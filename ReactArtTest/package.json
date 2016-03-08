@@ -1,0 +1,14 @@
+{
+  "name": "ReactArtTest",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start"
+  },
+  "dependencies": {
+    "art": "^0.10.1",
+    "immutable": "^3.7.6",
+    "react-native": "^0.21.0",
+    "react-native-fs": "^1.2.0"
+  }
+}
