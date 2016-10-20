@@ -1,0 +1,26 @@
+var classcom_1_1choosemuse_1_1libmuse_1_1_muse =
+[
+    [ "connect", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#a4355380a2dab434c74906c17ac86fc5f", null ],
+    [ "disconnect", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#a9b2753d90c0f5e52101a98347734e2d6", null ],
+    [ "enableDataTransmission", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#a70765dbdcc3e5200bb689c7628b1d82d", null ],
+    [ "execute", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#a8f222d0bfb368d0c47c739fbdca437d6", null ],
+    [ "getConnectionState", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#ad5cd57de14c7d8b79b447825338e6790", null ],
+    [ "getLastDiscoveredTime", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#afa1316b477d6fc858fd007471735b1fb", null ],
+    [ "getMacAddress", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#af2c7b622d135d60025710405b9349a14", null ],
+    [ "getMuseConfiguration", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#afe7a2c597622ba6322ef7c757373c798", null ],
+    [ "getMuseVersion", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#a82e984f27989e326725f854837fb709b", null ],
+    [ "getName", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#a657daef86fc4a3e882fe9ad2b62b29e4", null ],
+    [ "getRssi", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#ac8c564e457463f2ae7315deb6414dd13", null ],
+    [ "isLowEnergy", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#a4bbedf14714afb660be81475d2003a18", null ],
+    [ "registerConnectionListener", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#a98ee891d9aa5abae72e5a79ac7d0dbd0", null ],
+    [ "registerDataListener", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#a8b85a06656597f5faeab9033326d3f67", null ],
+    [ "registerErrorListener", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#a3e89d5b163881a284c9d3fa01326f68b", null ],
+    [ "runAsynchronously", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#a1d38d7eae3119f569b520c9ac3407d6a", null ],
+    [ "setNotchFrequency", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#a922b38735a8e4633e4ba21926377e389", null ],
+    [ "setNumConnectTries", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#a5bf6c87ab9d6233cb6b27394eeafc790", null ],
+    [ "setPreset", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#ac4a35c11b734590a8bab0485a614f0d3", null ],
+    [ "unregisterAllListeners", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#a629ca912ac8496248031bb2bf0d3bb51", null ],
+    [ "unregisterConnectionListener", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#af0323a501be6f5ccd5e9092ad09c66ec", null ],
+    [ "unregisterDataListener", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#af50dda7da0bceec69acd55aee20ac056", null ],
+    [ "unregisterErrorListener", "classcom_1_1choosemuse_1_1libmuse_1_1_muse.html#a393515c24ce92fb40802d67f922893eb", null ]
+];

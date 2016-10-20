@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <com.androidplot.xy.XYPlot
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        style='@style/APDefacto.Light'
+        android:id='@+id/eegplot'
+        android:title="EEG History Plot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff" />
+

@@ -1,0 +1,92 @@
+TASK com.eeg_project id=3727
+  ACTIVITY com.eeg_project/.components.connector.MuseActivity e34fe49 pid=4762
+    Local Activity 75ac1e6 State:
+      mResumed=true mStopped=false mFinished=false
+      mChangingConfigurations=false
+      mCurrentConfig={1.0 302mcc490mnc en_US ldltr sw360dp w360dp h568dp 480dpi nrml port finger -keyb/v/h -nav/h s.141}
+      mLoadersStarted=true
+      FragmentManager misc state:
+        mHost=android.app.Activity$HostCallbacks@b30e9ed
+        mContainer=android.app.Activity$HostCallbacks@b30e9ed
+        mCurState=5 mStateSaved=false mDestroyed=false
+    ViewRoot:
+      mAdded=true mRemoved=false
+      mConsumeBatchedInputScheduled=false
+      mConsumeBatchedInputImmediatelyScheduled=false
+      mPendingInputEventCount=0
+      mProcessInputEventsScheduled=false
+      mTraversalScheduled=false
+      android.view.ViewRootImpl$NativePreImeInputStage: mQueueLength=0
+      android.view.ViewRootImpl$ImeInputStage: mQueueLength=0
+      android.view.ViewRootImpl$NativePostImeInputStage: mQueueLength=0
+    Choreographer:
+      mFrameScheduled=false
+      mLastFrameTime=77240134 (19482 ms ago)
+    View Hierarchy:
+      com.android.internal.policy.PhoneWindow$DecorView{5680022 V.E...... R....... 0,0-1080,1920}
+        android.widget.LinearLayout{99e9ab3 V.E...... ........ 0,0-1080,1776}
+          android.view.ViewStub{51c9870 G.E...... ......I. 0,0-0,0 #10203ab android:id/action_mode_bar_stub}
+          android.widget.FrameLayout{a3f37e9 V.E...... ........ 0,72-1080,1776 #1020002 android:id/content}
+            android.widget.LinearLayout{729fc6e V.E...... ........ 0,0-1080,1704}
+              android.widget.Spinner{2de2f0f VFED..C.. ........ 0,0-1080,180 #7f0d0075 app:id/muses_spinner}
+                android.widget.TextView{f8acb9c V.ED..... ........ 0,57-936,122 #1020014 android:id/text1}
+              android.widget.LinearLayout{eca69a5 V.E...... ........ 0,180-1080,315}
+                android.widget.Button{2fd717a VFED..C.. ........ 0,0-300,120 #7f0d0076 app:id/refresh}
+                android.widget.Button{cd8ad2b VFED..C.. ........ 300,0-600,120 #7f0d0077 app:id/connect}
+                android.widget.Button{7470588 VFED..C.. ........ 600,0-960,120 #7f0d0078 app:id/disconnect}
+              android.widget.TextView{c1cfb21 V.ED..... ........ 0,315-1080,390}
+              android.widget.TextView{9612b46 V.ED..... ........ 0,390-1080,464 #7f0d0079 app:id/con_status}
+              android.widget.TextView{7b2f107 V.ED..... ........ 0,464-1080,538}
+              android.widget.LinearLayout{f0af234 V.E...... ........ 0,538-1080,1357}
+                com.androidplot.xy.XYPlot{5ad285d V.ED..... ........ 15,0-1080,900 #7f0d007a app:id/historyplot}
+              android.widget.TextView{1f4b5d2 V.ED..... ........ 0,1357-1080,1495}
+              android.widget.TextView{70396a3 V.ED..... ........ 0,1495-1080,1569 #7f0d007b app:id/version}
+              android.widget.LinearLayout{97efda0 V.E...... ........ 0,1569-1080,1704}
+                android.widget.Button{618ed59 VFED..C.. ........ 0,0-450,120 #7f0d007c app:id/pause}
+        android.view.View{cc45d1e V.ED..... ........ 0,1776-1080,1920 #1020030 android:id/navigationBarBackground}
+        android.view.View{72ef9ff V.ED..... ........ 0,0-1080,72 #102002f android:id/statusBarBackground}
+    Looper (main, tid 1) {96653cc}
+      Message 0: { when=-17ms callback=com.choosemuse.libmuse.HandlerEventLoop$1 target=android.os.Handler }
+      Message 1: { when=+7s927ms callback=com.choosemuse.libmuse.MuseManagerAndroid$3 target=android.os.Handler }
+      (Total messages: 2, polling=false, quitting=false)
+
+  ACTIVITY com.eeg_project/.MainActivity 7df53d8 pid=4762
+    Local Activity 37c4cfe State:
+      mResumed=false mStopped=true mFinished=false
+      mChangingConfigurations=false
+      mCurrentConfig={1.0 302mcc490mnc en_US ldltr sw360dp w360dp h568dp 480dpi nrml port finger -keyb/v/h -nav/h s.141}
+      mLoadersStarted=true
+      FragmentManager misc state:
+        mHost=android.app.Activity$HostCallbacks@9e20615
+        mContainer=android.app.Activity$HostCallbacks@9e20615
+        mCurState=3 mStateSaved=true mDestroyed=false
+    ViewRoot:
+      mAdded=true mRemoved=false
+      mConsumeBatchedInputScheduled=false
+      mConsumeBatchedInputImmediatelyScheduled=false
+      mPendingInputEventCount=0
+      mProcessInputEventsScheduled=false
+      mTraversalScheduled=false
+      android.view.ViewRootImpl$NativePreImeInputStage: mQueueLength=0
+      android.view.ViewRootImpl$ImeInputStage: mQueueLength=0
+      android.view.ViewRootImpl$NativePostImeInputStage: mQueueLength=0
+    Choreographer:
+      mFrameScheduled=false
+      mLastFrameTime=77240134 (19494 ms ago)
+    View Hierarchy:
+      com.android.internal.policy.PhoneWindow$DecorView{c552d2a I.E...... R......D 0,0-1080,1920}
+        android.widget.LinearLayout{c83371b V.E...... .......D 0,0-1080,1776}
+          android.view.ViewStub{88ae0b8 G.E...... ......I. 0,0-0,0 #10203ab android:id/action_mode_bar_stub}
+          android.widget.FrameLayout{9e9ee91 V.E...... .......D 0,72-1080,1776 #1020002 android:id/content}
+            com.facebook.react.ReactRootView{470f1f6 V.E...... .......D 0,0-1080,1704 #1}
+              com.facebook.react.views.view.ReactViewGroup{81429f7 V.E...... ......ID 0,0-1080,1704 #4}
+                com.facebook.react.views.text.ReactTextView{1695064 V.ED..... ........ 374,524-707,581 #6}
+                com.facebook.react.views.view.ReactViewGroup{1ade2cd V.E...... ......ID 434,1124-647,1181 #8}
+                  com.facebook.react.views.text.ReactTextView{9b23782 V.ED..... ........ 0,0-213,57 #9}
+                  com.eeg_project.components.connector.Connector{e576e93 V.ED..... ......ID 0,57-213,57 #c}
+        android.view.View{79d0ed0 V.ED..... ......ID 0,1776-1080,1920 #1020030 android:id/navigationBarBackground}
+        android.view.View{d42dec9 V.ED..... ......ID 0,0-1080,72 #102002f android:id/statusBarBackground}
+    Looper (main, tid 1) {96653cc}
+      Message 0: { when=+19ms callback=com.choosemuse.libmuse.HandlerEventLoop$1 target=android.os.Handler }
+      Message 1: { when=+7s924ms callback=com.choosemuse.libmuse.MuseManagerAndroid$3 target=android.os.Handler }
+      (Total messages: 2, polling=false, quitting=false)

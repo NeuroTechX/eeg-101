@@ -1,0 +1,109 @@
+@font-face {
+    font-family: proximanova;
+    color: #444444;
+    src: url('http://dev.choosemuse.com/wp-content/uploads/fonts/proximanova-regular-webfont.woff');
+}
+
+body, table, div, p, dl {
+    font-family: proximanova, sans-serif;
+}
+
+div.ah {
+    width: 40px;
+    height: 40px;
+    color: #28779D;
+    border: 2px solid #28779D;
+    background-image: none;
+    background-color: white;
+    border-radius: 50%;
+    font-size: 22px;
+    font-weight: 100;
+    padding: 0;
+    margin: 20px 0;
+    line-height: 40px;
+    text-align: left !important;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+}
+
+a {
+    color: #52B9E9;
+}
+
+.contents a:visited {
+    color: #52B9E9;
+}
+
+#nav-path {
+    display: none;
+}
+
+a.el {
+    font-weight: normal;
+}
+
+div#nav-tree a {
+    color: #555;
+}
+
+.ui-resizable .ui-resizable-handle {
+    background-image: none;   background: grey;   width: 2px;
+}
+
+div.header {
+    background-image: none;
+    background-color: #e8e8e8;
+    border: none;
+}
+
+div#titlearea {
+    border-bottom: 1px solid lightgrey;
+}
+
+div#nav-tree {
+    background: none;
+}
+
+#nav-tree .selected {
+    background: none;
+    text-shadow: none;
+    background-repeat: no-repeat;
+}
+
+#nav-tree .selected a {
+    color: #52B9E9;
+}
+
+#nav-sync {
+    display: none;
+}
+
+#MSearchBox .left {
+    background-image: none;
+    border-right: 0;
+    border-top-left-radius: 5px;
+    height: 21px;
+    border-bottom-left-radius: 5px;
+    background: #e8e8e8;
+}
+
+#MSearchBox .right {
+    background-image: none;
+    border-left: 0;
+    border-top-right-radius: 5px;
+    height: 21px;
+    border-bottom-right-radius: 5px;
+    background: #e8e8e8;
+}
+
+input#MSearchField {
+    background: #e8e8e8;
+}
+
+.icon {
+    background-color: #00B098;
+}
+
+h2.groupheader {
+    color: #28779D;
+}

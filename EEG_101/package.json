@@ -1,0 +1,17 @@
+{
+  "name": "EEG_Project",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "react-native start",
+    "run-android-dev": "adb reverse tcp:8081 tcp:8081 && react-native run-android"
+  },
+  "dependencies": {
+    "react": "15.3.1",
+    "react-native": "latest",
+    "react-native-router-flux": "^3.35.0",
+    "react-native-swiper": "1.4.6"
+  }
+
+
+}
