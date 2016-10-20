@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.androidplot.xy.XYPlot
+        style='@style/APDefacto.Light'
+        android:id='@+id/randomplot'
+        android:title="EEG History Plot"
+        android:layout_width="match_parent"
+        android:layout_height="336dp"
+        android:background="#ffffff" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Testual Textual Element"
+        android:id="@+id/textView3"
+        android:layout_gravity="center_horizontal" />
+
+
+</LinearLayout>
