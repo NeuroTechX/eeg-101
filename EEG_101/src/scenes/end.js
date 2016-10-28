@@ -12,7 +12,7 @@ import{
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
 
-import Button from '../components/Button';
+import WhiteButton from '../components/WhiteButton';
 
 
 class End extends Component {
@@ -22,15 +22,17 @@ class End extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-      <View style={{flexDirection: 'row', backgroundColor: 'black', justifyContent: 'center', alignItems:'center',}}>
+      <Image source={require('../assets/clouds.png')} style={styles.container} resizeMode='stretch'>
+      
+        <View style={styles.titleBox}>
+          <Text style={styles.title}> Thanks for completing {"\n"} EEG 101</Text>
+          <Text style={styles.body}> We hope you enjoyed the tutorial. Join our Slack at NeuroTechX.com to learn more or get involved!</Text>      
+        </View>
+
+        <View style={styles.ntxBox}>
           <Image source={require('../assets/ntx.png')} resizeMode='contain'
           style={{height:80, width:100}}/>
           <Text style={{fontFamily: 'Roboto-Bold', width: 150, color: 'white'}}>The International Neurotechnology Network</Text>
-        </View>
-        <View style={styles.titleBox}>
-          <Text style={styles.title}> Thanks for completing EEG 101</Text>
-          <Text style={styles.body}>We hope you enjoyed this tutorial. Get in touch with us @ NeurotechX.com if you want to get involved!</Text>       
         </View>
         
         <View style={styles.textbox}>
@@ -42,8 +44,12 @@ class End extends Component {
           <Text style={styles.body}>5. Brain Computer Interfaces</Text>
           <Text style={styles.body}>6. Machine Learning</Text>
         </View>
-          <Button onPress={Actions.SlideOne}>BACK TO BEGINNING</Button>       
-      </View>
+
+        <View style={{flex: 1, margin: 15}}>
+          <WhiteButton onPress={Actions.SlideOne}>BACK TO BEGINNING</WhiteButton>
+        </View>
+            
+      </Image>
     );
   }
 }
@@ -52,40 +58,60 @@ const styles = StyleSheet.create({
 
 body: {
     fontFamily: 'Roboto-Light',
-    fontSize: 16,
-    color: '#4AB4E3',
+    fontSize: 13,
+    color: '#ffffff',
     textAlign: 'center'
   },
 
-
   container: {
-    marginTop:55,
     flex: 1,
     justifyContent: 'space-around',
     alignItems: 'stretch',
+    width: null,
+    height: null,
+    backgroundColor: 'rgba(0,0,0,0)' 
 },
 
   header: {
     fontFamily: 'Roboto-Bold',
-    color: '#484848',
+    color: '#ffffff',
     fontSize: 20,
   },
 
 
   textbox: {
-    flex: 3,
-    marginLeft: 20,
-    marginRight: 20,
+    flex: 2,
+    margin: 20,
     justifyContent: 'space-around',
     alignItems: 'center',
+  },
+
+  ntxBox: {
+    marginLeft: 60,
+    marginRight: 60,
+    flex: 1.5,
+    backgroundColor: 'black',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems:'center',
+
   },
 
 
   title: {
     textAlign: 'center',
-    color: '#4AB4E3',
-    fontFamily: 'Roboto-Light',
+    margin: 15,
+    lineHeight: 50,
+    color: '#ffffff',
+    fontFamily: 'Roboto-Black',
     fontSize: 30,
+      },
+
+  titleBox: {
+    marginTop: 40,
+    flex: 3,
+    alignItems: 'center',
+    justifyContent: 'center',
       },
 
 

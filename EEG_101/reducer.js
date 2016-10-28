@@ -3,9 +3,17 @@
 // For the current implementation of EEG, this will primarily handle isActive changes
 
 import { ActionConst } from 'react-native-router-flux';
+import config from './config';
+import {
+  SET_CONNECTION_STATUS,
+  SET_AVAILABLE_MUSES,
+} from './constants';
 
 const initialState = {
   scene: {},
+  availableMuses: [],
+  hasSearchedForMuses: false,
+  connectionStatus: config.connectionStatus.DISCONNECTED,
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -17,6 +25,22 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         scene: action.scene,
       };
+
+    case SET_AVAILABLE_MUSES:
+
+      return {
+
+        ...state,
+        hasSearchedForMuses: true,
+        availableMuses: action.payload,
+      }
+
+    case SET_CONNECTION_STATUS:
+
+      return {
+        ...state,
+        connectionStatus: action.payload,
+      }
 
     // ...other actions
 

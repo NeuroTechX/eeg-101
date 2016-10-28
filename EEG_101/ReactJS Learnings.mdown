@@ -1,0 +1,121 @@
+Things learned about React.JS
+
+# Benefits of React
+
+## Imperative vs Declarative code
+Imperative code gives the computer a specific list of things to do to accomplish something. Declarative code is more concerned with telling the computer what we want to accomplish, allowing abstraction to somehow accomplish how that goal is accomplished. In React, this means that elements' states are sometimes stored in React components rather than the DOM
+
+The benefits of declarative code are more readability, reduced sie effects, less bugs, minimized mutability. 
+
+## Composition
+Everything in React is composed of components. When programming in React, helpful to think of breaking everything down into a component. The same intuition applied to breaking programs into functions can be used to break sites into different components.
+
+## Explicit Mutations
+Angular keeps all models in sync, but in React, any change in state needs to be associated with a setState. 
+
+## It's just javascript
+Map, which is a javascript thing is used a lot. Bind is used a lot as well.
+
+# Surrounding Technologies
+
+## React Router
+Allows you to map components to certain urls. Navigating between different urls on a site takes you between different active React components
+
+## Webpack
+Allows you to bundle all your code into one file (or multiple fule), giving you also the option to transform that code as you do so. Webpack is most helpful when you have multiple transformations you need to make (SASS, LESS, Coffeescript)
+
+Webpack needs to know:
+1. The starting point or root JavaScript file
+2. The transformations to make on your code
+3. The location to save the new transformed code
+
+Create webpack.config.js in root directory of project. 
+
+## Babel
+Babel allows certain transformations. Babel allows you to convert JSX into regular javascript so that a browser can understand it. JSX is cool cause it's kinda like html!
+
+## Axios
+For HTTP request. Kinda like promises (?)
+
+## NPM
+Is a package manager that allows all of the modules you might use in your project to be easily shared with others. You can do things like "npm install jquery" and that package will be automatically saved to your project and tracked in package.json. npm scripts also allow complicated terminal commands to be simplified. Simply add stuff under the scripts property in package.json ie. '''"test": "ava 'app/**/*.test.js' --verbose --require ./other/setup-ava-tests.js"'''
+
+
+# React Component Basics
+Components are created with the createClass method
+'''
+var React = require('react')
+var ReactDOM = require('react-dom')
+var HelloWorld = React.createClass({
+  render: function(){
+    return (
+      <div>
+        Hello World!
+      </div>
+    )
+  }
+});
+ReactDOM.render(<HelloWorld />, document.getElementById('app'));
+'''
+Although render is a function it might be better to think of it as essentially a template for a component. This component is then saved as a var HelloWorld and passed to the ReactDOM.render function. ReactDOM.render tkkes two args: the component and the DOM node where you want the component rendered. 
+
+Classic JavaScript transformation of the above code through Webpack:
+'''
+var HelloWorld = React.createClass({
+  displayName: "HelloMessage",
+  render: function() {
+    return React.createElement("div", null, "Hello World");
+  }
+});
+'''
+
+# Nested React Components
+Props are the cool way in React to pass data from one component to another child component and that system is through props. Props are to components what arguments are to functions and can be passed down between parent and child components
+
+Example:
+'''
+// Parent
+var FriendsContainer = React.createClass({
+  render: function(){
+    var name = 'Tyler McGinnis'
+    var friends = ['Ean Platter', 'Murphy Randall', 'Merrick Christensen']
+    return (
+      <div>
+        <h3> Name: {name} </h3>
+        <ShowList names={friends} />
+      </div>
+    )
+  }
+});
+
+//Child
+var ShowList = React.createClass({
+  render: function(){
+    var listItems = this.props.names.map(function(friend){
+      return <li> {friend} </li>;
+    });
+    return (
+      <div>
+        <h3> Friends </h3>
+        <ul>
+          {listItems}
+        </ul>
+      </div>
+    )
+  }
+});
+'''
+
+# Building UIs with functions
+One key concept behind React is describing functions that return UI components rather than just values. Instead of defining functions with return statements, React focuses on defining classes that return some UI stuff in their render function. This stuff is often JSX and looks just like HTML. So it could be helpful to think about designing a page in React as chunking HTML elements down into discrete components (but they'll be JavaScript functional and share data flow).
+
+However, React is built with Stateless Functional Components tat allow UI elements to be written as normal functions. Instead of using '''React.createClass({render: function(){return(JSX UI code)}})''' you can just use '''function(){return (JSX UI code)}'''
+
+With Stateless Functional Components these UI elements are now pure functions and gain all the benefits of functional programming: reliability, consistency, immutability
+
+# Acronym for creating React component: FIRST
+Focused 
+Independent
+Reusable
+Small 
+Testable

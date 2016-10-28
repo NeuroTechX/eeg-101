@@ -11,14 +11,17 @@ import{
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
 
+import config from '../../config'
+
 // Components. For JS UI elements
-import Button from '../components/Button';
-import ConnectorWidget from '../components/ConnectorWidget';
-import ElectrodeSelector from '../components/ElectrodeSelector';
+import WhiteButton from '../components/WhiteButton';
+
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
-    return {isVisible: state.scene.sceneKey === 'Landing'};
+    return {isVisible: state.scene.sceneKey === 'Landing',
+      connectionStatus: state.connectionStatus,
+    };
   }
 
  class Landing extends Component {
@@ -28,27 +31,22 @@ function  mapStateToProps(state) {
 
     // Initialize States
     this.state = {
-      startButtonDisabled: true
+      
     };
+    // <WhiteButton onPress={Actions.SlideOne} disabled={!(this.props.connectionStatus === config.connectionStatus.CONNECTED)}>BEGIN</WhiteButton>
   }
-
-  // Picker function that changes the selectedValue state
-  onValueChange(key, value) {
-      this.setState({
-          selectedValue : key,
-      });
-    }
 
   render() {
     return (
-      <View style={styles.container}>
+      <Image source={require('../assets/clouds.png')} style={styles.container} resizeMode='stretch'>
         <View style={styles.titleBox}>
           <Text style={styles.title}>Welcome to EEG 101</Text>
           <Text style={styles.body}>At the end of this tutorial, you will have learned how EEG devices can be used to measure the electrical activity of the brain.</Text>
         </View>
-        <ConnectorWidget  enableStartButton={(bool) => this.setState({startButtonDisabled: bool})}/>
-        <Button onPress={Actions.SlideOne} disabled={this.state.startButtonDisabled}>BEGIN</Button>
-      </View>
+        <View style={{flex: 1, margin: 40}}>
+          <WhiteButton onPress={Actions.ConnectorOne}>GET STARTED</WhiteButton>
+        </View>
+      </Image>
     );
   }
 
@@ -58,18 +56,20 @@ export default connect(mapStateToProps)(Landing);
 const styles = StyleSheet.create({
 
 body: {
-    fontFamily: 'Robot-Regular',
-    fontSize: 16,
+    fontFamily: 'Roboto-Light',
+    fontSize: 15,
     margin: 20,
-    color: '#4AB4E3',
+    color: '#ffffff',
     textAlign: 'center'
   },
 
   container: {
-    marginTop: 15,
     flex: 1,
     justifyContent: 'space-around',
     alignItems: 'stretch',
+    width: null,
+    height: null,
+    backgroundColor: 'rgba(0,0,0,0)' 
 },
 
   logo: {
@@ -79,16 +79,16 @@ body: {
 
   title: {
     textAlign: 'center',
-    margin: 50,
+    margin: 15,
     lineHeight: 50,
-    color: '#4AB4E3',
-    fontFamily: 'Roboto-Light',
-    fontSize: 40,
+    color: '#ffffff',
+    fontFamily: 'Roboto-Black',
+    fontSize: 48,
       },
 
   titleBox: {
-    flex: 5,
+    flex: 6,
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
       },
 });

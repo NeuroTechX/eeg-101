@@ -20,7 +20,7 @@ export default class Button extends Component{
 		return(
 		<TouchableOpacity onPress={this.props.onPress} disabled={this.props.disabled}> 
 			<View style={dynamicStyle}>
-          		<Text style={{color: 'white', fontFamily: 'Roboto-Bold',}}>{this.props.children}</Text>
+          		<Text style={{color: 'white', fontFamily: 'Roboto-Bold', fontSize: 15}}>{this.props.children}</Text>
         	</View>
 		</TouchableOpacity>
 		)
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
 
 active: {
   justifyContent: 'center',
-  backgroundColor: '#72C2F1',
+  backgroundColor: '#94DAFA',
   height: 50,
   margin: 5,
   padding: 5,

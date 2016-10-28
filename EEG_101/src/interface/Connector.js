@@ -1,6 +1,6 @@
 'use strict';
 // Connector.js
 //  Exposes ConnectorModule.java to JS
-import { NativeModules } from 'react-native';
+import { NativeModules, DeviceEventEmitter } from 'react-native';
 
 module.exports = NativeModules.Connector;

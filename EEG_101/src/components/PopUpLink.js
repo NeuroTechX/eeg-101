@@ -11,7 +11,9 @@ export default class PopUpLink extends Component{
 
   render() {
     return(
-      <Text style={{color:'#484848', fontFamily: 'Roboto-Regular'}}
+      <Text style={{color: '#6CCBEF',
+        fontFamily: 'Roboto-Medium',
+        textDecorationLine: 'underline',}}
        onPress={this.props.onPress}
        hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
        >{this.props.children}</Text>
