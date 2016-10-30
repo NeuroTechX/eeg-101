@@ -11,6 +11,9 @@
 /.idea/dictionaries
 .gradle
 /local.properties
+/build
+/captures
+.externalNativeBuild
 
 # node.js
 #
