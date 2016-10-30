@@ -1,4 +1,0 @@
-#Sun Oct 30 16:21:53 EDT 2016
-base.0=/home/dano/Desktop/EEG 101/eeg-101/EEG101/android/app/build/intermediates/transforms/dex/debug/folders/1000/1f/main
-renamed.0=classes.dex
-file.0=/home/dano/Desktop/EEG 101/eeg-101/EEG101/android/app/build/intermediates/transforms/dex/debug/folders/1000/1f/main/classes.dex
