@@ -1,0 +1,12 @@
+# Android/IJ
+#
+*.iml
+/.idea/workspace.xml
+/.idea/libraries
+/.idea/dictionaries
+.gradle
+/local.properties
+/build
+/captures
+.externalNativeBuild
+/*/build

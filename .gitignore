@@ -3,25 +3,4 @@
 .DS_Store
 
 
-# Android/IJ
-#
-*.iml
-/.idea/workspace.xml
-/.idea/libraries
-/.idea/dictionaries
-.gradle
-/local.properties
-/build
-/captures
-.externalNativeBuild
 
-# node.js
-#
-node_modules/
-npm-debug.log
-
-# BUCK
-buck-out/
-\.buckd/
-android/app/libs
-android/keystores/debug.keystore
