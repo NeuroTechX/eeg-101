@@ -1,0 +1,3 @@
+rootProject.name = 'EEG101'
+
+include ':app'
