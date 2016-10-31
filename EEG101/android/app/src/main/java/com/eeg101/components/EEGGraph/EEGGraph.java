@@ -4,19 +4,22 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import com.androidplot.Plot;
 import com.androidplot.ui.HorizontalPositioning;
 import com.androidplot.ui.Size;
+import com.androidplot.ui.Size;
 import com.androidplot.ui.SizeMetric;
 import com.androidplot.ui.SizeMode;
 import com.androidplot.ui.VerticalPositioning;
 import com.androidplot.xy.BoundaryMode;
-import com.androidplot.xy.LineAndPointFormatter;
+import com.androidplot.xy.FastLineAndPointRenderer;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
+import com.androidplot.xy.XYSeries;
 import com.choosemuse.libmuse.Eeg;
 import com.choosemuse.libmuse.Muse;
 import com.choosemuse.libmuse.MuseArtifactPacket;
@@ -24,6 +27,12 @@ import com.choosemuse.libmuse.MuseDataListener;
 import com.choosemuse.libmuse.MuseDataPacket;
 import com.choosemuse.libmuse.MuseDataPacketType;
 import com.eeg101.MainApplication;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 
 // Android View that handles basic single channel EEGGraph activities
@@ -35,7 +44,7 @@ public class EEGGraph extends FrameLayout {
     private static final int PLOT_LENGTH = 200;
     private MyPlotUpdater plotUpdater;
     HistoryDataSource data;
-    private SimpleXYSeries historySeries;
+    private DynamicSeries historySeries;
     private Thread myThread;
     String TAG = "RandomPlot";
     private final Handler handler = new Handler();
@@ -80,6 +89,7 @@ public class EEGGraph extends FrameLayout {
 
     public void setChannelOfInterest(int channel) {
         channelOfInterest = channel;
+        historySeries.clear();
     }
 
     // -----------------------------------------------------------------------
@@ -100,9 +110,7 @@ public class EEGGraph extends FrameLayout {
 
         // get datasets (Y will be historySeries, x will be implicitly generated):
         data = new HistoryDataSource();
-        historySeries = new SimpleXYSeries("Sample");
-        historySeries.useImplicitXVals();
-
+        historySeries = new DynamicSeries("EEG data");
 
         // Set X and Y domain
         historyPlot.setRangeBoundaries(400, 1200, BoundaryMode.FIXED);
@@ -111,7 +119,7 @@ public class EEGGraph extends FrameLayout {
 
         // add series to plot
         historyPlot.addSeries(historySeries,
-                new LineAndPointFormatter(Color.rgb(255,255,255), null, null, null));
+                new FastLineAndPointRenderer.Formatter(Color.rgb(255,255,255), null, null, null));
 
         // hook up series to data source
         //data.addObserver(plotUpdater);
@@ -253,10 +261,11 @@ public class EEGGraph extends FrameLayout {
     // --------------------------------------------------------------
     // Runnables
 
-    // PlotUpdater My observer class that will redraw plot
+    // Runnable class that redraws plot at a fixed frequency
     class MyPlotUpdater implements Runnable {
         Plot plot;
         private boolean keepRunning = true;
+
         public MyPlotUpdater(Plot plot) {
             this.plot = plot;
         }
@@ -279,6 +288,7 @@ public class EEGGraph extends FrameLayout {
         }
     }
 
+
     // Updates historySeries, performs data processing
     public class HistoryDataSource implements Runnable {
 
@@ -295,10 +305,10 @@ public class EEGGraph extends FrameLayout {
                     Thread.sleep(2);
                     if (eegStale) {
                         if (historySeries.size() > PLOT_LENGTH) {
-                            historySeries.removeFirst();
+                            historySeries.clear();
                         }
 
-                        historySeries.addLast(null, eegBuffer[channelOfInterest-1]);
+                        historySeries.addLast(eegBuffer[channelOfInterest-1]);
                         eegStale = false;
                     }
                 }
@@ -310,12 +320,74 @@ public class EEGGraph extends FrameLayout {
         public void stopThread() {
             keepRunning = false;
         }
+    }
+
+    // ---------------------------------------------------------------------
+// Data Series
+
+    // AndroidPlot class that stores data to be plotted. getX() and getY() are called by XYPlot to to draw graph
+    // This implementation only stores Y values, with X values implicitily determined by the index of the data in the LinkedList
+    class DynamicSeries implements XYSeries {
+        //private int index;
+        private String title;
+        private volatile LinkedList<Number> yVals = new LinkedList<Number>();
 
 
-        /*
-        public void addObserver(Observer observer) {
-            notifier.addObserver(observer);
+
+        public DynamicSeries(String title) {
+            this.title = title;
         }
-        */
+
+        @Override
+        public String getTitle() {
+            return title;
+        }
+
+        @Override
+        public int size() {
+            return yVals != null ? yVals.size() : 0;
+        }
+
+        @Override
+        public Number getX(int index) {
+            return index;
+        }
+
+        @Override
+        public Number getY(int index) {
+            return yVals.get(index);
+        }
+
+        public void addFirst(Number y) {
+            yVals.addFirst(y);
+        }
+
+        public void addLast(Number y) {
+            yVals.addLast(y);
+        }
+
+        public void addAll(Number[] y) {
+            yVals.addAll(Arrays.asList(y));
+
+        }
+
+        public void removeFirst() {
+            if (size() <= 0) {
+                throw new NoSuchElementException();
+            }
+            yVals.removeFirst();
+        }
+
+        public void removeLast() {
+            if (size() <= 0) {
+                throw new NoSuchElementException();
+            }
+            yVals.removeLast();
+        }
+
+        public void clear() {
+            yVals.clear();
+        }
+
     }
 }
