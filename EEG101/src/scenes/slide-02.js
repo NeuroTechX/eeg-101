@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import{
   Actions,
+  ActionConst,
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import config from '../../config';
@@ -57,7 +58,7 @@ class SlideThree extends Component {
     }});
     return (
       <View style={styles.container}>
-      
+        
         <View style={styles.graphContainer}>
           <Image source={imageSource(this.state.slidePosition)}
                 style={styles.image}

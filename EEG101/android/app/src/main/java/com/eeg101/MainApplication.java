@@ -1,6 +1,7 @@
 package com.eeg101;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.choosemuse.libmuse.Muse;
 import com.facebook.react.ReactApplication;
@@ -34,4 +35,7 @@ public class MainApplication extends Application implements ReactApplication {
   public ReactNativeHost getReactNativeHost() {
       return mReactNativeHost;
   }
-}
+
+  }
+
+

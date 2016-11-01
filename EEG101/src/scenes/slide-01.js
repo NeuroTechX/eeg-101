@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import{
   Actions,
+  ActionConst
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { setConnectionStatus } from '../../actions';
@@ -42,6 +43,7 @@ class SlideOne extends Component {
       popUp4Visible: false,
     };
   }
+  //           
   
   render() {
     return (

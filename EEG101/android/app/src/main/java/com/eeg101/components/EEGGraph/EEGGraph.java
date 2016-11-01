@@ -28,6 +28,7 @@ import com.choosemuse.libmuse.MuseDataPacket;
 import com.choosemuse.libmuse.MuseDataPacketType;
 import com.eeg101.MainApplication;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -167,6 +168,8 @@ public class EEGGraph extends FrameLayout {
 
         // Add children to EEGGraph
         this.addView(historyPlot, params);
+        historyPlot.setDrawingCacheEnabled(true);
+
 
     }
 
@@ -263,11 +266,11 @@ public class EEGGraph extends FrameLayout {
 
     // Runnable class that redraws plot at a fixed frequency
     class MyPlotUpdater implements Runnable {
-        Plot plot;
+        WeakReference<Plot> plot;
         private boolean keepRunning = true;
 
         public MyPlotUpdater(Plot plot) {
-            this.plot = plot;
+            this.plot = new WeakReference<Plot>(plot);
         }
 
         @Override
@@ -275,8 +278,9 @@ public class EEGGraph extends FrameLayout {
             try {
                 keepRunning = true;
                 while (keepRunning) {
-                    Thread.sleep(12);
-                    plot.redraw();
+                    // 33ms sleep = 30 fps
+                    Thread.sleep(33);
+                    plot.get().redraw();
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -305,7 +309,7 @@ public class EEGGraph extends FrameLayout {
                     Thread.sleep(2);
                     if (eegStale) {
                         if (historySeries.size() > PLOT_LENGTH) {
-                            historySeries.clear();
+                            historySeries.removeFirst();
                         }
 
                         historySeries.addLast(eegBuffer[channelOfInterest-1]);

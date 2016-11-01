@@ -1,0 +1,6 @@
+Debugging Memory Issues
+
+1. buildDrawingCache is taking too long according to systrace
+
+2. Array Index Out of Bounds exception in FastLineAndPointFormatter
+- Issue with source? More fragile loop+ native array implementation 

@@ -9,6 +9,7 @@ import {
 
 import{
   Actions,
+  ActionConst,
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
 
@@ -46,7 +47,7 @@ class End extends Component {
         </View>
 
         <View style={{flex: 1, margin: 15}}>
-          <WhiteButton onPress={Actions.SlideOne}>BACK TO BEGINNING</WhiteButton>
+          <WhiteButton onPress={Actions.ConnectorThree}>BACK TO BEGINNING</WhiteButton>
         </View>
             
       </Image>

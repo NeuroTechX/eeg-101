@@ -46,10 +46,9 @@ class SlideFour extends Component {
   render() {
     return (
       <View style={styles.container}>
-      
+        
         <View style={styles.graphContainer}>
-          <GraphView style={{flex:1}} visibility={this.props.isVisible} 
-          channelOfInterest={this.state.channelOfInterest}/>
+          <GraphView style={{flex:1}} visibility={this.props.isVisible}/>
         </View>
         <ElectrodeSelector
           channelOfInterest={(channel) => this.setState({channelOfInterest: channel})}/>
