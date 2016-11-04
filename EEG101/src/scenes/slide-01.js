@@ -64,6 +64,7 @@ class SlideOne extends Component {
             <Text style={styles.body}>
               Using the <PopUpLink onPress={() => this.setState({popUp1Visible: true})}>EEG</PopUpLink> device that you are wearing, we can detect the electrical activity of your brain.
             </Text>
+            <Image source={require('../assets/swipeicon.png')} resizeMode='contain' style={{height: 40, alignSelf: 'center'}}/>
           </View>
 
           <View style={styles.pageStyle}>
@@ -96,7 +97,7 @@ class SlideOne extends Component {
 
         <PopUp onClose={() => this.setState({popUp2Visible: false})} visible={this.state.popUp2Visible}
         title='Noise'>
-          Movement of the eyes (which are electrically charged) and activation of muscles produce electrical activity. Blinking, swallowing, and clenching the jaw produce electrical signals that are larger than those originating in the brain. These movement-related signals often cover up the EEG and make it difficult to read. To accurately sense the activity of the brain, keep movements to a minimum.
+          Movement of the eyes (which are electrically charged) and muscle activity produce electrical activity. Blinking, swallowing, and clenching the jaw produce electrical signals that are larger than those originating in the brain, making it difficult to read. the EEG To accurately sense the activity of the brain, movement must be kept to a minimum.
         </PopUp>
 
         <PopUp onClose={() => this.setState({popUp3Visible: false})} visible={this.state.popUp3Visible}

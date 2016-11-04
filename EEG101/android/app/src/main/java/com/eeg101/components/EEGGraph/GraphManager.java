@@ -1,5 +1,6 @@
 package com.eeg101.components.EEGGraph;
 
+import android.util.Log;
 import android.view.View;
 
 import com.facebook.react.uimanager.SimpleViewManager;
@@ -43,6 +44,7 @@ public class GraphManager extends SimpleViewManager<EEGGraph> {
     // Bridge function for channelOfInterestProp. Calls setChannelOfInterest in EEGGraph
     @ReactProp(name = "channelOfInterest")
     public void setChannelOfInterest(EEGGraph graph, @Nullable int channel) {
+        Log.w("EEG 101","setChannelOfInterest called");
         graph.setChannelOfInterest(channel);
     }
     /*

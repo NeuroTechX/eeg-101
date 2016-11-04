@@ -62,11 +62,8 @@ export default class ElectrodeSelector extends Component {
 const styles = StyleSheet.create({
  
   container: {
-  	height: 70,
-  	width: 70,
-  	position: 'absolute',
-  	right: 10,
-  	top: 10,
+  	height: 100,
+  	width: 100,
   	alignItems: 'center',
   },
 

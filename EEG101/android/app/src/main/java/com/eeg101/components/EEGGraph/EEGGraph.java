@@ -2,6 +2,7 @@ package com.eeg101.components.EEGGraph;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -15,8 +16,10 @@ import com.androidplot.ui.Size;
 import com.androidplot.ui.SizeMetric;
 import com.androidplot.ui.SizeMode;
 import com.androidplot.ui.VerticalPositioning;
+import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.FastLineAndPointRenderer;
+import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
@@ -51,6 +54,8 @@ public class EEGGraph extends FrameLayout {
     private final Handler handler = new Handler();
     Thread dataThread;
     Thread renderingThread;
+    LineAndPointFormatter lineFormatter;
+
 
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
@@ -89,8 +94,31 @@ public class EEGGraph extends FrameLayout {
     // Bridge functions
 
     public void setChannelOfInterest(int channel) {
+
         channelOfInterest = channel;
         historySeries.clear();
+
+
+        /* Uncomment to make plot change color based on selected electrode
+        historyPlot.getGraph().getBackgroundPaint().setColor(Color.rgb(255,255,255));
+
+        // Set color based on selected channel
+        switch(channel) {
+            case 1:
+                lineFormatter.getLinePaint().setColor(Color.rgb(232,106,33));
+                break;
+            case 2:
+                lineFormatter.getLinePaint().setColor(Color.rgb(0,153,135));
+                break;
+            case 3:
+                lineFormatter.getLinePaint().setColor(Color.rgb(86,92,155));
+                break;
+            case 4:
+                lineFormatter.getLinePaint().setColor(Color.rgb(209,14,137));
+                break;
+
+        }
+        */
     }
 
     // -----------------------------------------------------------------------
@@ -102,6 +130,8 @@ public class EEGGraph extends FrameLayout {
         // Parameters for EEGGraph Chld
         LayoutParams params = new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+
+
 
         // Create historyPlot
         historyPlot = new XYPlot(context, "EEG History Plot");
@@ -117,10 +147,15 @@ public class EEGGraph extends FrameLayout {
         historyPlot.setRangeBoundaries(400, 1200, BoundaryMode.FIXED);
         historyPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
+        // This is critical for being able to set the color of the plot
+        PixelUtils.init(getContext());
+
+        // Create line formatter with set color
+        lineFormatter = new FastLineAndPointRenderer.Formatter(Color.rgb(255,255,255), null, null, null);
 
         // add series to plot
         historyPlot.addSeries(historySeries,
-                new FastLineAndPointRenderer.Formatter(Color.rgb(255,255,255), null, null, null));
+                lineFormatter);
 
         // hook up series to data source
         //data.addObserver(plotUpdater);

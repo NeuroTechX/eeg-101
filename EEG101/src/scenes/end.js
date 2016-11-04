@@ -4,7 +4,10 @@ import {
   Text,
   View,
   Modal,
+  ViewPagerAndroid,
   Image,
+  Linking,
+  TouchableOpacity,
 } from 'react-native';
 
 import{
@@ -24,32 +27,57 @@ class End extends Component {
   render() {
     return (
       <Image source={require('../assets/clouds.png')} style={styles.container} resizeMode='stretch'>
-      
-        <View style={styles.titleBox}>
-          <Text style={styles.title}> Thanks for completing {"\n"} EEG 101</Text>
-          <Text style={styles.body}> We hope you enjoyed the tutorial. Join our Slack at NeuroTechX.com to learn more or get involved!</Text>      
-        </View>
 
-        <View style={styles.ntxBox}>
-          <Image source={require('../assets/ntx.png')} resizeMode='contain'
-          style={{height:80, width:100}}/>
-          <Text style={{fontFamily: 'Roboto-Bold', width: 150, color: 'white'}}>The International Neurotechnology Network</Text>
-        </View>
-        
-        <View style={styles.textbox}>
-          <Text style={styles.header}>What's Next?</Text>
-          <Text style={styles.body}>1. High/Low Pass Filtering</Text>
-          <Text style={styles.body}>2. Artifact Removal</Text>
-          <Text style={styles.body}>3. Feature Extraction</Text>
-          <Text style={styles.body}>4. Brain Waves</Text>
-          <Text style={styles.body}>5. Brain Computer Interfaces</Text>
-          <Text style={styles.body}>6. Machine Learning</Text>
-        </View>
+        <ViewPagerAndroid //Allows us to swipe between blocks
+          initialPage={0} style={{flex:8}}>
+          <View>
+            <View style={styles.titleBox}>
+              <Text style={styles.title}> Thanks for completing {"\n"} EEG 101</Text>
+              <Text style={styles.body}> We hope you enjoyed learning about the basics of EEG. Soon, this tutorial will cover more advanced aspects of processing and working with EEG, including how it can be used to create a simple brain-machine interface!</Text>      
+            </View>
 
-        <View style={{flex: 1, margin: 15}}>
-          <WhiteButton onPress={Actions.ConnectorThree}>BACK TO BEGINNING</WhiteButton>
-        </View>
+            <View style={styles.listBox}>
+              <Text style={styles.header}>What's Next?</Text>
+              <Text style={styles.body}>1. High/Low Pass Filtering</Text>
+              <Text style={styles.body}>2. Artifact Removal</Text>
+              <Text style={styles.body}>3. Feature Extraction</Text>
+              <Text style={styles.body}>4. Brain Waves</Text>
+              <Text style={styles.body}>5. Brain Computer Interfaces</Text>
+              <Text style={styles.body}>6. Machine Learning</Text>
+            </View>
+          </View>
+
+          <View style={{alignItems: 'center'}}>
+            <View style={styles.titleBox}>
+              <Text style={styles.header}>This project is Open Source</Text>
+              <Text style={styles.body}>EEG101 is the result of a collaboration between NeuroTechX, the international neurotechnology network, and the developers at KBDGroup. Its source code is open for anyone to use or contribute to.</Text>
+              <View style={styles.textBox}>
+              <Text style={styles.body}>Interested in how an EEG app is built? Have your own experience you'd like to share with the project? Check out the project repo on Github and our community on Slack</Text>
+              </View>
+            </View>
+
             
+              <View style={styles.logoBox}>
+                <TouchableOpacity onPress={() => {Linking.openURL('http://neurotechx.com/')}}>
+                  <Image source={require('../assets/ntx.png')} resizeMode='contain' style={{height:50, width:60}}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {Linking.openURL('http://www.kbdgroup.ca/index.html')}}>
+                  <Image source={require('../assets/kbdlogo.png')} resizeMode='contain' style={{height:40, width:60}}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {Linking.openURL('https://github.com/NeuroTechX/eeg-101')}}>
+                  <Image source={require('../assets/gitlogo.png')} resizeMode='contain' style={{height:40, width:60}}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {Linking.openURL('https://neurotechx.herokuapp.com/')}}>
+                  <Image source={require('../assets/slacklogowhite.png')} resizeMode='contain' style={{height:60, width:60}}/>
+                </TouchableOpacity>
+              </View>
+            
+          </View>
+          
+        </ViewPagerAndroid>
+        <View style={{flex: 1, margin: 15}}>
+              <WhiteButton onPress={Actions.ConnectorThree}>BACK TO BEGINNING</WhiteButton>
+            </View>
       </Image>
     );
   }
@@ -59,9 +87,9 @@ const styles = StyleSheet.create({
 
 body: {
     fontFamily: 'Roboto-Light',
-    fontSize: 13,
+    fontSize: 15,
     color: '#ffffff',
-    textAlign: 'center'
+    textAlign: 'center',
   },
 
   container: {
@@ -77,25 +105,31 @@ body: {
     fontFamily: 'Roboto-Bold',
     color: '#ffffff',
     fontSize: 20,
+    margin: 15,
   },
 
 
-  textbox: {
-    flex: 2,
+  textBox: {
     margin: 20,
     justifyContent: 'space-around',
     alignItems: 'center',
   },
 
-  ntxBox: {
-    marginLeft: 60,
-    marginRight: 60,
-    flex: 1.5,
+  listBox: {
+    flex: 3,
+    margin: 20,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+
+  logoBox: {
+    borderRadius: 20,
+    opacity: 1,
+    flex: 1,
     backgroundColor: 'black',
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems:'center',
-
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
 
 
@@ -110,7 +144,7 @@ body: {
 
   titleBox: {
     marginTop: 40,
-    flex: 3,
+    flex: 5,
     alignItems: 'center',
     justifyContent: 'center',
       },

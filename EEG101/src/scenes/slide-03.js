@@ -48,10 +48,8 @@ class SlideFour extends Component {
       <View style={styles.container}>
         
         <View style={styles.graphContainer}>
-          <GraphView style={{flex:1}} visibility={this.props.isVisible}/>
+          <GraphView style={{flex:1}} visibility={this.props.isVisible} channelOfInterest={this.state.channelOfInterest}/>
         </View>
-        <ElectrodeSelector
-          channelOfInterest={(channel) => this.setState({channelOfInterest: channel})}/>
 
         <Text style={styles.currentTitle}>HARDWARE</Text>
 
@@ -65,9 +63,11 @@ class SlideFour extends Component {
           </View>
           
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>Most EEG devices contain multiple electrodes</Text>
-            <Text style={styles.body}>The device you are wearing has <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>4 seperate electrodes.</PopUpLink> Touch the head diagram above to view the signal at each of the electrodes.
-            </Text>
+            <Text style={styles.header}>This device has 4 electrodes</Text>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={[styles.body,{flex:.5, marginRight: 10,}]}>Touch the head diagram to view the signal at each electrode.</Text>
+              <ElectrodeSelector channelOfInterest={(channel) => this.setState({channelOfInterest: channel})}/>
+            </View>
           </View>
 
           <View style={styles.pageStyle}>

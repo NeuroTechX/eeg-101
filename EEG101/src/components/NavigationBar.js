@@ -33,9 +33,9 @@ class NavigationBar extends Component {
   // Probably not necessary for this version of the app as we do not have subscenes
   getSelectedComponent (navigationState) {
     let selected = navigationState.children[navigationState.index];
-    /*while (selected.hasOwnProperty("children")) {
+    while (selected.hasOwnProperty("children")) {
       selected = selected.children[selected.index]
-    }*/
+    }
     return selected;
   }
   
