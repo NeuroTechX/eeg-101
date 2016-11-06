@@ -1,5 +1,6 @@
 // PopUpList.js
-// A popup modal containing extra info w/ no text commitment
+// A popup modal that has a ScrollView for displaying large amounts of text
+
 import React, { Component } from 'react';
 import {
   Text,

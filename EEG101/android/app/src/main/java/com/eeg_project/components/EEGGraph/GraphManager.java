@@ -1,18 +1,21 @@
-package com.eeg101.components.EEGGraph;
+package com.eeg_project.components.EEGGraph;
 
+import android.content.res.Resources;
 import android.util.Log;
 import android.view.View;
 
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
-
 import javax.annotation.Nullable;
+
 
 // GraphManager class manages EEGGraph objects.
 public class GraphManager extends SimpleViewManager<EEGGraph> {
     private final static String REACT_CLASS = "EEG_GRAPH";
     int counter = 0;
+    String graphType = "raw";
     EEGGraph eegGraph;
 
 
@@ -24,9 +27,16 @@ public class GraphManager extends SimpleViewManager<EEGGraph> {
 
     // Creates new EEGGraph views, accepting context as an argument. Context links the EEGGraph view to MainActivity
     @Override
-    protected EEGGraph createViewInstance(ThemedReactContext context) {
+    public EEGGraph createViewInstance(ThemedReactContext context) {
         eegGraph = new EEGGraph(context);
         return eegGraph;
+    }
+
+    // Bridge function for graphTypeProp.
+    // Does nothing now, but will eventually call setGraphType function in EEGGraph, determining which type of plot is added to the layout
+    @ReactProp(name = "graphType")
+    public void setGraphType(EEGGraph graph, @Nullable String type) {
+            graphType = type;
     }
 
 
@@ -44,9 +54,9 @@ public class GraphManager extends SimpleViewManager<EEGGraph> {
     // Bridge function for channelOfInterestProp. Calls setChannelOfInterest in EEGGraph
     @ReactProp(name = "channelOfInterest")
     public void setChannelOfInterest(EEGGraph graph, @Nullable int channel) {
-        Log.w("EEG 101","setChannelOfInterest called");
         graph.setChannelOfInterest(channel);
     }
+
     /*
     // Example receiveCommand declation for calling methods from JS to act on view
     public void receiveCommand(GraphManager root, int commandId, @Nullable ReadableArray args) {
@@ -58,8 +68,8 @@ public class GraphManager extends SimpleViewManager<EEGGraph> {
     }
     */
 
-    // Starts History Plot within EEGGraph views. Likely called everytime view is created or props are updated
-
+    // Callback that will be triggered after all properties are updated in current update transaction
+    //* (all @ReactProp handlers for properties updated in current transaction have been called)
     @Override
     protected void onAfterUpdateTransaction(EEGGraph view) {
         super.onAfterUpdateTransaction(view);

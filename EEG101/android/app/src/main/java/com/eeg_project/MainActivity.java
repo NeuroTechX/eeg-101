@@ -1,4 +1,4 @@
-package com.eeg101;
+package com.eeg_project;
 
 import com.facebook.react.ReactActivity;
 

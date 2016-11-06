@@ -1,5 +1,7 @@
 // PopUpLink.js
 // A string that will trigger the appearance of a PopUp
+// onPress should change a parent component's popUpVisible prop to true
+
 import React, { Component } from 'react';
 import {
   Text,

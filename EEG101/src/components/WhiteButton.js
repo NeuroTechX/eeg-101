@@ -1,5 +1,5 @@
 // WhiteButton.js
-// A duplicate button component for the early connector slides that is white instead of blue
+// A duplicate Button component for the early connector slides that is white instead of blue
 
 import React, { Component } from 'react';
 import {

@@ -6,12 +6,9 @@ import { requireNativeComponent, View } from 'react-native';
 var iface = {
   name: 'GraphView',
   propTypes: { 
-        //height: PropTypes.number,
-        //width: PropTypes.number,
-        //backgroundColor: PropTypes.string,
-        //strokeColor: PropTypes.string,
         visibility: PropTypes.bool,
         channelOfInterest: PropTypes.number,
+        graphType: PropTypes.string,
     ...View.propTypes // include the default view properties
   },
 };

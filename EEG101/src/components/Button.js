@@ -1,5 +1,8 @@
 // Button.js
-// A button to click
+// A blue, square button with white text that can be created with both onPress and disabled props
+// onPress is an arrow function that can be pretty much anything
+// disabled is a boolean that is passed to TouchableOpacity's built in disabled prop.
+
 import React, { Component } from 'react';
 import {
   Text,

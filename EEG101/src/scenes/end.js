@@ -124,8 +124,10 @@ body: {
 
   logoBox: {
     borderRadius: 20,
+    marginTop: -20,
+    marginBottom: 40,
     opacity: 1,
-    flex: 1,
+    flex: .75,
     backgroundColor: 'black',
     flexDirection: 'row',
     alignItems: 'center',
@@ -144,7 +146,7 @@ body: {
 
   titleBox: {
     marginTop: 40,
-    flex: 5,
+    flex: 4,
     alignItems: 'center',
     justifyContent: 'center',
       },

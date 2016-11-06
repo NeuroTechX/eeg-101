@@ -1,5 +1,5 @@
 // actions.js
-// Where we build functions that interact with the Redux store
+// Where we build functions that interact with the Redux store.
 
 import Connector from './src/interface/Connector';
 import {
@@ -8,17 +8,16 @@ import {
 } from './constants';
 import config from './config';
 
-// Fns that return an action that interacts with the store
+// setConnectionStatus and setAvailableMuses pass a payload to the reducer. Both Fns have a type (defined in constants.js) that allows them to be handled properly
 export const setConnectionStatus = (payload) => ({payload, type: SET_CONNECTION_STATUS});
 
-const setAvailableMuses = (payload) => ({payload, type: SET_AVAILABLE_MUSES});
+export const setAvailableMuses = (payload) => ({payload, type: SET_AVAILABLE_MUSES});
 
 // sets museArray to list of paired Muse devices through Connector.getDevices promise return
 function getDevices(dispatch) {
 
 	return Connector.getDevices()
 		.then((availableMuses) => {
-			console.log('getDevices called, returned' + availableMuses);
 			dispatch(setAvailableMuses(availableMuses));
 			return availableMuses;
 		});
@@ -32,6 +31,7 @@ function connectToDevice(dispatch) {
 		.then((isConnected) => {return isConnected});
 }
 
+// calls getDevices and connectToDevice 5 times in a row
 export function getAndConnectToDevice(timesCalled) {
 
 	if (!timesCalled) {

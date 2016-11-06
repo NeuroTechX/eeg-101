@@ -1,3 +1,6 @@
+// config.js
+// Stores variables that are used in Redux
+
 export default {
   navbarHeight:64,
   statusbarHeight:20,

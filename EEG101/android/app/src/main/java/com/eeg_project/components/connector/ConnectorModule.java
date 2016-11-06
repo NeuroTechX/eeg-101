@@ -1,4 +1,4 @@
-package com.eeg101.components.connector;
+package com.eeg_project.components.connector;
 
 import android.app.Activity;
 import android.support.annotation.Nullable;
@@ -9,7 +9,7 @@ import com.choosemuse.libmuse.MuseConnectionListener;
 import com.choosemuse.libmuse.MuseConnectionPacket;
 import com.choosemuse.libmuse.MuseListener;
 import com.choosemuse.libmuse.MuseManagerAndroid;
-import com.eeg101.MainApplication;
+import com.eeg_project.MainApplication;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;

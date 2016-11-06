@@ -1,5 +1,10 @@
 // PopUp.js
-// A popup modal containing extra info
+// A popup modal containing extra info. 
+// Can accept a title prop that will be display as header text at top of the popup text
+// Image source passed as image prop will be displayed in black region at the top of the popup
+// onClose is called when the Close button is clicked. Must be an arrow function that changes an isVisible prop in the parent component to false
+// visible must be a boolean state in the parent component
+
 import React, { Component } from 'react';
 import {
   Text,

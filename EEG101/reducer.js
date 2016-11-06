@@ -1,6 +1,5 @@
 // reducer.js
-// Our Redux reducer. Handles the routing actions produced by react-native-router-flux
-// For the current implementation of EEG, this will primarily handle isActive changes
+// Our Redux reducer. Handles the routing actions produced by react-native-router-flux as well as Muse connection actions
 
 import { ActionConst } from 'react-native-router-flux';
 import config from './config';

@@ -1,8 +1,7 @@
-package com.eeg101.components.EEGGraph;
+package com.eeg_project.components.EEGGraph;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -12,7 +11,6 @@ import android.widget.FrameLayout;
 import com.androidplot.Plot;
 import com.androidplot.ui.HorizontalPositioning;
 import com.androidplot.ui.Size;
-import com.androidplot.ui.Size;
 import com.androidplot.ui.SizeMetric;
 import com.androidplot.ui.SizeMode;
 import com.androidplot.ui.VerticalPositioning;
@@ -20,7 +18,6 @@ import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.FastLineAndPointRenderer;
 import com.androidplot.xy.LineAndPointFormatter;
-import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
 import com.choosemuse.libmuse.Eeg;
@@ -29,13 +26,11 @@ import com.choosemuse.libmuse.MuseArtifactPacket;
 import com.choosemuse.libmuse.MuseDataListener;
 import com.choosemuse.libmuse.MuseDataPacket;
 import com.choosemuse.libmuse.MuseDataPacketType;
-import com.eeg101.MainApplication;
+import com.eeg_project.MainApplication;
 
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 
@@ -204,6 +199,7 @@ public class EEGGraph extends FrameLayout {
         // Add children to EEGGraph
         this.addView(historyPlot, params);
         historyPlot.setDrawingCacheEnabled(true);
+
 
 
     }

@@ -1,3 +1,7 @@
+// ListItemBlock.js
+// Child component for an upcoming ListView component.
+// Not currently used in the app.
+
 'use strict';
 
 var React = require('react');

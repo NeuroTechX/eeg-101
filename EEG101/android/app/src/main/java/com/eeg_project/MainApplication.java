@@ -1,9 +1,10 @@
-package com.eeg101;
+package com.eeg_project;
 
 import android.app.Application;
 import android.util.Log;
 
 import com.choosemuse.libmuse.Muse;
+import com.eeg_project.BuildConfig;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;

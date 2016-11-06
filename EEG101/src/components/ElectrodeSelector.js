@@ -1,5 +1,7 @@
 // ElectrodeSelector.js
 // An interactive widget with a diagram of electrode positions that allows the user to specify data source
+// Head diagram image is split up into 4 equal-sized TouchableOpacitys, each of which changes the inherited channelOfInterest prop to a different value
+
 import React, { Component } from 'react';
 import {
   Text,
@@ -16,7 +18,6 @@ export default class ElectrodeSelector extends Component {
 		super(props);
 
 		this.state = {
-			selectedElectrode: 1,
 			image: require('../assets/electrodediagram1.png')
 		};
 	}

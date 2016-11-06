@@ -1,8 +1,9 @@
-package com.eeg101;
+package com.eeg_project;
 
 
-import com.eeg101.components.EEGGraph.GraphManager;
-import com.eeg101.components.connector.ConnectorModule;
+import com.eeg_project.components.EEGGraph.CircularBufferGraphManager;
+import com.eeg_project.components.EEGGraph.GraphManager;
+import com.eeg_project.components.connector.ConnectorModule;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
@@ -31,7 +32,8 @@ public class EEGPackage implements ReactPackage {
 	// Registers Java ViewManagers to JS
 	public List<ViewManager> createViewManagers(ReactApplicationContext reactApplicationContext) {
 		return Arrays.<ViewManager>asList(
-				new GraphManager()
+				new GraphManager(),
+				new CircularBufferGraphManager()
 		);
 	}
 }

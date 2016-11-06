@@ -1,5 +1,6 @@
 // NavigationBar.js
 // Custom built navbar for navigating the app
+
 import React, {Component} from 'react';
 
 import {
@@ -38,7 +39,8 @@ class NavigationBar extends Component {
     }
     return selected;
   }
-  
+
+  // renders the previous prop of the scene in the navbar
   renderBackText (childState: NavigationState) {
     return (
       <Text
@@ -64,7 +66,7 @@ class NavigationBar extends Component {
   }
 
 
-  // Substituted !_.isNil with ! == null
+  // If scene does not have a previous prop, will display a blank View as a placeholder
   renderCenterContent (childState: NavigationState) {
     if (childState.previous != null) {
       return (
@@ -82,13 +84,11 @@ class NavigationBar extends Component {
 
     return (
       <View style={styles.centerImageContainer}>
-        <Image
-          style={{height: 35, width: 35}}
-          source={require('../assets/eeg101logo.png')}
-        />
+        
       </View>
     );
   }
+
 
   renderNavBar (navigationState) {
     let selected = this.getSelectedComponent(navigationState);
