@@ -65,4 +65,13 @@
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 -dontwarn okio.**
 
+# Libmuse
+-keep class com.choosemuse.libmuse.* { *; }
+
+# AndroidPlot
 -keep class com.androidplot.** { *; }
+
+# Guava
+-dontwarn javax.annotation.**
+-dontwarn javax.inject.**
+-dontwarn sun.misc.Unsafe

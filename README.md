@@ -1,3 +1,7 @@
+<p align="center">
+    <img alt="babel" src="/EEG101graphic.png/" width="546">
+</p>
+
 # EEG 101
 
 An Interactive EEG tutorial app project to teach EEG and BCI basics.
