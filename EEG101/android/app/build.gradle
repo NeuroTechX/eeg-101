@@ -136,6 +136,8 @@ dependencies {
     compile "com.facebook.react:react-native:+"  // From node_modules
     compile files('libs/libmuse_android.jar')
     compile "com.androidplot:androidplot-core:1.2.2"
+    compile group: 'org.ejml', name: 'all', version: '0.29'
+
 }
 
 // Run this once to be able to run the application with BUCK

@@ -15,7 +15,6 @@ import com.androidplot.ui.SizeMode;
 import com.androidplot.ui.VerticalPositioning;
 import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.LineAndPointFormatter;
-import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
 import com.choosemuse.libmuse.Eeg;
@@ -27,8 +26,12 @@ import com.choosemuse.libmuse.MuseDataPacketType;
 import com.eeg_project.MainApplication;
 
 
-import java.util.Arrays;
+import com.eeg_project.components.signal.CircularBuffer;
+import com.eeg_project.components.signal.Filter;
 import com.google.common.primitives.Doubles;
+
+import org.ejml.simple.SimpleMatrix;
+
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
@@ -41,7 +44,7 @@ public class CircularBufferGraph extends FrameLayout {
     // ----------------------------------------------------------------------
     // Variables
     private XYPlot historyPlot;
-    private static final int PLOT_LENGTH = 200;
+    private static final int PLOT_LENGTH = 221;
     private CircularBufferGraph.MyPlotUpdater plotUpdater;
     CircularBufferGraph.HistoryDataSource dataSource;
     private DynamicSeries dataSeries;
@@ -61,9 +64,13 @@ public class CircularBufferGraph extends FrameLayout {
     MainApplication appState;
 
     // Circular data buffer
-    public double[][] eegBuffer = new double[110][2];
+    public CircularBuffer eegBuffer = new CircularBuffer(220,4);
+    public CircularBuffer filteredBuffer = new CircularBuffer(220,4);
+
+    public Filter filter = new Filter(220,1);
+
     public int pointsAdded = 0;
-    public double[] newData = new double[2];
+    public double[] newData = new double[4];
     public int index = 0;
 
 
@@ -106,7 +113,7 @@ public class CircularBufferGraph extends FrameLayout {
         dataSeries = new DynamicSeries("Buffer Plot");
 
         // Set X and Y domain
-        historyPlot.setRangeBoundaries(400, 1200, BoundaryMode.FIXED);
+        historyPlot.setRangeBoundaries(-20, 20, BoundaryMode.FIXED);
         historyPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
         // add dataSeries to plot and define color of plotted line
@@ -151,7 +158,7 @@ public class CircularBufferGraph extends FrameLayout {
         historyPlot.getGraph().position(0, HorizontalPositioning.ABSOLUTE_FROM_LEFT.ABSOLUTE_FROM_LEFT,
                 0, VerticalPositioning.ABSOLUTE_FROM_TOP);
 
-        // Add plot to CircularBuffer FrameLayout
+        // Add plot to CircularBufferGraph
         this.addView(historyPlot, params);
     }
 
@@ -217,7 +224,7 @@ public class CircularBufferGraph extends FrameLayout {
             switch (p.packetType()) {
                 case EEG:
                     getEegChannelValues(newData,p);
-                    eegBuffer = updateBuffer(eegBuffer, newData);
+                    eegBuffer.update(newData);
                     eegStale = true;
                     break;
                 case ACCELEROMETER:
@@ -231,24 +238,12 @@ public class CircularBufferGraph extends FrameLayout {
             }
         }
 
-        // Circular Buffer
-
         // Updates newData array based on incoming EEG channel values
         private void getEegChannelValues(double[] newData, MuseDataPacket p) {
             newData[0] = p.getEegChannelValue(Eeg.EEG1);
             newData[1] = p.getEegChannelValue(Eeg.EEG2);
-            //newData[2] = p.getEegChannelValue(Eeg.EEG3);
-            //newData[3] = p.getEegChannelValue(Eeg.EEG4);
-        }
-
-        // Adds newData array to current index in circular buffer. When buffer is full, index is reset
-        // newData is currently 1D, but could be made 2D in the future.
-        private double[][] updateBuffer(double[][] buffer, double[] newData) {
-            buffer[index] = newData;
-            index++;
-            pointsAdded++;
-            if (index >= buffer.length - 1) { index = 0;}
-            return buffer;
+            newData[2] = p.getEegChannelValue(Eeg.EEG3);
+            newData[3] = p.getEegChannelValue(Eeg.EEG4);
         }
 
         @Override
@@ -294,6 +289,10 @@ public class CircularBufferGraph extends FrameLayout {
         //private MyObservable notifier;
         private boolean keepRunning = true;
 
+        double[][] latestSamples;
+        double[][] filteredSamples;
+        double[] filtResult;
+
         @Override
         public void run() {
             android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
@@ -302,23 +301,28 @@ public class CircularBufferGraph extends FrameLayout {
                 while (keepRunning) {
                     Thread.sleep(2);
                     if (dataSeries.size() > PLOT_LENGTH) {
-                        dataSeries.removeFirst();
+                        dataSeries.clear();
                     }
-                    // Performs a data processing operation on a ~1s sample of EEG data
-                    if (pointsAdded >= 110) {
+                    // Data processing methods will go here
+                    // TODO write filtering, artifact detection, and fourier transform methods
 
-                        // Data processing methods will go here
-                        // TODO write filtering, artifact detection, and fourier transform methods
-                        // TODO implement EJML Matrix library to be able to easily take subarrays of eegBuffer
-                        dataSeries.addLast(eegBuffer[index][0]);
-                        pointsAdded = 0;
-                    }
+                    // Extract latest raw and filtered samples
+                    latestSamples = eegBuffer.extract(filter.getNB());
+            
+                    filteredSamples = filteredBuffer.extract(filter.getNA()-1);
+
+                    // Filter new raw sample
+                    filtResult = filter.transform(latestSamples, filteredSamples);
+
+                    // Update filtered buffer
+                    filteredBuffer.update(filtResult);
+
+                    dataSeries.addLast(filtResult[channelOfInterest] * 1000000000);
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-
         public void stopThread() {
             keepRunning = false;
         }
@@ -334,8 +338,6 @@ public class CircularBufferGraph extends FrameLayout {
         //private int index;
         private String title;
         private volatile LinkedList<Number> yVals = new LinkedList<Number>();
-
-
 
         public DynamicSeries(String title) {
             this.title = title;

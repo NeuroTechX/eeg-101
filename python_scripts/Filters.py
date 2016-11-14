@@ -1,3 +1,6 @@
+import numpy as np
+import scipy.signal as signal
+
 class Filter:
     def __init__(self, fs, filter_type):
 

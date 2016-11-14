@@ -21,6 +21,7 @@ import PopUpLink from '../components/PopUpLink';
 
 //Interfaces. For advanced elements such as graphs
 import GraphView from '../interface/GraphView';
+import CircBufferGraphView from '../interface/CircBufferGraphView';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {

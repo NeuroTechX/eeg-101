@@ -21,6 +21,7 @@ import ConnectorThree from './src/scenes/connector-03';
 import SlideOne from './src/scenes/slide-01';
 import SlideTwo from './src/scenes/slide-02';
 import SlideThree from './src/scenes/slide-03';
+import SlideFour from './src/scenes/slide-04';
 import End from './src/scenes/end';
 
 // Navbar import
@@ -64,6 +65,7 @@ class EEG_Project extends Component {
             <Scene component={SlideOne} key='SlideOne' previous='CONNECTION' hideNavBar={false}/>
             <Scene component={SlideTwo} key='SlideTwo'previous='INTRODUCTION'/>
             <Scene component={SlideThree} key='SlideThree'previous='PHYSIOLOGY'/>
+            <Scene component={SlideFour} key='SlideFour'previous='HARDWARE'/>
             <Scene component={End} key='End' previous='HARDWARE'/>
           </Scene>
         </RouterWithRedux>
