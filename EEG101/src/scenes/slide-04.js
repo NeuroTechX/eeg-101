@@ -35,14 +35,17 @@ class SlideFour extends Component {
     isVisible: true;
 
       // Initialize States
-    this.state = {popUpVisible: false};
-  }
+    this.state = {
+      popUpVisible: false,
+    channelOfInterest: 1,
+  };
+}
 
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.graphContainer}>
-            <CircBufferGraphView style={{flex:1}} visibility={this.props.isVisible}/>
+          <CircBufferGraphView style={{flex:1}} visibility={this.props.isVisible} channelOfInterest={this.state.channelOfInterest}/>
         </View>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
@@ -55,6 +58,10 @@ class SlideFour extends Component {
             <Text style={styles.header}>Preparing the signal for analysis</Text>
             <Text style={styles.body}>This is a test of the Circular Buffer component of an upcoming analysis graph illustrating how to remove <PopUpLink onPress={() => this.setState({popUpVisible: true})}>noise</PopUpLink> from this signal.</Text>
             <Button onPress={Actions.End}>Next</Button>
+          </View>
+
+          <View style ={styles.pageStyle}>
+            <ElectrodeSelector channelOfInterest={(channel) => this.setState({channelOfInterest: channel})}/>
           </View>
         </ViewPagerAndroid>
 

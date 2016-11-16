@@ -60,8 +60,10 @@ body: {
     fontSize: 15,
     margin: 20,
     color: '#ffffff',
-    textAlign: 'center'
+    textAlign: 'center',
+    borderWidth: 1,
   },
+    
 
 instructions: {
   fontFamily: 'Roboto-Bold',

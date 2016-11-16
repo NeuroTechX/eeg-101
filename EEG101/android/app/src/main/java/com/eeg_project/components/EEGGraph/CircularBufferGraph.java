@@ -2,7 +2,6 @@ package com.eeg_project.components.EEGGraph;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -16,7 +15,6 @@ import com.androidplot.ui.VerticalPositioning;
 import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.XYPlot;
-import com.androidplot.xy.XYSeries;
 import com.choosemuse.libmuse.Eeg;
 import com.choosemuse.libmuse.Muse;
 import com.choosemuse.libmuse.MuseArtifactPacket;
@@ -28,31 +26,19 @@ import com.eeg_project.MainApplication;
 
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
-import com.google.common.primitives.Doubles;
 
-import org.ejml.simple.SimpleMatrix;
-
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
-
-/**
- * Created by dano on 26/10/16.
- */
-
+// Android View that graphs processed EEG data
 public class CircularBufferGraph extends FrameLayout {
 
     // ----------------------------------------------------------------------
     // Variables
-    private XYPlot historyPlot;
-    private static final int PLOT_LENGTH = 221;
+    private XYPlot circBufferPlot;
+    private static final int PLOT_LENGTH = 220;
     private CircularBufferGraph.MyPlotUpdater plotUpdater;
     CircularBufferGraph.HistoryDataSource dataSource;
     private DynamicSeries dataSeries;
-    private Thread myThread;
-    String TAG = "RandomPlot";
-    private final Handler handler = new Handler();
     public CircularBufferGraph.museDataListener dataListener;
-    private boolean eegStale;
+    private boolean eegFresh;
     Thread dataThread;
     Thread renderingThread;
 
@@ -63,16 +49,11 @@ public class CircularBufferGraph extends FrameLayout {
     // Reference to global application state used for connected Muse
     MainApplication appState;
 
-    // Circular data buffer
-    public CircularBuffer eegBuffer = new CircularBuffer(220,4);
-    public CircularBuffer filteredBuffer = new CircularBuffer(220,4);
-
-    public Filter filter = new Filter(220,1);
-
-    public int pointsAdded = 0;
+    // Signal processing
+    public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
+    public CircularBuffer filteredBuffer = new CircularBuffer(220, 4);
+    public Filter filter = new Filter(220, "bandpass");
     public double[] newData = new double[4];
-    public int index = 0;
-
 
     // ------------------------------------------------------------------------
     // Constructors
@@ -84,8 +65,7 @@ public class CircularBufferGraph extends FrameLayout {
     }
 
     // -----------------------------------------------------------------------
-    // Bridge functions
-
+    // Bridge functions (can be called from JS by setting props)
     public void setChannelOfInterest(int channel) {
         channelOfInterest = channel;
     }
@@ -96,15 +76,11 @@ public class CircularBufferGraph extends FrameLayout {
     // Initialize and style AndroidPlot Graph. XML styling is not used.
     public void initView(Context context) {
 
-        // Set FrameLayout parameters for CircularBufferGraph View, which will be a child of FrameLayout
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-
-        // Create historyPlot
-        historyPlot = new XYPlot(context, "EEG Circ Buffer Plot");
+        // Create circBufferPlot
+        circBufferPlot = new XYPlot(context, "EEG Circ Buffer Plot");
 
         // Create plotUpdater
-        plotUpdater = new CircularBufferGraph.MyPlotUpdater(historyPlot);
+        plotUpdater = new CircularBufferGraph.MyPlotUpdater(circBufferPlot);
 
         // Create dataSource
         dataSource = new CircularBufferGraph.HistoryDataSource();
@@ -113,53 +89,54 @@ public class CircularBufferGraph extends FrameLayout {
         dataSeries = new DynamicSeries("Buffer Plot");
 
         // Set X and Y domain
-        historyPlot.setRangeBoundaries(-20, 20, BoundaryMode.FIXED);
-        historyPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
+        circBufferPlot.setRangeBoundaries(-10, 10, BoundaryMode.FIXED);
+        circBufferPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
         // add dataSeries to plot and define color of plotted line
-        historyPlot.addSeries(dataSeries,
+        circBufferPlot.addSeries(dataSeries,
                 new LineAndPointFormatter(Color.rgb(255,255,255), null, null, null));
 
         // Format plot layout
         //Remove margins, padding and border
-        historyPlot.setPlotMargins(0, 0, 0, 0);
-        historyPlot.setPlotPadding(0, 0, 0, 0);
-        historyPlot.getBorderPaint().setColor(Color.WHITE);
+        circBufferPlot.setPlotMargins(0, 0, 0, 0);
+        circBufferPlot.setPlotPadding(0, 0, 0, 0);
+        circBufferPlot.getBorderPaint().setColor(Color.WHITE);
 
         // Set plot background color
-        historyPlot.getGraph().getBackgroundPaint().setColor(Color.rgb(114,194,241));
+        circBufferPlot.getGraph().getBackgroundPaint().setColor(Color.rgb(114,194,241));
 
         // Remove gridlines
-        historyPlot.getGraph().getGridBackgroundPaint().setColor(Color.TRANSPARENT);
-        historyPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
-        historyPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
-        historyPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
-        historyPlot.getGraph().getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
+        circBufferPlot.getGraph().getGridBackgroundPaint().setColor(Color.TRANSPARENT);
+        circBufferPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
+        circBufferPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
+        circBufferPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
+        circBufferPlot.getGraph().getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
 
 
         // Remove axis labels and values
         // Domain = X; Range = Y
-        historyPlot.setDomainLabel(null);
-        historyPlot.setRangeLabel(null);
-        historyPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
-        historyPlot.getGraph().getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
-        historyPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
-        historyPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
+        circBufferPlot.setDomainLabel(null);
+        circBufferPlot.setRangeLabel(null);
+        circBufferPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
+        circBufferPlot.getGraph().getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
+        circBufferPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
+        circBufferPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
 
         // Remove extraneous elements
-        historyPlot.getLayoutManager().remove(historyPlot.getLegend());
+        circBufferPlot.getLayoutManager().remove(circBufferPlot.getLegend());
 
         // Set size of plot
         SizeMetric height = new SizeMetric(1, SizeMode.FILL);
         SizeMetric width = new SizeMetric(1, SizeMode.FILL);
-        historyPlot.getGraph().setSize(new Size(height, width));
+        circBufferPlot.getGraph().setSize(new Size(height, width));
 
         // Set position of plot (should be tweaked in order to center chart position)
-        historyPlot.getGraph().position(0, HorizontalPositioning.ABSOLUTE_FROM_LEFT.ABSOLUTE_FROM_LEFT,
+        circBufferPlot.getGraph().position(0, HorizontalPositioning.ABSOLUTE_FROM_LEFT.ABSOLUTE_FROM_LEFT,
                 0, VerticalPositioning.ABSOLUTE_FROM_TOP);
 
         // Add plot to CircularBufferGraph
-        this.addView(historyPlot, params);
+        this.addView(circBufferPlot, new FrameLayout.LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }
 
     // Called when user navigates away from parent React Native component. Stops active threads in order to limit memory usage
@@ -188,14 +165,12 @@ public class CircularBufferGraph extends FrameLayout {
     }
 
     // Start thread that will render the plot at a fixed speed
-    //
     public void startRenderingThread(){
         renderingThread = new Thread (plotUpdater);
         renderingThread.start();
     }
 
-    // Start thread that will render the plot at a fixed speed
-    //
+    // Stop all threads
     public void stopThreads(){
         plotUpdater.stopThread();
         dataSource.stopThread();
@@ -211,6 +186,10 @@ public class CircularBufferGraph extends FrameLayout {
     // Listener that receives incoming Muse data packets and updates the eegbuffer
     class museDataListener extends MuseDataListener {
 
+        double[][] latestSamples;
+        double[][] filteredSamples;
+        double[] filtResult;
+
         // Constructor
         museDataListener() {
         }
@@ -218,21 +197,28 @@ public class CircularBufferGraph extends FrameLayout {
         // Called whenever an incoming data packet is received. Handles different types of incoming data packets and updates data correctly
         @Override
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
-
-            // valuesSize returns the number of data values contained in the packet.
-            final long n = p.valuesSize();
             switch (p.packetType()) {
                 case EEG:
                     getEegChannelValues(newData,p);
                     eegBuffer.update(newData);
-                    eegStale = true;
+                    if (filteredBuffer.getIndex() >= PLOT_LENGTH -1) {
+                        dataSeries.clear();
+                    }
+                    // Extract latest raw and filtered samples
+                    latestSamples = eegBuffer.extract(filter.getNB());
+
+                    filteredSamples = filteredBuffer.extract(filter.getNA() - 1);
+
+                    // Filter new raw sample
+                    filtResult = filter.transform(latestSamples, filteredSamples);
+                    Log.w("EEG 101", "filtRes: " + filtResult[channelOfInterest - 1]);
+
+                    // Update filtered buffer
+                    filteredBuffer.update(filtResult);
+                    dataSeries.addLast(filtResult[channelOfInterest - 1] );
+
+                    eegFresh = false;
                     break;
-                case ACCELEROMETER:
-                    // Can do other things here for different types of packets
-                case ALPHA_RELATIVE:
-                case BATTERY:
-                case DRL_REF:
-                case QUANTIZATION:
                 default:
                     break;
             }
@@ -283,115 +269,27 @@ public class CircularBufferGraph extends FrameLayout {
     }
 
     // Data source runnable
-    // Updates dataSeries, has room for data processing
+    // Processes raw EEG data and updates dataSeries
     public class HistoryDataSource implements Runnable {
 
         //private MyObservable notifier;
         private boolean keepRunning = true;
 
-        double[][] latestSamples;
-        double[][] filteredSamples;
-        double[] filtResult;
+
 
         @Override
         public void run() {
             android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
             keepRunning = true;
-            try {
                 while (keepRunning) {
-                    Thread.sleep(2);
-                    if (dataSeries.size() > PLOT_LENGTH) {
-                        dataSeries.clear();
-                    }
-                    // Data processing methods will go here
-                    // TODO write filtering, artifact detection, and fourier transform methods
 
-                    // Extract latest raw and filtered samples
-                    latestSamples = eegBuffer.extract(filter.getNB());
-            
-                    filteredSamples = filteredBuffer.extract(filter.getNA()-1);
-
-                    // Filter new raw sample
-                    filtResult = filter.transform(latestSamples, filteredSamples);
-
-                    // Update filtered buffer
-                    filteredBuffer.update(filtResult);
-
-                    dataSeries.addLast(filtResult[channelOfInterest] * 1000000000);
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
+
         public void stopThread() {
             keepRunning = false;
         }
 
     }
 
-    // ---------------------------------------------------------------------
-// Data Series
-
-    // AndroidPlot class that stores data to be plotted. getX() and getY() are called by XYPlot to to draw graph
-    // This implementation only stores Y values, with X values implicitily determined by the index of the data in the LinkedList
-    class DynamicSeries implements XYSeries {
-        //private int index;
-        private String title;
-        private volatile LinkedList<Number> yVals = new LinkedList<Number>();
-
-        public DynamicSeries(String title) {
-            this.title = title;
-        }
-
-        @Override
-        public String getTitle() {
-            return title;
-        }
-
-        @Override
-        public int size() {
-            return yVals != null ? yVals.size() : 0;
-        }
-
-        @Override
-        public Number getX(int index) {
-            return index;
-        }
-
-        @Override
-        public Number getY(int index) {
-            return yVals.get(index);
-        }
-
-        public void addFirst(Number y) {
-            yVals.addFirst(y);
-        }
-
-        public void addLast(Number y) {
-            yVals.addLast(y);
-        }
-
-        public void addAll(double[] y) {
-            yVals.addAll(Doubles.asList(y));
-        }
-
-        public void removeFirst() {
-            if (size() <= 0) {
-                throw new NoSuchElementException();
-            }
-            yVals.removeFirst();
-        }
-
-        public void removeLast() {
-            if (size() <= 0) {
-                throw new NoSuchElementException();
-            }
-            yVals.removeLast();
-        }
-
-        public void clear() {
-            yVals.clear();
-        }
-
-    }
 }

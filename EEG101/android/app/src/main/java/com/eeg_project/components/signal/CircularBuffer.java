@@ -1,14 +1,19 @@
 package com.eeg_project.components.signal;
 import java.util.Arrays; // For printing arrays when debugging
 
+// A pure Java implementation of a circular buffer
 public class CircularBuffer {
 
+    // ------------------------------------------------------------------------
+    // Variables
     private int bufferLength;
     private int nbCh;
     private int index;
     private int pts;
     private double[][] buffer;
 
+    // ------------------------------------------------------------------------
+    // Constructor
     public CircularBuffer(int n, int m) {
         bufferLength = n;
         nbCh = m;
@@ -17,6 +22,8 @@ public class CircularBuffer {
         buffer = new double[bufferLength][nbCh];
     }
 
+    // ------------------------------------------------------------------------
+    // Methods
     public void update(double[] newData) {
 
         if (newData.length == nbCh) {
@@ -29,6 +36,7 @@ public class CircularBuffer {
         }
     }
 
+    // Extracts an array containing the last nbSamples from the buffer. If the loop that fills the extracted samples encounters the beginning of the buffer, it will begin to take samples from the end of the buffer
     public double[][] extract(int nbSamples) {
 
         int extractIndex;
@@ -49,6 +57,8 @@ public class CircularBuffer {
     public void print() {
         System.out.println(Arrays.deepToString(buffer));
     }
+
+    public int getIndex() { return index; }
 
     private int mod(int a, int b) {
         // Modulo operation that always return a positive number

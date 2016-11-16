@@ -2,9 +2,7 @@ package com.eeg_project.components.EEGGraph;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -19,7 +17,6 @@ import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.FastLineAndPointRenderer;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.XYPlot;
-import com.androidplot.xy.XYSeries;
 import com.choosemuse.libmuse.Eeg;
 import com.choosemuse.libmuse.Muse;
 import com.choosemuse.libmuse.MuseArtifactPacket;
@@ -29,9 +26,6 @@ import com.choosemuse.libmuse.MuseDataPacketType;
 import com.eeg_project.MainApplication;
 
 import java.lang.ref.WeakReference;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
 
 
 // Android View that handles basic single channel EEGGraph activities
@@ -39,18 +33,18 @@ public class EEGGraph extends FrameLayout {
 
     // ----------------------------------------------------------------------
     // Variables
-    private XYPlot historyPlot;
+    private XYPlot eegPlot;
     private static final int PLOT_LENGTH = 200;
     private MyPlotUpdater plotUpdater;
     HistoryDataSource data;
-    private DynamicSeries historySeries;
-    private Thread myThread;
+    private DynamicSeries dataSeries;
     String TAG = "RandomPlot";
-    private final Handler handler = new Handler();
     Thread dataThread;
     Thread renderingThread;
     LineAndPointFormatter lineFormatter;
-
+    public DataListener dataListener;
+    private final double[] eegBuffer = new double[6];
+    private boolean eegStale;
 
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
@@ -58,12 +52,6 @@ public class EEGGraph extends FrameLayout {
 
     // grab reference to global Muse
     MainApplication appState;
-
-
-    public DataListener dataListener;
-    private final double[] eegBuffer = new double[6];
-    private boolean eegStale;
-
 
     // ------------------------------------------------------------------------
     // Constructors
@@ -87,15 +75,12 @@ public class EEGGraph extends FrameLayout {
 
     // -----------------------------------------------------------------------
     // Bridge functions
-
     public void setChannelOfInterest(int channel) {
 
         channelOfInterest = channel;
-        historySeries.clear();
-
-
+        dataSeries.clear();
         /* Uncomment to make plot change color based on selected electrode
-        historyPlot.getGraph().getBackgroundPaint().setColor(Color.rgb(255,255,255));
+        eegPlot.getGraph().getBackgroundPaint().setColor(Color.rgb(255,255,255));
 
         // Set color based on selected channel
         switch(channel) {
@@ -119,28 +104,23 @@ public class EEGGraph extends FrameLayout {
     // -----------------------------------------------------------------------
     // Lifecycle methods (initView and onVisibilityChanged)
 
+    // Initializes and styles the AndroidPlot XYPlot component of EEGGraph
+    // All styling is performed entirely within this function, XML is not used
     public void initView(Context context) {
 
-        //This view is styled entirely within this function. XML is not used at all
-        // Parameters for EEGGraph Chld
-        LayoutParams params = new LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-
-
-
-        // Create historyPlot
-        historyPlot = new XYPlot(context, "EEG History Plot");
+        // Create eegPlot
+        eegPlot = new XYPlot(context, "EEG History Plot");
 
         // set up PlotUpdater
-        plotUpdater = new MyPlotUpdater(historyPlot);
+        plotUpdater = new MyPlotUpdater(eegPlot);
 
-        // get datasets (Y will be historySeries, x will be implicitly generated):
+        // get datasets (Y will be dataSeries, x will be implicitly generated):
         data = new HistoryDataSource();
-        historySeries = new DynamicSeries("EEG data");
+        dataSeries = new DynamicSeries("EEG data");
 
         // Set X and Y domain
-        historyPlot.setRangeBoundaries(400, 1200, BoundaryMode.FIXED);
-        historyPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
+        eegPlot.setRangeBoundaries(400, 1200, BoundaryMode.FIXED);
+        eegPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
         // This is critical for being able to set the color of the plot
         PixelUtils.init(getContext());
@@ -149,7 +129,7 @@ public class EEGGraph extends FrameLayout {
         lineFormatter = new FastLineAndPointRenderer.Formatter(Color.rgb(255,255,255), null, null, null);
 
         // add series to plot
-        historyPlot.addSeries(historySeries,
+        eegPlot.addSeries(dataSeries,
                 lineFormatter);
 
         // hook up series to data source
@@ -157,50 +137,48 @@ public class EEGGraph extends FrameLayout {
 
         // Format plot layout
         //Remove margins, padding and border
-        historyPlot.setPlotMargins(0, 0, 0, 0);
-        historyPlot.setPlotPadding(0, 0, 0, 0);
-        historyPlot.getBorderPaint().setColor(Color.WHITE);
+        eegPlot.setPlotMargins(0, 0, 0, 0);
+        eegPlot.setPlotPadding(0, 0, 0, 0);
+        eegPlot.getBorderPaint().setColor(Color.WHITE);
 
         // Make plot background blue (including removing grid lines)
-        historyPlot.getGraph().getBackgroundPaint().setColor(Color.rgb(114,194,241));
-        //historyPlot.getGraph().setBackgroundPaint(null);
-
-
-        historyPlot.getGraph().getGridBackgroundPaint().setColor(Color.TRANSPARENT);
-        historyPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
-        historyPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
-        historyPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
-        historyPlot.getGraph().getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
+        eegPlot.getGraph().getBackgroundPaint().setColor(Color.rgb(114,194,241));
+        //eegPlot.getGraph().setBackgroundPaint(null);
+        eegPlot.getGraph().getGridBackgroundPaint().setColor(Color.TRANSPARENT);
+        eegPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
+        eegPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
+        eegPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
+        eegPlot.getGraph().getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
 
 
         // Remove axis labels and values
         // Domain = X; Range = Y
-        historyPlot.setDomainLabel(null);
-        historyPlot.setRangeLabel(null);
-        historyPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
-        historyPlot.getGraph().getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
-        historyPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
-        historyPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
+        eegPlot.setDomainLabel(null);
+        eegPlot.setRangeLabel(null);
+        eegPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
+        eegPlot.getGraph().getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
+        eegPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
+        eegPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
 
 
         // Remove extraneous elements
-        //historyPlot.setTitle(null);
-        historyPlot.getLayoutManager().remove(historyPlot.getLegend());
+        //eegPlot.setTitle(null);
+        eegPlot.getLayoutManager().remove(eegPlot.getLegend());
 
         SizeMetric height = new SizeMetric(1, SizeMode.FILL);
         SizeMetric width = new SizeMetric(1, SizeMode.FILL);
         // Set size of plot
-        historyPlot.getGraph().setSize(new Size(height, width));
+        eegPlot.getGraph().setSize(new Size(height, width));
 
         // Set position of plot (should be tweaked in order to center chart position)
-        historyPlot.getGraph().position(0, HorizontalPositioning.ABSOLUTE_FROM_LEFT.ABSOLUTE_FROM_LEFT,
+        eegPlot.getGraph().position(0, HorizontalPositioning.ABSOLUTE_FROM_LEFT.ABSOLUTE_FROM_LEFT,
                 0, VerticalPositioning.ABSOLUTE_FROM_TOP);
 
         // Add children to EEGGraph
-        this.addView(historyPlot, params);
-        historyPlot.setDrawingCacheEnabled(true);
+        this.addView(eegPlot, new LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-
+        eegPlot.setDrawingCacheEnabled(true);
 
     }
 
@@ -279,10 +257,6 @@ public class EEGGraph extends FrameLayout {
             buffer[1] = p.getEegChannelValue(Eeg.EEG2);
             buffer[2] = p.getEegChannelValue(Eeg.EEG3);
             buffer[3] = p.getEegChannelValue(Eeg.EEG4);
-            /*
-            buffer[4] = p.getEegChannelValue(Eeg.AUX_LEFT);
-            buffer[5] = p.getEegChannelValue(Eeg.AUX_RIGHT);
-            */
         }
 
         @Override
@@ -324,7 +298,7 @@ public class EEGGraph extends FrameLayout {
     }
 
 
-    // Updates historySeries, performs data processing
+    // Updates dataSeries, performs data processing
     public class HistoryDataSource implements Runnable {
 
         //private MyObservable notifier;
@@ -339,11 +313,11 @@ public class EEGGraph extends FrameLayout {
                 while (keepRunning) {
                     Thread.sleep(2);
                     if (eegStale) {
-                        if (historySeries.size() > PLOT_LENGTH) {
-                            historySeries.removeFirst();
+                        if (dataSeries.size() > PLOT_LENGTH) {
+                            dataSeries.removeFirst();
                         }
 
-                        historySeries.addLast(eegBuffer[channelOfInterest-1]);
+                        dataSeries.addLast(eegBuffer[channelOfInterest-1]);
                         eegStale = false;
                     }
                 }
@@ -357,72 +331,5 @@ public class EEGGraph extends FrameLayout {
         }
     }
 
-    // ---------------------------------------------------------------------
-// Data Series
 
-    // AndroidPlot class that stores data to be plotted. getX() and getY() are called by XYPlot to to draw graph
-    // This implementation only stores Y values, with X values implicitily determined by the index of the data in the LinkedList
-    class DynamicSeries implements XYSeries {
-        //private int index;
-        private String title;
-        private volatile LinkedList<Number> yVals = new LinkedList<Number>();
-
-
-
-        public DynamicSeries(String title) {
-            this.title = title;
-        }
-
-        @Override
-        public String getTitle() {
-            return title;
-        }
-
-        @Override
-        public int size() {
-            return yVals != null ? yVals.size() : 0;
-        }
-
-        @Override
-        public Number getX(int index) {
-            return index;
-        }
-
-        @Override
-        public Number getY(int index) {
-            return yVals.get(index);
-        }
-
-        public void addFirst(Number y) {
-            yVals.addFirst(y);
-        }
-
-        public void addLast(Number y) {
-            yVals.addLast(y);
-        }
-
-        public void addAll(Number[] y) {
-            yVals.addAll(Arrays.asList(y));
-
-        }
-
-        public void removeFirst() {
-            if (size() <= 0) {
-                throw new NoSuchElementException();
-            }
-            yVals.removeFirst();
-        }
-
-        public void removeLast() {
-            if (size() <= 0) {
-                throw new NoSuchElementException();
-            }
-            yVals.removeLast();
-        }
-
-        public void clear() {
-            yVals.clear();
-        }
-
-    }
 }
