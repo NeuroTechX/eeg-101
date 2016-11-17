@@ -201,12 +201,11 @@ public class CircularBufferGraph extends FrameLayout {
                 case EEG:
                     getEegChannelValues(newData,p);
                     eegBuffer.update(newData);
-                    if (filteredBuffer.getIndex() >= PLOT_LENGTH -1) {
+                    if (dataSeries.size() >= PLOT_LENGTH) {
                         dataSeries.clear();
                     }
                     // Extract latest raw and filtered samples
                     latestSamples = eegBuffer.extract(filter.getNB());
-
                     filteredSamples = filteredBuffer.extract(filter.getNA() - 1);
 
                     // Filter new raw sample
@@ -216,8 +215,6 @@ public class CircularBufferGraph extends FrameLayout {
                     // Update filtered buffer
                     filteredBuffer.update(filtResult);
                     dataSeries.addLast(filtResult[channelOfInterest - 1] );
-
-                    eegFresh = false;
                     break;
                 default:
                     break;

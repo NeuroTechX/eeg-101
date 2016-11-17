@@ -43,7 +43,7 @@ public class EEGGraph extends FrameLayout {
     Thread renderingThread;
     LineAndPointFormatter lineFormatter;
     public DataListener dataListener;
-    private final double[] eegBuffer = new double[6];
+    private final double[] eegBuffer = new double[4];
     private boolean eegStale;
 
     // Bridged props
@@ -119,7 +119,7 @@ public class EEGGraph extends FrameLayout {
         dataSeries = new DynamicSeries("EEG data");
 
         // Set X and Y domain
-        eegPlot.setRangeBoundaries(400, 1200, BoundaryMode.FIXED);
+        eegPlot.setRangeBoundaries(500, 1100, BoundaryMode.FIXED);
         eegPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
         // This is critical for being able to set the color of the plot
@@ -233,11 +233,8 @@ public class EEGGraph extends FrameLayout {
 
         @Override
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
-            // valuesSize returns the number of data values contained in the packet.
-            final long n = p.valuesSize();
             switch (p.packetType()) {
                 case EEG:
-                    assert(eegBuffer.length >= n);
                     getEegChannelValues(eegBuffer,p);
                     eegStale = true;
                     break;
@@ -306,8 +303,6 @@ public class EEGGraph extends FrameLayout {
 
         @Override
         public void run() {
-
-            android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
             keepRunning = true;
             try {
                 while (keepRunning) {
