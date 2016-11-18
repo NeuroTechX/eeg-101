@@ -34,7 +34,7 @@ public class EEGGraph extends FrameLayout {
     // ----------------------------------------------------------------------
     // Variables
     private XYPlot eegPlot;
-    private static final int PLOT_LENGTH = 200;
+    private static final int PLOT_LENGTH = 220;
     private MyPlotUpdater plotUpdater;
     HistoryDataSource data;
     private DynamicSeries dataSeries;
@@ -303,15 +303,14 @@ public class EEGGraph extends FrameLayout {
 
         @Override
         public void run() {
-            keepRunning = true;
             try {
+                keepRunning = true;
                 while (keepRunning) {
                     Thread.sleep(2);
                     if (eegStale) {
                         if (dataSeries.size() > PLOT_LENGTH) {
                             dataSeries.removeFirst();
                         }
-
                         dataSeries.addLast(eegBuffer[channelOfInterest-1]);
                         eegStale = false;
                     }

@@ -3,7 +3,8 @@ import {
   StyleSheet,
   Text,
   View,
-  ViewPagerAndroid
+  ViewPagerAndroid,
+  Image
 } from 'react-native';
 import{
   Actions,
@@ -12,8 +13,6 @@ import { connect } from 'react-redux';
 
 //Interfaces. For advanced elements such as graphs
 import GraphView from '../interface/GraphView';
-import CircBufferGraphView from '../interface/CircBufferGraphView';
-
 
 import Button from '../components/Button';
 import PopUp from '../components/PopUp';
@@ -21,11 +20,10 @@ import PopUpLink from '../components/PopUpLink';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
-    return {isVisible: state.scene.sceneKey === 'SlideFive'};
-    
+    return {isVisible: state.scene.sceneKey === 'SlideSix'};
   }
 
-class SlideFive extends Component {
+class SlideSix extends Component {
   constructor(props) {
     super(props);
     isVisible: true;
@@ -41,31 +39,31 @@ class SlideFive extends Component {
     return (
       <View style={styles.container}>
       
-        <View style={styles.halfGraphContainer}>
-            <GraphView style={{flex:1}} visibility={this.props.isVisible}/>
-          </View>
-          <View style={styles.halfGraphContainer}>
-            <CircBufferGraphView style={{flex:1}} visibility={this.props.isVisible}/>
+        <View style={styles.graphContainer}>
+            <Image source={require('../assets/windowing.png')}
+                style={styles.image}
+                resizeMode='contain'/>
           </View>
 
-          <Text style={styles.currentTitle}>FILTERING</Text>
+          <Text style={styles.currentTitle}>EPOCHING</Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
           initialPage={0}>
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>Preparing the signal for analysis.</Text>
-            <Text style={styles.body}>First, the EEG must be <PopUpLink onPress={() => this.setState({popUpVisible: true})}>filtered</PopUpLink> to extract signals that don't come from the brain.
+            <Text style={styles.header}>Chunking the signal</Text>
+            <Text style={styles.body}>Next, the EEG is divided into small segments or <PopUpLink onPress={() => this.setState({popUpVisible: true})}>'epochs.'</PopUpLink>
+             
             </Text>
-            <Button onPress={Actions.SlideSix}>Next</Button>
+            <Button onPress={Actions.SlideSeven}>Next</Button>
           </View>
           
         </ViewPagerAndroid>
 
-        <PopUp onClose={() => this.setState({popUpVisible: false})} visible={this.state.popUpVisible} 
-        title="Bandpass Filters">
-        Bandpass filters remove frequencies that sit outside the spectrum of those produced by the brain, attenuating irrelevant components of the EEG such as those produced by muscle activity or background electrical activity. Here we have implemented a low-pass filter that removes high frequency noise.
+        <PopUp onClose={() => this.setState({popUpVisible: false})} visible={this.state.popUpVisible}
+        title='Epochs'>
+        Our brain state is constantly changing, and the EEG changes with it. We divide the EEG into epochs so that that we can characterize them and understand how the EEG changes over time.
         </PopUp>
 
       </View>
@@ -75,7 +73,7 @@ class SlideFive extends Component {
 
 const styles = StyleSheet.create({
 
-  currentTitle: {
+ currentTitle: {
     marginLeft: 20,
     marginTop: 10,
     fontSize: 13,
@@ -120,13 +118,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
 
-  halfGraphContainer: {
-    
-    flex: 2,
-    justifyContent: 'center',
-    alignItems: 'stretch',
+  image: {
+    flex: 1,
+    width: null,
+    height: null,
   },
+
 
 });
 
-export default connect(mapStateToProps)(SlideFive);
+export default connect(mapStateToProps)(SlideSix);

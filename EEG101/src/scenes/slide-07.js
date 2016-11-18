@@ -3,7 +3,8 @@ import {
   StyleSheet,
   Text,
   View,
-  ViewPagerAndroid
+  ViewPagerAndroid,
+  Image
 } from 'react-native';
 import{
   Actions,
@@ -16,6 +17,12 @@ import GraphView from '../interface/GraphView';
 import Button from '../components/Button';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
+
+// Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
+function  mapStateToProps(state) {
+    return {isVisible: state.scene.sceneKey === 'SlideSeven'};
+    
+  }
 
 class SlideSeven extends Component {
   constructor(props) {
@@ -32,8 +39,12 @@ class SlideSeven extends Component {
       <View style={styles.container}>
       
         <View style={styles.graphContainer}>
-            <Text>Raw History plot goes here</Text>
+          <Image source={require('../assets/artifact.png')}
+                style={styles.image}
+                resizeMode='contain'/>
         </View>
+
+        <Text style={styles.currentTitle}>ARTIFACT REMOVAL</Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
@@ -41,19 +52,18 @@ class SlideSeven extends Component {
 
           
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>Preparing the signal for analysis</Text>
-            <Text style={styles.body}>Next, we divide the signal into
-             <PopUpLink onPress={() => this.setState({popUpVisible: true})}> epochs.</PopUpLink>
+            <Text style={styles.header}>Removing noise</Text>
+            <Text style={styles.body}>After the EEG has been divided into epochs, those that contain a <PopUpLink onPress={() => this.setState({popUpVisible: true})}> significant amount</PopUpLink> of noise can be removed
+             
             </Text>
             <Button onPress={Actions.SlideEight}>Next</Button>
           </View>
 
         </ViewPagerAndroid>
 
-
-
-        <PopUp onClose={() => this.setState({popUpVisible: false})} visible={this.state.popUpVisible}>
-          Our brain state is constantly changing, and the EEG signals change with it.  We divide the signals into short segments or epochs that we can characterize. For example, here we have extracted 1-second segments from your signals.    
+        <PopUp onClose={() => this.setState({popUpVisible: false})} visible={this.state.popUpVisible}
+        title="Artifact">
+        One simple way to define what a 'significant amount of noise' is to compare the range of an epoch to its neighbouring epochs. If one segment of the EEG fluctuated a lot more than its neighbours, get rid of it!
         </PopUp>
 
       </View>
@@ -63,14 +73,18 @@ class SlideSeven extends Component {
 
 const styles = StyleSheet.create({
 
-  pageStyle: {
-    padding: 20,
-    alignItems: 'stretch',
-    justifyContent: 'space-around',
- },
+currentTitle: {
+    marginLeft: 20,
+    marginTop: 10,
+    fontSize: 13,
+    fontFamily: 'Roboto-Medium',
+    color: '#6CCBEF',
+  },
 
-body: {
-    fontSize: 18,
+  body: {
+    fontFamily: 'Roboto-Light',
+    color: '#484848',
+    fontSize: 19,
   },
 
   container: {
@@ -78,17 +92,19 @@ body: {
     flex: 1,
     justifyContent: 'space-around',
     alignItems: 'stretch',
-},
+  },
 
   graphContainer: {
-    backgroundColor: '#66ccff',
+    backgroundColor: '#72c2f1',
     flex: 4,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'stretch',
   },
 
   header: {
-    fontSize: 22,
+    fontFamily: 'Roboto-Bold',
+    color: '#484848',
+    fontSize: 20,
   },
 
 
@@ -96,6 +112,18 @@ body: {
     flex: 4,
   },
 
+  pageStyle: {
+    padding: 20,
+    alignItems: 'stretch',
+    justifyContent: 'space-around',
+  },
+
+  image: {
+    flex: 1,
+    width: null,
+    height: null,
+  },
+
 });
 
-export default connect(({route}) => ({route}))(SlideSeven);
+export default connect(mapStateToProps)(SlideSeven);

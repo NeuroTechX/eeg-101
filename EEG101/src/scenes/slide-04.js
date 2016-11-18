@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import config from '../../config';
 
 
+
 //Interfaces. For advanced elements such as graphs
 import CircBufferGraphView from '../interface/CircBufferGraphView';
 
@@ -57,7 +58,7 @@ class SlideFour extends Component {
           <View style={styles.pageStyle}>
             <Text style={styles.header}>Preparing the signal for analysis</Text>
             <Text style={styles.body}>This is a test of the Circular Buffer component of an upcoming analysis graph illustrating how to remove <PopUpLink onPress={() => this.setState({popUpVisible: true})}>noise</PopUpLink> from this signal.</Text>
-            <Button onPress={Actions.End}>Next</Button>
+            <Button onPress={Actions.SlideFive}>Next</Button>
           </View>
 
           <View style ={styles.pageStyle}>

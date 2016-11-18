@@ -3,7 +3,8 @@ import {
   StyleSheet,
   Text,
   View,
-  ViewPagerAndroid
+  ViewPagerAndroid,
+  Image
 } from 'react-native';
 import{
   Actions,
@@ -16,13 +17,20 @@ import Button from '../components/Button';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
 
+// Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
+function  mapStateToProps(state) {
+    return {isVisible: state.scene.sceneKey === 'SlideEight'};
+    
+  }
+
 class SlideEight extends Component {
   constructor(props) {
     super(props);
 
       // Initialize States
     this.state = {
-      popUpVisible: false,
+      popUp1Visible: false,
+      popUp2Visible: false,
     }
   }
 
@@ -31,8 +39,12 @@ class SlideEight extends Component {
       <View style={styles.container}>
       
         <View style={styles.graphContainer}>
-            <Text>Raw History plot goes here</Text>
+            <Image source={require('../assets/fourier.png')}
+                style={styles.image}
+                resizeMode='contain'/>
         </View>
+
+        <Text style={styles.currentTitle}>FEATURE EXTRACTION</Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
@@ -40,16 +52,29 @@ class SlideEight extends Component {
 
           
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>Preparing the signal for analysis</Text>
+            <Text style={styles.header}>Extracting features of the EEG</Text>
             <Text style={styles.body}>Finally, we extract signal attributes that change according to brain state. These attributes are known as
-             <PopUpLink onPress={() => this.setState({popUpVisible: true})}> features</PopUpLink>
+             <PopUpLink onPress={() => this.setState({popUp1Visible: true})}> features.</PopUpLink> 
             </Text>
-            <Button onPress={Actions.SlideNine}>Next</Button>
+           
+          </View>
+
+          <View style={styles.pageStyle}>
+            <Text style={styles.header}>How are features extracted?</Text>
+            <Text style={styles.body}>Complex signals can be decomposed into a sum of many simpler signals or waves with a mathematical function known as the <PopUpLink onPress={() => this.setState({popUp2Visible: true})}> Fourier Transform.</PopUpLink>
+            </Text>
+            <Button onPress={Actions.End}>Next</Button>
+            
           </View>
         </ViewPagerAndroid>
 
-        <PopUp onClose={() => this.setState({popUpVisible: false})} visible={this.state.popUpVisible}>
-          For example, a typical EEG feature is the strength of different frequencies inside the signal (see next section). To obtain features, mathematical transformations are applied to the EEG epochs.    
+        <PopUp onClose={() => this.setState({popUp1Visible: false})} visible={this.state.popUp1Visible}
+        title="Features">
+        An EEG feature can be thought of as the strength of a certain frequency inside the signal. Different frequencies represent different characteristics of brain activity.   
+        </PopUp>
+        <PopUp onClose={() => this.setState({popUp2Visible: false})} visible={this.state.popUp2Visible}
+        title="Fourier transform">
+        The Fourier Transform is a mathematical function that can decompose a signal into the frequencies or waves that make it up. Often, we use an algorithm specifically called the Fast Fourier Transform (FFT) to perform this decomposition in EEG.
         </PopUp>
       </View>
     );
@@ -58,14 +83,18 @@ class SlideEight extends Component {
 
 const styles = StyleSheet.create({
 
-  pageStyle: {
-    padding: 20,
-    alignItems: 'stretch',
-    justifyContent: 'space-around',
- },
+currentTitle: {
+    marginLeft: 20,
+    marginTop: 10,
+    fontSize: 13,
+    fontFamily: 'Roboto-Medium',
+    color: '#6CCBEF',
+  },
 
-body: {
-    fontSize: 18,
+  body: {
+    fontFamily: 'Roboto-Light',
+    color: '#484848',
+    fontSize: 19,
   },
 
   container: {
@@ -73,17 +102,19 @@ body: {
     flex: 1,
     justifyContent: 'space-around',
     alignItems: 'stretch',
-},
+  },
 
   graphContainer: {
-    backgroundColor: '#66ccff',
+    backgroundColor: 'white',
     flex: 4,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'stretch',
   },
 
   header: {
-    fontSize: 22,
+    fontFamily: 'Roboto-Bold',
+    color: '#484848',
+    fontSize: 20,
   },
 
 
@@ -91,6 +122,18 @@ body: {
     flex: 4,
   },
 
+  pageStyle: {
+    padding: 20,
+    alignItems: 'stretch',
+    justifyContent: 'space-around',
+  },
+
+  image: {
+    flex: 1,
+    width: null,
+    height: null,
+  },
+
 });
 
-export default connect(({route}) => ({route}))(SlideEight);
+export default connect(mapStateToProps)(SlideEight);
