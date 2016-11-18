@@ -93,7 +93,7 @@ class SlideOne extends Component {
 
         <PopUp onClose={() => this.setState({popUp1Visible: false})} visible={this.state.popUp1Visible}
         title='What exactly is EEG?' image={require('../assets/hansberger.jpg')}>
-          Electroencephalography (EEG) is a technique that measures the electrical activity of the brain with sensors that record fluctuations in voltage at the surface of the skull. The first human electroencephalogram was recorded in 1924 by Hans Berger, a German psychiatrist whose interest in ‘psychic energy’ led him to experiment with the electrical fields of the brain.
+          Electroencephalography (EEG) is a technique that measures the electrical activity of the brain with sensors that record fluctuations in voltage at the surface of the skull. The first human electroencephalogram was recorded in 1924 by Hans Berger, a German psychiatrist whose interest in ‘psychic energy’ led him to experiment with the electrical fields of the brain
           </PopUp>
 
         <PopUp onClose={() => this.setState({popUp2Visible: false})} visible={this.state.popUp2Visible}
@@ -103,7 +103,7 @@ class SlideOne extends Component {
 
         <PopUp onClose={() => this.setState({popUp3Visible: false})} visible={this.state.popUp3Visible}
         title='EEG cannot read minds'>
-           The EEG signal is generated when tens of thousands of brain cells fire in synchrony. Although thinking about a cat produces a change in brain activity, this change is too small to affect the large-scale, rhythmic firing of the brain that EEG detects.
+           As you will soon learn, the EEG signal is generated when tens of thousands of brain cells produce electricity in-sync. However, no obvious signals accompany most thoughts, such as thinking about a cat. Obvious EEG signals which accompany thoughts are very rare.
         </PopUp>
         
         <PopUp onClose={() => this.setState({popUp4Visible: false})} visible={this.state.popUp4Visible}
