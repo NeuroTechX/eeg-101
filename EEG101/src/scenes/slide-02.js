@@ -95,17 +95,17 @@ class SlideThree extends Component {
 
         <PopUp onClose={() => this.setState({popUp1Visible: false})} visible={this.state.popUp1Visible}
         title='Neural basis of EEG'>
-          When synapse are activated on a neuron's dendrites, a small electric field (a dipole) is created along the body of the neuron due to the difference in charge between its axons and dendrites. This electric field only lasts for a few milliseconds.
+          When synapses are activated on a neuron's dendrites, a small electric field (dipole) is created along the body of the neuron due to the difference in charge between its axons and dendrites. This electric field only lasts for a few milliseconds.
         </PopUp>
 
         <PopUp onClose={() => this.setState({popUp2Visible: false})} visible={this.state.popUp2Visible}
         title='Neural basis of EEG'>
-          The electric fields produced by single neurons are vanishingly small. However, when large numbers of cortical neurons fire rhythmically their activity can produce electric fields that are large enough to cross the surface of the skull. This process is influenced by many factors, including depth, orientation, and subtype of neurons, making it a topic of ongoing research.
+          The electric fields produced by single neurons are vanishingly small. However, when large numbers of cortical neurons fire rhythmically, their activity can produce electric fields that are large enough to cross the surface of the skull. This process is influenced by many factors, including depth, orientation, and subtype of neurons, and is a topic of ongoing research.
         </PopUp>
         
         <PopUp onClose={() => this.setState({popUp3Visible: false})} visible={this.state.popUp3Visible}
         title='Brain states'>
-          As we fall asleep and go through the different sleep stages there are dramatic changes in rhythmic brain activity. Rhythmic activity can also be altered by emotions and certain aspects of cognition. However, when we shift from thinking about cats to thinking about dogs, for example, there is no measureable change.
+          As we fall asleep and pass through multiple sleep stages there are dramatic changes in rhythmic brain activity. Rhythmic activity can also be altered by emotions and certain aspects of cognition.
         </PopUp>
 
        <PopUp onClose={Actions.ConnectorOne} visible={(this.props.isVisible && this.props.connectionStatus === config.connectionStatus.DISCONNECTED)} title='Muse Disconnected'>

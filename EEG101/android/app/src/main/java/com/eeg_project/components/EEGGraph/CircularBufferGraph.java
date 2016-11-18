@@ -27,6 +27,12 @@ import com.eeg_project.MainApplication;
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+
 // Android View that graphs processed EEG data
 public class CircularBufferGraph extends FrameLayout {
 
@@ -41,6 +47,10 @@ public class CircularBufferGraph extends FrameLayout {
     private boolean eegFresh;
     Thread dataThread;
     Thread renderingThread;
+    public BufferedWriter rawWriter;
+    public BufferedWriter filtWriter;
+    public File rawLogFile = new File("~/eegdata/raw");
+    public File filtLogFile = new File("~/eegdata/filtered");
 
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
@@ -89,7 +99,7 @@ public class CircularBufferGraph extends FrameLayout {
         dataSeries = new DynamicSeries("Buffer Plot");
 
         // Set X and Y domain
-        circBufferPlot.setRangeBoundaries(-10, 10, BoundaryMode.FIXED);
+        circBufferPlot.setRangeBoundaries(500, 1100, BoundaryMode.FIXED);
         circBufferPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
         // add dataSeries to plot and define color of plotted line
@@ -186,10 +196,6 @@ public class CircularBufferGraph extends FrameLayout {
     // Listener that receives incoming Muse data packets and updates the eegbuffer
     class museDataListener extends MuseDataListener {
 
-        double[][] latestSamples;
-        double[][] filteredSamples;
-        double[] filtResult;
-
         // Constructor
         museDataListener() {
         }
@@ -198,23 +204,12 @@ public class CircularBufferGraph extends FrameLayout {
         @Override
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
             switch (p.packetType()) {
+
                 case EEG:
-                    getEegChannelValues(newData,p);
+                    getEegChannelValues(newData, p);
                     eegBuffer.update(newData);
-                    if (dataSeries.size() >= PLOT_LENGTH) {
-                        dataSeries.clear();
-                    }
-                    // Extract latest raw and filtered samples
-                    latestSamples = eegBuffer.extract(filter.getNB());
-                    filteredSamples = filteredBuffer.extract(filter.getNA() - 1);
+                    eegFresh = true;
 
-                    // Filter new raw sample
-                    filtResult = filter.transform(latestSamples, filteredSamples);
-                    Log.w("EEG 101", "filtRes: " + filtResult[channelOfInterest - 1]);
-
-                    // Update filtered buffer
-                    filteredBuffer.update(filtResult);
-                    dataSeries.addLast(filtResult[channelOfInterest - 1] );
                     break;
                 default:
                     break;
@@ -269,18 +264,35 @@ public class CircularBufferGraph extends FrameLayout {
     // Processes raw EEG data and updates dataSeries
     public class HistoryDataSource implements Runnable {
 
-        //private MyObservable notifier;
+        double[][] latestSamples;
+        double[][] filteredSamples;
+        double[] filtResult;
         private boolean keepRunning = true;
-
-
 
         @Override
         public void run() {
-            android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-            keepRunning = true;
+            try {
+                keepRunning = true;
                 while (keepRunning) {
+                    Thread.sleep(2);
+                    if (eegFresh) {
+                        if (dataSeries.size() >= PLOT_LENGTH) {
+                            dataSeries.removeFirst();
+                        }
+                        // Extract latest raw and filtered samples
+                        latestSamples = eegBuffer.extract(filter.getNB());
+                        filteredSamples = filteredBuffer.extract(filter.getNA() - 1);
 
+                        // Filter new raw sample
+                        filtResult = filter.transform(latestSamples, filteredSamples);
+
+                        // Update filtered buffer
+                        filteredBuffer.update(filtResult);
+                        dataSeries.addLast(filtResult[channelOfInterest - 1]);
+                        eegFresh = false;
+                    }
                 }
+            } catch (InterruptedException e) {}
         }
 
         public void stopThread() {

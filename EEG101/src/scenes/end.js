@@ -33,13 +33,13 @@ class End extends Component {
           <View>
             <View style={styles.titleBox}>
               <Text style={styles.title}> Thanks for completing {"\n"} EEG 101</Text>
-              <Text style={styles.body}> We hope you enjoyed learning about the basics of EEG. Soon, this tutorial will cover more advanced aspects of processing and working with EEG, including how it can be used to create a simple brain-machine interface!</Text>      
+              <Text style={[styles.body, {margin: 10}]}> We hope you enjoyed learning about the basics of EEG. Soon, this tutorial will cover more advanced topics, such as how to create a simple brain-machine interface!</Text>      
             </View>
 
             <View style={styles.listBox}>
               <Text style={styles.header}>What's Next?</Text>
-              <Text style={styles.body}>1. High/Low Pass Filtering</Text>
-              <Text style={styles.body}>2. Artifact Removal</Text>
+              <Text style={styles.body}>1. High Pass Filtering</Text>
+              <Text style={styles.body}>2. Live Artifact Removal</Text>
               <Text style={styles.body}>3. Feature Extraction</Text>
               <Text style={styles.body}>4. Brain Waves</Text>
               <Text style={styles.body}>5. Brain Computer Interfaces</Text>
