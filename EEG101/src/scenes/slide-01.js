@@ -31,7 +31,6 @@ function  mapStateToProps(state) {
     };
   }
 
-
 class SlideOne extends Component {
   constructor(props) {
     super(props);
@@ -44,7 +43,6 @@ class SlideOne extends Component {
       popUp4Visible: false,
     };
   }
-  //           
   
   render() {
     return (

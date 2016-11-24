@@ -28,7 +28,6 @@ function  mapStateToProps(state) {
 class SlideFive extends Component {
   constructor(props) {
     super(props);
-    isVisible: true;
 
 
       // Initialize States

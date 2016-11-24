@@ -1,3 +1,5 @@
+package com.eeg_project.components.signal;
+
 import org.jtransforms.fft.DoubleFFT_1D;
 import java.lang.Math; // For log10
 // import java.lang.arraycopy; 

@@ -16,6 +16,11 @@ import Button from '../components/Button';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
 
+// Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
+function  mapStateToProps(state) {
+  return {isVisible: state.scene.sceneKey === 'SlideNine'};
+}
+
 class SlideNine extends Component {
   constructor(props) {
     super(props);
@@ -34,6 +39,8 @@ class SlideNine extends Component {
         <View style={styles.graphContainer}>
           <Text>Fourier Transform animation</Text>
         </View>
+
+        <Text style={styles.currentTitle}>PHYSIOLOGY</Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
@@ -103,4 +110,4 @@ body: {
 
 });
 
-export default connect(({route}) => ({route}))(SlideNine);
+export default connect(mapStateToProps)(SlideNine);

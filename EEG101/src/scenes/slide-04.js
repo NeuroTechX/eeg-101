@@ -33,7 +33,6 @@ function  mapStateToProps(state) {
 class SlideFour extends Component {
   constructor(props) {
     super(props);
-    isVisible: true;
 
       // Initialize States
     this.state = {
@@ -48,6 +47,8 @@ class SlideFour extends Component {
         <View style={styles.graphContainer}>
           <CircBufferGraphView style={{flex:1}} visibility={this.props.isVisible} channelOfInterest={this.state.channelOfInterest}/>
         </View>
+
+        <Text style={styles.currentTitle}>TEST</Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
             style={styles.viewPager}
@@ -85,7 +86,17 @@ pageStyle: {
  },
 
 body: {
-    fontSize: 18,
+    fontFamily: 'Roboto-Light',
+    color: '#484848',
+    fontSize: 19,
+  },
+
+  currentTitle: {
+    marginLeft: 20,
+    marginTop: 10,
+    fontSize: 13,
+    fontFamily: 'Roboto-Medium',
+    color: '#6CCBEF',
   },
 
   container: {
@@ -101,9 +112,11 @@ body: {
     justifyContent: 'center',
     alignItems: 'stretch',
   },
-
+  
   header: {
-    fontSize: 22,
+    fontFamily: 'Roboto-Bold',
+    color: '#484848',
+    fontSize: 20,
   },
 
 

@@ -17,6 +17,10 @@ import { connect } from 'react-redux';
 //Interfaces. For advanced elements such as graphs
 //import EEG_GRAPH from '../interface/GraphView';
 
+// Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
+function  mapStateToProps(state) {
+  return {isVisible: state.scene.sceneKey === 'SlideTen'};
+}
 class SlideTen extends Component {
   constructor(props) {
     super(props);
@@ -97,4 +101,4 @@ body: {
 
 });
 
-export default connect(({route}) => ({route}))(SlideTen);
+export default connect(mapStateToProps)(SlideTen);

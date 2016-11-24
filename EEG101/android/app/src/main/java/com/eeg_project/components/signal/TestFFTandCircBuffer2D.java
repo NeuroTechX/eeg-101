@@ -1,3 +1,9 @@
+package com.eeg_project.components.signal;
+
+import com.eeg_project.components.signal.CircBuffer2D;
+import com.eeg_project.components.signal.CircularBuffer;
+import com.eeg_project.components.signal.FFT;
+
 import java.util.Arrays; // For printing arrays when debugging
 
 public class TestFFTandCircBuffer2D {
@@ -34,6 +40,7 @@ public class TestFFTandCircBuffer2D {
 	}
 
 	public static void main(String[] args) {
+		/*
 
 		// 1. Create fake signal
 		int nbCh = 4;
@@ -42,7 +49,7 @@ public class TestFFTandCircBuffer2D {
 
 		// 2. Initialize raw signal buffer
 		int rawBufferLength = 220;
-		CircBuffer rawBuffer = new CircBuffer(rawBufferLength,nbCh);
+		CircularBuffer rawBuffer = new CircularBuffer(rawBufferLength,nbCh);
 
 		// 3. Initialize FFT transform
 		int windowLength = (int)fs;
@@ -89,10 +96,11 @@ public class TestFFTandCircBuffer2D {
 
 				// Plot PSD!
 				// AndroidSuperPlot(smoothLogPower);
+
 			}
 
 		}
-
+		*/
 
 	}
 } 

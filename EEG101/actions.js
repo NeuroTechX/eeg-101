@@ -11,6 +11,7 @@ import config from './config';
 // setConnectionStatus and setAvailableMuses pass a payload to the reducer. Both Fns have a type (defined in constants.js) that allows them to be handled properly
 export const setConnectionStatus = (payload) => ({payload, type: SET_CONNECTION_STATUS});
 
+
 export const setAvailableMuses = (payload) => ({payload, type: SET_AVAILABLE_MUSES});
 
 // sets museArray to list of paired Muse devices through Connector.getDevices promise return
@@ -46,7 +47,6 @@ export function getAndConnectToDevice(timesCalled) {
 				if (!isConnected && timesCalled < 5) {
         	return getAndConnectToDevice(timesCalled + 1)(dispatch);
         }
-
         return;
 			})
 			.catch((error) => {

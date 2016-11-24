@@ -3,9 +3,9 @@ package com.eeg_project.components.EEGGraph;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
-
 import com.androidplot.Plot;
 import com.androidplot.ui.HorizontalPositioning;
 import com.androidplot.ui.Size;
@@ -34,17 +34,18 @@ public class EEGGraph extends FrameLayout {
     // ----------------------------------------------------------------------
     // Variables
     private XYPlot eegPlot;
-    private static final int PLOT_LENGTH = 220;
-    private MyPlotUpdater plotUpdater;
-    HistoryDataSource data;
+    private static final int PLOT_LENGTH = 220 * 5;
+    private PlotUpdater plotUpdater;
+    EEGDataSource data;
     private DynamicSeries dataSeries;
-    String TAG = "RandomPlot";
+    String TAG = "EEGGraph";
     Thread dataThread;
     Thread renderingThread;
     LineAndPointFormatter lineFormatter;
     public DataListener dataListener;
     private final double[] eegBuffer = new double[4];
     private boolean eegStale;
+
 
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
@@ -58,9 +59,7 @@ public class EEGGraph extends FrameLayout {
     public EEGGraph(Context context) {
         super(context);
         appState = ((MainApplication)context.getApplicationContext());
-
         initView(context);
-        // Data threads are started in onVisibilityChanged function
     }
 
     public EEGGraph(Context context, AttributeSet attrs) {
@@ -96,7 +95,6 @@ public class EEGGraph extends FrameLayout {
             case 4:
                 lineFormatter.getLinePaint().setColor(Color.rgb(209,14,137));
                 break;
-
         }
         */
     }
@@ -112,10 +110,10 @@ public class EEGGraph extends FrameLayout {
         eegPlot = new XYPlot(context, "EEG History Plot");
 
         // set up PlotUpdater
-        plotUpdater = new MyPlotUpdater(eegPlot);
+        plotUpdater = new PlotUpdater(eegPlot);
 
         // get datasets (Y will be dataSeries, x will be implicitly generated):
-        data = new HistoryDataSource();
+        data = new EEGDataSource(appState.connectedMuse.isLowEnergy());
         dataSeries = new DynamicSeries("EEG data");
 
         // Set X and Y domain
@@ -126,7 +124,7 @@ public class EEGGraph extends FrameLayout {
         PixelUtils.init(getContext());
 
         // Create line formatter with set color
-        lineFormatter = new FastLineAndPointRenderer.Formatter(Color.rgb(255,255,255), null, null, null);
+        lineFormatter = new FastLineAndPointRenderer.Formatter(Color.rgb(255, 255, 255), null, null, null);
 
         // add series to plot
         eegPlot.addSeries(dataSeries,
@@ -142,14 +140,13 @@ public class EEGGraph extends FrameLayout {
         eegPlot.getBorderPaint().setColor(Color.WHITE);
 
         // Make plot background blue (including removing grid lines)
-        eegPlot.getGraph().getBackgroundPaint().setColor(Color.rgb(114,194,241));
+        eegPlot.getGraph().getBackgroundPaint().setColor(Color.rgb(114, 194, 241));
         //eegPlot.getGraph().setBackgroundPaint(null);
         eegPlot.getGraph().getGridBackgroundPaint().setColor(Color.TRANSPARENT);
         eegPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
         eegPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
         eegPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
         eegPlot.getGraph().getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
-
 
         // Remove axis labels and values
         // Domain = X; Range = Y
@@ -160,14 +157,13 @@ public class EEGGraph extends FrameLayout {
         eegPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
         eegPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
 
-
         // Remove extraneous elements
         //eegPlot.setTitle(null);
         eegPlot.getLayoutManager().remove(eegPlot.getLegend());
 
+        // Set size of plot
         SizeMetric height = new SizeMetric(1, SizeMode.FILL);
         SizeMetric width = new SizeMetric(1, SizeMode.FILL);
-        // Set size of plot
         eegPlot.getGraph().setSize(new Size(height, width));
 
         // Set position of plot (should be tweaked in order to center chart position)
@@ -179,15 +175,16 @@ public class EEGGraph extends FrameLayout {
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         eegPlot.setDrawingCacheEnabled(true);
-
+        onVisibilityChanged(this, View.VISIBLE);
     }
 
     @Override
     public void onVisibilityChanged(View changedView, int visibility){
+        Log.w(TAG, "On Visibility Started");
         if (visibility == View.INVISIBLE){
             stopThreads();
         }
-        else{
+        else if (dataThread == null || !dataThread.isAlive()) {
             startDataThread();
             startRenderingThread();
             // Register a listener to receive connection state changes.
@@ -199,22 +196,20 @@ public class EEGGraph extends FrameLayout {
     // ---------------------------------------------------------
     // Thread management functions
 
-    // Start thread that will  update the data whenever a Muse data packet is receive series
-    // and perform data processing
+    // Start thread that will  update the data whenever a Muse data packet is received
     public void startDataThread() {
+        Log.w(TAG, "Data Thread Started");
         dataThread = new Thread (data);
         dataThread.start();
     }
 
     // Start thread that will render the plot at a fixed speed
-    //
     public void startRenderingThread(){
+        Log.w(TAG, "Updater Thread Started");
         renderingThread = new Thread (plotUpdater);
         renderingThread.start();
     }
 
-    // Start thread that will render the plot at a fixed speed
-    //
     public void stopThreads(){
         plotUpdater.stopThread();
         data.stopThread();
@@ -226,6 +221,9 @@ public class EEGGraph extends FrameLayout {
 
     // --------------------------------------------------------------
     // Listeners
+
+    // Listener that receives incoming data from the Muse. Will run receiveMuseDataPacket
+    // Will call receiveMuseDataPacket as data comes in around 220hz (250hz for Muse 2016)
     class DataListener extends MuseDataListener {
 
         DataListener() {
@@ -233,20 +231,8 @@ public class EEGGraph extends FrameLayout {
 
         @Override
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
-            switch (p.packetType()) {
-                case EEG:
-                    getEegChannelValues(eegBuffer,p);
-                    eegStale = true;
-                    break;
-                case ACCELEROMETER:
-                    // Can do other things here for different types of packets
-                case ALPHA_RELATIVE:
-                case BATTERY:
-                case DRL_REF:
-                case QUANTIZATION:
-                default:
-                    break;
-            }
+            getEegChannelValues(eegBuffer, p);
+            eegStale = true;
         }
 
         private void getEegChannelValues(double[] buffer, MuseDataPacket p) {
@@ -258,20 +244,19 @@ public class EEGGraph extends FrameLayout {
 
         @Override
         public void receiveMuseArtifactPacket(final MuseArtifactPacket p, final Muse muse) {
-
+            // Does nothing for now
         }
     }
-
 
     // --------------------------------------------------------------
     // Runnables
 
     // Runnable class that redraws plot at a fixed frequency
-    class MyPlotUpdater implements Runnable {
+    class PlotUpdater implements Runnable {
         WeakReference<Plot> plot;
         private boolean keepRunning = true;
 
-        public MyPlotUpdater(Plot plot) {
+        public PlotUpdater(Plot plot) {
             this.plot = new WeakReference<Plot>(plot);
         }
 
@@ -296,17 +281,23 @@ public class EEGGraph extends FrameLayout {
 
 
     // Updates dataSeries, performs data processing
-    public class HistoryDataSource implements Runnable {
+    public class EEGDataSource implements Runnable {
+        private boolean keepRunning;
+        private int sleepInterval;
 
-        //private MyObservable notifier;
-        private boolean keepRunning = true;
+        public EEGDataSource(Boolean isLowEnergy) {
+            if (isLowEnergy) {sleepInterval = 4;}
+            else {
+                sleepInterval = 4;
+            }
+        }
 
         @Override
         public void run() {
-            try {
+
                 keepRunning = true;
                 while (keepRunning) {
-                    Thread.sleep(2);
+
                     if (eegStale) {
                         if (dataSeries.size() > PLOT_LENGTH) {
                             dataSeries.removeFirst();
@@ -314,9 +305,7 @@ public class EEGGraph extends FrameLayout {
                         dataSeries.addLast(eegBuffer[channelOfInterest-1]);
                         eegStale = false;
                     }
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+
             }
         }
 

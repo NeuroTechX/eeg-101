@@ -19,11 +19,10 @@ import ListItemBlock from '../components/ListItemBlock';
 //Interfaces. For advanced elements such as graphs
 //import EEG_GRAPH from '../interface/GraphView';
 
-/* <ListItemBlock title = "Gamma (30-100 Hz)">
-            <Text>These fast (ie. high frequency) waves have been associated with concentration, alertness, working memory, and attention.
-            </Text>
-          </ListItemBlock>
-    */
+// Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
+function  mapStateToProps(state) {
+  return {isVisible: state.scene.sceneKey === 'SlideEleven'};
+}
 
 class SlideEleven extends Component {
   constructor(props) {
@@ -132,4 +131,4 @@ body: {
 
 });
 
-export default connect(({route}) => ({route}))(SlideEleven);
+export default connect(mapStateToProps)(SlideEleven);

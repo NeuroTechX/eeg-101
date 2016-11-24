@@ -33,7 +33,6 @@ function  mapStateToProps(state) {
     this.state = {
       
     };
-    // <WhiteButton onPress={Actions.SlideOne} disabled={!(this.props.connectionStatus === config.connectionStatus.CONNECTED)}>BEGIN</WhiteButton>
   }
 
   render() {
@@ -49,13 +48,13 @@ function  mapStateToProps(state) {
       </View>
     );
   }
+ }
 
-}
 export default connect(mapStateToProps)(ConnectorOne);
 
 const styles = StyleSheet.create({
 
-body: {
+  body: {
     fontFamily: 'Roboto-Light',
     fontSize: 15,
     margin: 20,
@@ -63,15 +62,15 @@ body: {
     textAlign: 'center',
     borderWidth: 1,
   },
-    
 
-instructions: {
-  fontFamily: 'Roboto-Bold',
-  fontSize: 18,
-  margin: 20,
-  color: '#ffffff',
-  textAlign: 'center',
-},
+
+  instructions: {
+    fontFamily: 'Roboto-Bold',
+    fontSize: 18,
+    margin: 20,
+    color: '#ffffff',
+    textAlign: 'center',
+  },
 
   container: {
     flex: 1,
@@ -79,8 +78,8 @@ instructions: {
     alignItems: 'stretch',
     width: null,
     height: null,
-    backgroundColor: '#6CCBEF', 
-},
+    backgroundColor: '#6CCBEF',
+  },
 
   logo: {
     width: 50,
@@ -94,11 +93,11 @@ instructions: {
     color: '#ffffff',
     fontFamily: 'Roboto-Black',
     fontSize: 48,
-      },
+  },
 
   titleBox: {
     flex: 6,
     alignItems: 'center',
     justifyContent: 'center',
-      },
+  },
 });

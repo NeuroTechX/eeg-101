@@ -29,10 +29,9 @@ function  mapStateToProps(state) {
     };
   }
 
-class SlideFour extends Component {
+class SlideThree extends Component {
   constructor(props) {
     super(props);
-    isVisible: true;
 
       // Initialize States
     this.state = {
@@ -150,4 +149,4 @@ body: {
 
 });
 
-export default connect(mapStateToProps)(SlideFour);
+export default connect(mapStateToProps)(SlideThree);

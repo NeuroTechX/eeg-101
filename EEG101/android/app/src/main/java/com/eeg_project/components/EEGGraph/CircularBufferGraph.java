@@ -2,7 +2,7 @@ package com.eeg_project.components.EEGGraph;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -29,9 +29,7 @@ import com.eeg_project.components.signal.Filter;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+
 
 // Android View that graphs processed EEG data
 public class CircularBufferGraph extends FrameLayout {

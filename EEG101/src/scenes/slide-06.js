@@ -26,7 +26,6 @@ function  mapStateToProps(state) {
 class SlideSix extends Component {
   constructor(props) {
     super(props);
-    isVisible: true;
 
 
       // Initialize States

@@ -2,6 +2,7 @@ package com.eeg_project.components.connector;
 
 import android.app.Activity;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.choosemuse.libmuse.ConnectionState;
 import com.choosemuse.libmuse.Muse;
@@ -33,26 +34,13 @@ import java.util.Map;
 
 public class ConnectorModule extends ReactContextBaseJavaModule {
 
-
     // ----------------------------------------------------------
     // Variables
-
-    // Tag used for logging purposes
-    private final String TAG = "EEG 101";
-
-    // The Muse manager detects available headbands and listens for changes to the list of Muses
+    private final String TAG = "Connector";
     private MuseManagerAndroid manager;
-
-    // The connection listener will be notified whenever the connection state of its registered
-    // Muse changes
     private ConnectionListener connectionListener;
 
-    /** Initializes the MainApplication content so that the connectedMuse object stored within it
-     * can be referenced.
-     * Because this is a ReactContextBaseJavaModule, getCurrentActivity is called first to be able to
-     * call getApplication. We may have to be careful with this however, as the React Native documentation advises against holding
-     * references to getCurrentActivity return value as member variables
-     */
+    //Initializes the MainApplication content so that the connectedMuse object stored within the global application state and be accessed by any part of the app
     MainApplication appState;
     List<Muse> availableMuses;
     Promise connectionPromise;
@@ -60,14 +48,12 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
 
     // ---------------------------------------------------------
     // Constructor
-
     public ConnectorModule(ReactApplicationContext reactContext) {
         super(reactContext);
     }
 
     // ---------------------------------------------------------
     // React Native Module methods
-
     // Required by ReactContextBaseJavaModule
     @Override
     public String getName() {
@@ -92,111 +78,31 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
     // Bridged methods
 
 
-    @ReactMethod
-    public void startConnector() {
 
-        // We need to set the context on MuseManagerAndroid before we can do anything.
-        // This must come before other LibMuse API calls as it also loads the library.
-        manager = MuseManagerAndroid.getInstance();
-        manager.setContext(this.getReactApplicationContext());
-
-        // Clear the list of available muses so the user sees an empty list of devices when starting
-        availableMuses = null;
-
-        appState = ((MainApplication)this.getCurrentActivity().getApplication());
-
-
-
-        // Todo: figure out if weakReference is necessary or desirable. get currentActivity might be good enough
-        WeakReference<Activity> weakActivity =
-                new WeakReference<Activity> (this.getCurrentActivity());
-
-        // Register a listener to receive connection state changes.
-        connectionListener = new ConnectionListener(weakActivity);
-
-        // Register a listener to receive notifications of what Muse headbands
-        // we can connect to.
-        manager.setMuseListener(new MuseL(weakActivity));
-
-        manager.startListening();
-            }
-
-    // Returns
-    @ReactMethod
-    public void getDevices(Promise promise) {
-
-        if (manager == null) {
-            // We need to set the context on MuseManagerAndroid before we can do anything.
-            // This must come before other LibMuse API calls as it also loads the library.
-            manager = MuseManagerAndroid.getInstance();
-            manager.setContext(this.getReactApplicationContext());
-
-            // Clear the list of available muses so the user sees an empty list of devices when starting
-            availableMuses = null;
-
-            // Declare global application reference that is used for storing global Muse object
-            appState = ((MainApplication)this.getCurrentActivity().getApplication());
-
-            // Todo: figure out if weakReference is necessary or desirable. get currentActivity might be good enough
-            WeakReference<Activity> weakActivity =
-                    new WeakReference<Activity> (this.getCurrentActivity());
-
-            // Create a new listener that will be registered to receive connection state changes in connectDevice.
-            connectionListener = new ConnectionListener(weakActivity);
-
-            // Register a listener to receive notifications of what Muse headbands
-            // we can connect to.
-            manager.setMuseListener(new MuseL(weakActivity));
-            manager.startListening();
-        }
-        // Create WriteableArray that can be passed to JS
-        // Change from ReadableMap to ReadableArray containing ReadableMaps
-        WritableArray availableMuseArray = Arguments.createArray();
-
-        availableMuses = manager.getMuses();
-
-        try {
-            // Add the name of each available Muse to an array that will be passed to JS
-            for (Muse muse : availableMuses) {
-                // key = MAC address, value = Muse Name
-                availableMuseArray.pushString(muse.getName());
-            }
-            promise.resolve(availableMuseArray);
-        } catch (IllegalViewOperationException e) {
-            promise.reject(e);
-        }
-    }
 
     @ReactMethod
     public void connectDevice(Promise promise) {
         connectionPromise = promise;
         unfulfilledPromise = true;
-
-        // If availableMuses list is empty
-        if (availableMuses == null || availableMuses.size() == 0)  {
-
-            return;
-        }
-
-        // set global Muse to first muse in availableMuses list
-        appState.connectedMuse = availableMuses.get(0);
-
-        // Unregister all prior listeners and register our data listener to
-        // receive the MuseDataPacketTypes we are interested in.  If you do
-        // not register a listener for a particular data type, you will not
-        // receive data packets of that type.
         try {
+            sendEvent(getReactApplicationContext(), "CONNECT ATTEMPT", Arguments.createMap());
+            Log.w(TAG, "Attempting to connect to " + availableMuses.get(0));
+            // set global Muse to first muse in availableMuses list
+            appState.connectedMuse = availableMuses.get(0);
+
+            // Unregister all prior listeners and register our data listener to
+            // receive the MuseDataPacketTypes we are interested in.  If you do
+            // not register a listener for a particular data type, you will not
+            // receive data packets of that type.
+
             appState.connectedMuse.unregisterAllListeners();
             appState.connectedMuse.registerConnectionListener(connectionListener);
-            manager.stopListening();
 
             // Initiate a connection to the headband and stream the data asynchronously.
             // runAsynchronously() bridges to a C++ function that is implemented on the Muse
             appState.connectedMuse.runAsynchronously();
-        } catch (IllegalArgumentException | NullPointerException e) {
-
+        } catch (IllegalArgumentException | NullPointerException | IndexOutOfBoundsException e) {
             connectionPromise.reject(e);
-//            Toast.makeText(getCurrentActivity(), "No available muses", Toast.LENGTH_SHORT).show();
             return;
         }
     }
@@ -213,10 +119,59 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
         }
     }
 
+    //--------------------------------------------------------------
+    // Internal methods
+
+    private void startConnector() {
+        // We need to set the context on MuseManagerAndroid before we can do anything.
+        // This must come before other LibMuse API calls as it also loads the library.
+        manager = MuseManagerAndroid.getInstance();
+        manager.setContext(this.getReactApplicationContext());
+        availableMuses = null;
+        appState = ((MainApplication)this.getCurrentActivity().getApplication());
+        WeakReference<Activity> weakActivity =
+                new WeakReference<Activity> (this.getCurrentActivity());
+
+        // Register a listener to receive connection state changes.
+        connectionListener = new ConnectionListener(weakActivity);
+
+        // Register a listener to receive notifications of what Muse headbands
+        // we can connect to.
+        manager.setMuseListener(new MuseL(weakActivity));
+        manager.startListening();
+    }
+
+    // calls getMuses, resolves false ifEmpty, and returns readableArray if muses detected
+    @ReactMethod
+    public void getDevices(Promise promise) {
+        if (manager == null) {
+            startConnector();
+        }
+        // Create WriteableArray that can be passed to JS
+        // Change from ReadableMap to ReadableArray containing ReadableMaps
+        WritableArray availableMuseArray = Arguments.createArray();
+        availableMuses = manager.getMuses();
+        Log.w(TAG, "getMuses() result: " + availableMuses);
+        if (availableMuses.isEmpty()) { promise.resolve(false); }
+        else {
+            try {
+                sendEvent(getReactApplicationContext(), "MUSES FOUND", Arguments.createMap());
+                // Add the name of each available Muse to an array that will be passed to JS
+                for (Muse muse : availableMuses) {
+                    Log.w(TAG, "Found " + muse.getName());
+                    availableMuseArray.pushString(muse.getName());
+                }
+                promise.resolve(availableMuseArray);
+            } catch (IllegalViewOperationException e) {
+                promise.reject(e);
+            }
+        }
+    }
+
     //--------------------------------------
     // Listeners
-    // Each of these classes extend from the appropriate listener and contain a weak reference
-    // to the activity.  Each class simply forwards the messages it receives back to the Activity.
+
+    // Detects available headbands and listens for changes to the list of Muses
     class MuseL extends MuseListener {
         final WeakReference<Activity> activityRef;
 
@@ -226,9 +181,11 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
 
         @Override
         public void museListChanged() {
+            Log.w(TAG, "" + manager.getMuses());
         }
     }
 
+    // Notified whenever connection state of its registered Muse changes
     class ConnectionListener extends MuseConnectionListener  {
         final WeakReference<Activity> activityRef;
 
@@ -247,8 +204,8 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
                 if (current == ConnectionState.CONNECTED) {
                     sendEvent(getReactApplicationContext(), "CONNECTED", Arguments.createMap());
                     if (unfulfilledPromise){
-
                         connectionPromise.resolve(true);
+                        manager.stopListening();
                         unfulfilledPromise = false;
                     }
                 }
@@ -259,6 +216,7 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
                     sendEvent(getReactApplicationContext(), "DISCONNECTED", Arguments.createMap());
                     if (unfulfilledPromise){
                         connectionPromise.resolve(false);
+                        manager.stopListening();
                         unfulfilledPromise = false;
                     }
                 }

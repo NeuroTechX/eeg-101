@@ -21,7 +21,6 @@ import PopUpLink from '../components/PopUpLink';
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
     return {isVisible: state.scene.sceneKey === 'SlideSeven'};
-    
   }
 
 class SlideSeven extends Component {
@@ -37,7 +36,6 @@ class SlideSeven extends Component {
   render() {
     return (
       <View style={styles.container}>
-      
         <View style={styles.graphContainer}>
           <Image source={require('../assets/artifact.png')}
                 style={styles.image}
@@ -53,8 +51,7 @@ class SlideSeven extends Component {
           
           <View style={styles.pageStyle}>
             <Text style={styles.header}>Removing noise</Text>
-            <Text style={styles.body}>After the EEG has been divided into epochs, those that contain a <PopUpLink onPress={() => this.setState({popUpVisible: true})}> significant amount</PopUpLink> of noise can be removed
-             
+            <Text style={styles.body}>After the EEG has been divided into epochs, those that contain a <PopUpLink onPress={() => this.setState({popUpVisible: true})}> significant amount</PopUpLink> of noise can be removed.             
             </Text>
             <Button onPress={Actions.SlideEight}>Next</Button>
           </View>
@@ -62,7 +59,7 @@ class SlideSeven extends Component {
         </ViewPagerAndroid>
 
         <PopUp onClose={() => this.setState({popUpVisible: false})} visible={this.state.popUpVisible}
-        title="Artifact">
+        title="Artifact detection">
         One simple way to define what a 'significant amount of noise' is to compare the range of an epoch to its neighbouring epochs. If one segment of the EEG fluctuated a lot more than its neighbours, get rid of it!
         </PopUp>
 

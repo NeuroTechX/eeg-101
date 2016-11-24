@@ -4,10 +4,8 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
-  TouchableOpacity,
-  TouchableHighlight,
+  DeviceEventEmitter,
   StyleSheet,
-  Picker,
 } from 'react-native';
 import config from '../../../config'
 import Button from '../Button';
@@ -16,8 +14,20 @@ export default class ConnectorWidget extends Component{
   constructor(props) {
     super(props);
   }
-  // Call startConnector and getDevices when scene loads
+  // Call getAndConnectToDevice and register event listeners when component loads
   componentDidMount() {
+    DeviceEventEmitter.addListener('MUSES FOUND', (event) => {
+      console.log("device found");
+    });
+    DeviceEventEmitter.addListener('CONNECT ATTEMPT', (event) => {
+      console.log("attempting to connect");
+    });
+    DeviceEventEmitter.addListener('CONNECTED', (event) => {
+      console.log("connection success");
+    });
+    DeviceEventEmitter.addListener('DISCONNECTED', (event) => {
+      console.log("connection didn't work");
+    });
     this.props.getAndConnectToDevice();
   }
 
