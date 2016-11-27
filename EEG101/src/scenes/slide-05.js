@@ -3,7 +3,8 @@ import {
   StyleSheet,
   Text,
   View,
-  ViewPagerAndroid
+  ViewPagerAndroid,
+  Image
 } from 'react-native';
 import{
   Actions,
@@ -24,6 +25,8 @@ function  mapStateToProps(state) {
     return {isVisible: state.scene.sceneKey === 'SlideFive'};
     
   }
+
+
 
 class SlideFive extends Component {
   constructor(props) {
@@ -120,7 +123,6 @@ const styles = StyleSheet.create({
   },
 
   halfGraphContainer: {
-    
     flex: 2,
     justifyContent: 'center',
     alignItems: 'stretch',

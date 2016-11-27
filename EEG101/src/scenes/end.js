@@ -41,9 +41,8 @@ class End extends Component {
               <Text style={styles.body}>1. High Pass Filtering</Text>
               <Text style={styles.body}>2. Live Artifact Removal</Text>
               <Text style={styles.body}>3. Feature Extraction</Text>
-              <Text style={styles.body}>4. Brain Waves</Text>
-              <Text style={styles.body}>5. Brain Computer Interfaces</Text>
-              <Text style={styles.body}>6. Machine Learning</Text>
+              <Text style={styles.body}>4. Brain Computer Interfaces</Text>
+              <Text style={styles.body}>5. Machine Learning</Text>
             </View>
           </View>
 

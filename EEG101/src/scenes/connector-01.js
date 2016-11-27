@@ -42,7 +42,7 @@ function  mapStateToProps(state) {
           <Text style={styles.title}>Step 1</Text>
           <Text style={styles.instructions}>Make sure your Muse is powered on and paired through Bluetooth in your system settings</Text>
         </View>
-        <View style={{flex: 1, margin: 40}}>
+        <View style={styles.buttonContainer}>
           <WhiteButton onPress={Actions.ConnectorTwo}>OK, IT'S PAIRED</WhiteButton>
         </View>
       </View>
@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     margin: 20,
     color: '#ffffff',
     textAlign: 'center',
-    borderWidth: 1,
   },
 
 
@@ -74,11 +73,17 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
     alignItems: 'stretch',
     width: null,
     height: null,
     backgroundColor: '#6CCBEF',
+  },
+
+  buttonContainer: {
+    flex: 1,
+    margin: 40,
+    justifyContent: 'center',
   },
 
   logo: {
@@ -96,7 +101,7 @@ const styles = StyleSheet.create({
   },
 
   titleBox: {
-    flex: 6,
+    flex: 4,
     alignItems: 'center',
     justifyContent: 'center',
   },

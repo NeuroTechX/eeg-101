@@ -43,7 +43,7 @@ function  mapStateToProps(state) {
           <Text style={styles.instructions}>Wait for your Muse to pair {"\n"} with EEG 101</Text>
         </View>
         <ConnectorWidget/>
-        <View style={{flex: 1, margin: 40}}>
+        <View style={styles.buttonContainer}>
           <WhiteButton onPress={Actions.ConnectorThree} disabled={!(this.props.connectionStatus === config.connectionStatus.CONNECTED)}>LET'S GET STARTED</WhiteButton>
         </View>
       </View>
@@ -79,6 +79,12 @@ instructions: {
     backgroundColor: '#6CCBEF', 
 },
 
+  buttonContainer: {
+    flex: 1,
+    margin: 40,
+    justifyContent: 'center',
+  },
+
   logo: {
     width: 50,
     height: 50,
@@ -94,8 +100,8 @@ instructions: {
       },
 
   titleBox: {
-    flex: 6,
+    flex: 4,
     alignItems: 'center',
     justifyContent: 'center',
-      },
+  },
 });

@@ -15,7 +15,7 @@ import config from '../../config';
 
 
 //Interfaces. For advanced elements such as graphs
-import CircBufferGraphView from '../interface/CircBufferGraphView';
+import PSDGraphView from '../interface/PSDGraphView';
 
 import Button from '../components/Button';
 import PopUp from '../components/PopUp';
@@ -45,7 +45,7 @@ class SlideFour extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.graphContainer}>
-          <CircBufferGraphView style={{flex:1}} visibility={this.props.isVisible} channelOfInterest={this.state.channelOfInterest}/>
+          <PSDGraphView style={{flex:1}} visibility={this.props.isVisible} channelOfInterest={this.state.channelOfInterest}/>
         </View>
 
         <Text style={styles.currentTitle}>TEST</Text>
@@ -58,7 +58,7 @@ class SlideFour extends Component {
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>Preparing the signal for analysis</Text>
-            <Text style={styles.body}>This is a test of the Circular Buffer component of an upcoming analysis graph illustrating how to remove <PopUpLink onPress={() => this.setState({popUpVisible: true})}>noise</PopUpLink> from this signal.</Text>
+            <Text style={styles.body}>This is a test of the PSD component of an upcoming analysis graph illustrating how to remove <PopUpLink onPress={() => this.setState({popUpVisible: true})}>noise</PopUpLink> from this signal.</Text>
             <Button onPress={Actions.SlideFive}>Next</Button>
           </View>
 

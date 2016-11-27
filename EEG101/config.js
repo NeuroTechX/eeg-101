@@ -8,5 +8,6 @@ export default {
   	CONNECTED: 'CONNECTED',
   	CONNECTING: 'CONNECTING',
   	DISCONNECTED: 'DISCONNECTED',
+    NO_MUSES: 'NO_MUSES',
   }
 }

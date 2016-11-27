@@ -39,7 +39,7 @@ class SlideEight extends Component {
       <View style={styles.container}>
       
         <View style={styles.graphContainer}>
-            <Image source={require('../assets/fourier.png')}
+            <Image source={require('../assets/wavedecomposition.gif')}
                 style={styles.image}
                 resizeMode='contain'/>
         </View>
@@ -52,29 +52,35 @@ class SlideEight extends Component {
 
           
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>Extracting features of the EEG</Text>
-            <Text style={styles.body}>Finally, we extract signal attributes that change according to brain state. These attributes are known as
-             <PopUpLink onPress={() => this.setState({popUp1Visible: true})}> features.</PopUpLink> 
+            <Text style={styles.header}>Breaking down the EEG</Text>
+            <Text style={styles.body}>A complex signal like the EEG can be decomposed into the sum of many simpler periodic signals or
+              <PopUpLink onPress={() => this.setState({popUp1Visible: true})}>waves.</PopUpLink>
             </Text>
            
           </View>
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>How are features extracted?</Text>
-            <Text style={styles.body}>Complex signals can be decomposed into a sum of many simpler signals or waves with a mathematical function known as the <PopUpLink onPress={() => this.setState({popUp2Visible: true})}> Fourier Transform.</PopUpLink>
+            <Text style={styles.header}>How is the EEG broken down?</Text>
+            <Text style={styles.body}>Complex signals can be broken down into the simpler signal that make them up with a mathematical function known as the <PopUpLink onPress={() => this.setState({popUp2Visible: true})}> Fourier Transform.</PopUpLink>
+            </Text>
+          </View>
+
+          <View style={styles.pageStyle}>
+            <Text style={styles.header}>What do theses wave tell us?</Text>
+            <Text style={styles.body}>The relative strength of these 'brain waves' can tell us about what patterns of brain activity are present
             </Text>
             <Button onPress={Actions.End}>Next</Button>
-            
           </View>
         </ViewPagerAndroid>
 
         <PopUp onClose={() => this.setState({popUp1Visible: false})} visible={this.state.popUp1Visible}
-        title="Features">
-        An EEG feature can be thought of as the strength of a certain frequency inside the signal. Different frequencies represent different characteristics of brain activity.   
+        title="Waves">
+          Each wave is characterized by a certain frequency (number of cycles per second (Hz)). A high frequency wave has a lot of cycles per second, whereas a low frequency wave has fewer cycles per second. Waves of different frequencies are associated with different patterns of neural firing.
         </PopUp>
+
         <PopUp onClose={() => this.setState({popUp2Visible: false})} visible={this.state.popUp2Visible}
         title="Fourier transform">
-        The Fourier Transform is a mathematical function that can decompose a signal into the frequencies or waves that make it up. Often, we use an algorithm specifically called the Fast Fourier Transform (FFT) to perform this decomposition in EEG.
+        The Fourier Transform decomposes a complex signal into a collection of simple sine waves. Often, we use an algorithm specifically called the Fast Fourier Transform (FFT) to perform this decomposition in EEG.
         </PopUp>
       </View>
     );

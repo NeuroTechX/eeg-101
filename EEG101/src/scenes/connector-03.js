@@ -43,7 +43,7 @@ function  mapStateToProps(state) {
           <Text style={styles.body}>Fit the earpieces snugly behind your ears and adjust the headband so it sits mid forehead. Clear any hair between the device and your head</Text>
         </View>
         
-        <View style={{flex: 1, margin: 40}}>
+        <View style={styles.buttonContainer}>
           <WhiteButton onPress={Actions.SlideOne}>BEGIN</WhiteButton>
         </View>
       </View>
@@ -77,7 +77,14 @@ instructions: {
     width: null,
     height: null,
     backgroundColor: '#6CCBEF', 
-},
+  },
+
+  buttonContainer: {
+    flex: 1,
+    margin: 40,
+    justifyContent: 'center',
+
+  },
 
   logo: {
     width: 50,
@@ -94,8 +101,8 @@ instructions: {
       },
 
   titleBox: {
-    flex: 6,
+    flex: 4,
     alignItems: 'center',
     justifyContent: 'center',
-      },
+  },
 });

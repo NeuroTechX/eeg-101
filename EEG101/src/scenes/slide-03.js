@@ -72,7 +72,7 @@ class SlideThree extends Component {
           <View style={styles.pageStyle}>
             <Text style={styles.header}>What do electrodes measure?</Text>
             <Text style={styles.body}>Each electrode's reading is compared to a <PopUpLink onPress={() => this.setState({popUp3Visible: true})}>reference sensor</PopUpLink> and then amplified around 1,000,000 times.</Text>
-            <Button onPress={Actions.SlideFive}>NEXT MODULE</Button>
+            <Button onPress={Actions.SlideFour}>NEXT MODULE</Button>
           </View>
         </ViewPagerAndroid>
 

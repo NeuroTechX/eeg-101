@@ -33,23 +33,22 @@ public class EEGGraph extends FrameLayout {
 
     // ----------------------------------------------------------------------
     // Variables
-    private XYPlot eegPlot;
-    private static final int PLOT_LENGTH = 220 * 5;
-    private PlotUpdater plotUpdater;
+    public XYPlot eegPlot;
+    public static final int PLOT_LENGTH = 220;
+    public PlotUpdater plotUpdater;
     EEGDataSource data;
-    private DynamicSeries dataSeries;
+    public DynamicSeries dataSeries;
     String TAG = "EEGGraph";
     Thread dataThread;
     Thread renderingThread;
     LineAndPointFormatter lineFormatter;
     public DataListener dataListener;
-    private final double[] eegBuffer = new double[4];
+    public final double[] eegBuffer = new double[4];
     private boolean eegStale;
-
 
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
-    private int channelOfInterest = 1;
+    public int channelOfInterest = 1;
 
     // grab reference to global Muse
     MainApplication appState;
@@ -59,16 +58,6 @@ public class EEGGraph extends FrameLayout {
     public EEGGraph(Context context) {
         super(context);
         appState = ((MainApplication)context.getApplicationContext());
-        initView(context);
-    }
-
-    public EEGGraph(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initView(context);
-    }
-
-    public EEGGraph(Context context, AttributeSet attrs, int defStyle) {
-        this(context, attrs);
         initView(context);
     }
 
@@ -107,7 +96,7 @@ public class EEGGraph extends FrameLayout {
     public void initView(Context context) {
 
         // Create eegPlot
-        eegPlot = new XYPlot(context, "EEG History Plot");
+        eegPlot = new XYPlot(context, "Raw EEG Plot");
 
         // set up PlotUpdater
         plotUpdater = new PlotUpdater(eegPlot);
@@ -180,7 +169,6 @@ public class EEGGraph extends FrameLayout {
 
     @Override
     public void onVisibilityChanged(View changedView, int visibility){
-        Log.w(TAG, "On Visibility Started");
         if (visibility == View.INVISIBLE){
             stopThreads();
         }
@@ -252,7 +240,7 @@ public class EEGGraph extends FrameLayout {
     // Runnables
 
     // Runnable class that redraws plot at a fixed frequency
-    class PlotUpdater implements Runnable {
+    public final class PlotUpdater implements Runnable {
         WeakReference<Plot> plot;
         private boolean keepRunning = true;
 
@@ -281,31 +269,33 @@ public class EEGGraph extends FrameLayout {
 
 
     // Updates dataSeries, performs data processing
-    public class EEGDataSource implements Runnable {
+    public final class EEGDataSource implements Runnable {
         private boolean keepRunning;
         private int sleepInterval;
 
         public EEGDataSource(Boolean isLowEnergy) {
             if (isLowEnergy) {sleepInterval = 4;}
             else {
-                sleepInterval = 4;
+                sleepInterval = 2;
             }
         }
 
         @Override
         public void run() {
-
+            try {
                 keepRunning = true;
                 while (keepRunning) {
-
+                    Thread.sleep(sleepInterval);
                     if (eegStale) {
                         if (dataSeries.size() > PLOT_LENGTH) {
                             dataSeries.removeFirst();
                         }
-                        dataSeries.addLast(eegBuffer[channelOfInterest-1]);
+                        dataSeries.addLast(eegBuffer[channelOfInterest - 1]);
                         eegStale = false;
                     }
 
+                }
+            } catch (InterruptedException e) {
             }
         }
 

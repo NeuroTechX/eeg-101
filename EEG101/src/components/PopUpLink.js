@@ -17,7 +17,7 @@ export default class PopUpLink extends Component{
         fontFamily: 'Roboto-Medium',
         textDecorationLine: 'underline',}}
        onPress={this.props.onPress}
-       hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+       hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
        >{this.props.children}</Text>
     );
   }

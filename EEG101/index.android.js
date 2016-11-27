@@ -69,6 +69,7 @@ class EEG_Project extends Component {
             <Scene component={SlideOne} key='SlideOne' previous='CONNECTION' hideNavBar={false}/>
             <Scene component={SlideTwo} key='SlideTwo'previous='INTRODUCTION'/>
             <Scene component={SlideThree} key='SlideThree'previous='PHYSIOLOGY'/>
+            <Scene component={SlideFour} key='SlideFour'previous='STUFF'/>
             <Scene component={SlideFive} key='SlideFive'previous='HARDWARE'/>
             <Scene component={SlideSix} key='SlideSix'previous='FILTERING'/>
             <Scene component={SlideSeven} key='SlideSeven'previous='EPOCHING'/>

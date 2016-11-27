@@ -4,14 +4,16 @@
 import Component from './component';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { getAndConnectToDevice } from '../../../actions';
-import _ from 'lodash';
+import {
+	getAndConnectToDevice,
+	setConnectionStatus,
+} from '../../../actions';
+
 
 // Import properties stored in Redux
 function mapStateToProps(state) {
 	return {
 		connectionStatus: state.connectionStatus,
-		hasFailedMuseSearch: state.hasSearchedForMuses && _.isEmpty(state.availableMuses),
 	}
 }
 
@@ -19,6 +21,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators({
 		getAndConnectToDevice,
+		setConnectionStatus,
 	}, dispatch);
 }
 

@@ -11,7 +11,6 @@ import{
   ActionConst
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import { setConnectionStatus } from '../../actions';
 import config from '../../config';
 
 
@@ -109,7 +108,7 @@ class SlideOne extends Component {
           When the eyes are closed, there is often a large increase in rhythmic brain activity in the range of 8-13 cycles per second (Hz). Alpha waves were one of the first discoveries that Hans Berger made with EEG. However, you may not be able to see your alpha waves clearly right now because seeing obvious alpha waves depends upon the position of the EEG sensors. Do not feel bad if you cannot see it!
         </PopUp>
 
-        <PopUp onClose={Actions.ConnectorTwo} visible={(this.props.isVisible && this.props.connectionStatus === config.connectionStatus.DISCONNECTED)} title='Muse Disconnected'>
+        <PopUp onClose={Actions.ConnectorOne} visible={(this.props.isVisible && this.props.connectionStatus === config.connectionStatus.DISCONNECTED)} title='Muse Disconnected'>
         Please reconnect to continue the tutorial</PopUp>
 
       </View>

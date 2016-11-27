@@ -43,7 +43,7 @@ function  mapStateToProps(state) {
           <Text style={styles.title}>Welcome to EEG 101</Text>
           <Text style={styles.body}>At the end of this tutorial, you will have learned how EEG devices can be used to measure the electrical activity of the brain.</Text>
         </View>
-        <View style={{flex: 1, margin: 40}}>
+        <View style={styles.buttonContainer}>
           <WhiteButton onPress={Actions.ConnectorOne}>GET STARTED</WhiteButton>
         </View>
       </Image>
@@ -65,12 +65,18 @@ body: {
 
   container: {
     flex: 1,
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     alignItems: 'stretch',
     width: null,
     height: null,
     backgroundColor: 'rgba(0,0,0,0)' 
 },
+
+  buttonContainer: {
+    flex: 1,
+    margin: 40,
+    justifyContent: 'center',
+  },
 
   logo: {
     width: 50,
@@ -87,7 +93,7 @@ body: {
       },
 
   titleBox: {
-    flex: 6,
+    flex: 4,
     alignItems: 'center',
     justifyContent: 'center',
       },
