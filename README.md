@@ -1,7 +1,7 @@
 
-	<p align="center">
-	    <img alt="babel" src="/EEG101graphic.png/" width="600">
-	</p>
+<p align="center">
+    <img alt="babel" src="/EEG101graphic.png/" width="600">
+</p>
 
 # EEG 101
 
