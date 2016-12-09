@@ -10,11 +10,11 @@ import{
 import{ Provider, connect }from 'react-redux';
 import{ createStore, applyMiddleware }from 'redux';
 import thunk from 'redux-thunk';
-import config from './config';
-import { setConnectionStatus } from './actions';
+import config from './src/redux/config';
+import { setConnectionStatus } from './src/redux/actions';
 
 //  Scenes
-import Landing from './src/scenes/landing';
+import Landing from './src/scenes/begin-landing';
 import ConnectorOne from './src/scenes/connector-01';
 import ConnectorTwo from './src/scenes/connector-02';
 import ConnectorThree from './src/scenes/connector-03';
@@ -25,14 +25,13 @@ import SlideFour from './src/scenes/slide-04';
 import SlideFive from './src/scenes/slide-05';
 import SlideSix from './src/scenes/slide-06';
 import SlideSeven from './src/scenes/slide-07';
-import SlideEight from './src/scenes/slide-08';
-import End from './src/scenes/end';
+import End from './src/scenes/slide-end';
 
 // Navbar import
 import NavigationBar from './src/components/NavigationBar.js';
 
 // reducer is a function
-import reducer from './reducer';
+import reducer from './src/redux/reducer';
 
 // Connect Router to Redux
 const RouterWithRedux = connect()(Router);
@@ -69,10 +68,10 @@ class EEG_Project extends Component {
             <Scene component={SlideOne} key='SlideOne' previous='CONNECTION' hideNavBar={false}/>
             <Scene component={SlideTwo} key='SlideTwo'previous='INTRODUCTION'/>
             <Scene component={SlideThree} key='SlideThree'previous='PHYSIOLOGY'/>
-            <Scene component={SlideFive} key='SlideFive'previous='HARDWARE'/>
-            <Scene component={SlideSix} key='SlideSix'previous='FILTERING'/>
-            <Scene component={SlideSeven} key='SlideSeven'previous='EPOCHING'/>
-            <Scene component={SlideEight} key='SlideEight'previous='ARTIFACT REMOVAL'/>
+            <Scene component={SlideFour} key='SlideFour' previous='HARDWARE'/>
+            <Scene component={SlideFive} key='SlideFive' previous='FILTERING'/>
+            <Scene component={SlideSix} key='SlideSix' previous='EPOCHING'/>
+            <Scene component={SlideSeven} key='SlideSeven' previous='ARTIFACT REMOVAL'/>
             <Scene component={End} key='End' previous='FEATURE EXTRACTION'/>
           </Scene>
         </RouterWithRedux>

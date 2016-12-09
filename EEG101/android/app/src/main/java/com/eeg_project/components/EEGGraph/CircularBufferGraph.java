@@ -2,7 +2,7 @@ package com.eeg_project.components.EEGGraph;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -13,6 +13,7 @@ import com.androidplot.ui.SizeMetric;
 import com.androidplot.ui.SizeMode;
 import com.androidplot.ui.VerticalPositioning;
 import com.androidplot.xy.BoundaryMode;
+import com.androidplot.xy.FastLineAndPointRenderer;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.XYPlot;
 import com.choosemuse.libmuse.Eeg;
@@ -27,43 +28,35 @@ import com.eeg_project.MainApplication;
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 
 // Android View that graphs processed EEG data
 public class CircularBufferGraph extends FrameLayout {
 
     // ----------------------------------------------------------------------
     // Variables
-    private XYPlot circBufferPlot;
+    public XYPlot circBufferPlot;
     private static final int PLOT_LENGTH = 220;
-    private CircularBufferGraph.MyPlotUpdater plotUpdater;
-    CircularBufferGraph.HistoryDataSource dataSource;
-    private DynamicSeries dataSeries;
-    public CircularBufferGraph.museDataListener dataListener;
-    private boolean eegFresh;
+    public MyPlotUpdater plotUpdater;
+    private FilterDataSource dataSource;
+    public DynamicSeries dataSeries;
+    public museDataListener dataListener;
+    public boolean eegFresh;
+    private LineAndPointFormatter lineFormatter;
     Thread dataThread;
     Thread renderingThread;
-    public BufferedWriter rawWriter;
-    public BufferedWriter filtWriter;
-    public File rawLogFile = new File("~/eegdata/raw");
-    public File filtLogFile = new File("~/eegdata/filtered");
-
-    // Bridged props
-    // Default channelOfInterest = 1 (left ear)
-    private int channelOfInterest = 1;
 
     // Reference to global application state used for connected Muse
     MainApplication appState;
 
-    // Signal processing
+    // CircBuffer specific variables
     public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
     public CircularBuffer filteredBuffer = new CircularBuffer(220, 4);
-    public Filter filter = new Filter(220, "bandpass");
+    public Filter filter = new Filter(220, "lowpass");
     public double[] newData = new double[4];
+
+    // Bridged props
+    // Default channelOfInterest = 1 (left ear)
+    public int channelOfInterest = 1;
 
     // ------------------------------------------------------------------------
     // Constructors
@@ -87,13 +80,13 @@ public class CircularBufferGraph extends FrameLayout {
     public void initView(Context context) {
 
         // Create circBufferPlot
-        circBufferPlot = new XYPlot(context, "EEG Circ Buffer Plot");
+        circBufferPlot = new XYPlot(context, "Circ Buffer Plot");
 
         // Create plotUpdater
         plotUpdater = new CircularBufferGraph.MyPlotUpdater(circBufferPlot);
 
         // Create dataSource
-        dataSource = new CircularBufferGraph.HistoryDataSource();
+        dataSource = new FilterDataSource(appState.connectedMuse.isLowEnergy());
 
         // Create dataSeries that will be drawn on plot (Y will be obtained from dataSource, x will be implicitly generated):
         dataSeries = new DynamicSeries("Buffer Plot");
@@ -102,9 +95,13 @@ public class CircularBufferGraph extends FrameLayout {
         circBufferPlot.setRangeBoundaries(500, 1100, BoundaryMode.FIXED);
         circBufferPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
-        // add dataSeries to plot and define color of plotted line
-        circBufferPlot.addSeries(dataSeries,
-                new LineAndPointFormatter(Color.rgb(255,255,255), null, null, null));
+        // Create line formatter with set color
+        //lineFormatter = new LineAndPointFormatter(Color.rgb(255,255,255), null, null, null);
+        lineFormatter = new FastLineAndPointRenderer.Formatter(Color.rgb(255, 255, 255), null,
+                null, null);
+
+        // add dataSeries to plot to be drawn by lineFormatter
+        circBufferPlot.addSeries(dataSeries, lineFormatter);
 
         // Format plot layout
         //Remove margins, padding and border
@@ -147,6 +144,8 @@ public class CircularBufferGraph extends FrameLayout {
         // Add plot to CircularBufferGraph
         this.addView(circBufferPlot, new FrameLayout.LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+
+        onVisibilityChanged(this, View.VISIBLE);
     }
 
     // Called when user navigates away from parent React Native component. Stops active threads in order to limit memory usage
@@ -155,7 +154,7 @@ public class CircularBufferGraph extends FrameLayout {
         if (visibility == View.INVISIBLE){
             stopThreads();
         }
-        else{
+        else if (dataThread == null || !dataThread.isAlive()) {
             startDataThread();
             startRenderingThread();
             dataListener = new CircularBufferGraph.museDataListener();
@@ -203,17 +202,9 @@ public class CircularBufferGraph extends FrameLayout {
         // Called whenever an incoming data packet is received. Handles different types of incoming data packets and updates data correctly
         @Override
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
-            switch (p.packetType()) {
-
-                case EEG:
-                    getEegChannelValues(newData, p);
-                    eegBuffer.update(newData);
-                    eegFresh = true;
-
-                    break;
-                default:
-                    break;
-            }
+            getEegChannelValues(newData, p);
+            eegBuffer.update(newData);
+            eegFresh = true;
         }
 
         // Updates newData array based on incoming EEG channel values
@@ -262,19 +253,26 @@ public class CircularBufferGraph extends FrameLayout {
 
     // Data source runnable
     // Processes raw EEG data and updates dataSeries
-    public class HistoryDataSource implements Runnable {
-
+    public class FilterDataSource implements Runnable {
         double[][] latestSamples;
         double[][] filteredSamples;
         double[] filtResult;
         private boolean keepRunning = true;
+        private int sleepInterval;
+
+        public FilterDataSource(Boolean isLowEnergy) {
+            if (isLowEnergy) {sleepInterval = 4;}
+            else {
+                sleepInterval = 2;
+            }
+        }
 
         @Override
         public void run() {
             try {
                 keepRunning = true;
                 while (keepRunning) {
-                    Thread.sleep(2);
+                    Thread.sleep(sleepInterval);
                     if (eegFresh) {
                         if (dataSeries.size() >= PLOT_LENGTH) {
                             dataSeries.removeFirst();

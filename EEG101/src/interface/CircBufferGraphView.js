@@ -3,13 +3,9 @@
 import { PropTypes } from 'react';
 import { requireNativeComponent, View } from 'react-native';
 
-var iface = {
+const iface = {
   name: 'CircBufferGraphView',
-  propTypes: { 
-        //height: PropTypes.number,
-        //width: PropTypes.number,
-        //backgroundColor: PropTypes.string,
-        //strokeColor: PropTypes.string,
+  propTypes: {
         visibility: PropTypes.bool,
         channelOfInterest: PropTypes.number,
     ...View.propTypes // include the default view properties

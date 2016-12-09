@@ -1,10 +1,7 @@
 package com.eeg_project.components.EEGGraph;
 
-import android.content.res.Resources;
-import android.util.Log;
 import android.view.View;
 
-import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;

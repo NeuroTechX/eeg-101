@@ -10,7 +10,7 @@ import{
   Actions,
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import config from '../../config';
+import config from '../redux/config';
 
 
 //Interfaces. For advanced elements such as graphs
@@ -29,10 +29,9 @@ function  mapStateToProps(state) {
     };
   }
 
-class SlideFour extends Component {
+class SlideThree extends Component {
   constructor(props) {
     super(props);
-    isVisible: true;
 
       // Initialize States
     this.state = {
@@ -65,15 +64,15 @@ class SlideFour extends Component {
           <View style={styles.pageStyle}>
             <Text style={styles.header}>This device has 4 electrodes</Text>
             <View style={{flexDirection: 'row'}}>
-              <Text style={[styles.body,{flex:.5, marginRight: 10,}]}>Touch the head diagram to view the signal at each <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>electrode.</PopUpLink></Text>
+              <Text style={[styles.body,{flex:.5, marginRight: 10,}]}>Touch the head diagram to view the signal at each electrode. Scientists have <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>names</PopUpLink> for each of these electrodes.</Text>
               <ElectrodeSelector channelOfInterest={(channel) => this.setState({channelOfInterest: channel})}/>
             </View>
           </View>
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>What do electrodes measure?</Text>
-            <Text style={styles.body}>Each electrode's reading is compared to a <PopUpLink onPress={() => this.setState({popUp3Visible: true})}>reference sensor</PopUpLink> and then amplified around 1,000,000 times.</Text>
-            <Button onPress={Actions.SlideFive}>NEXT MODULE</Button>
+            <Text style={styles.body}>Each electrode detects voltage fluctuations that are compared to a <PopUpLink onPress={() => this.setState({popUp3Visible: true})}>reference sensor</PopUpLink> and then amplified around 1,000,000 times.</Text>
+            <Button onPress={Actions.SlideFour}>NEXT MODULE</Button>
           </View>
         </ViewPagerAndroid>
 
@@ -89,7 +88,7 @@ class SlideFour extends Component {
         </PopUp>
 
         <PopUp onClose={() => this.setState({popUp3Visible: false})} visible={this.state.popUp3Visible}
-        title='Referencing'>
+        title='Referencing' image={require('../assets/reference.png')}>
         Each electrode's signal is actually the relative difference in electrical potential between that electrode and the reference. Thus, the placement of the reference electrode is very import. In the Muse, the reference is located on the front of the forehead (indicated in black).
         </PopUp>
 
@@ -150,4 +149,4 @@ body: {
 
 });
 
-export default connect(mapStateToProps)(SlideFour);
+export default connect(mapStateToProps)(SlideThree);

@@ -11,7 +11,7 @@ import{
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
 
-import config from '../../config'
+import config from '../redux/config'
 
 // Components. For JS UI elements
 import WhiteButton from '../components/WhiteButton';
@@ -26,12 +26,6 @@ function  mapStateToProps(state) {
  class ConnectorThree extends Component {
   constructor(props) {
     super(props);
-    isVisible = true;
-
-    // Initialize States
-    this.state = {
-      
-    };
   }
 
   render() {
@@ -39,11 +33,11 @@ function  mapStateToProps(state) {
       <View style={styles.container}>
         <View style={styles.titleBox}>
           <Text style={styles.title}>Step 3</Text>
-          <Text style={styles.instructions}>Make sure Muse is fit to your head properly</Text>
-          <Text style={styles.body}>Fit the earpieces snugly behind your ears and adjust the headband so it sits mid forehead. Clear any hair between the device and your head</Text>
+          <Text style={styles.instructions}>Make sure the Muse is properly fit to your head</Text>
+          <Text style={styles.body}>Fit the earpieces snugly behind your ears and adjust the headband so that it rests mid forehead. Clear any hair that might prevent the device from making contact with your skin</Text>
         </View>
         
-        <View style={{flex: 1, margin: 40}}>
+        <View style={styles.buttonContainer}>
           <WhiteButton onPress={Actions.SlideOne}>BEGIN</WhiteButton>
         </View>
       </View>
@@ -55,12 +49,13 @@ export default connect(mapStateToProps)(ConnectorThree);
 const styles = StyleSheet.create({
 
 body: {
-    fontFamily: 'Roboto-Light',
-    fontSize: 15,
-    margin: 20,
-    color: '#ffffff',
-    textAlign: 'center'
-  },
+  fontFamily: 'Roboto-Light',
+  fontSize: 15,
+  marginLeft: 40,
+  marginRight: 40,
+  color: '#ffffff',
+  textAlign: 'center'
+},
 
 instructions: {
   fontFamily: 'Roboto-Bold',
@@ -77,7 +72,14 @@ instructions: {
     width: null,
     height: null,
     backgroundColor: '#6CCBEF', 
-},
+  },
+
+  buttonContainer: {
+    flex: 1,
+    margin: 40,
+    justifyContent: 'center',
+
+  },
 
   logo: {
     width: 50,
@@ -94,8 +96,8 @@ instructions: {
       },
 
   titleBox: {
-    flex: 6,
+    flex: 4,
     alignItems: 'center',
     justifyContent: 'center',
-      },
+  },
 });

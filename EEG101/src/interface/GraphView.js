@@ -3,7 +3,7 @@
 import { PropTypes } from 'react';
 import { requireNativeComponent, View } from 'react-native';
 
-var iface = {
+const iface = {
   name: 'GraphView',
   propTypes: { 
         visibility: PropTypes.bool,

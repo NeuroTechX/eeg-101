@@ -11,7 +11,6 @@ import javax.annotation.Nullable;
 // GraphManager class manages EEGGraph objects.
 public class CircularBufferGraphManager extends SimpleViewManager<CircularBufferGraph> {
     private final static String REACT_CLASS = "CIRC_BUFFER_GRAPH";
-    int counter = 0;
     CircularBufferGraph bufferGraph;
 
 

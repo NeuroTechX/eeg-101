@@ -11,8 +11,7 @@ import{
   ActionConst
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import { setConnectionStatus } from '../../actions';
-import config from '../../config';
+import config from '../redux/config';
 
 
 import Button from '../components/Button';
@@ -31,7 +30,6 @@ function  mapStateToProps(state) {
     };
   }
 
-
 class SlideOne extends Component {
   constructor(props) {
     super(props);
@@ -44,7 +42,6 @@ class SlideOne extends Component {
       popUp4Visible: false,
     };
   }
-  //           
   
   render() {
     return (
@@ -70,8 +67,8 @@ class SlideOne extends Component {
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>Try blinking your eyes...</Text>
-            <Text style={styles.body}>Does the signal change?{"\n"}
-            Eye movements create <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>noise</PopUpLink> in the EEG signal.
+            <Text style={styles.body}>Does the signal change?</Text>
+            <Text style={styles.body}>Eye movements create <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>noise</PopUpLink> in the EEG signal.
             </Text>
           </View>
 
@@ -98,7 +95,7 @@ class SlideOne extends Component {
 
         <PopUp onClose={() => this.setState({popUp2Visible: false})} visible={this.state.popUp2Visible}
         title='Noise'>
-          Movement of the eyes (which are electrically charged) and muscle activity produce electrical activity. Blinking, swallowing, and clenching the jaw produce electrical signals that are larger than those originating in the brain, making it difficult to read. the EEG To accurately sense the activity of the brain, movement must be kept to a minimum.
+          Movement of the eyes (which are electrically charged) and muscle activity produce electrical activity. Thus, blinking, swallowing, and clenching the jaw will all produce noise that can overpower signals originating in the brain. This can make it very difficult to read the EEG. To accurately sense the activity of the brain, movement must be kept to a minimum.
         </PopUp>
 
         <PopUp onClose={() => this.setState({popUp3Visible: false})} visible={this.state.popUp3Visible}
@@ -108,12 +105,11 @@ class SlideOne extends Component {
         
         <PopUp onClose={() => this.setState({popUp4Visible: false})} visible={this.state.popUp4Visible}
         title='Closed eye rhythms'>
-          When the eyes are closed, there is often a large increase in rhythmic brain activity in the range of 8-13 cycles per second (Hz). Alpha waves were one of the first discoveries that Hans Berger made with EEG. However, you may not be able to see your alpha waves clearly right now because seeing obvious alpha waves depends upon the position of the EEG sensors. Do not feel bad if you cannot see it!
+          When the eyes are closed, there is often a large increase in rhythmic brain activity in the range of 8-13 cycles per second (Hz). Alpha waves were one of the first discoveries that Hans Berger made with EEG. The ability to detect alpha waves when the eyes are closed varies greatly from person to person, however. Don't feel bad if you can't see them!
         </PopUp>
 
-        <PopUp onClose={Actions.ConnectorTwo} visible={(this.props.isVisible && this.props.connectionStatus === config.connectionStatus.DISCONNECTED)} title='Muse Disconnected'>
+        <PopUp onClose={Actions.ConnectorOne} visible={(this.props.isVisible && this.props.connectionStatus === config.connectionStatus.DISCONNECTED)} title='Muse Disconnected'>
         Please reconnect to continue the tutorial</PopUp>
-
       </View>
     );
   }
@@ -163,7 +159,6 @@ const styles = StyleSheet.create({
     color: '#484848',
     fontSize: 20,
   },
-
 
   viewPager: {
     flex: 4,

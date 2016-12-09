@@ -50,6 +50,31 @@ public class CircularBuffer {
         return extractedArray;
     }
 
+    public double[][] extractTransposed(int nbSamples) {
+        // Return an array containing the last `nbSamples` collected in
+        // the circular buffer.
+        //
+        // The shape of the returned array is [nbCh, nbSamples].
+        //
+        // This transposed version is useful to avoid additional looping
+        // through the returned array when computing FFT (the looping is
+        // instead done here.)
+        //
+        // TODO: find more efficient way to do that (use EJML?)
+
+        int extractIndex;
+        double[][] extractedArray = new double[nbCh][nbSamples];
+
+        for (int c = 0; c < nbCh; c++) {
+            for(int i = 0; i < nbSamples; i++) {
+                extractIndex = mod(index - nbSamples + i, bufferLength);
+                extractedArray[c][i] = buffer[extractIndex][c];
+            }
+        }
+
+        return extractedArray;
+    }
+
     public void resetPts() {
         pts = 0;
     }

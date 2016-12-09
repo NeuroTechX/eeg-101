@@ -11,34 +11,30 @@ import {
   View,
   Modal,
   StyleSheet,
-  TouchableOpacity,
   Image,
 } from 'react-native';
 
 import Button from '../components/Button';
-
-
 
 export default class PopUp extends Component{
   
   render() {
     let imageStyle = (this.props.image != null) ? styles.activeImage: styles.disabledImage
     return(
+
       <Modal
           animationType={"fade"}
           transparent={true}
           onRequestClose={this.props.onClose}
           visible={this.props.visible}>
         <View style={styles.modalBackground}>
-        <View style={{backgroundColor: '#1B1B1B'}}>
+          <View style={{backgroundColor: '#1B1B1B'}}>
             <Image source={this.props.image} style={imageStyle} resizeMode='contain'/>
-            </View>
+          </View>
           <View style={styles.modalInnerContainer}>
-            
-            <Text style={styles.modalTitle}> {this.props.title} </Text>
-            
-            <Text style={styles.modalText}> {this.props.children} </Text>
-              <Button onPress={this.props.onClose}>Close</Button>
+            <Text style={styles.modalTitle}>{this.props.title}</Text>
+            <Text style={styles.modalText}>{this.props.children}</Text>
+            <Button onPress={this.props.onClose}>Close</Button>
           </View>   
         </View>
       </Modal>
@@ -98,9 +94,6 @@ const styles = StyleSheet.create({
     width: 0,
   },
 
-  close: {
-    fontSize: 22,
-  },
 
 });
 

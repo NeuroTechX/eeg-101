@@ -11,7 +11,7 @@ import{
   ActionConst,
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import config from '../../config';
+import config from '../redux/config';
 
 
 //Interfaces. For advanced elements such as graphs
@@ -29,10 +29,9 @@ function  mapStateToProps(state) {
     };
   }
 
-class SlideThree extends Component {
+class SlideTwo extends Component {
   constructor(props) {
     super(props);
-    isVisible: true;
 
       // Initialize States
     this.state = {
@@ -53,7 +52,7 @@ class SlideThree extends Component {
         return require('../assets/neuronmultiarrow.png');
         break;
       case 2:
-        return require('../assets/neuronsandelectrodes.png');
+        return require('../assets/awakeasleep.gif');
         break;
     }});
     return (
@@ -81,13 +80,13 @@ class SlideThree extends Component {
           
           <View style={styles.pageStyle}>
           <Text style={styles.header}>Organized neural activity produces electric fields</Text>
-            <Text style={styles.body}>When billions of neurons work together to produce thoughts, feelings, and behaviours, their activity can be <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>detected.</PopUpLink>
+            <Text style={styles.body}>When billions of neurons <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>work together</PopUpLink> to produce thoughts, feelings, and behaviours, their electricity can be detected by electrodes on the scalp
             </Text>
           </View>
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>EEG detects the "state" of the brain</Text>
-            <Text style={styles.body}>The nature of this organized activity can reveal aspects of brain function, such as <PopUpLink onPress={() => this.setState({popUp3Visible: true})}>sleep and alertness.</PopUpLink>
+            <Text style={styles.body}>This organized electrical activity varies between different brain states, such as <PopUpLink onPress={() => this.setState({popUp3Visible: true})}>sleep and wakefulness.</PopUpLink>
             </Text>
             <Button onPress={Actions.SlideThree}>NEXT MODULE</Button>
           </View>
@@ -95,7 +94,7 @@ class SlideThree extends Component {
 
         <PopUp onClose={() => this.setState({popUp1Visible: false})} visible={this.state.popUp1Visible}
         title='Neural basis of EEG'>
-          When synapses are activated on a neuron's dendrites, a small electric field (dipole) is created along the body of the neuron due to the difference in charge between its axons and dendrites. This electric field only lasts for a few milliseconds.
+          When synapses are activated on a neuron's dendrites, a small electric field (dipole) is created along the body of the neuron due to the difference in charge between those dendrites and the axon. This electric field only lasts for a few milliseconds.
         </PopUp>
 
         <PopUp onClose={() => this.setState({popUp2Visible: false})} visible={this.state.popUp2Visible}
@@ -105,7 +104,7 @@ class SlideThree extends Component {
         
         <PopUp onClose={() => this.setState({popUp3Visible: false})} visible={this.state.popUp3Visible}
         title='Brain states'>
-          As we fall asleep and pass through multiple sleep stages there are dramatic changes in rhythmic brain activity. Rhythmic activity can also be altered by emotions and certain aspects of cognition.
+          When we're asleep our brains produce very different kinds rhythmic electrical activity than when we're awake. When awake, the brain's rhythms tend to be high frequency and irregular, while low frequency, organized rhythms become more dominant as we fall asleep and pass through the multiple sleep stages. Certain emotions and cognitive processes have also been linked with characteristic patterns of rhythmic activity that can be identified with EEG.
         </PopUp>
 
        <PopUp onClose={Actions.ConnectorOne} visible={(this.props.isVisible && this.props.connectionStatus === config.connectionStatus.DISCONNECTED)} title='Muse Disconnected'>
@@ -171,4 +170,4 @@ body: {
 
 });
 
-export default connect(mapStateToProps)(SlideThree);
+export default connect(mapStateToProps)(SlideTwo);

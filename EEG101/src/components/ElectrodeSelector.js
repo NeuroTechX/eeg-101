@@ -48,12 +48,12 @@ export default class ElectrodeSelector extends Component {
 			<Image source={this.state.image} 
 			style={styles.container}>
 				<View style={styles.horizontalContainer}>
-					<TouchableOpacity style={{flex:1}} onPress={() => {this.touch(2)}}></TouchableOpacity>
-					<TouchableOpacity style={{flex:1}} onPress={() => {this.touch(3)}}></TouchableOpacity>
+					<TouchableOpacity style={{flex:1}} onPress={() => {this.touch(2)}}/>
+					<TouchableOpacity style={{flex:1}} onPress={() => {this.touch(3)}}/>
 				</View>
 				<View style={styles.horizontalContainer}>
-					<TouchableOpacity style={{flex:1}} onPress={() => {this.touch(1)}}></TouchableOpacity>
-					<TouchableOpacity style={{flex:1}} onPress={() => {this.touch(4)}}></TouchableOpacity>
+					<TouchableOpacity style={{flex:1}} onPress={() => {this.touch(1)}}/>
+					<TouchableOpacity style={{flex:1}} onPress={() => {this.touch(4)}}/>
 				</View>
 			</Image>
 		);

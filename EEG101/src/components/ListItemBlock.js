@@ -4,35 +4,20 @@
 
 'use strict';
 
-var React = require('react');
-var ReactNative = require('react-native');
-var {
+import React, { Component } from 'react';
+
+import {
   StyleSheet,
   Text,
   View,
-} = ReactNative;
+} from 'react-native';
 
-class ListItemBlock extends React.Component {
-  props: {
-    title?: string,
-    description?: string,
-  };
-
-  static propTypes = {
-    title: React.PropTypes.string,
-    description: React.PropTypes.string,
-  };
-
-  state = {description: (null: ?string)};
+class ListItemBlock extends Component {
+  constructor(props) {
+    super(props);
+  }
 
   render() {
-    var description;
-    if (this.props.description) {
-      description =
-        <Text>
-          {this.props.description}
-        </Text>;
-    }
 
     return (
       <View style={styles.container}>
@@ -40,19 +25,18 @@ class ListItemBlock extends React.Component {
           <Text style={styles.titleText}>
             {this.props.title}
           </Text>
-          {description}
         </View>
-        <View style={styles.children}>
-          {
-            // $FlowFixMe found when converting React.createClass to ES6
-            this.props.children}
+        <View>
+          <Text style={styles.bodyText}>
+            {this.props.children}
+          </Text>
         </View>
       </View>
     );
   }
 }
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     borderRadius: 3,
     borderWidth: 0.5,
@@ -66,31 +50,23 @@ var styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderTopLeftRadius: 3,
     borderTopRightRadius: 2.5,
-    borderBottomColor: '#d6d7da',
-    backgroundColor: '#f6f7f8',
+    backgroundColor: '#cce9f8',
     paddingHorizontal: 10,
     paddingVertical: 5,
   },
   titleText: {
-    fontSize: 14,
-    fontWeight: '500',
+    fontFamily: 'Roboto-Bold',
+    color: '#484848',
+    fontSize: 20,
+    margin: 5,
   },
-  descriptionText: {
-    
+
+  bodyText: {
+    fontFamily: 'Roboto-Light',
+    color: '#484848',
+    fontSize: 15,
+    margin: 5,
   },
-  disclosure: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    padding: 10,
-  },
-  disclosureIcon: {
-    width: 12,
-    height: 8,
-  },
-  children: {
-    margin: 10,
-  }
 });
 
 module.exports = ListItemBlock;

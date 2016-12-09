@@ -26,8 +26,6 @@ function  mapStateToProps(state) {
 class SlideSix extends Component {
   constructor(props) {
     super(props);
-    isVisible: true;
-
 
       // Initialize States
     this.state = {
@@ -38,32 +36,31 @@ class SlideSix extends Component {
   render() {
     return (
       <View style={styles.container}>
-      
         <View style={styles.graphContainer}>
-            <Image source={require('../assets/windowing.png')}
+          <Image source={require('../assets/artifact.png')}
                 style={styles.image}
                 resizeMode='contain'/>
-          </View>
+        </View>
 
-          <Text style={styles.currentTitle}>EPOCHING</Text>
+        <Text style={styles.currentTitle}>ARTIFACT REMOVAL</Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
           initialPage={0}>
 
+          
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>Chunking the signal</Text>
-            <Text style={styles.body}>Next, the EEG is divided into small segments or <PopUpLink onPress={() => this.setState({popUpVisible: true})}>'epochs.'</PopUpLink>
-             
+            <Text style={styles.header}>Removing noise</Text>
+            <Text style={styles.body}>After the EEG has been divided into epochs, those that contain a <PopUpLink onPress={() => this.setState({popUpVisible: true})}> significant amount</PopUpLink> of noise can be removed.
             </Text>
             <Button onPress={Actions.SlideSeven}>Next</Button>
           </View>
-          
+
         </ViewPagerAndroid>
 
         <PopUp onClose={() => this.setState({popUpVisible: false})} visible={this.state.popUpVisible}
-        title='Epochs'>
-        Our brain state is constantly changing, and the EEG changes with it. We divide the EEG into epochs so that that we can characterize them and understand how the EEG changes over time.
+        title="Artifact detection">
+        One simple way to define what a 'significant amount of noise' is to compare the range of the EEG's fluctuation in one epoch to its neighbours. If the signal moves around in one epoch a lot more than in its neighbours, it is probably because there was an eyeblink or other source of noise. Get rid of it!
         </PopUp>
 
       </View>
@@ -73,7 +70,7 @@ class SlideSix extends Component {
 
 const styles = StyleSheet.create({
 
- currentTitle: {
+currentTitle: {
     marginLeft: 20,
     marginTop: 10,
     fontSize: 13,
@@ -95,7 +92,7 @@ const styles = StyleSheet.create({
   },
 
   graphContainer: {
-    backgroundColor: 'white',
+    backgroundColor: '#72c2f1',
     flex: 4,
     justifyContent: 'center',
     alignItems: 'stretch',
@@ -123,7 +120,6 @@ const styles = StyleSheet.create({
     width: null,
     height: null,
   },
-
 
 });
 

@@ -56,7 +56,8 @@ class NavigationBar extends Component {
       return (
         <TouchableOpacity
           style={styles.navBack}
-          onPress={Actions.pop}>
+          onPress={Actions.pop}
+          hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}>
           <Image source={backButtonIcon} style={{height: 20}} resizeMode='contain'/>
         </TouchableOpacity>
       );

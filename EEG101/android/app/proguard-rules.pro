@@ -71,7 +71,5 @@
 # AndroidPlot
 -keep class com.androidplot.** { *; }
 
-# Guava
--dontwarn javax.annotation.**
--dontwarn javax.inject.**
--dontwarn sun.misc.Unsafe
+# Animated Gif support
+-keep class com.facebook.imagepipeline.** { *; }

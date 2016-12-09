@@ -11,6 +11,8 @@ import {
   ScrollView,
 } from 'react-native';
 
+import Button from './Button';
+
 
 export default class PopUpList extends Component{
   
@@ -22,11 +24,9 @@ export default class PopUpList extends Component{
           onRequestClose={this.props.onClose}
           visible={this.props.visible}>
         <View style={styles.modalBackground}>
-          <ScrollView style={styles.modalInnerContainer}>
+          <ScrollView contentContainerStyle={styles.modalInnerContainer}>
             {this.props.children}
-            <TouchableOpacity onPress={this.props.onClose}>
-              <Text style={styles.close}>Close</Text>
-            </TouchableOpacity>
+            <Button onPress={this.props.onClose}>Close</Button>
           </ScrollView>   
         </View>
       </Modal>
@@ -35,27 +35,19 @@ export default class PopUpList extends Component{
 }
 
 const styles = StyleSheet.create({
- 
+
   modalBackground: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'stretch',
     padding: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(12, 89, 128, 0.8)',
   },
 
   modalInnerContainer: {
-    borderRadius: 10,
-    alignItems: 'center',
+    alignItems: 'stretch',
     backgroundColor: 'white',
     padding: 20,
-  },
-
-  modal: {
-    flex: .25,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'white',
   },
 
   close: {

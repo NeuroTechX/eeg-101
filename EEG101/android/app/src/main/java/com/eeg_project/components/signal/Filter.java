@@ -1,6 +1,6 @@
 package com.eeg_project.components.signal;
 
-import java.util.Arrays; // For printing arrays when debugging
+//import java.util.Arrays; // For printing arrays when debugging
 
 // Contains transform function for performing bandpass filter of EEG data. Also contains python-generated coefficients
 public class Filter {
@@ -25,7 +25,7 @@ public class Filter {
         if (filterType.contains("alpha")) { // Alpha bandpass
             // coeffB = {};
             // coeffA = {};
-        } else if (filterType.contains("bandpass")) { // 2-36 Hz bandpass
+        } else if (filterType.contains("lowpass")) { // 2-36 Hz bandpass
 
             // Coefficients for 36hz lowpass filter generated in python
             coeffB = new double[]{0.0098570847698665753355840024596545845270156860351562500000000000, 0.0492854238493328766779200122982729226350784301757812500000000000, 0.0985708476986657533558400245965458452701568603515625000000000000, 0.0985708476986657533558400245965458452701568603515625000000000000, 0.0492854238493328766779200122982729226350784301757812500000000000, 0.0098570847698665753355840024596545845270156860351562500000000000};
