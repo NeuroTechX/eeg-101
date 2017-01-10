@@ -3,6 +3,7 @@ package com.eeg_project.components.EEGGraph;
 import android.content.Context;
 import android.graphics.Color;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -27,6 +28,8 @@ import com.eeg_project.MainApplication;
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
 
+import java.util.Arrays;
+
 
 // Android View that graphs processed EEG data
 public class CircularBufferGraph extends FrameLayout {
@@ -40,6 +43,8 @@ public class CircularBufferGraph extends FrameLayout {
     public DynamicSeries dataSeries;
     public museDataListener dataListener;
     public boolean eegFresh;
+    double[] filtResult;
+    public int samplesCollected = 0;
     Thread dataThread;
     Thread renderingThread;
 
@@ -188,7 +193,6 @@ public class CircularBufferGraph extends FrameLayout {
 
     // Listener that receives incoming Muse data packets and updates the eegbuffer
     class museDataListener extends MuseDataListener {
-
         // Constructor
         museDataListener() {
         }
@@ -198,7 +202,8 @@ public class CircularBufferGraph extends FrameLayout {
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
             getEegChannelValues(newData, p);
             eegBuffer.update(newData);
-            eegFresh = true;
+
+
         }
 
         // Updates newData array based on incoming EEG channel values
@@ -222,6 +227,7 @@ public class CircularBufferGraph extends FrameLayout {
     class MyPlotUpdater implements Runnable {
         Plot plot;
         private boolean keepRunning = true;
+
         public MyPlotUpdater(Plot plot) {
             this.plot = plot;
         }
@@ -248,16 +254,17 @@ public class CircularBufferGraph extends FrameLayout {
     // Data source runnable
     // Processes raw EEG data and updates dataSeries
     public class FilterDataSource implements Runnable {
+        int stepSize = 26;
         double[][] latestSamples;
         double[][] filteredSamples;
-        double[] filtResult;
         private boolean keepRunning = true;
         private int sleepInterval;
 
         public FilterDataSource(Boolean isLowEnergy) {
-            if (isLowEnergy) {sleepInterval = 4;}
-            else {
-                sleepInterval = 2;
+            if (isLowEnergy) {
+                stepSize = 5;
+            } else {
+                stepSize = 22;
             }
         }
 
@@ -266,8 +273,7 @@ public class CircularBufferGraph extends FrameLayout {
             try {
                 keepRunning = true;
                 while (keepRunning) {
-                    Thread.sleep(sleepInterval);
-                    if (eegFresh) {
+                    if (eegBuffer.getPts() >= stepSize) {
                         if (dataSeries.size() >= PLOT_LENGTH) {
                             dataSeries.removeFirst();
                         }
@@ -280,11 +286,13 @@ public class CircularBufferGraph extends FrameLayout {
 
                         // Update filtered buffer
                         filteredBuffer.update(filtResult);
+                        samplesCollected = samplesCollected + 1;
+
                         dataSeries.addLast(filtResult[channelOfInterest - 1]);
-                        eegFresh = false;
+                        eegBuffer.resetPts();
                     }
                 }
-            } catch (InterruptedException e) {}
+            } catch (Exception e) {}
         }
 
         public void stopThread() {

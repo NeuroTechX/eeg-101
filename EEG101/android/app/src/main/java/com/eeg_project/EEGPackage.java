@@ -1,6 +1,7 @@
 package com.eeg_project;
 
 
+import com.eeg_project.components.EEGGraph.ArtefactRemovalGraphManager;
 import com.eeg_project.components.EEGGraph.CircularBufferGraphManager;
 import com.eeg_project.components.EEGGraph.GraphManager;
 import com.eeg_project.components.EEGGraph.PSDGraphManager;
@@ -35,7 +36,8 @@ public class EEGPackage implements ReactPackage {
 		return Arrays.<ViewManager>asList(
 				new GraphManager(),
 				new CircularBufferGraphManager(),
-				new PSDGraphManager()
+				new PSDGraphManager(),
+				new ArtefactRemovalGraphManager()
 		);
 	}
 }

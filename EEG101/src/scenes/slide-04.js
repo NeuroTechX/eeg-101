@@ -15,6 +15,7 @@ import config from '../../config';
 
 
 //Interfaces. For advanced elements such as graphs
+import ArtefactRemovalGraphView from '../interface/ArtefactRemovalGraphView';
 import PSDGraphView from '../interface/PSDGraphView';
 
 import Button from '../components/Button';

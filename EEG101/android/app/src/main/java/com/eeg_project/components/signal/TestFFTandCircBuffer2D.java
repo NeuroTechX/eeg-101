@@ -40,7 +40,7 @@ public class TestFFTandCircBuffer2D {
 	}
 
 	public static void main(String[] args) {
-		/*
+
 
 		// 1. Create fake signal
 		int nbCh = 4;
@@ -60,9 +60,10 @@ public class TestFFTandCircBuffer2D {
 		// 4. Initialize FFT 2D buffer
  		int fftBufferLength = 20;
         int nbBins = f.length;
-    	CircBuffer2D psdBuffer = new CircBuffer2D(fftBufferLength,nbCh,nbBins);
+    	PSDBuffer psdBuffer = new PSDBuffer(fftBufferLength,nbCh,nbBins);
 
 		// 5. Emulate data coming in at 10 Hz
+
 		double[][] x;
 		int step = (int)fs/10;
 
@@ -73,6 +74,7 @@ public class TestFFTandCircBuffer2D {
 
 			// Write new raw sample in buffer
 			rawBuffer.update(fakeSignal[i]);
+
 
 			// Process data if `step` samples have passed
 			if (rawBuffer.getPts() > step) {
@@ -93,14 +95,15 @@ public class TestFFTandCircBuffer2D {
 				smoothLogPower = psdBuffer.mean();
 
 				System.out.println(Arrays.toString(logpower[0]));
+				System.out.println(Arrays.toString(smoothLogPower[0]));
 
 				// Plot PSD!
-				// AndroidSuperPlot(smoothLogPower);
+				//AndroidSuperPlot(smoothLogPower);
 
 			}
 
 		}
-		*/
+
 
 	}
 } 

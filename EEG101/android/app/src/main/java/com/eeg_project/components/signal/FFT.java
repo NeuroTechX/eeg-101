@@ -1,5 +1,7 @@
 package com.eeg_project.components.signal;
 
+import android.util.Log;
+
 import org.jtransforms.fft.DoubleFFT_1D;
 import java.lang.Math; // For log10
 // import java.lang.arraycopy; 
@@ -21,9 +23,9 @@ public class FFT {
 // interpretation of the code and allow an eventual custom
 // FFT implementation.
 
-	private int l;
-	private int n;
-	private int nbFftPoints;
+	private int inputLength;
+	private int fftLength;
+	private int nbFFTPoints;
 	private boolean even;
 	private boolean zeroPad = false;
 
@@ -34,48 +36,48 @@ public class FFT {
 	private double[] f;
 	private double[] hammingWin;
 
-	private double fs;
+	private double samplingFrequency;
 	private DoubleFFT_1D fft_1D;
 
 
 	public FFT(int inputLength, int fftLength, double samplingFrequency) {
 
 		// Parameters
-		l = inputLength;
-		n = fftLength;
-		fs = samplingFrequency;
+		this.inputLength = inputLength;
+		this.fftLength = fftLength;
+		this.samplingFrequency = samplingFrequency;
 
 		// Find out if zero-padding or truncating is necessary
-		if (n > l) { // zero-padding
+		if (this.fftLength > this.inputLength) { // zero-padding
 			zeroPad = true;
 		}
 
 		// Compute the number of points in the FFT
-		if (n % 2 == 0) {
-			nbFftPoints = n/2;
+		if (this.fftLength % 2 == 0) {
+			nbFFTPoints = this.fftLength /2;
 			even = true;
 		} else {
-			nbFftPoints = (int)(n/2) + 1;
+			nbFFTPoints = (int)(this.fftLength /2) + 1;
 			even = false; 
 		}
 
 		// Initialize arrays to hold internal values
-		Y = new double[n];
-		real = new double[nbFftPoints];
-		imag = new double[nbFftPoints];
-		logpower = new double[nbFftPoints];
+		Y = new double[this.fftLength];
+		real = new double[nbFFTPoints];
+		imag = new double[nbFFTPoints];
+		logpower = new double[nbFFTPoints];
 
 		// Initialize FFT transform
-		fft_1D = new DoubleFFT_1D(n);
+		fft_1D = new DoubleFFT_1D(this.fftLength);
 
 		// Define frequency bins
-		f = new double[nbFftPoints];
-		for (int i = 0; i < nbFftPoints; i++) {
-			f[i] = fs*i/n;
+		f = new double[nbFFTPoints];
+		for (int i = 0; i < nbFFTPoints; i++) {
+			f[i] = this.samplingFrequency *i/ this.fftLength;
 		}
 
 		// Initialize Hamming window
-		hammingWin = hamming(l);
+		hammingWin = hamming(this.inputLength);
 
 	}
 
@@ -83,23 +85,25 @@ public class FFT {
 		// Compute log10(PSD) of x
 		// TODO: Improve efficiency by merging for loops
 
-		if (x.length != l) {
-			throw new IllegalArgumentException("Input has " + x.length + " elements instead of " + l + ".");
+		//Log.w("computingPSD", "received " + Arrays.toString(x));
+
+		if (x.length != inputLength) {
+			throw new IllegalArgumentException("Input has " + x.length + " elements instead of " + inputLength + ".");
 		}
 
 		if (zeroPad) {
-			Y = new double[n]; // Re-initialize to have zeros at the end
+			Y = new double[fftLength]; // Re-initialize to have zeros at the end
 		}
 
 		// Compute mean of the window
 		double winMean = 0;
-		for (int i = 0; i < l; i++) {
+		for (int i = 0; i < inputLength; i++) {
 			winMean += x[i];
 		}
-		winMean /= l;
+		winMean /= inputLength;
 
 		// De-mean and apply Hamming window
-		for (int i = 0; i < Math.min(l,n); i++) {
+		for (int i = 0; i < Math.min(inputLength, fftLength); i++) {
 			Y[i] = hammingWin[i]*(x[i] - winMean);
 		}
 
@@ -107,7 +111,7 @@ public class FFT {
 		fft_1D.realForward(Y);
 
 		// Get real and imaginary parts
-		for (int i = 0; i < nbFftPoints-1; i++) {
+		for (int i = 0; i < nbFFTPoints -1; i++) {
 			real[i] = Y[2*i];
 			imag[i] = Y[2*i + 1];
 		}
@@ -115,19 +119,18 @@ public class FFT {
 
 		// Get first and/or last points depending on length of FFT (Specific to JTransforms library)
 		if (even) {
-			real[nbFftPoints-1] = Y[1];
+			real[nbFFTPoints -1] = Y[1];
 		} else {
-			imag[nbFftPoints-1] = Y[1];
-			real[nbFftPoints-1] = Y[n-1];
+			imag[nbFFTPoints -1] = Y[1];
+			real[nbFFTPoints -1] = Y[fftLength -1];
 		}
 
 		// Compute log-power
-		for (int i = 0; i < nbFftPoints; i++) {
-			logpower[i] = Math.log10(real[i]*real[i] + imag[i]*imag[i]); // log squared complex magnitude
+		for (int i = 0; i < nbFFTPoints; i++) {
+			logpower[i] = Math.log10(1 + real[i]*real[i] + imag[i]*imag[i]); // log squared
+			// complex magnitude
 		}
-
 		return logpower;
-
 	}
  
 	private double[] hamming(int L) {
