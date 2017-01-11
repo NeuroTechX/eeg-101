@@ -43,7 +43,9 @@ public class CircularBuffer {
 
         for(int i = 0; i < nbSamples; i++) {
             extractIndex = mod(index - nbSamples + i, bufferLength);
-            extractedArray[i] = buffer[extractIndex];
+            for(int j = 0; j < nbCh; j++) {
+                extractedArray[i][j] = buffer[extractIndex][j];
+            }
         }
 
         return extractedArray;

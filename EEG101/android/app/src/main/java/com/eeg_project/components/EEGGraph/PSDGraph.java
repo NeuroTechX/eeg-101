@@ -250,15 +250,14 @@ public class PSDGraph extends FrameLayout {
     public class PSDDataSource implements Runnable {
         double[][] latestSamples;
         private boolean keepRunning = true;
-        //private int sleepInterval;
         int nbCh = 4;
         int stepSize = 26;
 
         // Initialize FFT transform
-        int fs = 220;
+        int fs = 256;
         int bufferLength = fs;
         int windowLength = (int)fs;
-        int fftLength = 128; // Should be 256
+        int fftLength = 256; // Should be 256
         FFT fft = new FFT(windowLength, fftLength, fs);
         double[] f = fft.getFreqBins();
 
@@ -290,13 +289,14 @@ public class PSDGraph extends FrameLayout {
 
                         // Compute log-PSD
                         for (int i = 0; i < nbCh; i++) {
-                            logpower[i] = fft.computeLogPSD(latestSamples[i]);
+                            double[] channelLogpower = fft.computeLogPSD(latestSamples[i]);
+                            for(int j = 0; j < nbBins; j++) {
+                                logpower[i][j] = channelLogpower[j];
+                            }
                         }
 
                         // Write new log-PSD in buffer
                         psdBuffer.update(logpower);
-
-                        //Log.w("logpower", Arrays.toString(logpower[0]));
 
                         // Compute average PSD over buffer
                         smoothLogPower = psdBuffer.mean();

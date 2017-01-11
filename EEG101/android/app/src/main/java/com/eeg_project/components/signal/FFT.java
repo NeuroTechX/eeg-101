@@ -127,7 +127,7 @@ public class FFT {
 
 		// Compute log-power
 		for (int i = 0; i < nbFFTPoints; i++) {
-			logpower[i] = Math.log10(1 + real[i]*real[i] + imag[i]*imag[i]); // log squared
+			logpower[i] = Math.log10(real[i]*real[i] + imag[i]*imag[i]); // log squared
 			// complex magnitude
 		}
 		return logpower;
