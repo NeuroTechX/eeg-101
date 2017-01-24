@@ -16,6 +16,7 @@ import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.FastLineAndPointRenderer;
 import com.androidplot.xy.LineAndPointFormatter;
+import com.androidplot.xy.StepMode;
 import com.androidplot.xy.XYPlot;
 import com.androidplot.xy.XYSeries;
 import com.choosemuse.libmuse.Eeg;
@@ -40,7 +41,7 @@ public class PSDGraph extends FrameLayout {
     // Variables
     private XYPlot psdPlot;
     private PSDDataSource dataSource;
-    public  int PLOT_LENGTH = 65;
+    public  int PLOT_LENGTH = 50;
     private PSDSeries dataSeries;
     public PlotUpdater plotUpdater;
     public MuseDataListener dataListener;
@@ -98,31 +99,24 @@ public class PSDGraph extends FrameLayout {
         psdPlot.addSeries(dataSeries,
                 new LineAndPointFormatter(Color.rgb(255, 255, 255), null, null, null));
 
+        // Set plot background color
+        psdPlot.getGraph().getBackgroundPaint().setColor(Color.rgb(114, 194, 241));
+
         // Format plot layout
         //Remove margins, padding and border
         psdPlot.setPlotMargins(0, 0, 0, 0);
         psdPlot.setPlotPadding(0, 0, 0, 0);
-        psdPlot.getBorderPaint().setColor(Color.WHITE);
-
-        // Set plot background color
-        psdPlot.getGraph().getBackgroundPaint().setColor(Color.rgb(114, 194, 241));
 
         // Remove gridlines
         psdPlot.getGraph().getGridBackgroundPaint().setColor(Color.TRANSPARENT);
-        psdPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
-        psdPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
-        psdPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
-        psdPlot.getGraph().getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
 
 
         // Remove axis labels and values
         // Domain = X; Range = Y
+        psdPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
+        psdPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
         psdPlot.setDomainLabel(null);
         psdPlot.setRangeLabel(null);
-        psdPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
-        psdPlot.getGraph().getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
-        psdPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
-        psdPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
 
         // Remove extraneous elements
         psdPlot.getLayoutManager().remove(psdPlot.getLegend());
@@ -134,7 +128,7 @@ public class PSDGraph extends FrameLayout {
 
         // Set position of plot (should be tweaked in order to center chart position)
         psdPlot.getGraph().position(0, HorizontalPositioning.ABSOLUTE_FROM_LEFT.ABSOLUTE_FROM_LEFT,
-                0, VerticalPositioning.ABSOLUTE_FROM_TOP);
+               0, VerticalPositioning.ABSOLUTE_FROM_TOP);
 
         // Add plot to CircularBufferGraph
         this.addView(psdPlot, new LayoutParams(
@@ -301,7 +295,7 @@ public class PSDGraph extends FrameLayout {
                         // Compute average PSD over buffer
                         smoothLogPower = psdBuffer.mean();
 
-                        Log.w("PSD", Arrays.toString(smoothLogPower[0]));
+                        //Log.w("PSD", Arrays.toString(smoothLogPower[0]));
 
                         eegBuffer.resetPts();
                     }
@@ -341,7 +335,7 @@ public class PSDGraph extends FrameLayout {
 
         @Override
         public Number getY(int index) {
-            return datasource.smoothLogPower[0][index];
+            return datasource.smoothLogPower[channelOfInterest - 1][index];
         }
     }
 }

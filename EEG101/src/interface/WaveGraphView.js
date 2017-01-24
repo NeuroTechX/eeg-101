@@ -5,9 +5,9 @@ import { requireNativeComponent, View, StyleSheet, Text } from 'react-native';
 import React, { Component } from 'react';
 import Svg, { Rect, Line } from 'react-native-svg';
 
-let PSDGraph = requireNativeComponent('PSD_GRAPH', PSDGraphView);
+let PSDGraph = requireNativeComponent('PSD_GRAPH', WaveGraphView);
 
-export default class PSDGraphView extends Component{
+export default class WaveGraphView extends Component{
   constructor(props) {
     super(props);
   }
@@ -53,19 +53,86 @@ export default class PSDGraphView extends Component{
             strokeWidth='3'
           />
 
+          <Rect
+            x='0%'
+            y='0%'
+            width='8%'
+            height="100%"
+            fill='#1B998B'
+            fillOpacity='0.5'
+          />
+
+          <Rect
+            x='8%'
+            y='0%'
+            width='8%'
+            height="100%"
+            fill='#FFDC6B'
+            fillOpacity='0.5'
+          />
+
+          <Rect
+            x='16%'
+            y='0%'
+            width='10%'
+            height="100%"
+            fill='#FFFD82'
+            fillOpacity='0.5'
+          />
+
+          <Rect
+            x='26%'
+            y='0%'
+            width='34%'
+            height="100%"
+            fill='#FF9B71'
+            fillOpacity='0.5'
+          />
+
+          <Rect
+            x='60%'
+            y='0%'
+            width='40%'
+            height="100%"
+            fill='#E84855'
+            fillOpacity='0.5'
+          />
+
         </Svg>
 
         <Text style={[styles.domainLabel, {
-          left: this.props.dimensions.width / 2.5,
+          left: 50,
           bottom: 10,
-        }]}>Frequency</Text>
+        }]}>δ</Text>
+
+        <Text style={[styles.domainLabel, {
+          left: 50 + this.props.dimensions.width * .08,
+          bottom: 10,
+        }]}>θ</Text>
+
+        <Text style={[styles.domainLabel, {
+          left: 50 + this.props.dimensions.width * .16,
+          bottom: 10,
+        }]}>α</Text>
+
+        <Text style={[styles.domainLabel, {
+          left: 50 + this.props.dimensions.width * .34,
+          bottom: 10,
+        }]}>β</Text>
+
+        <Text style={[styles.domainLabel, {
+          left: 50 + this.props.dimensions.width * .65,
+          bottom: 10,
+        }]}>γ</Text>
+
+
 
       </View>
     )
   }
 }
 
-PSDGraphView.propTypes = {
+WaveGraphView.propTypes = {
   dimensions: PropTypes.object,
   visibility: PropTypes.bool,
   channelOfInterest: PropTypes.number,

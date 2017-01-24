@@ -10,9 +10,10 @@ import{
   Actions,
   ActionConst
 }from 'react-native-router-flux';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import config from '../../config';
-
+import { setGraphViewDimensions } from '../../actions';
 
 import Button from '../components/Button';
 import PopUp from '../components/PopUp';
@@ -29,6 +30,13 @@ function  mapStateToProps(state) {
       connectionStatus: state.connectionStatus,
     };
   }
+
+// Binds actions to component's props
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    setGraphViewDimensions,
+  }, dispatch);
+}
 
 class SlideOne extends Component {
   constructor(props) {
@@ -47,7 +55,14 @@ class SlideOne extends Component {
     return (
       <View style={styles.container}>
 
-        <View  style={styles.graphContainer}>
+        <View onLayout={(event) => {
+          // Captures the width and height of the graphContainer to determine overlay positioning properties in PSDGraph
+          let {x, y, width, height} = event.nativeEvent.layout;
+          console.log(x, y, width, height);
+          this.props.setGraphViewDimensions({x: x, y: y, width: width, height: height})
+        }}
+        style={styles.graphContainer
+        }>
           <GraphView style={{flex:1}} visibility={this.props.isVisible}/>
         </View>
 
@@ -116,7 +131,7 @@ class SlideOne extends Component {
   }
 }
 
-export default connect(mapStateToProps)(SlideOne);
+export default connect(mapStateToProps, mapDispatchToProps)(SlideOne);
 
 // Darker: #72C2F1
 // Light: #97D2FC

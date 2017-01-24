@@ -24,6 +24,7 @@ import com.choosemuse.libmuse.MuseDataListener;
 import com.choosemuse.libmuse.MuseDataPacket;
 import com.choosemuse.libmuse.MuseDataPacketType;
 import com.eeg_project.MainApplication;
+import com.eeg_project.components.signal.CircularBuffer;
 
 import java.lang.ref.WeakReference;
 
@@ -43,7 +44,9 @@ public class EEGGraph extends FrameLayout {
     Thread renderingThread;
     LineAndPointFormatter lineFormatter;
     public DataListener dataListener;
-    public final double[] eegBuffer = new double[4];
+    public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
+    public double[] newData = new double[4];
+    public double[] latestSample;
     private boolean eegStale;
 
     // Bridged props
@@ -219,8 +222,8 @@ public class EEGGraph extends FrameLayout {
 
         @Override
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
-            getEegChannelValues(eegBuffer, p);
-            eegStale = true;
+            getEegChannelValues(newData, p);
+            eegBuffer.update(newData);
         }
 
         private void getEegChannelValues(double[] buffer, MuseDataPacket p) {
@@ -271,12 +274,13 @@ public class EEGGraph extends FrameLayout {
     // Updates dataSeries, performs data processing
     public final class EEGDataSource implements Runnable {
         private boolean keepRunning;
-        private int sleepInterval;
+        private int stepSize;
 
+        // Choosing these step sizes arbitrarily based on how they look
         public EEGDataSource(Boolean isLowEnergy) {
-            if (isLowEnergy) {sleepInterval = 4;}
+            if (isLowEnergy) {stepSize = 10;}
             else {
-                sleepInterval = 2;
+                stepSize = 15;
             }
         }
 
@@ -285,18 +289,17 @@ public class EEGGraph extends FrameLayout {
             try {
                 keepRunning = true;
                 while (keepRunning) {
-                    Thread.sleep(sleepInterval);
-                    if (eegStale) {
-                        if (dataSeries.size() > PLOT_LENGTH) {
+                    if (eegBuffer.getPts() >= stepSize) {
+                        if (dataSeries.size() >= PLOT_LENGTH) {
                             dataSeries.removeFirst();
                         }
-                        dataSeries.addLast(eegBuffer[channelOfInterest - 1]);
-                        eegStale = false;
+                        latestSample = eegBuffer.extract(1)[0];
+                        dataSeries.addLast(latestSample[channelOfInterest - 1]);
+                        eegBuffer.resetPts();
                     }
 
                 }
-            } catch (InterruptedException e) {
-            }
+            } catch (Exception e) {}
         }
 
         public void stopThread() {

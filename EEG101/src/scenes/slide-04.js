@@ -10,13 +10,10 @@ import{
   Actions,
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import config from '../../config';
-
-
 
 //Interfaces. For advanced elements such as graphs
 import ArtefactRemovalGraphView from '../interface/ArtefactRemovalGraphView';
-import PSDGraphView from '../interface/PSDGraphView';
+import WaveGraphView from '../interface/WaveGraphView';
 
 import Button from '../components/Button';
 import PopUp from '../components/PopUp';
@@ -28,6 +25,7 @@ function  mapStateToProps(state) {
     return {
       isVisible: state.scene.sceneKey === 'SlideFour',
       connectionStatus: state.connectionStatus,
+      dimensions: state.graphviewDimensions,
     };
   }
 
@@ -38,16 +36,17 @@ class SlideFour extends Component {
       // Initialize States
     this.state = {
       popUpVisible: false,
-    channelOfInterest: 1,
+      channelOfInterest: 1,
+
   };
 }
 
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.graphContainer}>
-          <PSDGraphView style={{flex:1}} visibility={this.props.isVisible} channelOfInterest={this.state.channelOfInterest}/>
-        </View>
+
+        <WaveGraphView dimensions ={this.props.dimensions} visibility={this.props.isVisible} channelOfInterest={this.state.channelOfInterest}/>
+
 
         <Text style={styles.currentTitle}>TEST</Text>
 
@@ -55,7 +54,6 @@ class SlideFour extends Component {
             style={styles.viewPager}
             initialPage={0}>
 
-         
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>Preparing the signal for analysis</Text>
@@ -71,7 +69,7 @@ class SlideFour extends Component {
           
 
           <PopUp onClose={() => this.setState({popUpVisible: false})} visible={this.state.popUpVisible}>
-          Electrodes conduct EEG signals from the brain, but also noise caused by eye movements and muscle activity. Electrical activity released by radio-emitting devices or the 50/60 Hz alternating (AC) current in electrical wiring can also be detected by EEG electrodes. 
+          Electrodes conduct EEG signals from the brain, but also noise caused by eye movements and muscle activity. Electrical activity released by radio-emitting devices or the 50/60 Hz alternating (AC) current in electrical wiring can also be detected by EEG electrodes.
           </PopUp>
       </View>
     );
@@ -107,12 +105,6 @@ body: {
     alignItems: 'stretch',
 },
 
-  graphContainer: {
-
-    flex: 4,
-    justifyContent: 'center',
-    alignItems: 'stretch',
-  },
   
   header: {
     fontFamily: 'Roboto-Bold',
@@ -120,10 +112,10 @@ body: {
     fontSize: 20,
   },
 
-
   viewPager: {
     flex: 4,
   },
+
 
 });
 

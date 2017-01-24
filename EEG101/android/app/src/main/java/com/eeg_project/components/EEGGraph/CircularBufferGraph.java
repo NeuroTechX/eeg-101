@@ -202,8 +202,6 @@ public class CircularBufferGraph extends FrameLayout {
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
             getEegChannelValues(newData, p);
             eegBuffer.update(newData);
-
-
         }
 
         // Updates newData array based on incoming EEG channel values
@@ -260,11 +258,12 @@ public class CircularBufferGraph extends FrameLayout {
         private boolean keepRunning = true;
         private int sleepInterval;
 
+        // Choosing these step sizes arbitrarily based on how they look
         public FilterDataSource(Boolean isLowEnergy) {
             if (isLowEnergy) {
-                stepSize = 5;
+                stepSize = 10;
             } else {
-                stepSize = 22;
+                stepSize = 15;
             }
         }
 

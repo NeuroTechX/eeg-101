@@ -73,7 +73,7 @@ public class FFT {
 		// Define frequency bins
 		f = new double[nbFFTPoints];
 		for (int i = 0; i < nbFFTPoints; i++) {
-			f[i] = this.samplingFrequency *i/ this.fftLength;
+			f[i] = this.samplingFrequency * i / this.fftLength;
 		}
 
 		// Initialize Hamming window
