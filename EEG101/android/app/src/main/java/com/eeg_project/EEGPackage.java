@@ -1,8 +1,10 @@
 package com.eeg_project;
 
 
+import com.eeg_project.components.EEGGraph.ArtefactRemovalGraphManager;
 import com.eeg_project.components.EEGGraph.CircularBufferGraphManager;
 import com.eeg_project.components.EEGGraph.GraphManager;
+import com.eeg_project.components.EEGGraph.PSDGraphManager;
 import com.eeg_project.components.connector.ConnectorModule;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
@@ -33,7 +35,9 @@ public class EEGPackage implements ReactPackage {
 	public List<ViewManager> createViewManagers(ReactApplicationContext reactApplicationContext) {
 		return Arrays.<ViewManager>asList(
 				new GraphManager(),
-				new CircularBufferGraphManager()
+				new CircularBufferGraphManager(),
+				new PSDGraphManager(),
+				new ArtefactRemovalGraphManager()
 		);
 	}
 }

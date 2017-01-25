@@ -4,12 +4,15 @@ import {
   Text,
   View,
   ViewPagerAndroid,
-  Image
+  Image,
 } from 'react-native';
 import{
   Actions,
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import config from '../../config';
+
+
 
 //Interfaces. For advanced elements such as graphs
 import GraphView from '../interface/GraphView';
@@ -19,11 +22,15 @@ import CircBufferGraphView from '../interface/CircBufferGraphView';
 import Button from '../components/Button';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
+import ElectrodeSelector from '../components/ElectrodeSelector';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
-    return {isVisible: state.scene.sceneKey === 'SlideFour'};
-    
+    return {
+      isVisible: state.scene.sceneKey === 'SlideFour',
+      connectionStatus: state.connectionStatus,
+      dimensions: state.graphviewDimensions,
+    };
   }
 
 
@@ -65,13 +72,13 @@ class SlideFour extends Component {
             </Text>
             <Button onPress={Actions.SlideFive}>Next</Button>
           </View>
-          
+
+          <View style ={styles.pageStyle}>
+            <ElectrodeSelector channelOfInterest={(channel) => this.setState({channelOfInterest: channel})}/>
+          </View>
         </ViewPagerAndroid>
 
-        <PopUp onClose={() => this.setState({popUpVisible: false})} visible={this.state.popUpVisible} 
-        title="Filters">
-        Filters remove frequencies that sit outside the spectrum of signals produced by the brain, getting rid of a lot of the noise produced muscle activity or background electrical activity. Filters are normally either high-pass (removing low frequencies), low-pass (removing high frequencies) or bandpass (allowing only a narrow band of frequencies through). Here we have implemented a low-pass filter that removes high frequency noise.
-        </PopUp>
+          
 
       </View>
     );
@@ -80,13 +87,11 @@ class SlideFour extends Component {
 
 const styles = StyleSheet.create({
 
-  currentTitle: {
-    marginLeft: 20,
-    marginTop: 10,
-    fontSize: 13,
-    fontFamily: 'Roboto-Medium',
-    color: '#6CCBEF',
-  },
+pageStyle: {
+    padding: 20,
+    alignItems: 'stretch',
+    justifyContent: 'space-around',
+ },
 
   body: {
     fontFamily: 'Roboto-Light',

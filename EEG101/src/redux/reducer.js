@@ -5,14 +5,14 @@ import { ActionConst } from 'react-native-router-flux';
 import config from './config';
 import {
   SET_CONNECTION_STATUS,
-  SET_AVAILABLE_MUSES,
+  SET_GRAPHVIEW_DIMENSIONS
 } from './constants';
 
 const initialState = {
   scene: {},
-  availableMuses: [],
-  hasSearchedForMuses: false,
   connectionStatus: config.connectionStatus.DISCONNECTED,
+  availableMuses: false,
+  graphviewDimensions: {x: 0, y: 0, width: 300, height: 250}
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -22,24 +22,22 @@ export default function reducer(state = initialState, action = {}) {
 
       return {
         ...state,
-        scene: action.scene,
+        scene: action.scene
       };
-
-    case SET_AVAILABLE_MUSES:
-
-      return {
-
-        ...state,
-        hasSearchedForMuses: true,
-        availableMuses: action.payload,
-      }
 
     case SET_CONNECTION_STATUS:
 
       return {
         ...state,
-        connectionStatus: action.payload,
-      }
+        connectionStatus: action.payload
+      };
+
+    case SET_GRAPHVIEW_DIMENSIONS:
+
+      return {
+        ...state,
+        graphviewDimensions: action.payload
+      };
 
     // ...other actions
 

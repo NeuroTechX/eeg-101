@@ -2,7 +2,7 @@ package com.eeg_project.components.EEGGraph;
 
 import android.content.Context;
 import android.graphics.Color;
-
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -12,9 +12,13 @@ import com.androidplot.ui.Size;
 import com.androidplot.ui.SizeMetric;
 import com.androidplot.ui.SizeMode;
 import com.androidplot.ui.VerticalPositioning;
+import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.BoundaryMode;
+import com.androidplot.xy.FastLineAndPointRenderer;
 import com.androidplot.xy.LineAndPointFormatter;
+import com.androidplot.xy.StepMode;
 import com.androidplot.xy.XYPlot;
+import com.androidplot.xy.XYSeries;
 import com.choosemuse.libmuse.Eeg;
 import com.choosemuse.libmuse.Muse;
 import com.choosemuse.libmuse.MuseArtifactPacket;
@@ -22,46 +26,34 @@ import com.choosemuse.libmuse.MuseDataListener;
 import com.choosemuse.libmuse.MuseDataPacket;
 import com.choosemuse.libmuse.MuseDataPacketType;
 import com.eeg_project.MainApplication;
-
-
+import com.eeg_project.components.signal.CircBuffer2D;
 import com.eeg_project.components.signal.CircularBuffer;
-import com.eeg_project.components.signal.Filter;
+import com.eeg_project.components.signal.FFT;
+import com.eeg_project.components.signal.PSDBuffer;
 
 import java.util.Arrays;
 
 
-// Android View that graphs processed EEG data
-public class CircularBufferGraph extends FrameLayout {
+// A dynamic power spectra density (PSD) graph generated from a circular buffer
+public class PSDGraph extends FrameLayout {
 
-    // ----------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     // Variables
-    public XYPlot circBufferPlot;
-    private static final int PLOT_LENGTH = 220;
-    public MyPlotUpdater plotUpdater;
-    private FilterDataSource dataSource;
-    public DynamicSeries dataSeries;
-    public museDataListener dataListener;
+    private XYPlot psdPlot;
+    private PSDDataSource dataSource;
+    public  int PLOT_LENGTH = 50;
+    private PSDSeries dataSeries;
+    public PlotUpdater plotUpdater;
+    public MuseDataListener dataListener;
     public boolean eegFresh;
-    double[] filtResult;
-    public int samplesCollected = 0;
     Thread dataThread;
     Thread renderingThread;
-    public BufferedWriter rawWriter;
-    public BufferedWriter filtWriter;
-    public File rawLogFile = new File("~/eegdata/raw");
-    public File filtLogFile = new File("~/eegdata/filtered");
-
-    // Bridged props
-    // Default channelOfInterest = 1 (left ear)
-    private int channelOfInterest = 1;
 
     // Reference to global application state used for connected Muse
     MainApplication appState;
 
     // CircBuffer specific variables
     public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
-    public CircularBuffer filteredBuffer = new CircularBuffer(220, 4);
-    public Filter filter = new Filter(220, "bandpass");
     public double[] newData = new double[4];
 
     // Bridged props
@@ -70,11 +62,10 @@ public class CircularBufferGraph extends FrameLayout {
 
     // ------------------------------------------------------------------------
     // Constructors
-    public CircularBufferGraph(Context context) {
+    public PSDGraph(Context context) {
         super(context);
-        appState = ((MainApplication)context.getApplicationContext());
+        appState = ((MainApplication) context.getApplicationContext());
         initView(context);
-        // Data threads are started in onVisibilityChanged function
     }
 
     // -----------------------------------------------------------------------
@@ -83,72 +74,64 @@ public class CircularBufferGraph extends FrameLayout {
         channelOfInterest = channel;
     }
 
-    // -----------------------------------------------------------------------
-    // Lifecycle methods (initView and onVisibilityChanged)
+    // Initializes and styles the AndroidPlot XYPlot component of EEGGraph
+    // All styling is performed entirely within this function, XML is not used
 
-    // Initialize and style AndroidPlot Graph. XML styling is not used.
     public void initView(Context context) {
 
         // Create circBufferPlot
-        circBufferPlot = new XYPlot(context, "EEG Circ Buffer Plot");
+        psdPlot = new XYPlot(context, "PSD Plot");
 
         // Create plotUpdater
-        plotUpdater = new CircularBufferGraph.MyPlotUpdater(circBufferPlot);
+        plotUpdater = new PlotUpdater(psdPlot);
 
         // Create dataSource
-        dataSource = new FilterDataSource(appState.connectedMuse.isLowEnergy());
+        dataSource = new PSDDataSource(appState.connectedMuse.isLowEnergy());
 
         // Create dataSeries that will be drawn on plot (Y will be obtained from dataSource, x will be implicitly generated):
-        dataSeries = new DynamicSeries("Buffer Plot");
+        dataSeries = new PSDSeries(dataSource, "PSD Plot");
 
         // Set X and Y domain
-        circBufferPlot.setRangeBoundaries(500, 1100, BoundaryMode.FIXED);
-        circBufferPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
+        psdPlot.setRangeBoundaries(0, 15, BoundaryMode.FIXED);
+        psdPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
         // add dataSeries to plot and define color of plotted line
-        circBufferPlot.addSeries(dataSeries,
-                new LineAndPointFormatter(Color.rgb(255,255,255), null, null, null));
+        psdPlot.addSeries(dataSeries,
+                new LineAndPointFormatter(Color.rgb(255, 255, 255), null, null, null));
+
+        // Set plot background color
+        psdPlot.getGraph().getBackgroundPaint().setColor(Color.rgb(114, 194, 241));
 
         // Format plot layout
         //Remove margins, padding and border
-        circBufferPlot.setPlotMargins(0, 0, 0, 0);
-        circBufferPlot.setPlotPadding(0, 0, 0, 0);
-        circBufferPlot.getBorderPaint().setColor(Color.WHITE);
-
-        // Set plot background color
-        circBufferPlot.getGraph().getBackgroundPaint().setColor(Color.rgb(114,194,241));
+        psdPlot.setPlotMargins(0, 0, 0, 0);
+        psdPlot.setPlotPadding(0, 0, 0, 0);
 
         // Remove gridlines
-        circBufferPlot.getGraph().getGridBackgroundPaint().setColor(Color.TRANSPARENT);
-        circBufferPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
-        circBufferPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
-        circBufferPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
-        circBufferPlot.getGraph().getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
+        psdPlot.getGraph().getGridBackgroundPaint().setColor(Color.TRANSPARENT);
 
 
         // Remove axis labels and values
         // Domain = X; Range = Y
-        circBufferPlot.setDomainLabel(null);
-        circBufferPlot.setRangeLabel(null);
-        circBufferPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
-        circBufferPlot.getGraph().getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
-        circBufferPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
-        circBufferPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
+        psdPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
+        psdPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
+        psdPlot.setDomainLabel(null);
+        psdPlot.setRangeLabel(null);
 
         // Remove extraneous elements
-        circBufferPlot.getLayoutManager().remove(circBufferPlot.getLegend());
+        psdPlot.getLayoutManager().remove(psdPlot.getLegend());
 
         // Set size of plot
         SizeMetric height = new SizeMetric(1, SizeMode.FILL);
         SizeMetric width = new SizeMetric(1, SizeMode.FILL);
-        circBufferPlot.getGraph().setSize(new Size(height, width));
+        psdPlot.getGraph().setSize(new Size(height, width));
 
         // Set position of plot (should be tweaked in order to center chart position)
-        circBufferPlot.getGraph().position(0, HorizontalPositioning.ABSOLUTE_FROM_LEFT.ABSOLUTE_FROM_LEFT,
-                0, VerticalPositioning.ABSOLUTE_FROM_TOP);
+        psdPlot.getGraph().position(0, HorizontalPositioning.ABSOLUTE_FROM_LEFT.ABSOLUTE_FROM_LEFT,
+               0, VerticalPositioning.ABSOLUTE_FROM_TOP);
 
         // Add plot to CircularBufferGraph
-        this.addView(circBufferPlot, new FrameLayout.LayoutParams(
+        this.addView(psdPlot, new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         onVisibilityChanged(this, View.VISIBLE);
@@ -163,7 +146,7 @@ public class CircularBufferGraph extends FrameLayout {
         else if (dataThread == null || !dataThread.isAlive()) {
             startDataThread();
             startRenderingThread();
-            dataListener = new CircularBufferGraph.museDataListener();
+            dataListener = new psdDataListener();
             // Register a listener to receive data packets from Muse. Second argument defines which type(s) of data will be transmitted to listener
             appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         }
@@ -199,10 +182,10 @@ public class CircularBufferGraph extends FrameLayout {
     // Listeners
 
     // Listener that receives incoming Muse data packets and updates the eegbuffer
-    class museDataListener extends MuseDataListener {
+    class psdDataListener extends MuseDataListener {
 
         // Constructor
-        museDataListener() {
+        psdDataListener() {
         }
 
         // Called whenever an incoming data packet is received. Handles different types of incoming data packets and updates data correctly
@@ -230,11 +213,10 @@ public class CircularBufferGraph extends FrameLayout {
     // Runnables
 
     // Runnable class that redraws plot at a fixed frequency
-    class MyPlotUpdater implements Runnable {
+    class PlotUpdater implements Runnable {
         Plot plot;
         private boolean keepRunning = true;
-
-        public MyPlotUpdater(Plot plot) {
+        public PlotUpdater(Plot plot) {
             this.plot = plot;
         }
 
@@ -259,20 +241,33 @@ public class CircularBufferGraph extends FrameLayout {
 
     // Data source runnable
     // Processes raw EEG data and updates dataSeries
-    public class FilterDataSource implements Runnable {
-        int stepSize = 26;
+    public class PSDDataSource implements Runnable {
         double[][] latestSamples;
-        double[][] filteredSamples;
-        double[] filtResult;
         private boolean keepRunning = true;
-        private int sleepInterval;
+        int nbCh = 4;
+        int stepSize = 26;
 
-        // Choosing these step sizes arbitrarily based on how they look
-        public FilterDataSource(Boolean isLowEnergy) {
+        // Initialize FFT transform
+        int fs = 256;
+        int bufferLength = fs;
+        int windowLength = (int)fs;
+        int fftLength = 256; // Should be 256
+        FFT fft = new FFT(windowLength, fftLength, fs);
+        double[] f = fft.getFreqBins();
+
+        // Initialize FFT 2D Buffer
+        int fftBufferLength = 20;
+        int nbBins = f.length;
+        PSDBuffer psdBuffer = new PSDBuffer(fftBufferLength,nbCh,nbBins);
+
+        double[][] logpower = new double[nbCh][nbBins];
+        public double[][] smoothLogPower = new double[nbCh][nbBins];
+
+        public PSDDataSource(Boolean isLowEnergy) {
             if (isLowEnergy) {
-                stepSize = 10;
+                stepSize = 26;
             } else {
-                stepSize = 15;
+                stepSize = 22;
             }
         }
 
@@ -282,31 +277,65 @@ public class CircularBufferGraph extends FrameLayout {
                 keepRunning = true;
                 while (keepRunning) {
                     if (eegBuffer.getPts() >= stepSize) {
-                        if (dataSeries.size() >= PLOT_LENGTH) {
-                            dataSeries.removeFirst();
-                        }
+
                         // Extract latest raw and filtered samples
-                        latestSamples = eegBuffer.extract(filter.getNB());
-                        filteredSamples = filteredBuffer.extract(filter.getNA() - 1);
+                        latestSamples = eegBuffer.extractTransposed(windowLength);
 
-                        // Filter new raw sample
-                        filtResult = filter.transform(latestSamples, filteredSamples);
+                        // Compute log-PSD
+                        for (int i = 0; i < nbCh; i++) {
+                            double[] channelLogpower = fft.computeLogPSD(latestSamples[i]);
+                            for(int j = 0; j < nbBins; j++) {
+                                logpower[i][j] = channelLogpower[j];
+                            }
+                        }
 
-                        // Update filtered buffer
-                        filteredBuffer.update(filtResult);
-                        samplesCollected = samplesCollected + 1;
+                        // Write new log-PSD in buffer
+                        psdBuffer.update(logpower);
 
-                        dataSeries.addLast(filtResult[channelOfInterest - 1]);
+                        // Compute average PSD over buffer
+                        smoothLogPower = psdBuffer.mean();
+
+                        //Log.w("PSD", Arrays.toString(smoothLogPower[0]));
+
                         eegBuffer.resetPts();
                     }
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
-
         public void stopThread() {
             keepRunning = false;
         }
-
     }
 
+    class PSDSeries implements XYSeries {
+        private PSDDataSource datasource;
+        private int seriesIndex;
+        private String title;
+
+        public PSDSeries(PSDDataSource datasource, String title) {
+            this.datasource = datasource;
+            this.title = title;
+        }
+
+        @Override
+        public String getTitle() {
+            return title;
+        }
+
+        @Override
+        public int size() {
+            return datasource.smoothLogPower[0].length;
+        }
+
+        @Override
+        public Number getX(int index) {
+            return index;
+        }
+
+        @Override
+        public Number getY(int index) {
+            return datasource.smoothLogPower[channelOfInterest - 1][index];
+        }
+    }
 }

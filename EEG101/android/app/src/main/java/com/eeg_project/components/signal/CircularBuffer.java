@@ -14,9 +14,9 @@ public class CircularBuffer {
 
     // ------------------------------------------------------------------------
     // Constructor
-    public CircularBuffer(int n, int m) {
-        bufferLength = n;
-        nbCh = m;
+    public CircularBuffer(int bufferLength, int nChannels) {
+        this.bufferLength = bufferLength;
+        this.nbCh = nChannels;
         index = 0;
         pts = 0;
         buffer = new double[bufferLength][nbCh];
@@ -24,16 +24,14 @@ public class CircularBuffer {
 
     // ------------------------------------------------------------------------
     // Methods
-    public void update(double[] newData) {
 
-        if (newData.length == nbCh) {
-            buffer[index] = newData;
-            index++;
-            pts++;
-            if (index >= bufferLength) { index = 0;}
-        } else {
-            System.out.println("All channels must be updated at once.");
+    // Updates the 2D buffer array with the 1D newData array at the current index. When index reaches the maximum bufferLength it returns to 0.
+    public void update(double[] newData) {
+        for(int i = 0; i < nbCh; i++) {
+            buffer[index][i] = newData[i];
         }
+        index = (index + 1) % bufferLength;
+        pts++;
     }
 
     // Extracts an array containing the last nbSamples from the buffer. If the loop that fills the extracted samples encounters the beginning of the buffer, it will begin to take samples from the end of the buffer
@@ -44,7 +42,9 @@ public class CircularBuffer {
 
         for(int i = 0; i < nbSamples; i++) {
             extractIndex = mod(index - nbSamples + i, bufferLength);
-            extractedArray[i] = buffer[extractIndex];
+            for(int j = 0; j < nbCh; j++) {
+                extractedArray[i][j] = buffer[extractIndex][j];
+            }
         }
 
         return extractedArray;
@@ -74,6 +74,8 @@ public class CircularBuffer {
 
         return extractedArray;
     }
+
+    public int getPts() { return pts; }
 
     public void resetPts() {
         pts = 0;

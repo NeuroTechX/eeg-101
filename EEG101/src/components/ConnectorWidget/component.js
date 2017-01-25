@@ -1,4 +1,4 @@
-// ConnectorWidget/component.js
+// ConnectorWidget.js
 // An interface component with a picker and two buttons that handles connection to Muse devices
 import React, { Component } from 'react';
 import {
@@ -8,6 +8,8 @@ import {
   StyleSheet,
   PermissionsAndroid
 } from 'react-native';
+import config from '../../../config'
+import Button from '../Button';
 
 import config from '../../redux/config'
 

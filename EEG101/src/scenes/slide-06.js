@@ -36,6 +36,7 @@ class SlideSix extends Component {
   render() {
     return (
       <View style={styles.container}>
+      
         <View style={styles.graphContainer}>
           <Image source={require('../assets/artifact.png')}
                 style={styles.image}
@@ -70,7 +71,7 @@ class SlideSix extends Component {
 
 const styles = StyleSheet.create({
 
-currentTitle: {
+ currentTitle: {
     marginLeft: 20,
     marginTop: 10,
     fontSize: 13,

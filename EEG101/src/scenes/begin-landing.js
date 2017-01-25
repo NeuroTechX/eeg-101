@@ -69,6 +69,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
+  buttonContainer: {
+    flex: 1,
+    margin: 40,
+    justifyContent: 'center',
+  },
+
   logo: {
     width: 50,
     height: 50,

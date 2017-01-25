@@ -12,7 +12,8 @@ import{
 import { connect } from 'react-redux';
 
 //Interfaces. For advanced elements such as graphs
-//import EEG_GRAPH from '../interface/GraphView';
+
+
 import Button from '../components/Button';
 import PopUp from '../components/PopUp';
 import PopUpList from '../components/PopUpList';

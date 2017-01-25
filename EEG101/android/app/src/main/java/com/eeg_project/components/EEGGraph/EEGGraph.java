@@ -2,14 +2,18 @@ package com.eeg_project.components.EEGGraph;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+
 import com.androidplot.Plot;
 import com.androidplot.ui.HorizontalPositioning;
 import com.androidplot.ui.Size;
 import com.androidplot.ui.SizeMetric;
 import com.androidplot.ui.SizeMode;
 import com.androidplot.ui.VerticalPositioning;
+import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.FastLineAndPointRenderer;
 import com.androidplot.xy.LineAndPointFormatter;
@@ -21,6 +25,7 @@ import com.choosemuse.libmuse.MuseDataListener;
 import com.choosemuse.libmuse.MuseDataPacket;
 import com.choosemuse.libmuse.MuseDataPacketType;
 import com.eeg_project.MainApplication;
+import com.eeg_project.components.signal.CircularBuffer;
 
 import java.lang.ref.WeakReference;
 
@@ -40,14 +45,16 @@ public class EEGGraph extends FrameLayout {
     Thread renderingThread;
     LineAndPointFormatter lineFormatter;
     public DataListener dataListener;
-    public final double[] eegBuffer = new double[4];
+    public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
+    public double[] newData = new double[4];
+    public double[] latestSample;
     private boolean eegStale;
 
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
     public int channelOfInterest = 1;
 
-    // Grab reference to global Muse
+    // grab reference to global Muse
     MainApplication appState;
 
     // ------------------------------------------------------------------------
@@ -55,6 +62,18 @@ public class EEGGraph extends FrameLayout {
     public EEGGraph(Context context) {
         super(context);
         appState = ((MainApplication)context.getApplicationContext());
+
+        initView(context);
+        // Data threads are started in onVisibilityChanged function
+    }
+
+    public EEGGraph(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initView(context);
+    }
+
+    public EEGGraph(Context context, AttributeSet attrs, int defStyle) {
+        this(context, attrs);
         initView(context);
     }
 
@@ -81,6 +100,7 @@ public class EEGGraph extends FrameLayout {
             case 4:
                 lineFormatter.getLinePaint().setColor(Color.rgb(209,14,137));
                 break;
+
         }
         */
     }
@@ -95,12 +115,11 @@ public class EEGGraph extends FrameLayout {
         // Create eegPlot
         eegPlot = new XYPlot(context, "Raw EEG Plot");
 
-        // Create PlotUpdater and EEGDataSource runnables
+        // set up PlotUpdater
         plotUpdater = new PlotUpdater(eegPlot);
-        data = new EEGDataSource(appState.connectedMuse.isLowEnergy());
 
-        // Create series that will actually be drawn on eegPlot
-        // (Y will be dataSeries, x will be implicitly generated):
+        // get datasets (Y will be dataSeries, x will be implicitly generated):
+        data = new EEGDataSource(appState.connectedMuse.isLowEnergy());
         dataSeries = new DynamicSeries("EEG data");
 
         // Set X and Y domain
@@ -108,30 +127,33 @@ public class EEGGraph extends FrameLayout {
         eegPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
         // This is critical for being able to set the color of the plot
-        // (Unused unless code in onVisibilityChanged is uncommented
-        // PixelUtils.init(getContext());
+        PixelUtils.init(getContext());
 
         // Create line formatter with set color
-        //lineFormatter = new LineAndPointFormatter(Color.rgb(255,255,255), null, null, null);
-        lineFormatter = new FastLineAndPointRenderer.Formatter(Color.rgb(255, 255, 255), null,
-                null, null);
+        lineFormatter = new FastLineAndPointRenderer.Formatter(Color.rgb(255, 255, 255), null, null, null);
 
-        // add dataSeries to plot to be drawn by lineFormatter
-        eegPlot.addSeries(dataSeries, lineFormatter);
+        // add series to plot
+        eegPlot.addSeries(dataSeries,
+                lineFormatter);
+
+        // hook up series to data source
+        //data.addObserver(plotUpdater);
 
         // Format plot layout
         //Remove margins, padding and border
         eegPlot.setPlotMargins(0, 0, 0, 0);
         eegPlot.setPlotPadding(0, 0, 0, 0);
-        // eegPlot.getBorderPaint().setColor(Color.WHITE);
+        eegPlot.getBorderPaint().setColor(Color.WHITE);
 
-        // Make plot background blue sand remove grid lines
+        // Make plot background blue (including removing grid lines)
         eegPlot.getGraph().getBackgroundPaint().setColor(Color.rgb(114, 194, 241));
+        //eegPlot.getGraph().setBackgroundPaint(null);
         eegPlot.getGraph().getGridBackgroundPaint().setColor(Color.TRANSPARENT);
         eegPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
         eegPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
         eegPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
         eegPlot.getGraph().getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
+
 
         // Remove axis labels and values
         // Domain = X; Range = Y
@@ -142,23 +164,25 @@ public class EEGGraph extends FrameLayout {
         eegPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
         eegPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
 
-        // Remove legend
+        // Remove extraneous elements
+        //eegPlot.setTitle(null);
         eegPlot.getLayoutManager().remove(eegPlot.getLegend());
 
         // Set size of plot
         SizeMetric height = new SizeMetric(1, SizeMode.FILL);
         SizeMetric width = new SizeMetric(1, SizeMode.FILL);
+        // Set size of plot
         eegPlot.getGraph().setSize(new Size(height, width));
 
-        // Set position of plot (can be tweaked in order to center chart position)
+        // Set position of plot (should be tweaked in order to center chart position)
         eegPlot.getGraph().position(0, HorizontalPositioning.ABSOLUTE_FROM_LEFT.ABSOLUTE_FROM_LEFT,
                 0, VerticalPositioning.ABSOLUTE_FROM_TOP);
 
-        // Add eegPlot to parent EEGGraph FrameLayout
+        // Add children to EEGGraph
         this.addView(eegPlot, new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-        // Extra onVisibilityChanged call to ensure graph starts plotting on older devices
+        eegPlot.setDrawingCacheEnabled(true);
         onVisibilityChanged(this, View.VISIBLE);
     }
 
@@ -181,16 +205,21 @@ public class EEGGraph extends FrameLayout {
 
     // Start thread that will  update the data whenever a Muse data packet is received
     public void startDataThread() {
+        Log.w(TAG, "Data Thread Started");
         dataThread = new Thread (data);
         dataThread.start();
     }
 
     // Start thread that will render the plot at a fixed speed
+    //
     public void startRenderingThread(){
+        Log.w(TAG, "Updater Thread Started");
         renderingThread = new Thread (plotUpdater);
         renderingThread.start();
     }
 
+    // Start thread that will render the plot at a fixed speed
+    //
     public void stopThreads(){
         plotUpdater.stopThread();
         data.stopThread();
@@ -212,8 +241,8 @@ public class EEGGraph extends FrameLayout {
 
         @Override
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
-            getEegChannelValues(eegBuffer, p);
-            eegStale = true;
+            getEegChannelValues(newData, p);
+            eegBuffer.update(newData);
         }
 
         private void getEegChannelValues(double[] buffer, MuseDataPacket p) {
@@ -228,6 +257,7 @@ public class EEGGraph extends FrameLayout {
             // Does nothing for now
         }
     }
+
 
     // --------------------------------------------------------------
     // Runnables
@@ -264,31 +294,27 @@ public class EEGGraph extends FrameLayout {
     // Updates dataSeries, performs data processing
     public final class EEGDataSource implements Runnable {
         private boolean keepRunning;
-        private int sleepInterval;
+        private int stepSize;
 
-        public EEGDataSource(Boolean isLowEnergy) {
-            if (isLowEnergy) {sleepInterval = 4;}
-            else {
-                sleepInterval = 2;
-            }
-        }
+        //private MyObservable notifier;
+        private boolean keepRunning = true;
 
         @Override
         public void run() {
             try {
                 keepRunning = true;
                 while (keepRunning) {
-                    Thread.sleep(sleepInterval);
-                    if (eegStale) {
-                        if (dataSeries.size() > PLOT_LENGTH) {
+                    if (eegBuffer.getPts() >= stepSize) {
+                        if (dataSeries.size() >= PLOT_LENGTH) {
                             dataSeries.removeFirst();
                         }
-                        dataSeries.addLast(eegBuffer[channelOfInterest - 1]);
-                        eegStale = false;
+                        latestSample = eegBuffer.extract(1)[0];
+                        dataSeries.addLast(latestSample[channelOfInterest - 1]);
+                        eegBuffer.resetPts();
                     }
+
                 }
-            } catch (InterruptedException e) {
-            }
+            } catch (Exception e) {}
         }
 
         public void stopThread() {

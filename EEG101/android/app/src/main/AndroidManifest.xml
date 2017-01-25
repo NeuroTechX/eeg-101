@@ -1,6 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<<<<<<< HEAD
           xmlns:tools="http://schemas.android.com/tools"
     package="com.eeg_project">
+||||||| merged common ancestors
+    package="com.eeg_project"
+    android:versionCode="3"
+    android:versionName="1.1">
+=======
+    package="com.eeg_project"
+    android:versionCode="4"
+    android:versionName="1.2">
+>>>>>>> dano-signal-processing
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH" />

@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 
+
   viewPager: {
     flex: 4,
   },

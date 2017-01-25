@@ -3,6 +3,7 @@ package com.eeg_project.components.EEGGraph;
 import android.content.Context;
 import android.graphics.Color;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -26,12 +27,11 @@ import com.eeg_project.MainApplication;
 
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
-
-import java.util.Arrays;
+import com.eeg_project.components.signal.NoiseDetector;
 
 
 // Android View that graphs processed EEG data
-public class CircularBufferGraph extends FrameLayout {
+public class ArtefactRemovalGraph extends FrameLayout {
 
     // ----------------------------------------------------------------------
     // Variables
@@ -42,18 +42,8 @@ public class CircularBufferGraph extends FrameLayout {
     public DynamicSeries dataSeries;
     public museDataListener dataListener;
     public boolean eegFresh;
-    double[] filtResult;
-    public int samplesCollected = 0;
     Thread dataThread;
     Thread renderingThread;
-    public BufferedWriter rawWriter;
-    public BufferedWriter filtWriter;
-    public File rawLogFile = new File("~/eegdata/raw");
-    public File filtLogFile = new File("~/eegdata/filtered");
-
-    // Bridged props
-    // Default channelOfInterest = 1 (left ear)
-    private int channelOfInterest = 1;
 
     // Reference to global application state used for connected Muse
     MainApplication appState;
@@ -70,7 +60,7 @@ public class CircularBufferGraph extends FrameLayout {
 
     // ------------------------------------------------------------------------
     // Constructors
-    public CircularBufferGraph(Context context) {
+    public ArtefactRemovalGraph(Context context) {
         super(context);
         appState = ((MainApplication)context.getApplicationContext());
         initView(context);
@@ -93,7 +83,7 @@ public class CircularBufferGraph extends FrameLayout {
         circBufferPlot = new XYPlot(context, "EEG Circ Buffer Plot");
 
         // Create plotUpdater
-        plotUpdater = new CircularBufferGraph.MyPlotUpdater(circBufferPlot);
+        plotUpdater = new ArtefactRemovalGraph.MyPlotUpdater(circBufferPlot);
 
         // Create dataSource
         dataSource = new FilterDataSource(appState.connectedMuse.isLowEnergy());
@@ -163,7 +153,7 @@ public class CircularBufferGraph extends FrameLayout {
         else if (dataThread == null || !dataThread.isAlive()) {
             startDataThread();
             startRenderingThread();
-            dataListener = new CircularBufferGraph.museDataListener();
+            dataListener = new ArtefactRemovalGraph.museDataListener();
             // Register a listener to receive data packets from Muse. Second argument defines which type(s) of data will be transmitted to listener
             appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         }
@@ -210,6 +200,7 @@ public class CircularBufferGraph extends FrameLayout {
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
             getEegChannelValues(newData, p);
             eegBuffer.update(newData);
+            eegFresh = true;
         }
 
         // Updates newData array based on incoming EEG channel values
@@ -233,7 +224,6 @@ public class CircularBufferGraph extends FrameLayout {
     class MyPlotUpdater implements Runnable {
         Plot plot;
         private boolean keepRunning = true;
-
         public MyPlotUpdater(Plot plot) {
             this.plot = plot;
         }
@@ -260,19 +250,22 @@ public class CircularBufferGraph extends FrameLayout {
     // Data source runnable
     // Processes raw EEG data and updates dataSeries
     public class FilterDataSource implements Runnable {
-        int stepSize = 26;
         double[][] latestSamples;
         double[][] filteredSamples;
         double[] filtResult;
+        int windowLength = 220;
+        double[][] filtWindow = new double[windowLength][4];
         private boolean keepRunning = true;
         private int sleepInterval;
 
-        // Choosing these step sizes arbitrarily based on how they look
+        NoiseDetector noiseDetector = new NoiseDetector(6000.0); // Should probably be around 400
+        // (uV^2)
+        boolean[] noiseDecisions = new boolean[4];
+
         public FilterDataSource(Boolean isLowEnergy) {
-            if (isLowEnergy) {
-                stepSize = 10;
-            } else {
-                stepSize = 15;
+            if (isLowEnergy) {sleepInterval = 4;}
+            else {
+                sleepInterval = 2;
             }
         }
 
@@ -281,7 +274,8 @@ public class CircularBufferGraph extends FrameLayout {
             try {
                 keepRunning = true;
                 while (keepRunning) {
-                    if (eegBuffer.getPts() >= stepSize) {
+                    //Thread.sleep(sleepInterval);
+                    if (eegFresh) {
                         if (dataSeries.size() >= PLOT_LENGTH) {
                             dataSeries.removeFirst();
                         }
@@ -294,10 +288,16 @@ public class CircularBufferGraph extends FrameLayout {
 
                         // Update filtered buffer
                         filteredBuffer.update(filtResult);
-                        samplesCollected = samplesCollected + 1;
 
+                        // Noise Detection
+                        filtWindow = filteredBuffer.extractTransposed(windowLength);
+                        noiseDecisions = noiseDetector.detectArtefact(filtWindow);
+
+                        if (noiseDecisions[0] == true) {
+                            Log.w("artefacts", "artefact detected!");
+                        }
                         dataSeries.addLast(filtResult[channelOfInterest - 1]);
-                        eegBuffer.resetPts();
+                        eegFresh = false;
                     }
                 }
             } catch (Exception e) {}
