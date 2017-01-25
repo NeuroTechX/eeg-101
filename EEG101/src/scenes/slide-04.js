@@ -10,9 +10,6 @@ import{
   Actions,
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import config from '../../config';
-
-
 
 //Interfaces. For advanced elements such as graphs
 import GraphView from '../interface/GraphView';
@@ -73,12 +70,12 @@ class SlideFour extends Component {
             <Button onPress={Actions.SlideFive}>Next</Button>
           </View>
 
-          <View style ={styles.pageStyle}>
-            <ElectrodeSelector channelOfInterest={(channel) => this.setState({channelOfInterest: channel})}/>
-          </View>
         </ViewPagerAndroid>
 
-          
+        <PopUp onClose={() => this.setState({popUpVisible: false})} visible={this.state.popUpVisible}
+               title="Filters">
+          Filters remove frequencies that sit outside the spectrum of signals produced by the brain, getting rid of a lot of the noise produced muscle activity or background electrical activity. Filters are normally either high-pass (removing low frequencies), low-pass (removing high frequencies) or bandpass (allowing only a narrow band of frequencies through). Here we have implemented a low-pass filter that removes high frequency noise.
+        </PopUp>
 
       </View>
     );

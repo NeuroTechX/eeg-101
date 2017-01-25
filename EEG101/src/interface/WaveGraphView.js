@@ -5,7 +5,7 @@ import { requireNativeComponent, View, StyleSheet, Text } from 'react-native';
 import React, { Component } from 'react';
 import Svg, { Rect, Line } from 'react-native-svg';
 
-let PSDGraph = requireNativeComponent('PSD_GRAPH', WaveGraphView);
+let WaveGraph = requireNativeComponent('PSD_GRAPH', WaveGraphView);
 
 export default class WaveGraphView extends Component{
   constructor(props) {
@@ -16,7 +16,7 @@ export default class WaveGraphView extends Component{
     return(
       <View style={styles.graphContainer}>
 
-        <PSDGraph style={[styles.graph, {
+        <WaveGraph style={[styles.graph, {
           left: this.props.dimensions.x + 50,
           bottom: 50,
           height: this.props.dimensions.height - 50,

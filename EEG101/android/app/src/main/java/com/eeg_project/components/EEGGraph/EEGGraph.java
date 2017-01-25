@@ -3,7 +3,6 @@ package com.eeg_project.components.EEGGraph;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -48,7 +47,7 @@ public class EEGGraph extends FrameLayout {
     public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
     public double[] newData = new double[4];
     public double[] latestSample;
-    private boolean eegStale;
+
 
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
@@ -205,7 +204,7 @@ public class EEGGraph extends FrameLayout {
 
     // Start thread that will  update the data whenever a Muse data packet is received
     public void startDataThread() {
-        Log.w(TAG, "Data Thread Started");
+
         dataThread = new Thread (data);
         dataThread.start();
     }
@@ -213,7 +212,6 @@ public class EEGGraph extends FrameLayout {
     // Start thread that will render the plot at a fixed speed
     //
     public void startRenderingThread(){
-        Log.w(TAG, "Updater Thread Started");
         renderingThread = new Thread (plotUpdater);
         renderingThread.start();
     }
@@ -296,8 +294,13 @@ public class EEGGraph extends FrameLayout {
         private boolean keepRunning;
         private int stepSize;
 
-        //private MyObservable notifier;
-        private boolean keepRunning = true;
+        // Choosing these step sizes arbitrarily based on how they look
+        public EEGDataSource(Boolean isLowEnergy) {
+            if (isLowEnergy) {stepSize = 10;}
+            else {
+                stepSize = 15;
+            }
+        }
 
         @Override
         public void run() {
@@ -312,7 +315,6 @@ public class EEGGraph extends FrameLayout {
                         dataSeries.addLast(latestSample[channelOfInterest - 1]);
                         eegBuffer.resetPts();
                     }
-
                 }
             } catch (Exception e) {}
         }
@@ -321,6 +323,4 @@ public class EEGGraph extends FrameLayout {
             keepRunning = false;
         }
     }
-
-
 }

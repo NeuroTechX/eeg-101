@@ -274,7 +274,6 @@ public class PSDGraph extends FrameLayout {
         @Override
         public void run() {
             try {
-                keepRunning = true;
                 while (keepRunning) {
                     if (eegBuffer.getPts() >= stepSize) {
 

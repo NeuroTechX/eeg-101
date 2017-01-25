@@ -12,15 +12,15 @@ import{
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import config from '../redux/config';
-
-
+import { bindActionCreators } from 'redux';
+import { setGraphViewDimensions } from '../redux/actions';
 import Button from '../components/Button';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
 
 //Interfaces. For advanced elements such as graphs
 import GraphView from '../interface/GraphView';
-import CircBufferGraphView from '../interface/CircBufferGraphView';
+
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
@@ -29,6 +29,13 @@ function  mapStateToProps(state) {
       connectionStatus: state.connectionStatus,
     };
   }
+
+// Binds actions to component's props
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    setGraphViewDimensions,
+  }, dispatch);
+}
 
 class SlideOne extends Component {
   constructor(props) {
@@ -47,7 +54,12 @@ class SlideOne extends Component {
     return (
       <View style={styles.container}>
 
-        <View  style={styles.graphContainer}>
+        <View  style={styles.graphContainer} onLayout={(event) => {
+          // Captures the width and height of the graphContainer to determine overlay positioning properties in PSDGraph
+          let {x, y, width, height} = event.nativeEvent.layout;
+          console.log(x, y, width, height);
+          this.props.setGraphViewDimensions({x: x, y: y, width: width, height: height})
+        }}>
           <GraphView style={{flex:1}} visibility={this.props.isVisible}/>
         </View>
 
@@ -115,7 +127,7 @@ class SlideOne extends Component {
   }
 }
 
-export default connect(mapStateToProps)(SlideOne);
+export default connect(mapStateToProps, mapDispatchToProps)(SlideOne);
 
 // Darker: #72C2F1
 // Light: #97D2FC

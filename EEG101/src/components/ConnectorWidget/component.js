@@ -8,7 +8,6 @@ import {
   StyleSheet,
   PermissionsAndroid
 } from 'react-native';
-import config from '../../../config'
 import Button from '../Button';
 
 import config from '../../redux/config'
@@ -29,7 +28,7 @@ export default class ConnectorWidget extends Component {
 
   async requestLocationPermission() {
     try {
-      const granted = await PermissionsAndroid.requestPermission(
+      const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
         {
           'title': 'EEG 101 needs your permission',

@@ -2,10 +2,9 @@ package com.eeg_project.components.EEGGraph;
 
 import android.content.Context;
 import android.graphics.Color;
-
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
-
 import com.androidplot.Plot;
 import com.androidplot.ui.HorizontalPositioning;
 import com.androidplot.ui.Size;
@@ -22,13 +21,8 @@ import com.choosemuse.libmuse.MuseDataListener;
 import com.choosemuse.libmuse.MuseDataPacket;
 import com.choosemuse.libmuse.MuseDataPacketType;
 import com.eeg_project.MainApplication;
-
-
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
-
-import java.util.Arrays;
-
 
 // Android View that graphs processed EEG data
 public class CircularBufferGraph extends FrameLayout {
@@ -46,14 +40,6 @@ public class CircularBufferGraph extends FrameLayout {
     public int samplesCollected = 0;
     Thread dataThread;
     Thread renderingThread;
-    public BufferedWriter rawWriter;
-    public BufferedWriter filtWriter;
-    public File rawLogFile = new File("~/eegdata/raw");
-    public File filtLogFile = new File("~/eegdata/filtered");
-
-    // Bridged props
-    // Default channelOfInterest = 1 (left ear)
-    private int channelOfInterest = 1;
 
     // Reference to global application state used for connected Muse
     MainApplication appState;
@@ -61,7 +47,7 @@ public class CircularBufferGraph extends FrameLayout {
     // CircBuffer specific variables
     public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
     public CircularBuffer filteredBuffer = new CircularBuffer(220, 4);
-    public Filter filter = new Filter(220, "bandpass");
+    public Filter filter = new Filter(220, "lowpass");
     public double[] newData = new double[4];
 
     // Bridged props
@@ -200,7 +186,6 @@ public class CircularBufferGraph extends FrameLayout {
 
     // Listener that receives incoming Muse data packets and updates the eegbuffer
     class museDataListener extends MuseDataListener {
-
         // Constructor
         museDataListener() {
         }
@@ -260,12 +245,11 @@ public class CircularBufferGraph extends FrameLayout {
     // Data source runnable
     // Processes raw EEG data and updates dataSeries
     public class FilterDataSource implements Runnable {
-        int stepSize = 26;
+        int stepSize;
         double[][] latestSamples;
         double[][] filteredSamples;
-        double[] filtResult;
         private boolean keepRunning = true;
-        private int sleepInterval;
+
 
         // Choosing these step sizes arbitrarily based on how they look
         public FilterDataSource(Boolean isLowEnergy) {
@@ -279,7 +263,6 @@ public class CircularBufferGraph extends FrameLayout {
         @Override
         public void run() {
             try {
-                keepRunning = true;
                 while (keepRunning) {
                     if (eegBuffer.getPts() >= stepSize) {
                         if (dataSeries.size() >= PLOT_LENGTH) {
@@ -297,6 +280,7 @@ public class CircularBufferGraph extends FrameLayout {
                         samplesCollected = samplesCollected + 1;
 
                         dataSeries.addLast(filtResult[channelOfInterest - 1]);
+
                         eegBuffer.resetPts();
                     }
                 }

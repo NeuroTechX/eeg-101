@@ -3,7 +3,7 @@
 import { PropTypes } from 'react';
 import { requireNativeComponent, View, StyleSheet, Text } from 'react-native';
 import React, { Component } from 'react';
-import Svg, { Rect, Line } from 'react-native-svg';
+import Svg, { Line } from 'react-native-svg';
 
 let PSDGraph = requireNativeComponent('PSD_GRAPH', PSDGraphView);
 

@@ -25,8 +25,6 @@ import SlideFour from './src/scenes/slide-04';
 import SlideFive from './src/scenes/slide-05';
 import SlideSix from './src/scenes/slide-06';
 import SlideSeven from './src/scenes/slide-07';
-import SlideEight from './src/scenes/slide-08';
-import SlideNine from './src/scenes/slide-09';
 import End from './src/scenes/slide-end';
 
 // Navbar import
@@ -70,13 +68,24 @@ class EEG_Project extends Component {
             <Scene component={SlideOne} key='SlideOne' previous='CONNECTION' hideNavBar={false}/>
             <Scene component={SlideTwo} key='SlideTwo'previous='INTRODUCTION'/>
             <Scene component={SlideThree} key='SlideThree'previous='PHYSIOLOGY'/>
+<<<<<<< HEAD
             <Scene component={SlideFour} key='SlideFour' previous='HARDWARE'/>
             <Scene component={SlideFive} key='SlideFive' previous='FILTERING'/>
             <Scene component={SlideSix} key='SlideSix' previous='EPOCHING'/>
             <Scene component={SlideSeven} key='SlideSeven' previous='ARTIFACT REMOVAL'/>
-            <Scene component={SlideEight} key='SlideEight' previous='FEATURE EXTRACTION'/>
-            <Scene component={SlideNine} key='SlideNine' previous='PSD'/>
-            <Scene component={End} key='End' previous='BRAIN WAVES'/>
+||||||| merged common ancestors
+            <Scene component={SlideFive} key='SlideFive'previous='HARDWARE'/>
+            <Scene component={SlideSix} key='SlideSix'previous='FILTERING'/>
+            <Scene component={SlideSeven} key='SlideSeven'previous='EPOCHING'/>
+            <Scene component={SlideEight} key='SlideEight'previous='ARTIFACT REMOVAL'/>
+=======
+            <Scene component={SlideFour} key='SlideFour'previous='STUFF'/>
+            <Scene component={SlideFive} key='SlideFive'previous='HARDWARE'/>
+            <Scene component={SlideSix} key='SlideSix'previous='FILTERING'/>
+            <Scene component={SlideSeven} key='SlideSeven'previous='EPOCHING'/>
+            <Scene component={SlideEight} key='SlideEight'previous='ARTIFACT REMOVAL'/>
+>>>>>>> dano-signal-processing
+            <Scene component={End} key='End' previous='FEATURE EXTRACTION'/>
           </Scene>
         </RouterWithRedux>
       </Provider>

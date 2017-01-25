@@ -1,4 +1,6 @@
 package com.eeg_project.components.signal;
+import android.util.Log;
+
 import java.util.Arrays; // For printing arrays when debugging
 
 // A pure Java implementation of a circular buffer
@@ -36,7 +38,6 @@ public class CircularBuffer {
 
     // Extracts an array containing the last nbSamples from the buffer. If the loop that fills the extracted samples encounters the beginning of the buffer, it will begin to take samples from the end of the buffer
     public double[][] extract(int nbSamples) {
-
         int extractIndex;
         double[][] extractedArray = new double[nbSamples][nbCh];
 
