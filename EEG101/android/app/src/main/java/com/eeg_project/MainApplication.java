@@ -31,7 +31,7 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new SvgPackage(),
               new EEGPackage(),
-              new SvgPackage()
+             gi
       );
     }
   };
