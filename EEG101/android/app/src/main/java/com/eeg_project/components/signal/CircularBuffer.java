@@ -76,6 +76,28 @@ public class CircularBuffer {
         return extractedArray;
     }
 
+    public double[] extractSingleChannelTransposed(int nbSamples, int channelofinterest) {
+        // Return an array containing the last `nbSamples` collected in
+        // the circular buffer.
+        //
+        // The shape of the returned array is [nbSamples].
+        //
+        // This transposed version is useful to avoid additional looping
+        // through the returned array when computing FFT (the looping is
+        // instead done here.)
+
+        int extractIndex;
+        double[] extractedArray = new double[nbSamples];
+
+        for(int i = 0; i < nbSamples; i++) {
+            extractIndex = mod(index - nbSamples + i, bufferLength);
+            extractedArray[i] = buffer[extractIndex][channelofinterest];
+        }
+
+        return extractedArray;
+    }
+
+
     public int getPts() { return pts; }
 
     public void resetPts() {
@@ -94,5 +116,10 @@ public class CircularBuffer {
         return (c < 0) ? c + b : c;
     }
 
+    public void clear() {
+        this.buffer = new double[this.bufferLength][this.nbCh];
+        this.index = 0;
+        this.pts = 0;
+    }
 
 }

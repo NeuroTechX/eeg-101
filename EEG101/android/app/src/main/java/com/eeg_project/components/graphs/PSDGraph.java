@@ -38,7 +38,6 @@ public class PSDGraph extends FrameLayout {
     private PSDSeries dataSeries;
     public PlotUpdater plotUpdater;
     public MuseDataListener dataListener;
-    public boolean eegFresh;
     Thread dataThread;
     Thread renderingThread;
 
@@ -65,6 +64,7 @@ public class PSDGraph extends FrameLayout {
     // Bridge functions (can be called from JS by setting props)
     public void setChannelOfInterest(int channel) {
         channelOfInterest = channel;
+        dataSource.clearDataBuffer();
     }
 
     // Initializes and styles the AndroidPlot XYPlot component of EEGGraph
@@ -85,7 +85,7 @@ public class PSDGraph extends FrameLayout {
         dataSeries = new PSDSeries(dataSource, "PSD Plot");
 
         // Set X and Y domain
-        psdPlot.setRangeBoundaries(0, 15, BoundaryMode.FIXED);
+        psdPlot.setRangeBoundaries(0, 40000, BoundaryMode.FIXED);
         psdPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
         // add dataSeries to plot and define color of plotted line
@@ -235,9 +235,8 @@ public class PSDGraph extends FrameLayout {
     // Data source runnable
     // Processes raw EEG data and updates dataSeries
     public class PSDDataSource implements Runnable {
-        double[][] latestSamples;
+        double[] latestSamples;
         private boolean keepRunning = true;
-        int nbCh = 4;
         int stepSize = 26;
 
         // Initialize FFT transform
@@ -251,10 +250,10 @@ public class PSDGraph extends FrameLayout {
         // Initialize FFT 2D Buffer
         int fftBufferLength = 20;
         int nbBins = f.length;
-        PSDBuffer psdBuffer = new PSDBuffer(fftBufferLength,nbCh,nbBins);
+        PSDBuffer psdBuffer = new PSDBuffer(fftBufferLength, nbBins);
 
-        double[][] logpower = new double[nbCh][nbBins];
-        public double[][] smoothLogPower = new double[nbCh][nbBins];
+        double[] logpower = new double[nbBins];
+        public double[] smoothLogPower = new double[nbBins];
 
         public PSDDataSource(Boolean isLowEnergy) {
             if (isLowEnergy) {
@@ -271,15 +270,10 @@ public class PSDGraph extends FrameLayout {
                     if (eegBuffer.getPts() >= stepSize) {
 
                         // Extract latest raw and filtered samples
-                        latestSamples = eegBuffer.extractTransposed(windowLength);
+                        latestSamples = eegBuffer.extractSingleChannelTransposed(windowLength, channelOfInterest - 1);
 
-                        // Compute log-PSD
-                        for (int i = 0; i < nbCh; i++) {
-                            double[] channelLogpower = fft.computeLogPSD(latestSamples[i]);
-                            for(int j = 0; j < nbBins; j++) {
-                                logpower[i][j] = channelLogpower[j];
-                            }
-                        }
+                        // Compute log-PSD for channel of interest
+                        double[] logpower = fft.computePSD(latestSamples);
 
                         // Write new log-PSD in buffer
                         psdBuffer.update(logpower);
@@ -287,13 +281,16 @@ public class PSDGraph extends FrameLayout {
                         // Compute average PSD over buffer
                         smoothLogPower = psdBuffer.mean();
 
-                        //Log.w("PSD", Arrays.toString(smoothLogPower[0]));
-
                         eegBuffer.resetPts();
                     }
                 }
             } catch (Exception e) {
             }
+        }
+
+        public void clearDataBuffer() {
+            psdBuffer.clear();
+            eegBuffer.clear();
         }
         public void stopThread() {
             keepRunning = false;
@@ -317,7 +314,7 @@ public class PSDGraph extends FrameLayout {
 
         @Override
         public int size() {
-            return datasource.smoothLogPower[0].length;
+            return datasource.smoothLogPower.length;
         }
 
         @Override
@@ -327,7 +324,7 @@ public class PSDGraph extends FrameLayout {
 
         @Override
         public Number getY(int index) {
-            return datasource.smoothLogPower[channelOfInterest - 1][index];
+            return datasource.smoothLogPower[index];
         }
     }
 }

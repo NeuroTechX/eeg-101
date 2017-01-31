@@ -35,6 +35,7 @@ public class FFT {
 	private double[] Y;
 	private double[] f;
 	private double[] hammingWin;
+	private double[] complexMagnitude;
 
 	private double samplingFrequency;
 	private DoubleFFT_1D fft_1D;
@@ -66,6 +67,8 @@ public class FFT {
 		real = new double[nbFFTPoints];
 		imag = new double[nbFFTPoints];
 		logpower = new double[nbFFTPoints];
+		complexMagnitude = new double[nbFFTPoints];
+
 
 		// Initialize FFT transform
 		fft_1D = new DoubleFFT_1D(this.fftLength);
@@ -79,6 +82,56 @@ public class FFT {
 		// Initialize Hamming window
 		hammingWin = hamming(this.inputLength);
 
+	}
+
+	public double[] computePSD(double[] x) {
+		// Compute PSD of x
+		// TODO: Improve efficiency by merging for loops
+
+		if (x.length != inputLength) {
+			throw new IllegalArgumentException("Input has " + x.length + " elements instead of " + inputLength + ".");
+		}
+
+		if (zeroPad) {
+			Y = new double[fftLength]; // Re-initialize to have zeros at the end
+		}
+
+		// Compute mean of the window
+		double winMean = 0;
+		for (int i = 0; i < inputLength; i++) {
+			winMean += x[i];
+		}
+		winMean /= inputLength;
+
+		// De-mean and apply Hamming window
+		for (int i = 0; i < Math.min(inputLength, fftLength); i++) {
+			Y[i] = hammingWin[i]*(x[i] - winMean);
+		}
+
+		// Compute DFT
+		fft_1D.realForward(Y);
+
+		// Get real and imaginary parts
+		for (int i = 0; i < nbFFTPoints -1; i++) {
+			real[i] = Y[2*i];
+			imag[i] = Y[2*i + 1];
+		}
+		imag[0] = 0;
+
+		// Get first and/or last points depending on length of FFT (Specific to JTransforms library)
+		if (even) {
+			real[nbFFTPoints -1] = Y[1];
+		} else {
+			imag[nbFFTPoints -1] = Y[1];
+			real[nbFFTPoints -1] = Y[fftLength -1];
+		}
+
+		// Compute complex number?
+		for (int i = 0; i < nbFFTPoints; i++) {
+			complexMagnitude[i] = real[i]*real[i] + imag[i]*imag[i]; // log squared
+			// complex magnitude
+		}
+		return complexMagnitude;
 	}
 
 	public double[] computeLogPSD(double[] x) {

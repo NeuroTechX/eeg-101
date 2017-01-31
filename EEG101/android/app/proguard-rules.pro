@@ -32,23 +32,24 @@
 -keep @com.facebook.proguard.annotations.DoNotStrip class *
 -keep @com.facebook.common.internal.DoNotStrip class *
 -keepclassmembers class * {
-    @com.facebook.proguard.annotations.DoNotStrip *;
-    @com.facebook.common.internal.DoNotStrip *;
+ @com.facebook.proguard.annotations.DoNotStrip *;
+ @com.facebook.common.internal.DoNotStrip *;
 }
 
 -keepclassmembers @com.facebook.proguard.annotations.KeepGettersAndSetters class * {
-  void set*(***);
-  *** get*();
+ void set*(***);
+ *** get*();
 }
 
 -keep class * extends com.facebook.react.bridge.JavaScriptModule { *; }
 -keep class * extends com.facebook.react.bridge.NativeModule { *; }
--keepclassmembers,includedescriptorclasses class * { native <methods>; }
+-keepclassmembers, includedescriptorclasses class * { native <methods>; }
 -keepclassmembers class *  { @com.facebook.react.uimanager.UIProp <fields>; }
 -keepclassmembers class *  { @com.facebook.react.uimanager.annotations.ReactProp <methods>; }
 -keepclassmembers class *  { @com.facebook.react.uimanager.annotations.ReactPropGroup <methods>; }
 
--dontwarn com.facebook.react.**
+-keep class com.facebook.** { *; }
+-dontwarn com.facebook.**
 
 # okhttp
 
@@ -60,16 +61,27 @@
 
 # okio
 
--keep class sun.misc.Unsafe { *; }
 -dontwarn java.nio.file.*
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 -dontwarn okio.**
 
 # Libmuse
--keep class com.choosemuse.libmuse.* { *; }
+-keep  class com.choosemuse.libmuse.* { *; }
 
 # AndroidPlot
 -keep class com.androidplot.** { *; }
 
 # Animated Gif support
--keep class com.facebook.imagepipeline.** { *; }
+-keep, includedescriptorclasses class com.facebook.imagepipeline.** { *; }
+-dontwarn com.facebook.imagepipeline.**
+
+# Svg
+-keep class com.horcrux.svg.** { *; }
+
+# JTransforms
+-dontwarn org.apache.commons.**
+-dontwarn pl.edu.icm.jlargearrays.**
+
+
+
+

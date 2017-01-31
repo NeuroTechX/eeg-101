@@ -1,91 +1,68 @@
 package com.eeg_project.components.signal;
 import java.util.Arrays; // For printing arrays when debugging
 
-public class PSDBuffer extends CircBuffer2D {
-    // This class extends CircBuffer2D to expose PSD-specific methods
+public class PSDBuffer {
+
+    // This class implements a PSD-specific single channel buffer with methods
     // such as noise marking in a joined buffer, and mean across epochs
 
-    private boolean[][] noiseBuffer;
+    // ------------------------------------------------------------------------
+    // Variables
+    private int bufferlength;
+    private int nbBins;
+    private int pts;
+    private int index;
+    private double[][] buffer;
+    private boolean[] noiseBuffer;
 
-    public PSDBuffer(int n, int m, int l) {
-
-        super(n,m,l);
-        noiseBuffer = new boolean[bufferLength][nbCh];
-
+    public PSDBuffer(int bl, int nb) {
+        this.bufferlength = bl;
+        this.nbBins = nb;
+        this.index = 0;
+        this.pts = 0;
+        this.buffer = new double[bl][nb];
+        this.noiseBuffer = new boolean[bl];
     }
 
-    public void update(double[][] newData, boolean[] noise) {
+    // Updates the 2D buffer array with the 1D newData array at the current index. When index reaches the maximum bufferLength it returns to 0.
+    public void update(double[] newData) {
 
-        noiseBuffer[index] = noise; // update noise detection
-        super.update(newData);
 
+            // loop through bins
+            for(int j = 0; j < nbBins; j++) {
+                buffer[index][j] = newData[j];
+            }
+
+        index = (index + 1) % this.bufferlength;
+        pts++;
     }
 
-    public void update(double[][] newData) {
 
-        this.update(newData, new boolean[nbCh]);
-
-    }
-
-    public double[][] mean() {
+    public double[] mean() {
         // Compute the mean of the buffer across epochs (1st dimension of `buffer`).
 
-        double[][] bufferMean = new double[nbCh][nbBins];
-        double[] nbPointsSummed = new double[nbCh];
+        double[] bufferMean = new double[nbBins];
+        double nbPointsSummed = 0;
 
-        for (int i = 0; i <  bufferLength; i++) {
-            for (int c = 0; c <  nbCh; c++) {
-                nbPointsSummed[c]++;
-                for (int n = 0; n <  nbBins; n++) {
-                    bufferMean[c][n] += buffer[i][c][n];
+        for (int i = 0; i <  this.bufferlength; i++) {
+                nbPointsSummed++;
+                for (int n = 0; n <  this.nbBins; n++) {
+                    bufferMean[n] += buffer[i][n];
                 }
             }
-        }
 
-        for (int c = 0; c <  nbCh; c++) {
-            for (int n = 0; n <  nbBins; n++) {
-                bufferMean[c][n] /= nbPointsSummed[c];
-            }
+        for (int n = 0; n <  nbBins; n++) {
+            bufferMean[n] /= nbPointsSummed;
         }
 
         return bufferMean;
-
     }
 
-    public static void main(String[] args ) {
-
-        // Create test buffer
-        int testBufferLength = 5;
-        int testNbCh = 4;
-        int testNbBins = 3;
-        PSDBuffer testBuffer = new PSDBuffer(testBufferLength,testNbCh,testNbBins);
-
-        // Update buffer a few times with fake data
-        double[][] fakeSamples = new double[][]{{0,1,2}, {3,4,5}, {6,7,8}, {9,10,11}};
-        int nbUpdates = 3;
-        for(int i = 0; i < nbUpdates; i++){
-            testBuffer.update(fakeSamples);
-        }
-
-        // Update with specific noise detection
-        testBuffer.update(fakeSamples, new boolean[]{true,false,true,false});
-        System.out.println(Arrays.deepToString(testBuffer.noiseBuffer));
-
-        // Print buffer
-        testBuffer.print();
-
-        // Extract latest samples from buffer
-        double[][][] testExtractedArray = testBuffer.extract(4);
-        System.out.println(Arrays.deepToString(testExtractedArray));
-
-        // Reset number of collected points
-        testBuffer.resetPts();
-
-        // Print mean of buffer
-        double[][] bufferMean = testBuffer.mean();
-        System.out.println(Arrays.deepToString(bufferMean));
-
-
+    public void clear() {
+        this.buffer = new double[this.bufferlength][this.nbBins];
+        this.index = 0;
+        this.pts = 0;
+        this.noiseBuffer = new boolean[this.bufferlength];
     }
 
 }

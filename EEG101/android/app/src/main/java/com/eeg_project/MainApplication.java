@@ -30,8 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new SvgPackage(),
-              new EEGPackage(),
-             gi
+              new EEGPackage()
       );
     }
   };

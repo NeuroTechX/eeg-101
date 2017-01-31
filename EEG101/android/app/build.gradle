@@ -83,24 +83,24 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = true
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "24.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "com.eeg_project"
         minSdkVersion 16
-        targetSdkVersion 22
-        versionCode 4
-        versionName "1.2"
+        targetSdkVersion 25
+        versionCode 7
+        versionName "1.5"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
         signingConfigs {
             release {
-                storeFile file(MYAPP_RELEASE_STORE_FILE)
-                storePassword MYAPP_RELEASE_STORE_PASSWORD
-                keyAlias MYAPP_RELEASE_KEY_ALIAS
-                keyPassword MYAPP_RELEASE_KEY_PASSWORD
+                storeFile file(EEG101_RELEASE_STORE_FILE)
+                storePassword EEG101_RELEASE_STORE_PASSWORD
+                keyAlias EEG101_RELEASE_KEY_ALIAS
+                keyPassword EEG101_RELEASE_KEY_PASSWORD
             }
         }
     }
@@ -144,7 +144,6 @@ dependencies {
     // Animated Gif support
     compile 'com.facebook.fresco:animated-base-support:0.11.0'
     compile 'com.facebook.fresco:animated-gif:0.11.0'
-    compile group: 'com.google.guava', name: 'guava', version: '15.0'
     compile "com.android.support:appcompat-v7:23.0.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
     compile files('libs/libmuse_android.jar')
