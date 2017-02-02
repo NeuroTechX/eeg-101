@@ -52,17 +52,15 @@ class SlideSix extends Component {
           
           <View style={styles.pageStyle}>
             <Text style={styles.header}>Removing noise</Text>
-            <Text style={styles.body}>After the EEG has been divided into epochs, those that contain a <PopUpLink onPress={() => this.setState({popUpVisible: true})}> significant amount</PopUpLink> of noise can be removed.
+            <Text style={styles.body}>After the EEG has been divided into epochs, those that contain a <PopUpLink onPress={() => this.setState({popUpVisible: true})}> significant</PopUpLink> amount of noise can be ignored.
             </Text>
-            <Button onPress={Actions.SlideSeven}>Next</Button>
+            <Button onPress={Actions.SlideSeven}>NEXT</Button>
           </View>
 
         </ViewPagerAndroid>
 
         <PopUp onClose={() => this.setState({popUpVisible: false})} visible={this.state.popUpVisible}
-        title="Artifact detection">
-        One simple way to define what a 'significant amount of noise' is to compare the range of the EEG's fluctuation in one epoch to its neighbours. If the signal moves around in one epoch a lot more than in its neighbours, it is probably because there was an eyeblink or other source of noise. Get rid of it!
-        </PopUp>
+        title="Artefact detection">One simple way to define what a 'significant amount of noise' is to compare how variable an epoch is in comparison to its neighbours. If the signal moves around in one epoch a lot more than in its neighbours, it is probably because there was an eyeblink or some other source of noise. Get rid of it!</PopUp>
 
       </View>
     );

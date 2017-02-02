@@ -55,13 +55,13 @@ class SlideFive extends Component {
             <Text style={styles.body}>Next, the EEG is divided into small segments or <PopUpLink onPress={() => this.setState({popUpVisible: true})}>'epochs.'</PopUpLink>
              
             </Text>
-            <Button onPress={Actions.SlideSix}>Next</Button>
+            <Button onPress={Actions.SlideSix}>NEXT</Button>
           </View>
           
         </ViewPagerAndroid>
 
         <PopUp onClose={() => this.setState({popUpVisible: false})} visible={this.state.popUpVisible}
-        title='Epochs'>The brain is constantly changing and the EEG changes with it. Dividing the EEG into epochs allows each moment in time to be analyzed individually. Then, analyzing how properties of these epochs varies allows us to quantify how the brain changes over time.
+        title='Epochs'>The brain is constantly changing and the EEG changes with it. Dividing the EEG into epochs allows each moment in time to be analyzed individually. Analyzing how the properties of these epochs vary allows us to quantify how the brain changes over time.
         </PopUp>
 
       </View>

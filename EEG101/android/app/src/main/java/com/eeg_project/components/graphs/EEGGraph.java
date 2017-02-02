@@ -122,7 +122,7 @@ public class EEGGraph extends FrameLayout {
         dataSeries = new DynamicSeries("EEG data");
 
         // Set X and Y domain
-        eegPlot.setRangeBoundaries(500, 1100, BoundaryMode.FIXED);
+        eegPlot.setRangeBoundaries(600, 1000, BoundaryMode.FIXED);
         eegPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
         // This is critical for being able to set the color of the plot
@@ -296,9 +296,9 @@ public class EEGGraph extends FrameLayout {
 
         // Choosing these step sizes arbitrarily based on how they look
         public EEGDataSource(Boolean isLowEnergy) {
-            if (isLowEnergy) {stepSize = 10;}
+            if (isLowEnergy) {stepSize = 6;}
             else {
-                stepSize = 15;
+                stepSize = 5;
             }
         }
 

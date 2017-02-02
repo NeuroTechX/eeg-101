@@ -71,8 +71,8 @@ class SlideThree extends Component {
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>What do electrodes measure?</Text>
-            <Text style={styles.body}>Each electrode detects voltage fluctuations that are compared to a <PopUpLink onPress={() => this.setState({popUp3Visible: true})}>reference sensor</PopUpLink> and then amplified around 1,000,000 times.</Text>
-            <Button onPress={Actions.SlideFour}>NEXT MODULE</Button>
+            <Text style={[styles.body, {fontSize: 18}]}>Each electrode detects voltage fluctuations that are compared to a <PopUpLink onPress={() => this.setState({popUp3Visible: true})}>reference electrode</PopUpLink> and then amplified around 1,000,000 times.</Text>
+            <Button onPress={Actions.SlideFour}>NEXT</Button>
           </View>
         </ViewPagerAndroid>
 
@@ -83,13 +83,12 @@ class SlideThree extends Component {
 
         <PopUp onClose={() => this.setState({popUp2Visible: false})} visible={this.state.popUp2Visible}
         title='Electrode naming conventions' image={require('../assets/electrodelocations.png')}>
-      
-        EEG electrodes are typically identified by a combination of a letter and a number. The letter indicates the part of the head where the electrode is located (F for frontal, C for central, etc.). EEG electrodes are typically identified by a combination of a letter and a number. The letter indicates the part of the head where the electrode is located (F for frontal, C for central, etc.).        
+        EEG electrodes are typically identified by a combination of a letter and a number. The letter indicates the part of the head where the electrode is located (F for frontal, C for central, etc.). The number indicates distance from the midline of the head with odd numbers on the right and even numbers on the left.
         </PopUp>
 
         <PopUp onClose={() => this.setState({popUp3Visible: false})} visible={this.state.popUp3Visible}
         title='Referencing' image={require('../assets/reference.png')}>
-        Each electrode's signal is actually the relative difference in electrical potential between that electrode and the reference. Thus, the placement of the reference electrode is very import. In the Muse, the reference is located on the front of the forehead (indicated in black).
+        Each electrode's signal reflects the difference in electrical potential between that electrode and the reference. Thus, the placement of the reference electrode is very important. With Muse, the reference is located on the front of the forehead.
         </PopUp>
 
         <PopUp onClose={Actions.ConnectorOne} visible={(this.props.isVisible && this.props.connectionStatus === config.connectionStatus.DISCONNECTED)} title='Muse Disconnected'>

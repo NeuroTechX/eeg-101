@@ -59,16 +59,16 @@ class SlideSeven extends Component {
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>How is the EEG broken down?</Text>
-            <Text style={styles.body}>Complex signals can be broken down into the simpler signals that make them up with a mathematical function known as the <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>Fourier Transform.</PopUpLink>
+            <Text style={[styles.body, {fontSize: 18}]}>Complex signals can be broken down into simpler signals with a mathematical function known as the <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>Fourier Transform.</PopUpLink>
             </Text>
-            <Button onPress={Actions.SlideEight}>Next</Button>
+            <Button onPress={Actions.SlideEight}>NEXT</Button>
           </View>
 
         </ViewPagerAndroid>
 
         <PopUp onClose={() => this.setState({popUp1Visible: false})} visible={this.state.popUp1Visible}
                title="Waves">
-          Each wave is characterized by a certain frequency (number of cycles per second (Hz)). A high frequency wave has a lot of cycles per second, whereas a low frequency wave has fewer cycles per second. Waves of different frequencies are associated with different patterns of neural firing.
+          Each wave is characterised by a certain frequency (number of cycles per second, Hertz (Hz)). A high frequency wave has many cycles per second, whereas a low frequency wave has fewer cycles per second. Waves of different frequencies are associated with different patterns of neural firing.
         </PopUp>
 
         <PopUp onClose={() => this.setState({popUp2Visible: false})} visible={this.state.popUp2Visible}

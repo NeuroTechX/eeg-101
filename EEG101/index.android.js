@@ -73,7 +73,7 @@ class EEG_Project extends Component {
             <Scene component={SlideFour} key='SlideFour' previous='HARDWARE'/>
             <Scene component={SlideFive} key='SlideFive' previous='FILTERING'/>
             <Scene component={SlideSix} key='SlideSix' previous='EPOCHING'/>
-            <Scene component={SlideSeven} key='SlideSeven' previous='ARTIFACT REMOVAL'/>
+            <Scene component={SlideSeven} key='SlideSeven' previous='ARTEFACT REMOVAL'/>
             <Scene component={SlideEight} key='SlideEight' previous='FEATURE EXTRACTION'/>
             <Scene component={SlideNine} key='SlideNine' previous='PSD'/>
             <Scene component={End} key='End' previous='BRAIN WAVES'/>

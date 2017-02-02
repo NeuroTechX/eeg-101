@@ -253,9 +253,9 @@ public class CircularBufferGraph extends FrameLayout {
         // Choosing these step sizes arbitrarily based on how they look
         public FilterDataSource(Boolean isLowEnergy) {
             if (isLowEnergy) {
-                stepSize = 10;
+                stepSize = 6;
             } else {
-                stepSize = 15;
+                stepSize = 5;
             }
         }
 

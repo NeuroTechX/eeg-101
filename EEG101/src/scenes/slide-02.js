@@ -80,7 +80,7 @@ class SlideTwo extends Component {
           
           <View style={styles.pageStyle}>
           <Text style={styles.header}>Organized neural activity produces electric fields</Text>
-            <Text style={styles.body}>When billions of neurons <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>work together</PopUpLink> to produce thoughts, feelings, and behaviours, their electricity can be detected by electrodes on the scalp
+            <Text style={[styles.body, {fontSize: 18}]}>When billions of neurons <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>work together</PopUpLink> to produce thoughts, feelings, and behaviours, their electricity can be detected by electrodes on the scalp.
             </Text>
           </View>
 
@@ -88,7 +88,7 @@ class SlideTwo extends Component {
             <Text style={styles.header}>EEG detects the "state" of the brain</Text>
             <Text style={styles.body}>This organized electrical activity varies between different brain states, such as <PopUpLink onPress={() => this.setState({popUp3Visible: true})}>sleep and wakefulness.</PopUpLink>
             </Text>
-            <Button onPress={Actions.SlideThree}>NEXT MODULE</Button>
+            <Button onPress={Actions.SlideThree}>NEXT</Button>
           </View>
         </ViewPagerAndroid>
 
@@ -104,7 +104,7 @@ class SlideTwo extends Component {
         
         <PopUp onClose={() => this.setState({popUp3Visible: false})} visible={this.state.popUp3Visible}
         title='Brain states'>
-          When we're asleep our brains produce very different kinds rhythmic electrical activity than when we're awake. When awake, the brain's rhythms tend to be high frequency and irregular, while low frequency, organized rhythms become more dominant as we fall asleep and pass through the multiple sleep stages. Certain emotions and cognitive processes have also been linked with characteristic patterns of rhythmic activity that can be identified with EEG.
+          During sleep our brains produce very different kinds of rhythmic electrical activity. When awake, brain rhythms tend to be rapidly-changing and irregular, while slowly-changing, organized rhythms become more dominant as we fall asleep and pass through the multiple sleep stages. {"\n"}Certain emotions and cognitive processes have also been linked with characteristic patterns of rhythmic activity that can be identified with EEG.
         </PopUp>
 
        <PopUp onClose={Actions.ConnectorOne} visible={(this.props.isVisible && this.props.connectionStatus === config.connectionStatus.DISCONNECTED)} title='Muse Disconnected'>
@@ -161,8 +161,8 @@ body: {
     fontFamily: 'Roboto-Bold',
     color: '#484848',
     fontSize: 20,
-  },
 
+  },
 
   viewPager: {
     flex: 4,

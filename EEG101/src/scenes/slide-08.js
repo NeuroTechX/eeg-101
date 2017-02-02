@@ -55,14 +55,14 @@ class SlideEight extends Component {
             <Text style={styles.header}>Power Spectral Density</Text>
             <Text style={styles.body}>When we apply the Fourier Transform to the EEG, we obtain a measure of signal strength at given frequencies, represented in units of <PopUpLink onPress={() => this.setState({popUp1Visible: true})}>power.</PopUpLink>
             </Text>
-            <Button onPress={Actions.SlideNine}>Next</Button>
+            <Button onPress={Actions.SlideNine}>NEXT</Button>
           </View>
 
         </ViewPagerAndroid>
 
         <PopUp onClose={() => this.setState({popUp1Visible: false})} visible={this.state.popUp1Visible}
                title="Power">
-          In this graph, the X axis represents frequency and the Y axis represents Power (volts squared). Power indicates how strongly represented a certain frequency is in a complex signal. When the power is high only for a few frequencies, it means that the signal is primarily composed of those few elements. If all frequencies have similar power, the signal is chaotic and not reducable to a few frequency components.
+          In this graph, the X axis represents frequency and the Y axis represents power (microvolts squared, in decibels (dB)). Power represents how strong a certain frequency is in a complex signal. When power is high for only a few frequencies, it means that the signal is primarily composed of those few elements. If all frequencies have similar power, the signal will look random and be difficult to interpret.
         </PopUp>
 
       </View>
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   body: {
     fontFamily: 'Roboto-Light',
     color: '#484848',
-    fontSize: 19,
+    fontSize: 17,
   },
 
   container: {

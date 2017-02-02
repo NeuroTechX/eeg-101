@@ -34,7 +34,7 @@ function  mapStateToProps(state) {
         <View style={styles.titleBox}>
           <Text style={styles.title}>Step 3</Text>
           <Text style={styles.instructions}>Make sure the Muse is properly fit to your head</Text>
-          <Text style={styles.body}>Fit the earpieces snugly behind your ears and adjust the headband so that it rests mid forehead. Clear any hair that might prevent the device from making contact with your skin</Text>
+          <Text style={styles.body}>Fit the earpieces snugly behind your ears and adjust the headband so that it rests mid forehead. Clear any hair that might prevent the device from making contact with your skin.</Text>
         </View>
         
         <View style={styles.buttonContainer}>

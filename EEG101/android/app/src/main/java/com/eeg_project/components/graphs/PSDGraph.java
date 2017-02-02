@@ -85,7 +85,7 @@ public class PSDGraph extends FrameLayout {
         dataSeries = new PSDSeries(dataSource, "PSD Plot");
 
         // Set X and Y domain
-        psdPlot.setRangeBoundaries(0, 40000, BoundaryMode.FIXED);
+        psdPlot.setRangeBoundaries(0, 7, BoundaryMode.FIXED);
         psdPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
         // add dataSeries to plot and define color of plotted line
@@ -273,7 +273,7 @@ public class PSDGraph extends FrameLayout {
                         latestSamples = eegBuffer.extractSingleChannelTransposed(windowLength, channelOfInterest - 1);
 
                         // Compute log-PSD for channel of interest
-                        double[] logpower = fft.computePSD(latestSamples);
+                        double[] logpower = fft.computeLogPSD(latestSamples);
 
                         // Write new log-PSD in buffer
                         psdBuffer.update(logpower);

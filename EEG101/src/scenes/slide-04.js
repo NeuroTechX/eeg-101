@@ -64,17 +64,17 @@ class SlideFour extends Component {
           initialPage={0}>
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>How do we get meaningful data from the EEG?.</Text>
-            <Text style={styles.body}>First, the EEG must be <PopUpLink onPress={() => this.setState({popUpVisible: true})}>filtered</PopUpLink> to extract signals that don't come from the brain.
+            <Text style={styles.header}>How do we get meaningful data from the EEG?</Text>
+            <Text style={[styles.body, {fontSize: 18}]}>First, the EEG must be <PopUpLink onPress={() => this.setState({popUpVisible: true})}>filtered</PopUpLink> to reduce signals that don't come from the brain.
             </Text>
-            <Button onPress={Actions.SlideFive}>Next</Button>
+            <Button onPress={Actions.SlideFive}>NEXT</Button>
           </View>
 
         </ViewPagerAndroid>
 
         <PopUp onClose={() => this.setState({popUpVisible: false})} visible={this.state.popUpVisible}
                title="Filters">
-          Filters remove frequencies that sit outside the spectrum of signals produced by the brain, getting rid of a lot of the noise produced muscle activity or background electrical activity. Filters are normally either high-pass (removing low frequencies), low-pass (removing high frequencies) or bandpass (allowing only a narrow band of frequencies through). Here we have implemented a low-pass filter that removes high frequency noise.
+          Filters remove frequencies that sit outside the spectrum of signals produced by the brain, getting rid of some of the noise produced by muscles or environmental electrical activity. Filters are normally either high-pass (removing low frequencies), low-pass (removing high frequencies) or band-pass (allowing only a specific band of frequencies through). Here, we have implemented a low-pass filter that removes high frequency noise.
         </PopUp>
 
       </View>
@@ -84,11 +84,11 @@ class SlideFour extends Component {
 
 const styles = StyleSheet.create({
 
-pageStyle: {
+  pageStyle: {
     padding: 20,
     alignItems: 'stretch',
     justifyContent: 'space-around',
- },
+  },
 
   body: {
     fontFamily: 'Roboto-Light',
@@ -96,8 +96,16 @@ pageStyle: {
     fontSize: 19,
   },
 
+  currentTitle: {
+    marginLeft: 20,
+    marginTop: 10,
+    fontSize: 13,
+    fontFamily: 'Roboto-Medium',
+    color: '#6CCBEF',
+  },
+
   container: {
-    marginTop:55,
+    marginTop: 55,
     flex: 1,
     justifyContent: 'space-around',
     alignItems: 'stretch',
@@ -109,14 +117,9 @@ pageStyle: {
     fontSize: 20,
   },
 
+
   viewPager: {
     flex: 4,
-  },
-
-  pageStyle: {
-    padding: 20,
-    alignItems: 'stretch',
-    justifyContent: 'space-around',
   },
 
   halfGraphContainer: {

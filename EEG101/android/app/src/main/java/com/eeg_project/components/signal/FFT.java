@@ -28,7 +28,6 @@ public class FFT {
 	private int nbFFTPoints;
 	private boolean even;
 	private boolean zeroPad = false;
-
 	private double[] real;
 	private double[] imag;
 	private double[] logpower;

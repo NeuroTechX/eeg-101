@@ -12,20 +12,26 @@ An Interactive EEG tutorial app project to teach EEG and BCI basics.
 - Built with React Native for Android
 - Streams data from the Muse EEG device
 - Works with Libmuse Java API
-- Presents information about EEG basics (neurobiology -> hardware)
+- Presents information about EEG basics (neurobiology -> hardware -> signal processing)
 
 ## In Development
 
-- Bandpass filtering
+- Brain-Computer Interface
 - Dynamic artifact removal
-- Feature extraction (Fast FFT)
-- Machine learning
+- Bandpass Filter
+- Machine learning (Logistic Regression, Naive Bayes, [Riemannian Potato](http://alexandre.barachant.org/papers/conferences/potato/))
+
+## Overview
+
+EEG 101 is built in React Native, so one half is written in JavaScript (front-end and general app framework) and the other half in Java for Android (Muse data and EEG plotting code). The JavaScript layer, based on the React framework, provides the basic app structure, including all the lesson content and UI. Connecting to the Muse, streaming incoming data, and plotting that data at 30fps all occurs in the native Java layer. There are a number of different Java Views (e.g. EEGGraph, PSDGraph, CircularBufferGraph) that are imported into our app as [native UI components](https://facebook.github.io/react-native/docs/native-components-android.html). Additionally, connecting to the Muse headband occurs through a [native module](https://facebook.github.io/react-native/docs/native-modules-android.html), ConnectorModule.
+
+EEG 101 is entirely free to use or modify for your own purposes. You might be interested in how we've used React Native to create a flexible, easy-to-develop-for platform for EEG apps. Or, you might just be interested in how we connect and handle data from the Muse. In any case, we hope that you find EEG 101 educational and helpful!
 
 ## Setup
 
 1. Install and setup React Native from the [Source website](https://facebook.github.io/react-native/docs/getting-started.html). We recommend setting up the [Gradle Daemon](https://docs.gradle.org/2.9/userguide/gradle_daemon.html) as well
 2. Import android folder as a new project into Android Studio
-3. Run `npm install` to install all necessary node packages (or take a look at [yarn](https://github.com/yarnpkg/yarn) if you want to avoid some headaches)
+3. Install [yarn](https://github.com/yarnpkg/yarn) and run `yarn install`. npm might work as well.
 4. Connect an Android device with USB debug mode enabled. There can be issues running this app on a virtual device and we recommend real hardware. 
 5. run `react-native start` to start React packager
 5. In new terminal, `adb reverse tcp:8081 tcp:8081` to ensure debug server is connected to the device and `react-native run-android` to install

@@ -36,11 +36,10 @@ class End extends Component {
 
             <View style={styles.listBox}>
               <Text style={styles.header}>What's Next?</Text>
-              <Text style={styles.body}>1. High Pass Filtering</Text>
-              <Text style={styles.body}>2. Live Artifact Removal</Text>
-              <Text style={styles.body}>3. Feature Extraction</Text>
-              <Text style={styles.body}>4. Brain Computer Interfaces</Text>
-              <Text style={styles.body}>5. Machine Learning</Text>
+              <Text style={styles.body}>1. Interactive Brain Computer Interface</Text>
+              <Text style={styles.body}>2. Band-Pass Filtering</Text>
+              <Text style={styles.body}>3. Live Artifact Removal</Text>
+              <Text style={styles.body}>4. Machine Learning!</Text>
             </View>
 
             <View style={{marginBottom: 20}}>
@@ -73,9 +72,32 @@ class End extends Component {
                   <Image source={require('../assets/slacklogowhite.png')} resizeMode='contain' style={{height:40, width:40}}/>
                 </TouchableOpacity>
               </View>
-            <View style={{flex: 1, margin: 15, alignSelf: 'stretch'}}>
+            <View style={{marginBottom: 20}}>
+              <Image source={require('../assets/swipeiconwhite.png')} resizeMode='contain' style={{height: 40, width: 40, alignSelf: 'center'}}/>
+            </View>
+
+
+          </View>
+
+          <View style={{alignItems: 'center'}}>
+
+          <View style={[styles.listBox, {marginTop: 100}]}>
+            <Text style={styles.header}>The EEG 101 Team</Text>
+              <Text style={styles.body}>Hubert Banville - Visionary</Text>
+              <Text style={styles.body}>Dano Morrison - Developer</Text>
+              <Text style={styles.body}>Geordan King - Producer</Text>
+              <Text style={styles.body}>Michael Vu - Author</Text>
+              <Text style={styles.body}>Joanna Jang - Author</Text>
+              <Text style={styles.body}>Brian Stern - Software Architect</Text>
+              <Text style={styles.body}>Steve Harjula - Visual Design</Text>
+            <Text style={styles.body}>Miles McCraw - Animator</Text>
+          </View>
+
+            <View style={{flex: 1, margin: 15, marginBottom: 0, alignSelf: 'stretch'}}>
               <WhiteButton onPress={Actions.ConnectorThree}>BACK TO BEGINNING</WhiteButton>
             </View>
+
+
           </View>
           
         </ViewPagerAndroid>
@@ -89,7 +111,7 @@ const styles = StyleSheet.create({
 
 body: {
     fontFamily: 'Roboto-Light',
-    fontSize: 15,
+    fontSize: 17,
     color: '#ffffff',
     textAlign: 'center',
   },

@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import WaveGraphView from '../interface/WaveGraphView';
 
 import Button from '../components/Button';
+import PopUp from '../components/PopUp';
 import PopUpList from '../components/PopUpList';
 import ListItemBlock from '../components/ListItemBlock';
 import PopUpLink from '../components/PopUpLink';
@@ -36,6 +37,7 @@ class SlideNine extends Component {
     this.state = {
       channelOfInterest: 1,
       popUp1Visible: false,
+      popUp2Visible: false,
     }
   }
 
@@ -45,7 +47,7 @@ class SlideNine extends Component {
 
         <WaveGraphView dimensions ={this.props.dimensions} visibility={this.props.isVisible} channelOfInterest={this.state.channelOfInterest}/>
 
-        <Text style={styles.currentTitle}>WAVES</Text>
+        <Text style={styles.currentTitle}>BRAIN WAVES</Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
@@ -53,34 +55,47 @@ class SlideNine extends Component {
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>What do these frequencies represent?</Text>
-            <Text style={styles.body}>The relative strengths of these <PopUpLink onPress={() => this.setState({popUp1Visible: true})}>brain waves</PopUpLink> can give us clues as to what patterns of brain activity are present
+            <Text style={styles.body}>The PSD can be divided into different frequency bands (named by the greek letters δ, θ, α, β, and γ).
             </Text>
-            <Button onPress={Actions.End}>Next</Button>
           </View>
 
-          <View style ={styles.pageStyle}>
-            <ElectrodeSelector channelOfInterest={(channel) => this.setState({channelOfInterest: channel})}/>
+          <View style={styles.pageStyle}>
+            <Text style={styles.header}>Brain Waves</Text>
+            <Text style={styles.body}>Each frequency band exhibits activity correlated with different brain processes. These bands are often referred to as <PopUpLink onPress={() => this.setState({popUp1Visible: true})}>brain waves</PopUpLink>.
+            </Text>
+          </View>
+
+          <View style={styles.pageStyle}>
+            <Text style={styles.header}>Harnessing Brain Waves</Text>
+            <Text style={[styles.body, {fontSize: 17}]}>Notice how the power in a given frequency band changes over time. It is possible to harness these changes to create a simple <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>Brain-Computer Interface (BCI)</PopUpLink>.
+            </Text>
+            <Button onPress={Actions.End}>NEXT</Button>
           </View>
 
         </ViewPagerAndroid>
 
         <PopUpList onClose={() => this.setState({popUp1Visible: false})} visible={this.state.popUp1Visible}>
-          <ListItemBlock title = "Delta (0-4 Hz)">
-            Delta waves are the slowest (ie. lowest frequency) brain waves. Delta waves dominate during deep sleep tend to be high in amplitude because they represent the synchronized firing of large populations of neurons.
+          <ListItemBlock title = "Delta δ (0-4 Hz)">
+            Delta waves are the slowest (i.e. lowest frequency) brain waves. Delta waves dominate during deep sleep and tend to be high in amplitude because they represent the synchronized firing of large populations of neurons.
           </ListItemBlock>
-          <ListItemBlock title = "Theta (4-8 Hz)">
-            Theta waves are most commonly observed in the period just before falling asleep and have been suggested to be related to increased creativity that can occur during this 'hypnagogic' state. They have also been observed during deep meditative and hypnotic states.
+          <ListItemBlock title = "Theta θ (4-8 Hz)">
+            Theta waves are most commonly observed in the 'hypnagogic' period just before falling asleep. They have also been observed during deep meditative and hypnotic states.
           </ListItemBlock>
-          <ListItemBlock title = "Alpha (8-13 Hz)">
-            Alpha waves are most prevalent when the brain is awake but relaxed, leading some researchers to think they arise from the awake but quiet and controlled activity of neurons at rest. For example, the dramatica increase in alpha waves observed when the eyes are closed is strongest at the back, where visual processing occurs and where neural activity would be expected to quiet down.
+          <ListItemBlock title = "Alpha α (8-13 Hz)">
+            Alpha waves can indicate the idling of a brain region. For example, they increase dramatically at when the eyes are closed. They are especially strong at the back of the head, where the vision centre of the brain is located.
           </ListItemBlock>
-          <ListItemBlock title = "Beta (13-30 Hz)">
-            Beta waves are prevalent when the brain is awake and active. They have been associated with alertness, concentration, and the active, sometimes chaotic, firing of neurons hard at work.
+          <ListItemBlock title = "Beta β (13-30 Hz)">
+            Beta waves are prevalent when the brain is awake and active. They have been associated with alertness, concentration, and the active firing of neurons hard at work.
           </ListItemBlock>
-          <ListItemBlock title = "Gamma (30-100 Hz)">
+          <ListItemBlock title = "Gamma γ (30-100 Hz)">
             Gamma waves are the fastest form of neural oscillation. They are difficult to detect and analyze with ordinary EEG but are a topic of much ongoing research. They have been tentatively associated with attention, working memory, and even consciousness
           </ListItemBlock>
         </PopUpList>
+
+        <PopUp onClose={() => this.setState({popUp2Visible: false})} visible={this.state.popUp2Visible}
+               title="Brain Computer Interfaces">
+          A Brain-Computer Interface is a direct communication channel between the brain and an external device. For example, one can feed information about brain state based on EEG frequency bands to a computer; that computer then analyzes the EEG data and decides what the user intent was. The computer can use that command to control an external device such as a wheelchair or a display.
+        </PopUp>
       </View>
     );
   }

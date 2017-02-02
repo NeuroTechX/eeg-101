@@ -95,7 +95,7 @@ class SlideOne extends Component {
             <Text style={styles.header}>Now try closing your eyes for 10 seconds</Text>
             <Text style={styles.body}>You may notice a change in your signal due to an increase in <PopUpLink onPress={() => this.setState({popUp4Visible: true})}>alpha waves.</PopUpLink>
             </Text>
-            <Button onPress={Actions.SlideTwo}>NEXT MODULE</Button>
+            <Button onPress={Actions.SlideTwo}>NEXT</Button>
           </View>
 
         </ViewPagerAndroid>
@@ -112,12 +112,12 @@ class SlideOne extends Component {
 
         <PopUp onClose={() => this.setState({popUp3Visible: false})} visible={this.state.popUp3Visible}
         title='EEG cannot read minds'>
-           The EEG signal is generated when tens of thousands of brain cells fire in synchrony. Although thinking about a cat produces a change in brain activity, this change is too small to affect the large-scale, rhythmic firing of the brain that EEG detects.
+           The EEG signal is generated when tens of thousands of brain cells fire in synchrony. Although thinking about a cat produces some change in brain activity, it is too small to affect the large-scale, rhythmic firing of the brain that EEG detects.
         </PopUp>
         
         <PopUp onClose={() => this.setState({popUp4Visible: false})} visible={this.state.popUp4Visible}
         title='Closed eye rhythms'>
-          When the eyes are closed, there is often a large increase in rhythmic brain activity in the range of 8-13 cycles per second (Hz). Alpha waves were one of the first discoveries that Hans Berger made with EEG. The ability to detect alpha waves when the eyes are closed varies greatly from person to person, however. Don't feel bad if you can't see them!
+          When the eyes are closed, there is often a large increase in rhythmic brain activity in the range of 8-13 cycles per second (Hz). These alpha waves were one of the first discoveries that Hans Berger made with EEG. The ability to detect alpha waves when the eyes are closed varies greatly from person to person, however. Don't feel bad if you can't see them!
         </PopUp>
 
         <PopUp onClose={Actions.ConnectorOne} visible={(this.props.isVisible && this.props.connectionStatus === config.connectionStatus.DISCONNECTED)} title='Muse Disconnected'>
