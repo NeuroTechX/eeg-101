@@ -4,6 +4,7 @@ package com.eeg_project;
 import com.eeg_project.components.managers.FilterGraphManager;
 import com.eeg_project.components.managers.GraphManager;
 import com.eeg_project.components.managers.PSDGraphManager;
+import com.eeg_project.components.managers.ArtefactRemovalGraphManager;
 import com.eeg_project.components.connector.ConnectorModule;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
@@ -35,7 +36,8 @@ public class EEGPackage implements ReactPackage {
 		return Arrays.<ViewManager>asList(
 				new GraphManager(),
 				new FilterGraphManager(),
-				new PSDGraphManager()
+				new PSDGraphManager(),
+				new ArtefactRemovalGraphManager()
 		);
 	}
 }

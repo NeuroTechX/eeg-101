@@ -19,7 +19,7 @@ import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
 
 //Interfaces. For advanced elements such as graphs
-import GraphView from '../interface/GraphView';
+import ArtefactRemovalGraphView from '../interface/ArtefactRemovalGraphView';
 
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
@@ -60,7 +60,7 @@ class SlideOne extends Component {
           console.log(x, y, width, height);
           this.props.setGraphViewDimensions({x: x, y: y, width: width, height: height})
         }}>
-          <GraphView style={{flex:1}} visibility={this.props.isVisible}/>
+          <ArtefactRemovalGraphView style={{flex:1}} visibility={this.props.isVisible}/>
         </View>
 
         <Text style={styles.currentTitle}>INTRODUCTION</Text>
