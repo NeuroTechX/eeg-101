@@ -123,7 +123,7 @@ public class PSDGraph extends FrameLayout {
         psdPlot.getGraph().position(0, HorizontalPositioning.ABSOLUTE_FROM_LEFT.ABSOLUTE_FROM_LEFT,
                0, VerticalPositioning.ABSOLUTE_FROM_TOP);
 
-        // Add plot to CircularBufferGraph
+        // Add plot to FilterGraph
         this.addView(psdPlot, new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 

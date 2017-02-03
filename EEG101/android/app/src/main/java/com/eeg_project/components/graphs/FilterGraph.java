@@ -24,7 +24,7 @@ import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
 
 // Android View that graphs processed EEG data
-public class CircularBufferGraph extends FrameLayout {
+public class FilterGraph extends FrameLayout {
 
     // ----------------------------------------------------------------------
     // Variables
@@ -55,7 +55,7 @@ public class CircularBufferGraph extends FrameLayout {
 
     // ------------------------------------------------------------------------
     // Constructors
-    public CircularBufferGraph(Context context) {
+    public FilterGraph(Context context) {
         super(context);
         appState = ((MainApplication)context.getApplicationContext());
         initView(context);
@@ -78,7 +78,7 @@ public class CircularBufferGraph extends FrameLayout {
         circBufferPlot = new XYPlot(context, "EEG Circ Buffer Plot");
 
         // Create plotUpdater
-        plotUpdater = new CircularBufferGraph.MyPlotUpdater(circBufferPlot);
+        plotUpdater = new FilterGraph.MyPlotUpdater(circBufferPlot);
 
         // Create dataSource
         dataSource = new FilterDataSource(appState.connectedMuse.isLowEnergy());
@@ -132,7 +132,7 @@ public class CircularBufferGraph extends FrameLayout {
         circBufferPlot.getGraph().position(0, HorizontalPositioning.ABSOLUTE_FROM_LEFT.ABSOLUTE_FROM_LEFT,
                 0, VerticalPositioning.ABSOLUTE_FROM_TOP);
 
-        // Add plot to CircularBufferGraph
+        // Add plot to FilterGraph
         this.addView(circBufferPlot, new FrameLayout.LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
@@ -148,7 +148,7 @@ public class CircularBufferGraph extends FrameLayout {
         else if (dataThread == null || !dataThread.isAlive()) {
             startDataThread();
             startRenderingThread();
-            dataListener = new CircularBufferGraph.museDataListener();
+            dataListener = new FilterGraph.museDataListener();
             // Register a listener to receive data packets from Muse. Second argument defines which type(s) of data will be transmitted to listener
             appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         }

@@ -1,7 +1,7 @@
 package com.eeg_project;
 
 
-import com.eeg_project.components.managers.CircularBufferGraphManager;
+import com.eeg_project.components.managers.FilterGraphManager;
 import com.eeg_project.components.managers.GraphManager;
 import com.eeg_project.components.managers.PSDGraphManager;
 import com.eeg_project.components.connector.ConnectorModule;
@@ -34,7 +34,7 @@ public class EEGPackage implements ReactPackage {
 	public List<ViewManager> createViewManagers(ReactApplicationContext reactApplicationContext) {
 		return Arrays.<ViewManager>asList(
 				new GraphManager(),
-				new CircularBufferGraphManager(),
+				new FilterGraphManager(),
 				new PSDGraphManager()
 		);
 	}

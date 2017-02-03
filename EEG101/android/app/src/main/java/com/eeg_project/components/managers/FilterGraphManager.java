@@ -2,7 +2,7 @@ package com.eeg_project.components.managers;
 
 import android.view.View;
 
-import com.eeg_project.components.graphs.CircularBufferGraph;
+import com.eeg_project.components.graphs.FilterGraph;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -10,9 +10,9 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 import javax.annotation.Nullable;
 
 // GraphManager class manages EEGGraph objects.
-public class CircularBufferGraphManager extends SimpleViewManager<CircularBufferGraph> {
+public class FilterGraphManager extends SimpleViewManager<FilterGraph> {
     private final static String REACT_CLASS = "CIRC_BUFFER_GRAPH";
-    CircularBufferGraph bufferGraph;
+    FilterGraph bufferGraph;
 
 
     @Override
@@ -23,15 +23,15 @@ public class CircularBufferGraphManager extends SimpleViewManager<CircularBuffer
 
     // Creates new EEGGraph views, accepting context as an argument. Context links the EEGGraph view to MainActivity
     @Override
-    protected CircularBufferGraph createViewInstance(ThemedReactContext context) {
-        bufferGraph = new CircularBufferGraph(context);
+    protected FilterGraph createViewInstance(ThemedReactContext context) {
+        bufferGraph = new FilterGraph(context);
         return bufferGraph;
     }
 
 
     // Bridge function for visibility prop. View.VISIBILITY is a native property of Android views
     @ReactProp(name = "visibility")
-    public void setVisibility(CircularBufferGraph graph, @Nullable boolean isVisible) {
+    public void setVisibility(FilterGraph graph, @Nullable boolean isVisible) {
         if (isVisible){
             graph.setVisibility(View.VISIBLE);
         }
@@ -42,7 +42,7 @@ public class CircularBufferGraphManager extends SimpleViewManager<CircularBuffer
 
     // Bridge function for channelOfInterestProp. Calls setChannelOfInterest in EEGGraph
     @ReactProp(name = "channelOfInterest")
-    public void setChannelOfInterest(CircularBufferGraph graph, @Nullable int channel) {
+    public void setChannelOfInterest(FilterGraph graph, @Nullable int channel) {
         graph.setChannelOfInterest(channel);
     }
 
