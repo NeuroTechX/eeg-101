@@ -12,7 +12,7 @@ const initialState = {
   scene: {},
   connectionStatus: config.connectionStatus.DISCONNECTED,
   availableMuses: false,
-  graphviewDimensions: {x: 0, y: 0, width: 300, height: 250}
+  graphViewDimensions: {x: 0, y: 0, width: 300, height: 250}
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -36,7 +36,7 @@ export default function reducer(state = initialState, action = {}) {
 
       return {
         ...state,
-        graphviewDimensions: action.payload
+        graphViewDimensions: action.payload
       };
 
     // ...other actions

@@ -12,6 +12,17 @@ export default class PSDGraphView extends Component{
     super(props);
   }
 
+  componentDidMount() {
+    //console.log(this.graphRef);
+  }
+
+  // Returns the callback ref from the child PSDGraph so that it can be used in SanboxGraph to send commands.
+  // A bit of a hacky solution. Sometimes this function is called when the ref has been destroyed, throwing errors
+  getChildRef() {
+    if(this.graphRef !== null) { return this.graphRef
+    }
+  }
+
   render() {
     return(
       <View style={styles.graphContainer}>
@@ -21,7 +32,7 @@ export default class PSDGraphView extends Component{
           bottom: 50,
           height: this.props.dimensions.height - 50,
           width: this.props.dimensions.width - 50
-        }]} {...this.props}/>
+        }]} ref={(ref) => this.graphRef = ref} {...this.props}/>
 
         <Text style={[styles.rangeLabel, {
           left: this.props.dimensions.x,

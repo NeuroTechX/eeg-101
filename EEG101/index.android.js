@@ -27,6 +27,7 @@ import SlideSix from './src/scenes/slide-06';
 import SlideSeven from './src/scenes/slide-07';
 import SlideEight from './src/scenes/slide-08';
 import SlideNine from './src/scenes/slide-09';
+import Sandbox from './src/scenes/sandbox';
 import End from './src/scenes/slide-end';
 
 // Navbar import
@@ -68,6 +69,7 @@ class EEG_Project extends Component {
             <Scene component={ConnectorTwo} key='ConnectorTwo' hideNavBar={true}/>
             <Scene component={ConnectorThree} key='ConnectorThree' hideNavBar={true}/>
             <Scene component={SlideOne} key='SlideOne' previous='CONNECTION' hideNavBar={false}/>
+            <Scene component={Sandbox} key='Sandbox' previous='BLAH' hideNavBar={false}/>
             <Scene component={SlideTwo} key='SlideTwo'previous='INTRODUCTION'/>
             <Scene component={SlideThree} key='SlideThree'previous='PHYSIOLOGY'/>
             <Scene component={SlideFour} key='SlideFour' previous='HARDWARE'/>
@@ -76,7 +78,8 @@ class EEG_Project extends Component {
             <Scene component={SlideSeven} key='SlideSeven' previous='ARTEFACT REMOVAL'/>
             <Scene component={SlideEight} key='SlideEight' previous='FEATURE EXTRACTION'/>
             <Scene component={SlideNine} key='SlideNine' previous='PSD'/>
-            <Scene component={End} key='End' previous='BRAIN WAVES'/>
+            <Scene component={Sandbox} key='Sandbox' previous='BRAIN WAVES'/>
+            <Scene component={End} key='End' previous='SANDBOX'/>
           </Scene>
         </RouterWithRedux>
       </Provider>

@@ -1,11 +1,18 @@
 package com.eeg_project.components.managers;
 
+import android.util.Log;
 import android.view.View;
 
+import com.eeg_project.components.graphs.EEGGraph;
 import com.eeg_project.components.graphs.FilterGraph;
+import com.facebook.infer.annotation.Assertions;
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
+
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -13,6 +20,8 @@ import javax.annotation.Nullable;
 public class FilterGraphManager extends SimpleViewManager<FilterGraph> {
     private final static String REACT_CLASS = "CIRC_BUFFER_GRAPH";
     FilterGraph bufferGraph;
+    public static final int COMMAND_START_THREADS = 1;
+    public static final int COMMAND_STOP_THREADS = 2;
 
 
     @Override
@@ -44,6 +53,29 @@ public class FilterGraphManager extends SimpleViewManager<FilterGraph> {
     @ReactProp(name = "channelOfInterest")
     public void setChannelOfInterest(FilterGraph graph, @Nullable int channel) {
         graph.setChannelOfInterest(channel);
+    }
+
+
+    // Bridge function for receiving 'start threads' and 'stop threads' commands from the
+    // dispatchViewManagerCommand() method in JS. Currently, only used in stopping threads when
+    // switching between graphs in the SandboxGraph component    @Override
+    public void receiveCommand(
+            FilterGraph view,
+            int commandID,
+            @Nullable ReadableArray args) {
+        Assertions.assertNotNull(view);
+        Assertions.assertNotNull(args);
+        switch (commandID) {
+            case 0: {
+                view.stopThreads();
+                return;
+            }
+            default:
+                throw new IllegalArgumentException(String.format(
+                        "Unsupported command %d received by %s.",
+                        commandID,
+                        getClass().getSimpleName()));
+        }
     }
 
 }

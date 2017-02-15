@@ -1,17 +1,22 @@
 package com.eeg_project.components.managers;
 
+import android.util.Log;
 import android.view.View;
 
+import com.eeg_project.components.graphs.EEGGraph;
 import com.eeg_project.components.graphs.PSDGraph;
+import com.facebook.infer.annotation.Assertions;
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 
+import java.util.Map;
+
 import javax.annotation.Nullable;
 
-/**
- * Created by dano on 26/11/16.
- */
+
 
 public class PSDGraphManager extends SimpleViewManager<PSDGraph> {
     private final static String REACT_CLASS = "PSD_GRAPH";
@@ -23,7 +28,8 @@ public class PSDGraphManager extends SimpleViewManager<PSDGraph> {
         return REACT_CLASS;
     }
 
-    // Creates new EEGGraph views, accepting context as an argument. Context links the EEGGraph view to MainActivity
+    // Creates new PSDGraph views, accepting context as an argument. Context links the EEGGraph
+    // view to MainActivity
     @Override
     public PSDGraph createViewInstance(ThemedReactContext context) {
         psdGraph = new PSDGraph(context);
@@ -45,6 +51,29 @@ public class PSDGraphManager extends SimpleViewManager<PSDGraph> {
     @ReactProp(name = "channelOfInterest")
     public void setChannelOfInterest(PSDGraph graph, @Nullable int channel) {
         graph.setChannelOfInterest(channel);
+    }
+
+
+    // Bridge function for receiving 'start threads' and 'stop threads' commands from the
+    // dispatchViewManagerCommand() method in JS. Currently, only used in stopping threads when
+    // switching between graphs in the SandboxGraph component    @Override
+    public void receiveCommand(
+            PSDGraph view,
+            int commandID,
+            @Nullable ReadableArray args) {
+        Assertions.assertNotNull(view);
+        Assertions.assertNotNull(args);
+        switch (commandID) {
+            case 0: {
+                view.stopThreads();
+                return;
+            }
+            default:
+                throw new IllegalArgumentException(String.format(
+                        "Unsupported command %d received by %s.",
+                        commandID,
+                        getClass().getSimpleName()));
+        }
     }
 }
 

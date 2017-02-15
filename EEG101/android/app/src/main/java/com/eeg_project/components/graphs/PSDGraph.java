@@ -2,6 +2,7 @@ package com.eeg_project.components.graphs;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -127,7 +128,7 @@ public class PSDGraph extends FrameLayout {
         this.addView(psdPlot, new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-        onVisibilityChanged(this, View.VISIBLE);
+        //onVisibilityChanged(this, View.VISIBLE);
     }
 
     // Called when user navigates away from parent React Native component. Stops active threads in order to limit memory usage
@@ -163,6 +164,8 @@ public class PSDGraph extends FrameLayout {
 
     // Stop all threads
     public void stopThreads(){
+        Log.w("Test", "Stopping PSD threads");
+
         plotUpdater.stopThread();
         dataSource.stopThread();
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  Animated,
   StyleSheet,
   Text,
   View,
@@ -10,6 +11,7 @@ import{
   Actions,
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import Animation from 'lottie-react-native';
 
 import config from '../redux/config'
 
@@ -18,20 +20,38 @@ import WhiteButton from '../components/WhiteButton';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to this scene's ley
 function  mapStateToProps(state) {
-    return {isVisible: state.scene.sceneKey === 'Landing',
-      connectionStatus: state.connectionStatus,
+  return {isVisible: state.scene.sceneKey === 'Landing',
+    connectionStatus: state.connectionStatus,
+
+  };
+}
+
+class Landing extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      progress: new Animated.Value(0),
     };
   }
 
- class Landing extends Component {
-  constructor(props) {
-    super(props);
+  componentDidMount() {
+    Animated.timing(this.state.progress, {
+      toValue: 1,
+      duration: 5000,
+    }).start();
   }
 
   render() {
     return (
       <Image source={require('../assets/clouds.png')} style={styles.container} resizeMode='stretch'>
         <View style={styles.titleBox}>
+          <Animation
+            style={{width: 100,
+              height: 100}}
+            progress={this.state.progress}
+            loop = {true}
+            source={require('../assets/watermelon.json')}
+          />
           <Text style={styles.title}>Welcome to EEG 101</Text>
           <Text style={styles.body}>At the end of this tutorial, you will have learned how EEG devices can be used to measure the electrical activity of the brain.</Text>
         </View>
@@ -87,11 +107,11 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontFamily: 'Roboto-Black',
     fontSize: 48,
-      },
+  },
 
   titleBox: {
     flex: 4,
     alignItems: 'center',
     justifyContent: 'center',
-      },
-  });
+  },
+});

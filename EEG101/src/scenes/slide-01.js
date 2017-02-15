@@ -19,16 +19,16 @@ import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
 
 //Interfaces. For advanced elements such as graphs
-import ArtefactRemovalGraphView from '../interface/ArtefactRemovalGraphView';
+import GraphView from '../interface/GraphView';
 
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
-    return {
-      isVisible: state.scene.sceneKey === 'SlideOne',
-      connectionStatus: state.connectionStatus,
-    };
-  }
+  return {
+    isVisible: state.scene.sceneKey === 'SlideOne',
+    connectionStatus: state.connectionStatus,
+  };
+}
 
 // Binds actions to component's props
 function mapDispatchToProps(dispatch) {
@@ -40,7 +40,7 @@ function mapDispatchToProps(dispatch) {
 class SlideOne extends Component {
   constructor(props) {
     super(props);
-    
+
     // Initialize States
     this.state = {
       popUp1Visible: false,
@@ -49,7 +49,7 @@ class SlideOne extends Component {
       popUp4Visible: false,
     };
   }
-  
+
   render() {
     return (
       <View style={styles.container}>
@@ -60,7 +60,7 @@ class SlideOne extends Component {
           console.log(x, y, width, height);
           this.props.setGraphViewDimensions({x: x, y: y, width: width, height: height})
         }}>
-          <ArtefactRemovalGraphView style={{flex:1}} visibility={this.props.isVisible}/>
+          <GraphView style={{flex:1}} visibility={this.props.isVisible}/>
         </View>
 
         <Text style={styles.currentTitle}>INTRODUCTION</Text>
@@ -101,27 +101,27 @@ class SlideOne extends Component {
         </ViewPagerAndroid>
 
         <PopUp onClose={() => this.setState({popUp1Visible: false})} visible={this.state.popUp1Visible}
-        title='What exactly is EEG?' image={require('../assets/hansberger.jpg')}>
+               title='What exactly is EEG?' image={require('../assets/hansberger.jpg')}>
           Electroencephalography (EEG) is a technique that measures the electrical activity of the brain with sensors that record fluctuations in voltage at the surface of the skull. The first human electroencephalogram was recorded in 1924 by Hans Berger, a German psychiatrist whose interest in ‘psychic energy’ led him to experiment with the electrical fields of the brain.
-          </PopUp>
+        </PopUp>
 
         <PopUp onClose={() => this.setState({popUp2Visible: false})} visible={this.state.popUp2Visible}
-        title='Noise'>
+               title='Noise'>
           Movement of the eyes (which are electrically charged) and muscle activity produce electrical activity. Thus, blinking, swallowing, and clenching the jaw will all produce noise that can overpower signals originating in the brain. This can make it very difficult to read the EEG. To accurately sense the activity of the brain, movement must be kept to a minimum.
         </PopUp>
 
         <PopUp onClose={() => this.setState({popUp3Visible: false})} visible={this.state.popUp3Visible}
-        title='EEG cannot read minds'>
-           The EEG signal is generated when tens of thousands of brain cells fire in synchrony. Although thinking about a cat produces some change in brain activity, it is too small to affect the large-scale, rhythmic firing of the brain that EEG detects.
+               title='EEG cannot read minds'>
+          The EEG signal is generated when tens of thousands of brain cells fire in synchrony. Although thinking about a cat produces some change in brain activity, it is too small to affect the large-scale, rhythmic firing of the brain that EEG detects.
         </PopUp>
-        
+
         <PopUp onClose={() => this.setState({popUp4Visible: false})} visible={this.state.popUp4Visible}
-        title='Closed eye rhythms'>
+               title='Closed eye rhythms'>
           When the eyes are closed, there is often a large increase in rhythmic brain activity in the range of 8-13 cycles per second (Hz). These alpha waves were one of the first discoveries that Hans Berger made with EEG. The ability to detect alpha waves when the eyes are closed varies greatly from person to person, however. Don't feel bad if you can't see them!
         </PopUp>
 
         <PopUp onClose={Actions.ConnectorOne} visible={(this.props.isVisible && this.props.connectionStatus === config.connectionStatus.DISCONNECTED)} title='Muse Disconnected'>
-        Please reconnect to continue the tutorial</PopUp>
+          Please reconnect to continue the tutorial</PopUp>
       </View>
     );
   }
@@ -139,12 +139,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
 
- currentTitle: {
-  marginLeft: 20,
-  marginTop: 10,
-  fontSize: 13,
-  fontFamily: 'Roboto-Medium',
-  color: '#6CCBEF',
+  currentTitle: {
+    marginLeft: 20,
+    marginTop: 10,
+    fontSize: 13,
+    fontFamily: 'Roboto-Medium',
+    color: '#6CCBEF',
   },
 
   body: {

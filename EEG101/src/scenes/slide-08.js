@@ -22,7 +22,7 @@ import PopUpLink from '../components/PopUpLink';
 function  mapStateToProps(state) {
   return {
     isVisible: state.scene.sceneKey === 'SlideEight',
-    dimensions: state.graphviewDimensions,
+    dimensions: state.graphViewDimensions,
   };
 
 }

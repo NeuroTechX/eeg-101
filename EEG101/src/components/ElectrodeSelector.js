@@ -55,7 +55,7 @@ export default class ElectrodeSelector extends Component {
 					<TouchableOpacity style={{flex:1}} onPress={() => {this.touch(1)}}/>
 					<TouchableOpacity style={{flex:1}} onPress={() => {this.touch(4)}}/>
 				</View>
-			</Image>
+			</Image> 
 		);
 	}
 }

@@ -31,6 +31,7 @@ import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
 import com.eeg_project.components.signal.NoiseDetector;
 
+import static java.lang.Double.NaN;
 
 
 // Android View that graphs processed EEG data
@@ -43,6 +44,7 @@ public class ArtefactRemovalGraph extends FrameLayout {
     public MyPlotUpdater plotUpdater;
     private FilterDataSource dataSource;
     public DynamicSeries dataSeries;
+    public DynamicSeries artefactSeries;
     public museDataListener dataListener;
     double[] filtResult;
     public int samplesCollected = 0;
@@ -51,6 +53,7 @@ public class ArtefactRemovalGraph extends FrameLayout {
     Thread renderingThread;
 
     LineAndPointFormatter lineFormatter;
+    LineAndPointFormatter artefactLineFormatter;
 
 
     // Reference to global application state used for connected Muse
@@ -98,6 +101,7 @@ public class ArtefactRemovalGraph extends FrameLayout {
 
         // Create dataSeries that will be drawn on plot (Y will be obtained from dataSource, x will be implicitly generated):
         dataSeries = new DynamicSeries("Buffer Plot");
+        artefactSeries = new DynamicSeries("Artefacts");
 
         // Set X and Y domain
         circBufferPlot.setRangeBoundaries(500, 1100, BoundaryMode.FIXED);
@@ -105,10 +109,16 @@ public class ArtefactRemovalGraph extends FrameLayout {
 
         // Create line formatter with set color
         lineFormatter = new FastLineAndPointRenderer.Formatter(Color.rgb(255, 255, 255), null, null, null);
+        artefactLineFormatter = new FastLineAndPointRenderer.Formatter(Color.rgb(241, 116, 116),
+                null,
+                null,
+                null);
+
 
         // add series to plot
         circBufferPlot.addSeries(dataSeries,
                 lineFormatter);
+        circBufferPlot.addSeries(artefactSeries, artefactLineFormatter);
 
         // Format plot layout
         //Remove margins, padding and border
@@ -263,10 +273,10 @@ public class ArtefactRemovalGraph extends FrameLayout {
         int stepSize;
         double[][] latestSamples;
         double[][] filteredSamples;
-        int windowLength = 220;
+        int windowLength = 110; // originally 220, same as Filter sampling frequency
         double[][] filtWindow = new double[windowLength][4];
         private boolean keepRunning = true;
-        NoiseDetector noiseDetector = new NoiseDetector(6000.0); // Should probably be around 400
+        NoiseDetector noiseDetector = new NoiseDetector(400.0); // Should probably be around 400
         // (uV^2)
         boolean[] noiseDecisions = new boolean[4];
 
@@ -287,6 +297,7 @@ public class ArtefactRemovalGraph extends FrameLayout {
                     if (eegBuffer.getPts() >= stepSize) {
                         if (dataSeries.size() >= PLOT_LENGTH) {
                             dataSeries.removeFirst();
+                            artefactSeries.removeFirst();
                         }
                         // Extract latest raw and filtered samples
                         latestSamples = eegBuffer.extract(filter.getNB());
@@ -303,11 +314,12 @@ public class ArtefactRemovalGraph extends FrameLayout {
                         noiseDecisions = noiseDetector.detectArtefact(filtWindow);
 
                         if (noiseDecisions[0] == true) {
-                            Log.w("artefacts", "artefact detected!");
-                            lineFormatter.getLinePaint().setColor(Color.rgb(0,153,135));
-
-                        } else { lineFormatter.getLinePaint().setColor(Color.rgb(232,106,33));}
-                        dataSeries.addLast(filtResult[channelOfInterest - 1]);
+                            dataSeries.addLast(NaN);
+                            artefactSeries.addLast(filtResult[channelOfInterest - 1]);
+                        } else {
+                            dataSeries.addLast(filtResult[channelOfInterest - 1]);
+                            artefactSeries.addLast(NaN);
+                        }
 
                         eegBuffer.resetPts();
                     }

@@ -25,7 +25,7 @@ import ElectrodeSelector from '../components/ElectrodeSelector';
 function  mapStateToProps(state) {
   return {
     isVisible: state.scene.sceneKey === 'SlideNine',
-    dimensions: state.graphviewDimensions,
+    dimensions: state.graphViewDimensions,
   };
 }
 
@@ -69,7 +69,7 @@ class SlideNine extends Component {
             <Text style={styles.header}>Harnessing Brain Waves</Text>
             <Text style={[styles.body, {fontSize: 17}]}>Notice how the power in a given frequency band changes over time. It is possible to harness these changes to create a simple <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>Brain-Computer Interface (BCI)</PopUpLink>.
             </Text>
-            <Button onPress={Actions.End}>NEXT</Button>
+            <Button onPress={Actions.Sandbox}>NEXT</Button>
           </View>
 
         </ViewPagerAndroid>
