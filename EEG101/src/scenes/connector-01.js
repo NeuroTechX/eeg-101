@@ -10,6 +10,7 @@ import{
 import { connect } from 'react-redux';
 
 import config from '../redux/config'
+import { MediaQueryStyleSheet }  from 'react-native-responsive';
 
 // Components. For JS UI elements
 import WhiteButton from '../components/WhiteButton';
@@ -34,7 +35,7 @@ function  mapStateToProps(state) {
       <View style={styles.container}>
         <View style={styles.titleBox}>
           <Text style={styles.title}>Step 1</Text>
-          <Text style={styles.instructions}>Make sure your Muse is powered on. </Text>
+          <Text style={styles.instructions}>Make sure your Muse is powered on</Text>
           <Text style={styles.body}>If you are using a first generation Muse you may need to pair your device in bluetooth settings</Text>
         </View>
         <View style={styles.buttonContainer}>
@@ -47,7 +48,9 @@ function  mapStateToProps(state) {
 
 export default connect(mapStateToProps)(ConnectorOne);
 
-const styles = StyleSheet.create({
+const styles = MediaQueryStyleSheet.create(
+  {
+    // Base styles
   body: {
     fontFamily: 'Roboto-Light',
     fontSize: 15,
@@ -100,4 +103,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-});
+},
+  // Responsive styles
+  {
+    "@media (min-device-height: 700)": {
+      body: {
+        fontSize: 20,
+        marginLeft: 50,
+        marginRight: 50
+      },
+
+      instructions: {
+        fontSize: 30
+      },
+    }
+  });

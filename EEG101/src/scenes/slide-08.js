@@ -10,6 +10,8 @@ import{
   Actions,
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import { MediaQueryStyleSheet }  from 'react-native-responsive';
+
 
 //Interfaces. For advanced elements such as graphs
 import PSDGraphView from '../interface/PSDGraphView';
@@ -43,7 +45,6 @@ class SlideEight extends Component {
 
         <PSDGraphView dimensions={this.props.dimensions} visibility={this.props.isVisible} />
 
-
         <Text style={styles.currentTitle}>PSD</Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
@@ -70,59 +71,80 @@ class SlideEight extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = MediaQueryStyleSheet.create(
+  // Base styles
+  {
+    currentTitle: {
+      marginLeft: 20,
+      marginTop: 10,
+      fontSize: 13,
+      fontFamily: 'Roboto-Medium',
+      color: '#6CCBEF',
+    },
 
-  currentTitle: {
-    marginLeft: 20,
-    marginTop: 10,
-    fontSize: 13,
-    fontFamily: 'Roboto-Medium',
-    color: '#6CCBEF',
+    body: {
+      fontFamily: 'Roboto-Light',
+      color: '#484848',
+      fontSize: 17,
+    },
+
+    container: {
+      marginTop: 55,
+      flex: 1,
+      justifyContent: 'space-around',
+      alignItems: 'stretch',
+    },
+
+    graphContainer: {
+      backgroundColor: 'white',
+      flex: 4,
+      justifyContent: 'center',
+      alignItems: 'stretch',
+    },
+
+    header: {
+      fontFamily: 'Roboto-Bold',
+      color: '#484848',
+      fontSize: 20,
+    },
+
+    viewPager: {
+      flex: 4,
+    },
+
+    pageStyle: {
+      padding: 20,
+      alignItems: 'stretch',
+      justifyContent: 'space-around',
+    },
+
+    image: {
+      flex: 1,
+      width: null,
+      height: null,
+    },
   },
+  // Responsive styles
+  {
+    "@media (min-device-height: 700)": {
 
-  body: {
-    fontFamily: 'Roboto-Light',
-    color: '#484848',
-    fontSize: 17,
-  },
+      viewPager: {
+        flex: 3,
+      },
 
-  container: {
-    marginTop:55,
-    flex: 1,
-    justifyContent: 'space-around',
-    alignItems: 'stretch',
-  },
+      header: {
+        fontSize: 30,
+      },
 
-  graphContainer: {
-    backgroundColor: 'white',
-    flex: 4,
-    justifyContent: 'center',
-    alignItems: 'stretch',
-  },
+      currentTitle: {
+        fontSize: 20,
+      },
 
-  header: {
-    fontFamily: 'Roboto-Bold',
-    color: '#484848',
-    fontSize: 20,
-  },
-
-
-  viewPager: {
-    flex: 4,
-  },
-
-  pageStyle: {
-    padding: 20,
-    alignItems: 'stretch',
-    justifyContent: 'space-around',
-  },
-
-  image: {
-    flex: 1,
-    width: null,
-    height: null,
-  },
-
-});
+      body: {
+        fontSize: 25,
+      }
+    }
+  }
+);
 
 export default connect(mapStateToProps)(SlideEight);

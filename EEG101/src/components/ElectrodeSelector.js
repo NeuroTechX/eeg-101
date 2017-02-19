@@ -10,6 +10,7 @@ import {
   StyleSheet,
   Image,
 } from 'react-native';
+import { MediaQueryStyleSheet} from 'react-native-responsive';
 
 import Connector from '../interface/Connector';
 
@@ -59,18 +60,26 @@ export default class ElectrodeSelector extends Component {
 		);
 	}
 }
+const styles = MediaQueryStyleSheet.create(
+  // Base styles
+  {
+    container: {
+      height: 100,
+      width: 100,
+      alignItems: 'center',
+    },
 
-const styles = StyleSheet.create({
- 
-  container: {
-  	height: 100,
-  	width: 100,
-  	alignItems: 'center',
+    horizontalContainer: {
+      flexDirection: 'row',
+      flex: 1,
+    }
   },
-
-  horizontalContainer: {
-  	flexDirection: 'row',
-  	flex:1,
-  }
-    
-});
+	// Responsive styles
+  {
+    "@media (min-device-height: 700)": {
+    	container: {
+    		height: 200,
+				width: 200,
+			}
+    }
+	});

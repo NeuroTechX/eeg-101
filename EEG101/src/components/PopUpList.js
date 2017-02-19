@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import { MediaQueryStyleSheet} from 'react-native-responsive';
 
 import Button from './Button';
 
@@ -34,27 +35,42 @@ export default class PopUpList extends Component{
   }
 }
 
-const styles = StyleSheet.create({
+const styles = MediaQueryStyleSheet.create(
+  // Base styles
+  {
+    modalBackground: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'stretch',
+      padding: 20,
+      backgroundColor: 'rgba(12, 89, 128, 0.8)',
+    },
 
-  modalBackground: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'stretch',
-    padding: 20,
-    backgroundColor: 'rgba(12, 89, 128, 0.8)',
+    modalInnerContainer: {
+      alignItems: 'stretch',
+      backgroundColor: 'white',
+      padding: 20,
+    },
+
+    close: {
+      alignSelf: 'center',
+      padding: 20,
+      fontSize: 22,
+    },
+
   },
-
-  modalInnerContainer: {
-    alignItems: 'stretch',
-    backgroundColor: 'white',
-    padding: 20,
-  },
-
-  close: {
-    alignSelf: 'center',
-    padding: 20,
-    fontSize: 22,
-  },
-
-});
-
+  // Responsive styles
+  {
+    "@media (min-device-height: 700)": {
+      modalBackground: {
+        paddingTop: 100,
+        backgroundColor: 'rgba(12, 89, 128, 0.25)',
+      },
+    },
+    "@media (min-device-height: 1000)": {
+      modalBackground: {
+        paddingTop: 200,
+        backgroundColor: 'rgba(12, 89, 128, 0.25)',
+      },
+    }
+  });

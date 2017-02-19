@@ -14,6 +14,8 @@ import { connect } from 'react-redux';
 import Button from '../components/Button';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
+import { MediaQueryStyleSheet }  from 'react-native-responsive';
+
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
@@ -59,7 +61,7 @@ class SlideSeven extends Component {
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>How is the EEG broken down?</Text>
-            <Text style={[styles.body, {fontSize: 18}]}>Complex signals can be broken down into simpler signals with a mathematical function known as the <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>Fourier Transform.</PopUpLink>
+            <Text style={ styles.body }>Complex signals can be broken down into simpler signals with a mathematical function known as the <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>Fourier Transform.</PopUpLink>
             </Text>
             <Button onPress={Actions.SlideEight}>NEXT</Button>
           </View>
@@ -81,59 +83,81 @@ class SlideSeven extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = MediaQueryStyleSheet.create(
+  // Base styles
+  {
+    currentTitle: {
+      marginLeft: 20,
+      marginTop: 10,
+      fontSize: 13,
+      fontFamily: 'Roboto-Medium',
+      color: '#6CCBEF',
+    },
 
-  currentTitle: {
-    marginLeft: 20,
-    marginTop: 10,
-    fontSize: 13,
-    fontFamily: 'Roboto-Medium',
-    color: '#6CCBEF',
+    body: {
+      fontFamily: 'Roboto-Light',
+      color: '#484848',
+      fontSize: 19,
+    },
+
+    container: {
+      marginTop: 55,
+      flex: 1,
+      justifyContent: 'space-around',
+      alignItems: 'stretch',
+    },
+
+    graphContainer: {
+      backgroundColor: 'white',
+      flex: 4,
+      justifyContent: 'center',
+      alignItems: 'stretch',
+    },
+
+    header: {
+      fontFamily: 'Roboto-Bold',
+      color: '#484848',
+      fontSize: 20,
+    },
+
+
+    viewPager: {
+      flex: 4,
+    },
+
+    pageStyle: {
+      padding: 20,
+      alignItems: 'stretch',
+      justifyContent: 'space-around',
+    },
+
+    image: {
+      flex: 1,
+      width: null,
+      height: null,
+    },
   },
+  // Responsive styles
+  {
+    "@media (min-device-height: 700)": {
 
-  body: {
-    fontFamily: 'Roboto-Light',
-    color: '#484848',
-    fontSize: 19,
-  },
+      viewPager: {
+        flex: 3,
+      },
 
-  container: {
-    marginTop:55,
-    flex: 1,
-    justifyContent: 'space-around',
-    alignItems: 'stretch',
-  },
+      header: {
+        fontSize: 30,
+      },
 
-  graphContainer: {
-    backgroundColor: 'white',
-    flex: 4,
-    justifyContent: 'center',
-    alignItems: 'stretch',
-  },
+      currentTitle: {
+        fontSize: 20,
+      },
 
-  header: {
-    fontFamily: 'Roboto-Bold',
-    color: '#484848',
-    fontSize: 20,
-  },
-
-
-  viewPager: {
-    flex: 4,
-  },
-
-  pageStyle: {
-    padding: 20,
-    alignItems: 'stretch',
-    justifyContent: 'space-around',
-  },
-
-  image: {
-    flex: 1,
-    width: null,
-    height: null,
-  },
-
-});
+      body: {
+        fontSize: 25,
+      }
+    }
+  }
+);
 
 export default connect(mapStateToProps)(SlideSeven);

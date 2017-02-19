@@ -11,15 +11,14 @@ import{
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import config from '../redux/config';
-
-
-//Interfaces. For advanced elements such as graphs
-import GraphView from '../interface/GraphView';
+import { MediaQueryStyleSheet} from 'react-native-responsive';
 
 import Button from '../components/Button';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
 import ElectrodeSelector from '../components/ElectrodeSelector';
+
+import GraphView from '../interface/GraphView';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
@@ -71,7 +70,7 @@ class SlideThree extends Component {
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>What do electrodes measure?</Text>
-            <Text style={[styles.body, {fontSize: 18}]}>Each electrode detects voltage fluctuations that are compared to a <PopUpLink onPress={() => this.setState({popUp3Visible: true})}>reference electrode</PopUpLink> and then amplified around 1,000,000 times.</Text>
+            <Text style={styles.body}>Each electrode detects voltage fluctuations that are compared to a <PopUpLink onPress={() => this.setState({popUp3Visible: true})}>reference electrode</PopUpLink> and then amplified around 1,000,000 times.</Text>
             <Button onPress={Actions.SlideFour}>NEXT</Button>
           </View>
         </ViewPagerAndroid>
@@ -99,53 +98,75 @@ class SlideThree extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = MediaQueryStyleSheet.create(
+  // Base styles
+  {
+    pageStyle: {
+      padding: 20,
+      alignItems: 'stretch',
+      justifyContent: 'space-around',
+    },
 
-  pageStyle: {
-    padding: 20,
-    alignItems: 'stretch',
-    justifyContent: 'space-around',
- },
+    body: {
+      fontFamily: 'Roboto-Light',
+      color: '#484848',
+      fontSize: 19,
+    },
 
-body: {
-    fontFamily: 'Roboto-Light',
-    color: '#484848',
-    fontSize: 19,
+    currentTitle: {
+      marginLeft: 20,
+      marginTop: 10,
+      fontSize: 13,
+      fontFamily: 'Roboto-Medium',
+      color: '#6CCBEF',
+    },
+
+    container: {
+      marginTop: 55,
+      flex: 1,
+      justifyContent: 'space-around',
+      alignItems: 'stretch',
+    },
+
+    graphContainer: {
+
+      flex: 4,
+      justifyContent: 'center',
+      alignItems: 'stretch',
+    },
+
+    header: {
+      fontFamily: 'Roboto-Bold',
+      color: '#484848',
+      fontSize: 20,
+    },
+
+
+    viewPager: {
+      flex: 4,
+    },
   },
+  // Responsive styles
+  {
+    "@media (min-device-height: 700)": {
 
-  currentTitle: {
-    marginLeft: 20,
-    marginTop: 10,
-    fontSize: 13,
-    fontFamily: 'Roboto-Medium',
-    color: '#6CCBEF',
-  },
+      viewPager: {
+        flex: 3,
+      },
 
-  container: {
-    marginTop:55,
-    flex: 1,
-    justifyContent: 'space-around',
-    alignItems: 'stretch',
-},
+      header: {
+        fontSize: 30,
+      },
 
-  graphContainer: {
+      currentTitle: {
+        fontSize: 20,
+      },
 
-    flex: 4,
-    justifyContent: 'center',
-    alignItems: 'stretch',
-  },
-  
-  header: {
-    fontFamily: 'Roboto-Bold',
-    color: '#484848',
-    fontSize: 20,
-  },
-
-
-  viewPager: {
-    flex: 4,
-  },
-
-});
+      body: {
+        fontSize: 25,
+      }
+    }
+  }
+);
 
 export default connect(mapStateToProps)(SlideThree);

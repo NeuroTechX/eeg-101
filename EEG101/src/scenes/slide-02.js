@@ -12,6 +12,8 @@ import{
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import config from '../redux/config';
+import { MediaQueryStyleSheet }  from 'react-native-responsive';
+
 
 
 //Interfaces. For advanced elements such as graphs
@@ -80,7 +82,7 @@ class SlideTwo extends Component {
           
           <View style={styles.pageStyle}>
           <Text style={styles.header}>Organized neural activity produces electric fields</Text>
-            <Text style={[styles.body, {fontSize: 18}]}>When billions of neurons <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>work together</PopUpLink> to produce thoughts, feelings, and behaviours, their electricity can be detected by electrodes on the scalp.
+            <Text style={styles.body}>When billions of neurons <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>work together</PopUpLink> to produce thoughts, feelings, and behaviours, their electricity can be detected by electrodes on the scalp.
             </Text>
           </View>
 
@@ -115,59 +117,81 @@ class SlideTwo extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = MediaQueryStyleSheet.create(
+  // Base styles
+  {
+    pageStyle: {
+      padding: 20,
+      alignItems: 'stretch',
+      justifyContent: 'space-around',
+   },
 
-  pageStyle: {
-    padding: 20,
-    alignItems: 'stretch',
-    justifyContent: 'space-around',
- },
+    image: {
+      flex: 1,
+      width: null,
+      height: null,
+    },
 
-  image: {
-    flex: 1,
-    width: null,
-    height: null,
+    currentTitle: {
+      marginLeft: 20,
+      marginTop: 10,
+      fontSize: 13,
+      fontFamily: 'Roboto-Medium',
+      color: '#6CCBEF',
+    },
+
+  body: {
+      fontFamily: 'Roboto-Light',
+      color: '#484848',
+      fontSize: 19,
+    },
+
+    container: {
+      marginTop:55,
+      flex: 1,
+      justifyContent: 'space-around',
+      alignItems: 'stretch',
   },
 
-  currentTitle: {
-    marginLeft: 20,
-    marginTop: 10,
-    fontSize: 13,
-    fontFamily: 'Roboto-Medium',
-    color: '#6CCBEF',
-  },
+    graphContainer: {
+      backgroundColor: 'white',
+      flex: 4,
+      justifyContent: 'center',
+      alignItems: 'stretch',
+    },
 
-body: {
-    fontFamily: 'Roboto-Light',
-    color: '#484848',
-    fontSize: 19,
-  },
+    header: {
+      fontFamily: 'Roboto-Bold',
+      color: '#484848',
+      fontSize: 20,
 
-  container: {
-    marginTop:55,
-    flex: 1,
-    justifyContent: 'space-around',
-    alignItems: 'stretch',
-},
+    },
 
-  graphContainer: {
-    backgroundColor: 'white',
-    flex: 4,
-    justifyContent: 'center',
-    alignItems: 'stretch',
-  },
-
-  header: {
-    fontFamily: 'Roboto-Bold',
-    color: '#484848',
-    fontSize: 20,
+    viewPager: {
+      flex: 4,
+    },
 
   },
+  // Responsive styles
+  {
+    "@media (min-device-height: 700)": {
 
-  viewPager: {
-    flex: 4,
-  },
+      viewPager: {
+        flex: 3,
+      },
 
-});
+      header: {
+        fontSize: 30,
+      },
+
+      currentTitle: {
+        fontSize: 20,
+      },
+
+      body: {
+        fontSize: 25,
+      }
+    }
+  });
 
 export default connect(mapStateToProps)(SlideTwo);

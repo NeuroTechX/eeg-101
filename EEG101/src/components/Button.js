@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-
+import { MediaQueryStyleSheet } from 'react-native-responsive';
 
 export default class Button extends Component{
   constructor(props){
@@ -31,26 +31,40 @@ export default class Button extends Component{
 
 };
 
-const styles = StyleSheet.create({
+const styles = MediaQueryStyleSheet.create(
+  {
+  // Base styles
+  active: {
+    justifyContent: 'center',
+    backgroundColor: '#94DAFA',
+    height: 50,
+    margin: 5,
+    padding: 5,
+    alignItems: 'center',
+    },
 
-active: {
-  justifyContent: 'center',
-  backgroundColor: '#94DAFA',
-  height: 50,
-  margin: 5,
-  padding: 5,
-  alignItems: 'center',
+  disabled: {
+    justifyContent: 'center',
+    backgroundColor: '#b6bfcb',
+    height: 50,
+    margin: 5,
+    padding: 5,
+    alignItems: 'center',
+    }
   },
-
-disabled: {
-  justifyContent: 'center',
-  backgroundColor: '#b6bfcb',
-  height: 50,
-  margin: 5,
-  padding: 5,
-  alignItems: 'center',
-  }
-});
+  // Responsive styles
+  {
+    "@media (min-device-height: 700)": {
+      active: {
+        marginLeft: 20,
+        marginRight: 20,
+      },
+      disabled: {
+        marginLeft: 20,
+        marginRight: 20,
+      },
+    }
+  });
 
 
 

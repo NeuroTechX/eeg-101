@@ -20,6 +20,8 @@ import Button from '../components/Button';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
 import ElectrodeSelector from '../components/ElectrodeSelector';
+import { MediaQueryStyleSheet }  from 'react-native-responsive';
+
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
@@ -48,14 +50,13 @@ class SlideFour extends Component {
       <View style={styles.container}>
       
         <View style={styles.halfGraphContainer}>
-            <GraphView style={{flex:1}} visibility={this.props.isVisible}/>
+          <GraphView style={{flex:1}} visibility={this.props.isVisible}/>
           <Text style={styles.halfGraphLabelText}>Raw</Text>
-
-          </View>
-          <View style={styles.halfGraphContainer}>
-            <CircBufferGraphView style={{flex:1}} visibility={this.props.isVisible}/>
-              <Text style={styles.halfGraphLabelText}>Low Pass Filter</Text>
-          </View>
+        </View>
+        <View style={styles.halfGraphContainer}>
+          <CircBufferGraphView style={{flex:1}} visibility={this.props.isVisible}/>
+          <Text style={styles.halfGraphLabelText}>Low Pass Filter</Text>
+        </View>
 
           <Text style={styles.currentTitle}>FILTERING</Text>
 
@@ -65,7 +66,7 @@ class SlideFour extends Component {
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>How do we get meaningful data from the EEG?</Text>
-            <Text style={[styles.body, {fontSize: 18}]}>First, the EEG must be <PopUpLink onPress={() => this.setState({popUpVisible: true})}>filtered</PopUpLink> to reduce signals that don't come from the brain.
+            <Text style={styles.body}>First, the EEG must be <PopUpLink onPress={() => this.setState({popUpVisible: true})}>filtered</PopUpLink> to reduce signals that don't come from the brain.
             </Text>
             <Button onPress={Actions.SlideFive}>NEXT</Button>
           </View>
@@ -82,62 +83,84 @@ class SlideFour extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = MediaQueryStyleSheet.create(
+  // Base styles
+  {
+    pageStyle: {
+      padding: 20,
+      alignItems: 'stretch',
+      justifyContent: 'space-around',
+    },
 
-  pageStyle: {
-    padding: 20,
-    alignItems: 'stretch',
-    justifyContent: 'space-around',
+    body: {
+      fontFamily: 'Roboto-Light',
+      color: '#484848',
+      fontSize: 19,
+    },
+
+    currentTitle: {
+      marginLeft: 20,
+      marginTop: 10,
+      fontSize: 13,
+      fontFamily: 'Roboto-Medium',
+      color: '#6CCBEF',
+    },
+
+    container: {
+      marginTop: 55,
+      flex: 1,
+      justifyContent: 'space-around',
+      alignItems: 'stretch',
+    },
+
+    header: {
+      fontFamily: 'Roboto-Bold',
+      color: '#484848',
+      fontSize: 20,
+    },
+
+
+    viewPager: {
+      flex: 4,
+    },
+
+    halfGraphContainer: {
+      flex: 2,
+      justifyContent: 'center',
+      alignItems: 'stretch',
+
+    },
+
+    halfGraphLabelText: {
+      position: 'absolute',
+      top: 5,
+      left: 5,
+      fontSize: 13,
+      fontFamily: 'Roboto-Medium',
+      color: '#ffffff',
+    },
   },
+  // Responsive styles
+  {
+    "@media (min-device-height: 700)": {
 
-  body: {
-    fontFamily: 'Roboto-Light',
-    color: '#484848',
-    fontSize: 19,
-  },
+      viewPager: {
+        flex: 3,
+      },
 
-  currentTitle: {
-    marginLeft: 20,
-    marginTop: 10,
-    fontSize: 13,
-    fontFamily: 'Roboto-Medium',
-    color: '#6CCBEF',
-  },
+      header: {
+        fontSize: 30,
+      },
 
-  container: {
-    marginTop: 55,
-    flex: 1,
-    justifyContent: 'space-around',
-    alignItems: 'stretch',
-  },
+      currentTitle: {
+        fontSize: 20,
+      },
 
-  header: {
-    fontFamily: 'Roboto-Bold',
-    color: '#484848',
-    fontSize: 20,
-  },
-
-
-  viewPager: {
-    flex: 4,
-  },
-
-  halfGraphContainer: {
-    flex: 2,
-    justifyContent: 'center',
-    alignItems: 'stretch',
-
-  },
-
-  halfGraphLabelText: {
-    position: 'absolute',
-    top: 5,
-    left: 5,
-    fontSize: 13,
-    fontFamily: 'Roboto-Medium',
-    color: '#ffffff',
-  },
-
-});
+      body: {
+        fontSize: 25,
+      }
+    }
+  }
+);
 
 export default connect(mapStateToProps)(SlideFour);

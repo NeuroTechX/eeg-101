@@ -17,15 +17,15 @@ export const setGraphViewDimensions = (payload) => ({payload, type: SET_GRAPHVIE
 export function getAndConnectToDevice() {
   return (dispatch) =>  {
     return Connector.getAndConnectToDevice()
-      .then((isConnected) => {
-        return isConnected
-      }, (reason) => {
-        return reason;
-      })
-      .catch((error) => {
-        console.log(error);
-        dispatch(setConnectionStatus(config.connectionStatus.DISCONNECTED));
-      });
+    .then((isConnected) => {
+      return isConnected
+    }, (reason) => {
+      return reason;
+    })
+    .catch((error) => {
+      console.log(error);
+      dispatch(setConnectionStatus(config.connectionStatus.DISCONNECTED));
+    });
   }
 }
 

@@ -12,11 +12,9 @@ import config from '../redux/config';
 import { bindActionCreators } from 'redux';
 import { setGraphViewDimensions } from '../redux/actions';
 import Button from '../components/Button';
-import PopUp from '../components/PopUp';
-import PopUpLink from '../components/PopUpLink';
-import ElectrodSelector from '../components/ElectrodeSelector';
+import { MediaQueryStyleSheet }  from 'react-native-responsive';
+
 //Interfaces. For advanced elements such as graphs
-import ArtefactRemovalGraphView from '../interface/ArtefactRemovalGraphView';
 import SandboxGraph from '../components/SandboxGraph';
 import ElectrodeSelector from '../components/ElectrodeSelector';
 
@@ -52,12 +50,12 @@ class Sandbox extends Component {
     return (
       <View style={styles.container}>
 
-          <SandboxGraph style={{flex:1}}
-                        visibility={this.props.isVisible}
-                        channelOfInterest={this.state.channelOfInterest}
-                        graphType={this.state.graphType}
-                        dimensions={{x: 0, y: 0, width: 360, height: 413}}
-          />
+        <SandboxGraph style={{flex:1}}
+                      visibility={this.props.isVisible}
+                      channelOfInterest={this.state.channelOfInterest}
+                      graphType={this.state.graphType}
+                      dimensions={{x: 0, y: 0, width: 360, height: 413}}
+        />
 
         <View style={{flexDirection: 'row'}}>
           <ElectrodeSelector channelOfInterest={(channel) => this.setState({channelOfInterest: channel})}/>
@@ -78,18 +76,23 @@ class Sandbox extends Component {
 
 export default connect(mapStateToProps, mapDispatchToProps)(Sandbox);
 
-const styles = StyleSheet.create({
+const styles = MediaQueryStyleSheet.create(
+  // Base styles
+  {
+    container: {
+      marginTop: 55,
+      flex: 1,
+      justifyContent: 'space-around',
+      alignItems: 'stretch',
+    },
 
-  container: {
-    marginTop: 55,
-    flex: 1,
-    justifyContent: 'space-around',
-    alignItems: 'stretch',
+    nextButtonContainer: {
+      padding: 20,
+      alignItems: 'stretch',
+      justifyContent: 'space-around',
+    }
   },
+  // Responsive styles
+  {
 
-  nextButtonContainer: {
-    padding: 20,
-    alignItems: 'stretch',
-    justifyContent: 'space-around',
-  }
-});
+  });

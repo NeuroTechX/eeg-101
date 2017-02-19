@@ -59,7 +59,7 @@ public class GraphManager extends SimpleViewManager<EEGGraph> {
     public void setChannelOfInterest(EEGGraph graph, @Nullable int channel) {
         graph.setChannelOfInterest(channel);
     }
-    
+
     // Bridge function for receiving 'start threads' and 'stop threads' commands from the
     // dispatchViewManagerCommand() method in JS. Currently, only used in stopping threads when
     // switching between graphs in the SandboxGraph component    @Override

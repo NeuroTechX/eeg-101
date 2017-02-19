@@ -10,6 +10,8 @@ import{
   Actions,
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import { MediaQueryStyleSheet }  from 'react-native-responsive';
+
 
 //Interfaces. For advanced elements such as graphs
 import WaveGraphView from '../interface/WaveGraphView';
@@ -45,7 +47,7 @@ class SlideNine extends Component {
     return (
       <View style={styles.container}>
 
-        <WaveGraphView dimensions ={this.props.dimensions} visibility={this.props.isVisible} channelOfInterest={this.state.channelOfInterest}/>
+        <WaveGraphView dimensions={this.props.dimensions} visibility={this.props.isVisible} />
 
         <Text style={styles.currentTitle}>BRAIN WAVES</Text>
 
@@ -67,7 +69,7 @@ class SlideNine extends Component {
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>Harnessing Brain Waves</Text>
-            <Text style={[styles.body, {fontSize: 17}]}>Notice how the power in a given frequency band changes over time. It is possible to harness these changes to create a simple <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>Brain-Computer Interface (BCI)</PopUpLink>.
+            <Text style={styles.body}>Notice how the power in a given frequency band changes over time. It is possible to harness these changes to create a simple <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>Brain-Computer Interface (BCI)</PopUpLink>.
             </Text>
             <Button onPress={Actions.Sandbox}>NEXT</Button>
           </View>
@@ -101,59 +103,80 @@ class SlideNine extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+const styles = MediaQueryStyleSheet.create(
+  // Base styles
+  {
+    currentTitle: {
+      marginLeft: 20,
+      marginTop: 10,
+      fontSize: 13,
+      fontFamily: 'Roboto-Medium',
+      color: '#6CCBEF',
+    },
 
-  currentTitle: {
-    marginLeft: 20,
-    marginTop: 10,
-    fontSize: 13,
-    fontFamily: 'Roboto-Medium',
-    color: '#6CCBEF',
+    body: {
+      fontFamily: 'Roboto-Light',
+      color: '#484848',
+      fontSize: 19,
+    },
+
+    container: {
+      marginTop: 55,
+      flex: 1,
+      justifyContent: 'space-around',
+      alignItems: 'stretch',
+    },
+
+    graphContainer: {
+      backgroundColor: 'white',
+      flex: 4,
+      justifyContent: 'center',
+      alignItems: 'stretch',
+    },
+
+    header: {
+      fontFamily: 'Roboto-Bold',
+      color: '#484848',
+      fontSize: 20,
+    },
+
+    viewPager: {
+      flex: 4,
+    },
+
+    pageStyle: {
+      padding: 20,
+      alignItems: 'stretch',
+      justifyContent: 'space-around',
+    },
+
+    image: {
+      flex: 1,
+      width: null,
+      height: null,
+    },
   },
+  // Responsive styles
+  {
+    "@media (min-device-height: 700)": {
 
-  body: {
-    fontFamily: 'Roboto-Light',
-    color: '#484848',
-    fontSize: 19,
-  },
+      viewPager: {
+        flex: 3,
+      },
 
-  container: {
-    marginTop:55,
-    flex: 1,
-    justifyContent: 'space-around',
-    alignItems: 'stretch',
-  },
+      header: {
+        fontSize: 30,
+      },
 
-  graphContainer: {
-    backgroundColor: 'white',
-    flex: 4,
-    justifyContent: 'center',
-    alignItems: 'stretch',
-  },
+      currentTitle: {
+        fontSize: 20,
+      },
 
-  header: {
-    fontFamily: 'Roboto-Bold',
-    color: '#484848',
-    fontSize: 20,
-  },
-
-
-  viewPager: {
-    flex: 4,
-  },
-
-  pageStyle: {
-    padding: 20,
-    alignItems: 'stretch',
-    justifyContent: 'space-around',
-  },
-
-  image: {
-    flex: 1,
-    width: null,
-    height: null,
-  },
-
-});
+      body: {
+        fontSize: 25,
+      }
+    }
+  }
+);
 
 export default connect(mapStateToProps)(SlideNine);

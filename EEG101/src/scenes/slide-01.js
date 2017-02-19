@@ -17,6 +17,7 @@ import { setGraphViewDimensions } from '../redux/actions';
 import Button from '../components/Button';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
+import { MediaQueryStyleSheet} from 'react-native-responsive';
 
 //Interfaces. For advanced elements such as graphs
 import GraphView from '../interface/GraphView';
@@ -131,8 +132,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(SlideOne);
 
 // Darker: #72C2F1
 // Light: #97D2FC
-const styles = StyleSheet.create({
-
+const styles = MediaQueryStyleSheet.create(
+  // Base styles
+  {
   pageStyle: {
     padding: 15,
     alignItems: 'stretch',
@@ -177,4 +179,25 @@ const styles = StyleSheet.create({
     flex: 4,
   },
 
-});
+},
+  // Responsive styles
+  {
+    "@media (min-device-height: 700)": {
+
+      viewPager: {
+        flex: 3,
+      },
+
+      header: {
+        fontSize: 30,
+      },
+
+      currentTitle: {
+        fontSize: 20,
+      },
+
+      body: {
+        fontSize: 25,
+      }
+    }
+  });
