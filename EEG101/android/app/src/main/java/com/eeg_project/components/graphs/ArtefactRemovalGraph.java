@@ -108,7 +108,7 @@ public class ArtefactRemovalGraph extends FrameLayout {
         circBufferPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
         // Create line formatter with set color
-        lineFormatter = new FastLineAndPointRenderer.Formatter(Color.rgb(255, 255, 255), null, null, null);
+        lineFormatter = new FastLineAndPointRenderer.Formatter(Color.WHITE, null, null, null);
         artefactLineFormatter = new FastLineAndPointRenderer.Formatter(Color.rgb(241, 116, 116),
                 null,
                 null,

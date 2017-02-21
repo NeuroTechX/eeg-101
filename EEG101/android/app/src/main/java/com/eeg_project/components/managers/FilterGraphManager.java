@@ -43,8 +43,7 @@ public class FilterGraphManager extends SimpleViewManager<FilterGraph> {
     public void setVisibility(FilterGraph graph, @Nullable boolean isVisible) {
         if (isVisible){
             graph.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             graph.setVisibility(View.INVISIBLE);
         }
     }

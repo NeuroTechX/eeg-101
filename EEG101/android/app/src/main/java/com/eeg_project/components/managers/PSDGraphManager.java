@@ -41,8 +41,7 @@ public class PSDGraphManager extends SimpleViewManager<PSDGraph> {
     public void setVisibility(PSDGraph graph, @Nullable boolean isVisible) {
         if (isVisible){
             graph.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             graph.setVisibility(View.INVISIBLE);
         }
     }

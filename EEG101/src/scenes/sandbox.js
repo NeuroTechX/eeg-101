@@ -12,6 +12,7 @@ import config from '../redux/config';
 import { bindActionCreators } from 'redux';
 import { setGraphViewDimensions } from '../redux/actions';
 import Button from '../components/Button';
+import SandboxButton from '../components/SandboxButton';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
 
 //Interfaces. For advanced elements such as graphs
@@ -40,35 +41,67 @@ class Sandbox extends Component {
 
     // Initialize States
     this.state = {
-      dimensions: {x: 0, y: 0, width: 0, height: 0},
       graphType: config.graphType.EEG,
       channelOfInterest: 1,
     };
   }
 
   render() {
+
+    switch (this.state.graphType) {
+      case config.graphType.EEG:
+        infoString = 'Single-channel EEG displays raw, unprocessed data from one electrode';
+        break;
+
+      case config.graphType.FILTER:
+        infoString = 'Low-pass filtering removes high frequency noise';
+        break;
+
+      case config.graphType.WAVES:
+        infoString ='The PSD curve represents the strength of different frequencies in the EEG';
+        break;
+    }
+
     return (
       <View style={styles.container}>
-
-        <SandboxGraph style={{flex:1}}
-                      visibility={this.props.isVisible}
-                      channelOfInterest={this.state.channelOfInterest}
-                      graphType={this.state.graphType}
-                      dimensions={{x: 0, y: 0, width: 360, height: 413}}
-        />
-
-        <View style={{flexDirection: 'row'}}>
-          <ElectrodeSelector channelOfInterest={(channel) => this.setState({channelOfInterest: channel})}/>
-          <Button onPress={() => this.setState({graphType: config.graphType.EEG})}>EEG</Button>
-          <Button onPress={() => this.setState({graphType: config.graphType.FILTER})}>Filter</Button>
-          <Button onPress={() => this.setState({graphType: config.graphType.PSD})}>PSD</Button>
-          <Button onPress={() => this.setState({graphType: config.graphType.WAVE})}>Wave</Button>
+        <View style={styles.graphContainer} onLayout={(event) => {
+          // Captures the width and height of the graphContainer to determine overlay positioning properties in PSDGraph
+          let {x, y, width, height} = event.nativeEvent.layout;
+          this.props.setGraphViewDimensions({x: x, y: y, width: width, height: height})
+        }}>
+          <SandboxGraph style={{flex:1}}
+                        visibility={this.props.isVisible}
+                        channelOfInterest={this.state.channelOfInterest}
+                        graphType={this.state.graphType}
+                        dimensions={this.props.dimensions}
+          />
         </View>
 
-        <View style={styles.nextButtonContainer}>
+        <Text style={styles.currentTitle}>SANDBOX</Text>
+
+        <View style={styles.pageContainer}>
+          <View style={styles.infoContainer}>
+            <View style={styles.buttonContainer}>
+              <SandboxButton onPress={() => this.setState({graphType: config.graphType.EEG})}
+                             active={this.state.graphType === config.graphType.EEG}>Raw</SandboxButton>
+              <SandboxButton onPress={() => this.setState({graphType: config.graphType.FILTER})}
+                             active={this.state.graphType === config.graphType.FILTER}>Filtered</SandboxButton>
+              <SandboxButton onPress={() => this.setState({graphType: config.graphType.WAVES})}
+                             active={this.state.graphType === config.graphType.WAVES}>PSD</SandboxButton>
+            </View>
+
+            <View style={styles.textContainer}>
+              <Text style={styles.body}>
+              {infoString}
+              </Text>
+            </View>
+
+            <ElectrodeSelector channelOfInterest={(channel) => this.setState({channelOfInterest: channel})}/>
+
+          </View>
+
           <Button onPress={Actions.End}>END</Button>
         </View>
-
       </View>
     );
   }
@@ -80,19 +113,67 @@ const styles = MediaQueryStyleSheet.create(
   // Base styles
   {
     container: {
-      marginTop: 55,
       flex: 1,
       justifyContent: 'space-around',
       alignItems: 'stretch',
     },
 
-    nextButtonContainer: {
-      padding: 20,
+    graphContainer: {
+      flex: 5,
+      justifyContent: 'center',
       alignItems: 'stretch',
-      justifyContent: 'space-around',
-    }
+    },
+
+    currentTitle: {
+      marginLeft: 20,
+      marginTop: 10,
+      fontSize: 13,
+      fontFamily: 'Roboto-Medium',
+      color: '#6CCBEF',
+    },
+
+    buttonContainer: {
+      flex: 1,
+      alignItems: 'flex-start',
+      justifyContent: 'space-between',
+    },
+
+    body: {
+      padding: 5,
+      fontFamily: 'Roboto-Light',
+      color: '#484848',
+      fontSize: 17,
+    },
+
+    pageContainer: {
+      flex: 4,
+      marginTop: -15,
+      paddingLeft: 15,
+      paddingRight: 15,
+      paddingBottom: 15,
+    },
+
+    infoContainer: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+
+    textContainer: {
+      flex: 2,
+    },
+
   },
   // Responsive styles
   {
+    "@media (min-device-height: 700)": {
+      currentTitle: {
+        fontSize: 20,
+      },
 
+      body: {
+        fontSize: 25,
+      }
+    }
   });

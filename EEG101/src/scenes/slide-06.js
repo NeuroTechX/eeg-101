@@ -54,7 +54,7 @@ class SlideSix extends Component {
           
           <View style={styles.pageStyle}>
             <Text style={styles.header}>Removing noise</Text>
-            <Text style={styles.body}>After the EEG has been divided into epochs, those that contain a <PopUpLink onPress={() => this.setState({popUpVisible: true})}> significant</PopUpLink> amount of noise can be ignored.
+            <Text style={styles.body}>After the EEG has been divided into epochs, those that contain a <PopUpLink onPress={() => this.setState({popUpVisible: true})}>significant</PopUpLink> amount of noise can be ignored.
             </Text>
             <Button onPress={Actions.SlideSeven}>NEXT</Button>
           </View>

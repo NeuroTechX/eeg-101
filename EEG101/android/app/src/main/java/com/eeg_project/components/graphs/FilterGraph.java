@@ -66,7 +66,29 @@ public class FilterGraph extends FrameLayout {
     // -----------------------------------------------------------------------
     // Bridge functions (can be called from JS by setting props)
     public void setChannelOfInterest(int channel) {
+
         channelOfInterest = channel;
+        dataSeries.clear();
+        /* Uncomment to make plot change color based on selected electrode
+        eegPlot.getGraph().getBackgroundPaint().setColor(Color.rgb(255,255,255));
+
+        // Set color based on selected channel
+        switch(channel) {
+            case 1:
+                lineFormatter.getLinePaint().setColor(Color.rgb(232,106,33));
+                break;
+            case 2:
+                lineFormatter.getLinePaint().setColor(Color.rgb(0,153,135));
+                break;
+            case 3:
+                lineFormatter.getLinePaint().setColor(Color.rgb(86,92,155));
+                break;
+            case 4:
+                lineFormatter.getLinePaint().setColor(Color.rgb(209,14,137));
+                break;
+
+        }
+        */
     }
 
     // -----------------------------------------------------------------------
@@ -149,7 +171,7 @@ public class FilterGraph extends FrameLayout {
         else if (dataThread == null || !dataThread.isAlive()) {
             startDataThread();
             startRenderingThread();
-            dataListener = new FilterGraph.museDataListener();
+            dataListener = new museDataListener();
             // Register a listener to receive data packets from Muse. Second argument defines which type(s) of data will be transmitted to listener
             appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         }

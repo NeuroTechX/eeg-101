@@ -5,6 +5,7 @@ import {
   View,
   Picker,
   Image,
+  TouchableOpacity
 } from 'react-native';
 import{
   Actions,
@@ -17,6 +18,7 @@ import config from '../redux/config'
 
 // Components. For JS UI elements
 import WhiteButton from '../components/WhiteButton';
+
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
@@ -38,9 +40,24 @@ function  mapStateToProps(state) {
           <Text style={styles.instructions}>Make sure the Muse is properly fit to your head</Text>
           <Text style={styles.body}>Fit the earpieces snugly behind your ears and adjust the headband so that it rests mid forehead. Clear any hair that might prevent the device from making contact with your skin.</Text>
         </View>
+
+        <TouchableOpacity onPress={Actions.Sandbox}>
+          <View style={{borderColor: 'white',
+            borderWidth: 1,
+            alignSelf: 'center',
+            margin: 5,
+            padding: 5,
+          }}>
+            <Text style={{color: 'white',
+              fontFamily: 'Roboto-Bold',
+              fontSize: 15,
+            }}>SANDBOX MODE</Text>
+          </View>
+        </TouchableOpacity>
+
         
         <View style={styles.buttonContainer}>
-          <WhiteButton onPress={Actions.SlideOne}>BEGIN</WhiteButton>
+          <WhiteButton onPress={Actions.SlideOne}>BEGIN LESSON</WhiteButton>
         </View>
       </View>
     );

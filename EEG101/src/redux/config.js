@@ -14,7 +14,8 @@ export default {
     EEG: 'EEG',
     FILTER: 'FILTER',
     PSD: 'PSD',
-    WAVE: 'WAVE'
+    WAVES: 'WAVES',
+    ARTEFACT: 'ARTEFACT'
   }
 
 }

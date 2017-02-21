@@ -157,7 +157,8 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     logo: {
-    width: 60,
+      width: 60,
+      height: 40,
     },
 
     title: {
@@ -205,6 +206,7 @@ const styles = MediaQueryStyleSheet.create(
         paddingRight: 50,
         fontSize: 20,
       },
+
       swipeImage: {
         margin: 50,
         height: 75,
@@ -217,7 +219,7 @@ const styles = MediaQueryStyleSheet.create(
       },
 
       buttonBox: {
-        margin: 100,
+        padding: 20,
       }
     }
   });

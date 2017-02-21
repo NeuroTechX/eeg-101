@@ -69,7 +69,6 @@ class EEG_Project extends Component {
             <Scene component={ConnectorTwo} key='ConnectorTwo' hideNavBar={true}/>
             <Scene component={ConnectorThree} key='ConnectorThree' hideNavBar={true}/>
             <Scene component={SlideOne} key='SlideOne' previous='CONNECTION' hideNavBar={false}/>
-            <Scene component={Sandbox} key='Sandbox' previous='BLAH' hideNavBar={false}/>
             <Scene component={SlideTwo} key='SlideTwo'previous='INTRODUCTION'/>
             <Scene component={SlideThree} key='SlideThree'previous='PHYSIOLOGY'/>
             <Scene component={SlideFour} key='SlideFour' previous='HARDWARE'/>
@@ -78,7 +77,7 @@ class EEG_Project extends Component {
             <Scene component={SlideSeven} key='SlideSeven' previous='ARTEFACT REMOVAL'/>
             <Scene component={SlideEight} key='SlideEight' previous='FEATURE EXTRACTION'/>
             <Scene component={SlideNine} key='SlideNine' previous='PSD'/>
-            <Scene component={Sandbox} key='Sandbox' previous='BRAIN WAVES'/>
+            <Scene component={Sandbox} key='Sandbox' previous='LESSON' hideNavBar={true}/>
             <Scene component={End} key='End' previous='SANDBOX'/>
           </Scene>
         </RouterWithRedux>

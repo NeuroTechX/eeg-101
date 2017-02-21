@@ -33,8 +33,7 @@ public class ArtefactRemovalGraphManager extends SimpleViewManager<ArtefactRemov
     public void setVisibility(ArtefactRemovalGraph graph, @Nullable boolean isVisible) {
         if (isVisible){
             graph.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             graph.setVisibility(View.INVISIBLE);
         }
     }

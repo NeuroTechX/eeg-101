@@ -6,8 +6,8 @@ import { requireNativeComponent, View } from 'react-native';
 const iface = {
   name: 'ArtefactRemovalGraphView',
   propTypes: {
-        visibility: PropTypes.bool,
-        channelOfInterest: PropTypes.number,
+    visibility: PropTypes.bool,
+    channelOfInterest: PropTypes.number,
     ...View.propTypes // include the default view properties
   },
 };

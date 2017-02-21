@@ -55,7 +55,7 @@ class SlideFour extends Component {
         </View>
         <View style={styles.halfGraphContainer}>
           <CircBufferGraphView style={{flex:1}} visibility={this.props.isVisible}/>
-          <Text style={styles.halfGraphLabelText}>Low Pass Filter</Text>
+          <Text style={styles.halfGraphLabelText}>Low-Pass Filter</Text>
         </View>
 
           <Text style={styles.currentTitle}>FILTERING</Text>

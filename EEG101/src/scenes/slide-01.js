@@ -66,40 +66,41 @@ class SlideOne extends Component {
 
         <Text style={styles.currentTitle}>INTRODUCTION</Text>
 
-        <ViewPagerAndroid //Allows us to swipe between blocks
-          style={styles.viewPager}
-          initialPage={0}>
+          <ViewPagerAndroid //Allows us to swipe between blocks
+            style={styles.viewPager}
+            initialPage={0}>
 
-          <View style={styles.pageStyle}>
-            <Text style={styles.header}>Your brain produces electricity</Text>
-            <Text style={styles.body}>
-              Using the <PopUpLink onPress={() => this.setState({popUp1Visible: true})}>EEG</PopUpLink> device that you are wearing, we can detect the electrical activity of your brain.
-            </Text>
-            <Image source={require('../assets/swipeicon.png')} resizeMode='contain' style={{height: 40, alignSelf: 'center'}}/>
-          </View>
+            <View style={styles.pageStyle}>
+              <Text style={styles.header}>Your brain produces electricity</Text>
+              <Text style={styles.body}>
+                Using the <PopUpLink onPress={() => this.setState({popUp1Visible: true})}>EEG</PopUpLink> device that you are wearing, we can detect the electrical activity of your brain.
+              </Text>
+              <Image source={require('../assets/swipeicon.png')} resizeMode='contain' style={styles.swipeImage}/>
+            </View>
 
-          <View style={styles.pageStyle}>
-            <Text style={styles.header}>Try blinking your eyes...</Text>
-            <Text style={styles.body}>Does the signal change?</Text>
-            <Text style={styles.body}>Eye movements create <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>noise</PopUpLink> in the EEG signal.
-            </Text>
-          </View>
+            <View style={styles.pageStyle}>
+              <Text style={styles.header}>Try blinking your eyes...</Text>
+              <Text style={styles.body}>Does the signal change?</Text>
+              <Text style={styles.body}>Eye movements create <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>noise</PopUpLink> in the EEG signal.
+              </Text>
+            </View>
 
-          <View style={styles.pageStyle}>
-            <Text style={styles.header}>Try thinking about a cat... </Text>
-            <Text style={styles.body}>Does the signal change?</Text>
-            <Text style={styles.body}>Although EEG can measure overall brain activity, it’s not capable of <PopUpLink onPress={() => this.setState({popUp3Visible: true})}>reading minds.</PopUpLink>
-            </Text>
-          </View>
+            <View style={styles.pageStyle}>
+              <Text style={styles.header}>Try thinking about a cat... </Text>
+              <Text style={styles.body}>Does the signal change?</Text>
+              <Text style={styles.body}>Although EEG can measure overall brain activity, it’s not capable of <PopUpLink onPress={() => this.setState({popUp3Visible: true})}>reading minds.</PopUpLink>
+              </Text>
+            </View>
 
-          <View style={styles.pageStyle}>
-            <Text style={styles.header}>Now try closing your eyes for 10 seconds</Text>
-            <Text style={styles.body}>You may notice a change in your signal due to an increase in <PopUpLink onPress={() => this.setState({popUp4Visible: true})}>alpha waves.</PopUpLink>
-            </Text>
-            <Button onPress={Actions.SlideTwo}>NEXT</Button>
-          </View>
+            <View style={styles.pageStyle}>
+              <Text style={styles.header}>Now try closing your eyes for 10 seconds</Text>
+              <Text style={styles.body}>You may notice a change in your signal due to an increase in <PopUpLink onPress={() => this.setState({popUp4Visible: true})}>alpha waves.</PopUpLink>
+              </Text>
+              <Button onPress={Actions.SlideTwo}>NEXT</Button>
+            </View>
 
-        </ViewPagerAndroid>
+          </ViewPagerAndroid>
+
 
         <PopUp onClose={() => this.setState({popUp1Visible: false})} visible={this.state.popUp1Visible}
                title='What exactly is EEG?' image={require('../assets/hansberger.jpg')}>
@@ -135,51 +136,62 @@ export default connect(mapStateToProps, mapDispatchToProps)(SlideOne);
 const styles = MediaQueryStyleSheet.create(
   // Base styles
   {
-  pageStyle: {
-    padding: 15,
-    alignItems: 'stretch',
-    justifyContent: 'space-around',
+    pageStyle: {
+      padding: 15,
+      alignItems: 'stretch',
+      justifyContent: 'space-around',
+    },
+
+    currentTitle: {
+      marginLeft: 20,
+      marginTop: 10,
+      fontSize: 13,
+      fontFamily: 'Roboto-Medium',
+      color: '#6CCBEF',
+    },
+
+    body: {
+      fontFamily: 'Roboto-Light',
+      color: '#484848',
+      fontSize: 19,
+    },
+
+    container: {
+      marginTop:55,
+      flex: 1,
+      justifyContent: 'space-around',
+      alignItems: 'stretch',
+    },
+
+    graphContainer: {
+      flex: 4,
+      justifyContent: 'center',
+      alignItems: 'stretch',
+    },
+
+      sandboxButtonContainer: {
+        position: 'absolute',
+        right: 5,
+        top: 5,
+      },
+
+    header: {
+      fontFamily: 'Roboto-Bold',
+      color: '#484848',
+      fontSize: 20,
+    },
+
+    viewPager: {
+      borderWidth:1 ,
+      flex: 4,
+    },
+
+    swipeImage: {
+      height: 40,
+      alignSelf: 'center'
+    }
+
   },
-
-  currentTitle: {
-    marginLeft: 20,
-    marginTop: 10,
-    fontSize: 13,
-    fontFamily: 'Roboto-Medium',
-    color: '#6CCBEF',
-  },
-
-  body: {
-    fontFamily: 'Roboto-Light',
-    color: '#484848',
-    fontSize: 19,
-  },
-
-  container: {
-    marginTop:55,
-    flex: 1,
-    justifyContent: 'space-around',
-    alignItems: 'stretch',
-  },
-
-  graphContainer: {
-    flex: 4,
-    justifyContent: 'center',
-    alignItems: 'stretch',
-  },
-
-  header: {
-    fontFamily: 'Roboto-Bold',
-    color: '#484848',
-    fontSize: 20,
-  },
-
-
-  viewPager: {
-    flex: 4,
-  },
-
-},
   // Responsive styles
   {
     "@media (min-device-height: 700)": {
@@ -198,6 +210,11 @@ const styles = MediaQueryStyleSheet.create(
 
       body: {
         fontSize: 25,
-      }
+      },
+
+      swipeImage: {
+        height: 75,
+        width: 75,
+      },
     }
   });
