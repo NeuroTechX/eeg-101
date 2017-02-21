@@ -19,7 +19,7 @@ import GraphView from '../interface/GraphView';
 import FilterGraphView from '../interface/CircBufferGraphView';
 import PSDGraphView from '../interface/PSDGraphView';
 import WaveGraphView from '../interface/WaveGraphView';
-import ArtefactRemovalGraphView from '../interface/ArtefactRemovalGraphView';
+
 
 export default class SandboxGraph extends Component {
   constructor(props) {
@@ -72,12 +72,6 @@ export default class SandboxGraph extends Component {
                          ref={(ref) => {if(ref !== null) {this.graphRef = ref.getChildRef()}}}
                          channelOfInterest={this.props.channelOfInterest}
                          dimensions={this.props.dimensions}/>
-        );
-      case config.graphType.ARTEFACT:
-        return (
-          <ArtefactRemovalGraphView style={{flex:1}} visibility={this.props.visibility}
-                         ref={(ref) => this.graphRef = ref}
-                         channelOfInterest={this.props.channelOfInterest}/>
         );
     }
   }

@@ -53,7 +53,7 @@ class SlideEight extends Component {
 
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>Power Spectral Density</Text>
+            <Text style={styles.header}>Power Spectral Density (PSD)</Text>
             <Text style={styles.body}>When we apply the Fourier Transform to the EEG, we obtain a measure of signal strength at given frequencies, represented in units of <PopUpLink onPress={() => this.setState({popUp1Visible: true})}>power.</PopUpLink>
             </Text>
             <Button onPress={Actions.SlideNine}>NEXT</Button>
