@@ -25,7 +25,7 @@ import java.util.List;
 
 // React Native module that handles connecting to Muses with LibMuse functions
 // Calling getAndConnectToDevice from JS handles entire connection process.
-public class ConnectorModule extends ReactContextBaseJavaModule {
+public class  ConnectorModule extends ReactContextBaseJavaModule {
 
     // ----------------------------------------------------------
     // Variables
@@ -141,7 +141,6 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
                 sendEvent(getReactApplicationContext(), "DISCONNECTED", Arguments.createMap());
                 Thread.sleep(1500);
                 availableMuses = manager.getMuses();
-
 
                 if (availableMuses.isEmpty() || tryCount >= 4) {
                     noMusesDetected();

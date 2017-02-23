@@ -18,10 +18,8 @@ import javax.annotation.Nullable;
 
 // GraphManager class manages EEGGraph objects.
 public class FilterGraphManager extends SimpleViewManager<FilterGraph> {
-    private final static String REACT_CLASS = "CIRC_BUFFER_GRAPH";
+    private final static String REACT_CLASS = "FILTER_GRAPH";
     FilterGraph bufferGraph;
-    public static final int COMMAND_START_THREADS = 1;
-    public static final int COMMAND_STOP_THREADS = 2;
 
 
     @Override
@@ -54,6 +52,11 @@ public class FilterGraphManager extends SimpleViewManager<FilterGraph> {
         graph.setChannelOfInterest(channel);
     }
 
+    // Bridge function for channelOfInterestProp. Calls setChannelOfInterest in EEGGraph
+    @ReactProp(name = "filterType")
+    public void setFilterType(FilterGraph graph, @Nullable String filterType) {
+        graph.setFilterType(filterType);
+    }
 
     // Bridge function for receiving 'start threads' and 'stop threads' commands from the
     // dispatchViewManagerCommand() method in JS. Currently, only used in stopping threads when

@@ -1,6 +1,11 @@
 package com.eeg_project.components.signal;
 
-//import java.util.Arrays; // For printing arrays when debugging
+import biz.source_code.dsp.filter.FilterPassType;
+import biz.source_code.dsp.filter.FilterCharacteristicsType;
+import biz.source_code.dsp.filter.IirFilterCoefficients;
+import biz.source_code.dsp.filter.IirFilterDesignFisher;
+
+// import java.util.Arrays; // For printing arrays when debugging
 
 // Contains transform function for performing bandpass filter of EEG data. Also contains python-generated coefficients
 public class Filter {
@@ -9,61 +14,114 @@ public class Filter {
     // Variables
     private String filterType;
     private double fs;
-    private double[] coeffB;
-    private double[] coeffA;
+    private double[] b;
+    private double[] a;
     private int nB;
     private int nA;
 
     // ------------------------------------------------------------------------
     // Constructor
 
-    // Sampling frequency input is currently unused but may be used in the future to generate filter coefficient matrices automatically
-    public Filter(double samplingFrequency, String inputFilterType) {
+    public Filter(double samplingFrequency, String inputFilterType, int filterOrder, double fc1, double fc2) {
 
         filterType = inputFilterType;
+        FilterCharacteristicsType filterCharacteristicsType = FilterCharacteristicsType.butterworth;
 
-        if (filterType.contains("alpha")) { // Alpha bandpass
-            // coeffB = {};
-            // coeffA = {};
-        } else if (filterType.contains("lowpass")) { // 2-36 Hz bandpass
+        FilterPassType filterPassType = FilterPassType.lowpass;
 
-            // Coefficients for 36hz lowpass filter generated in python
-            coeffB = new double[]{0.0098570847698665753355840024596545845270156860351562500000000000, 0.0492854238493328766779200122982729226350784301757812500000000000, 0.0985708476986657533558400245965458452701568603515625000000000000, 0.0985708476986657533558400245965458452701568603515625000000000000, 0.0492854238493328766779200122982729226350784301757812500000000000, 0.0098570847698665753355840024596545845270156860351562500000000000};
-            coeffA = new double[]{1.0000000000000000000000000000000000000000000000000000000000000000, -1.7049690366758873949493136024102568626403808593750000000000000000, 1.6581363186364945772055534689570777118206024169921875000000000000, -0.8538305269449562029393518969300203025341033935546875000000000000, 0.2454451058426845577731256753395427949726581573486328125000000000, -0.0293551482226050569623865271751128602772951126098632812500000000};
+        if (filterType.contains("lowpass")) {
+            filterPassType = FilterPassType.lowpass;
 
-            /*
-            // These coefficients were generated with scipy's `signal.butter` function for fs=220
-            coeffB = new double[]{0.0078257670268340635832959861772906151600182056427001953125000000, 0.0000000000000000000000000000000000000000000000000000000000000000, -0.0391288351341703144470329789328388869762420654296875000000000000, 0.0000000000000000000000000000000000000000000000000000000000000000, 0.0782576702683406288940659578656777739524841308593750000000000000, 0.0000000000000000000000000000000000000000000000000000000000000000, -0.0782576702683406288940659578656777739524841308593750000000000000, 0.0000000000000000000000000000000000000000000000000000000000000000, 0.0391288351341703144470329789328388869762420654296875000000000000, 0.0000000000000000000000000000000000000000000000000000000000000000, -0.0078257670268340635832959861772906151600182056427001953125000000};
-            coeffA = new double[]{1.0000000000000000000000000000000000000000000000000000000000000000, -6.6668777100381477751511738460976630449295043945312500000000000000, 20.102068981754037224618514301255345344543457031250000000000000000, -36.3714748273075940687704132869839668273925781250000000000000000000, 44.0208829591519616997175035066902637481689453125000000000000000000, -37.3825112968389277057212893851101398468017578125000000000000000000, 22.5663716670588918589146487647667527198791503906250000000000000000, -9.5478386288525811664840148296207189559936523437500000000000000000, 2.7081430610461021402102232968900352716445922851562500000000000000, -0.4653152296484516781127638296311488375067710876464843750000000000, 0.0365512213384927495130050090210716007277369499206542968750000000};
-            */
-            nB = coeffB.length;
-            nA = coeffA.length;
+        } else if (filterType.contains("highpass")) {
+            filterPassType = FilterPassType.highpass;
+
+        } else if (filterType.contains("bandstop")) {
+            filterPassType = FilterPassType.bandstop;
+        
+        } else if (filterType.contains("bandpass")) {
+            filterPassType = FilterPassType.bandpass;
+
         } else {
-            System.out.println("Filter type not recognized!");
-        }
+            throw new RuntimeException("Filter type not recognized.");
+        }  
+
+        double fc1Norm = fc1/samplingFrequency;
+        double fc2Norm = fc2/samplingFrequency;
+        IirFilterCoefficients coeffs = IirFilterDesignFisher.design(filterPassType, filterCharacteristicsType, filterOrder, 0., fc1Norm, fc2Norm);
+
+        b = coeffs.b;
+        a = coeffs.a;
+
+        nB = b.length;
+        nA = a.length;
 
     }
 
     // ---------------------------------------------------------------------
     // Methods
-    // Performs filter difference equation
-    // (b*x - a*y)/a[0]
-    public double[] transform(double[][] x, double[][] y) {
+    public double[] transform(double x, double[] z) {
+        // This function implements the Discrete Form II Transposed of 
+        // a linear filter.
+        //
+        // Args:
+        //  x: the current sample to be filtered
+        //  z: the internal state of the filter
+        //
+        // Returns:
+        //  the updated internal state of the filter, with the new 
+        //  filtered value in the last position. This is a hack
+        //  that allows to pass both the internal state and the 
+        //  output of the filter at once.
 
-        int nbCh = x[0].length;
-        double[] filtSum = new double[nbCh];
+        z[z.length - 1] = 0;
+        double y = b[0]*x + z[0];
 
-        // Filter channel by channel, and sample by sample
-        for (int c = 0; c < x[0].length; c++) {
-            filtSum[c] = coeffB[0]*x[nB-1][c];
-            for (int i = 1; i < nB; i++) {
-                filtSum[c] += coeffB[i]*x[nB-i-1][c] - coeffA[i]*y[nA-i-1][c];
-            }
-            filtSum[c] /= coeffA[0];
+        for (int i = 1; i < nB; i++) {
+            z[i-1] = b[i]*x + z[i] - a[i]*y;
+         }
+
+        z[z.length - 1] = y;
+
+        return z;
+
+    }
+
+    public double[][] transform(double[] x, double[][] z) {
+        // This function implements the Discrete Form II Transposed of 
+        // a linear filter for multichannel signals
+        //
+        // Args:
+        //  x: the current channel samples to be filtered
+        //  z: the internal state of the filter for each channels [nbCh,nbPoints]
+        //
+        // Returns:
+        //  the updated internal states of the filter, with the new 
+        //  filtered values in the last position. [nbCh,nbPoints]
+        //  This is a hack that allows to pass both the internal state and the 
+        //  output of the filter at once.
+
+        // double[] zNew = new double[z[0].length];
+
+        for (int i = 0; i < x.length; i++) { 
+            z[i] = transform(x[i],z[i]);
+            // System.arraycopy(z[i], 0, zNew, 0, z[i].length);
+            // zNew = transform(x[i],zNew);
+            // System.arraycopy(zNew, 0, z[i], 0, z[i].length);
         }
 
-        return filtSum;
+        return z;
+        
+    }
 
+    public static double[] extractFilteredSamples(double[][] z) {
+        // Utility function to extract the filtered samples from the returned array
+        // of transform()
+        
+        double[] filtSignal = new double[z.length];
+        for (int i = 0; i < z.length; i++) {
+            filtSignal[i] = z[i][z[0].length - 1];
+        }
+        return filtSignal;
     }
 
     public int getNB() {

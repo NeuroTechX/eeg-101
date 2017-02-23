@@ -3,7 +3,6 @@ package com.eeg_project.components.graphs;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -183,7 +182,7 @@ public class EEGGraph extends FrameLayout {
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
         eegPlot.setDrawingCacheEnabled(true);
-        //onVisibilityChanged(this, View.VISIBLE);
+        onVisibilityChanged(this, View.VISIBLE);
     }
 
     @Override
@@ -220,8 +219,6 @@ public class EEGGraph extends FrameLayout {
     // Start thread that will render the plot at a fixed speed
     //
     public void stopThreads(){
-        Log.w("Test", "Stopping EEGGraph threads");
-
         plotUpdater.stopThread();
         data.stopThread();
 

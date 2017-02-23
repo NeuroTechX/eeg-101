@@ -37,17 +37,21 @@ public class FilterGraph extends FrameLayout {
     public museDataListener dataListener;
     public boolean eegFresh;
     double[] filtResult;
-    public int samplesCollected = 0;
     Thread dataThread;
     Thread renderingThread;
 
     // Reference to global application state used for connected Muse
     MainApplication appState;
 
-    // CircBuffer specific variables
+    // Filter specific variables
+    public int filterFreq;
     public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
-    public CircularBuffer filteredBuffer = new CircularBuffer(220, 4);
-    public Filter filter = new Filter(220, "lowpass");
+    public Filter activeFilter = new Filter(256., "bandpass", 5, 2, 36);
+
+    // Filter states represent info about previous samples; intermediate values that represent
+    // polynomial components determined by previous samples in the epoch. For more info, read the Rational Transfer Function description here: https://www.mathworks.com/help/matlab/ref/filter.html
+    public double[][] filtState;
+
     public double[] newData = new double[4];
 
     // Bridged props
@@ -65,30 +69,28 @@ public class FilterGraph extends FrameLayout {
 
     // -----------------------------------------------------------------------
     // Bridge functions (can be called from JS by setting props)
-    public void setChannelOfInterest(int channel) {
+    public void setChannelOfInterest(int channel) { channelOfInterest = channel; }
 
-        channelOfInterest = channel;
-        dataSeries.clear();
-        /* Uncomment to make plot change color based on selected electrode
-        eegPlot.getGraph().getBackgroundPaint().setColor(Color.rgb(255,255,255));
+    public void setFilterType(String filterType) {
+        if(appState.connectedMuse.isLowEnergy()) { filterFreq = 256; }
+        else { filterFreq = 220; }
 
-        // Set color based on selected channel
-        switch(channel) {
-            case 1:
-                lineFormatter.getLinePaint().setColor(Color.rgb(232,106,33));
-                break;
-            case 2:
-                lineFormatter.getLinePaint().setColor(Color.rgb(0,153,135));
-                break;
-            case 3:
-                lineFormatter.getLinePaint().setColor(Color.rgb(86,92,155));
-                break;
-            case 4:
-                lineFormatter.getLinePaint().setColor(Color.rgb(209,14,137));
+        switch(filterType) {
+            case "lowpass":
+                activeFilter = new Filter(filterFreq, "lowpass", 5, 36, 0);
+                filtState = new double[4][activeFilter.getNB()];
                 break;
 
+            case "bandpass":
+                activeFilter = new Filter(filterFreq, "bandpass", 5, 1, 36);
+                filtState = new double[4][activeFilter.getNB()];
+                break;
+
+            case "highpass":
+                activeFilter = new Filter(filterFreq, "highpass", 2, 1, 0);
+                filtState = new double[4][activeFilter.getNB()];
+                break;
         }
-        */
     }
 
     // -----------------------------------------------------------------------
@@ -101,7 +103,7 @@ public class FilterGraph extends FrameLayout {
         circBufferPlot = new XYPlot(context, "EEG Circ Buffer Plot");
 
         // Create plotUpdater
-        plotUpdater = new FilterGraph.MyPlotUpdater(circBufferPlot);
+        plotUpdater = new MyPlotUpdater(circBufferPlot);
 
         // Create dataSource
         dataSource = new FilterDataSource(appState.connectedMuse.isLowEnergy());
@@ -110,7 +112,7 @@ public class FilterGraph extends FrameLayout {
         dataSeries = new DynamicSeries("Buffer Plot");
 
         // Set X and Y domain
-        circBufferPlot.setRangeBoundaries(500, 1100, BoundaryMode.FIXED);
+        circBufferPlot.setRangeBoundaries(-200, 200, BoundaryMode.FIXED);
         circBufferPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
         // add dataSeries to plot and define color of plotted line
@@ -156,10 +158,10 @@ public class FilterGraph extends FrameLayout {
                 0, VerticalPositioning.ABSOLUTE_FROM_TOP);
 
         // Add plot to FilterGraph
-        this.addView(circBufferPlot, new FrameLayout.LayoutParams(
+        this.addView(circBufferPlot, new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-        //onVisibilityChanged(this, View.VISIBLE);
+        onVisibilityChanged(this, View.VISIBLE);
     }
 
     // Called when user navigates away from parent React Native component. Stops active threads in order to limit memory usage
@@ -195,7 +197,6 @@ public class FilterGraph extends FrameLayout {
 
     // Stop all threads
     public void stopThreads(){
-        Log.w("Test", "Stopping FilterGraph threads");
         plotUpdater.stopThread();
         dataSource.stopThread();
 
@@ -218,6 +219,17 @@ public class FilterGraph extends FrameLayout {
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
             getEegChannelValues(newData, p);
             eegBuffer.update(newData);
+
+            // Filter new raw sample
+            filtState = activeFilter.transform(newData, filtState);
+            filtResult = activeFilter.extractFilteredSamples(filtState);
+            //lowFiltState = lowFilter.transform(newData,lowFiltState);
+            //lowFiltResult = lowFilter.extractFilteredSamples(lowFiltState);
+            //highFiltState = highFilter.transform(lowFiltResult, highFiltState);
+            //highFiltResult = highFilter.extractFilteredSamples(highFiltState);
+
+            // Update filtered buffer
+            //filteredBuffer.update(highFiltResult);
         }
 
         // Updates newData array based on incoming EEG channel values
@@ -291,16 +303,16 @@ public class FilterGraph extends FrameLayout {
                         if (dataSeries.size() >= PLOT_LENGTH) {
                             dataSeries.removeFirst();
                         }
-                        // Extract latest raw and filtered samples
-                        latestSamples = eegBuffer.extract(filter.getNB());
-                        filteredSamples = filteredBuffer.extract(filter.getNA() - 1);
-
-                        // Filter new raw sample
-                        filtResult = filter.transform(latestSamples, filteredSamples);
-
-                        // Update filtered buffer
-                        filteredBuffer.update(filtResult);
-                        samplesCollected = samplesCollected + 1;
+//                        // Extract latest raw samples
+//                        latestSamples = eegBuffer.extract(1);
+//
+//                        // Filter new raw sample
+//                        filtState = filter.transform(latestSamples[0],filtState);
+//                        filtResult = filter.extractFilteredSamples(filtState);
+//
+//                        // Update filtered buffer
+//                        filteredBuffer.update(filtResult);
+//                        samplesCollected = samplesCollected + 1;
 
                         dataSeries.addLast(filtResult[channelOfInterest - 1]);
 

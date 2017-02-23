@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 
 //Interfaces. For advanced elements such as graphs
 import GraphView from '../interface/GraphView';
-import CircBufferGraphView from '../interface/CircBufferGraphView';
+import FilterGraphView from '../interface/FilterGraphView';
 
 
 import Button from '../components/Button';
@@ -54,7 +54,7 @@ class SlideFour extends Component {
           <Text style={styles.halfGraphLabelText}>Raw</Text>
         </View>
         <View style={styles.halfGraphContainer}>
-          <CircBufferGraphView style={{flex:1}} visibility={this.props.isVisible}/>
+          <FilterGraphView style={{flex:1}} visibility={this.props.isVisible} filterType={'bandpass'}/>
           <Text style={styles.halfGraphLabelText}>Low-Pass Filter</Text>
         </View>
 

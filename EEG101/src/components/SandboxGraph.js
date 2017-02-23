@@ -16,7 +16,7 @@ import {
 import config from '../redux/config'
 
 import GraphView from '../interface/GraphView';
-import FilterGraphView from '../interface/CircBufferGraphView';
+import FilterGraphView from '../interface/FilterGraphView';
 import PSDGraphView from '../interface/PSDGraphView';
 import WaveGraphView from '../interface/WaveGraphView';
 
