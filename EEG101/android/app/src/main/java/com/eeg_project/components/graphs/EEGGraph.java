@@ -3,6 +3,7 @@ package com.eeg_project.components.graphs;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -25,6 +26,7 @@ import com.choosemuse.libmuse.MuseDataPacket;
 import com.choosemuse.libmuse.MuseDataPacketType;
 import com.eeg_project.MainApplication;
 import com.eeg_project.components.signal.CircularBuffer;
+import com.eeg_project.components.signal.Filter;
 
 import java.lang.ref.WeakReference;
 
@@ -48,6 +50,14 @@ public class EEGGraph extends FrameLayout {
     public double[] newData = new double[4];
     public double[] latestSample;
 
+    // Filter variables
+    public int filterFreq;
+    public Filter highPassFilter;
+    public Filter bandstopFilter;
+    public double[] bandstopFiltState;
+    public double[] highPassFiltState;
+    public double filtInput;
+    public double filtResult;
 
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
@@ -121,8 +131,18 @@ public class EEGGraph extends FrameLayout {
         data = new EEGDataSource(appState.connectedMuse.isLowEnergy());
         dataSeries = new DynamicSeries("EEG data");
 
+        // Create high pass filter as well as bandstop filter if Muse is lowEnergy
+        if (appState.connectedMuse.isLowEnergy()) {
+            Log.w("EEG", "Created Filters");
+            filterFreq = 256;
+            bandstopFilter = new Filter(filterFreq, "bandstop", 5, 55, 65);
+            bandstopFiltState = new double[bandstopFilter.getNB()];
+        } else { filterFreq = 220; }
+        highPassFilter = new Filter(filterFreq, "highpass", 2, .1, 0);
+        highPassFiltState = new double[bandstopFilter.getNB()];
+
         // Set X and Y domain
-        eegPlot.setRangeBoundaries(600, 1000, BoundaryMode.FIXED);
+        eegPlot.setRangeBoundaries(-150, 150, BoundaryMode.FIXED);
         eegPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
         // This is critical for being able to set the color of the plot
@@ -233,14 +253,29 @@ public class EEGGraph extends FrameLayout {
     // Listener that receives incoming data from the Muse. Will run receiveMuseDataPacket
     // Will call receiveMuseDataPacket as data comes in around 220hz (250hz for Muse 2016)
     class DataListener extends MuseDataListener {
+        Boolean isLowEnergy;
 
         DataListener() {
+            Log.w("EEG", "Created Data Listener");
+            isLowEnergy = appState.connectedMuse.isLowEnergy();
         }
 
         @Override
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
             getEegChannelValues(newData, p);
             eegBuffer.update(newData);
+
+
+
+            // Filter new raw sample
+                bandstopFiltState = bandstopFilter.transform(newData[channelOfInterest - 1],
+                        bandstopFiltState);
+                filtInput = bandstopFilter.extractFilteredSamples(bandstopFiltState);
+                highPassFiltState = highPassFilter.transform(filtInput, highPassFiltState);
+                filtResult = highPassFilter.extractFilteredSamples(highPassFiltState);
+
+
+
         }
 
         private void getEegChannelValues(double[] buffer, MuseDataPacket p) {
@@ -311,8 +346,7 @@ public class EEGGraph extends FrameLayout {
                         if (dataSeries.size() >= PLOT_LENGTH) {
                             dataSeries.removeFirst();
                         }
-                        latestSample = eegBuffer.extract(1)[0];
-                        dataSeries.addLast(latestSample[channelOfInterest - 1]);
+                        dataSeries.addLast(filtResult);
                         eegBuffer.resetPts();
                     }
                 }

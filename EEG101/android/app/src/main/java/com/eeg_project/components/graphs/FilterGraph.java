@@ -36,7 +36,7 @@ public class FilterGraph extends FrameLayout {
     public DynamicSeries dataSeries;
     public museDataListener dataListener;
     public boolean eegFresh;
-    double[] filtResult;
+    double filtResult;
     Thread dataThread;
     Thread renderingThread;
 
@@ -46,11 +46,11 @@ public class FilterGraph extends FrameLayout {
     // Filter specific variables
     public int filterFreq;
     public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
-    public Filter activeFilter = new Filter(256., "bandpass", 5, 2, 36);
+    public Filter activeFilter;
 
     // Filter states represent info about previous samples; intermediate values that represent
     // polynomial components determined by previous samples in the epoch. For more info, read the Rational Transfer Function description here: https://www.mathworks.com/help/matlab/ref/filter.html
-    public double[][] filtState;
+    public double[] filtState;
 
     public double[] newData = new double[4];
 
@@ -69,26 +69,31 @@ public class FilterGraph extends FrameLayout {
 
     // -----------------------------------------------------------------------
     // Bridge functions (can be called from JS by setting props)
-    public void setChannelOfInterest(int channel) { channelOfInterest = channel; }
+    public void setChannelOfInterest(int channel) {
+        dataSeries.clear();
+        channelOfInterest = channel;
+    }
 
     public void setFilterType(String filterType) {
+        dataSeries.clear();
+
         if(appState.connectedMuse.isLowEnergy()) { filterFreq = 256; }
         else { filterFreq = 220; }
 
         switch(filterType) {
             case "lowpass":
                 activeFilter = new Filter(filterFreq, "lowpass", 5, 36, 0);
-                filtState = new double[4][activeFilter.getNB()];
+                filtState = new double[activeFilter.getNB()];
                 break;
 
             case "bandpass":
                 activeFilter = new Filter(filterFreq, "bandpass", 5, 1, 36);
-                filtState = new double[4][activeFilter.getNB()];
+                filtState = new double[activeFilter.getNB()];
                 break;
 
             case "highpass":
                 activeFilter = new Filter(filterFreq, "highpass", 2, 1, 0);
-                filtState = new double[4][activeFilter.getNB()];
+                filtState = new double[activeFilter.getNB()];
                 break;
         }
     }
@@ -221,15 +226,8 @@ public class FilterGraph extends FrameLayout {
             eegBuffer.update(newData);
 
             // Filter new raw sample
-            filtState = activeFilter.transform(newData, filtState);
+            filtState = activeFilter.transform(newData[channelOfInterest - 1], filtState);
             filtResult = activeFilter.extractFilteredSamples(filtState);
-            //lowFiltState = lowFilter.transform(newData,lowFiltState);
-            //lowFiltResult = lowFilter.extractFilteredSamples(lowFiltState);
-            //highFiltState = highFilter.transform(lowFiltResult, highFiltState);
-            //highFiltResult = highFilter.extractFilteredSamples(highFiltState);
-
-            // Update filtered buffer
-            //filteredBuffer.update(highFiltResult);
         }
 
         // Updates newData array based on incoming EEG channel values
@@ -281,8 +279,6 @@ public class FilterGraph extends FrameLayout {
     // Processes raw EEG data and updates dataSeries
     public class FilterDataSource implements Runnable {
         int stepSize;
-        double[][] latestSamples;
-        double[][] filteredSamples;
         private boolean keepRunning = true;
 
 
@@ -303,18 +299,7 @@ public class FilterGraph extends FrameLayout {
                         if (dataSeries.size() >= PLOT_LENGTH) {
                             dataSeries.removeFirst();
                         }
-//                        // Extract latest raw samples
-//                        latestSamples = eegBuffer.extract(1);
-//
-//                        // Filter new raw sample
-//                        filtState = filter.transform(latestSamples[0],filtState);
-//                        filtResult = filter.extractFilteredSamples(filtState);
-//
-//                        // Update filtered buffer
-//                        filteredBuffer.update(filtResult);
-//                        samplesCollected = samplesCollected + 1;
-
-                        dataSeries.addLast(filtResult[channelOfInterest - 1]);
+                        dataSeries.addLast(filtResult);
 
                         eegBuffer.resetPts();
                     }

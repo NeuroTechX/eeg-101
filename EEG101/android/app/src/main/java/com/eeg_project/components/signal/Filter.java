@@ -1,5 +1,7 @@
 package com.eeg_project.components.signal;
 
+import android.util.Log;
+
 import biz.source_code.dsp.filter.FilterPassType;
 import biz.source_code.dsp.filter.FilterCharacteristicsType;
 import biz.source_code.dsp.filter.IirFilterCoefficients;
@@ -72,16 +74,13 @@ public class Filter {
         //  filtered value in the last position. This is a hack
         //  that allows to pass both the internal state and the 
         //  output of the filter at once.
-
         z[z.length - 1] = 0;
         double y = b[0]*x + z[0];
-
         for (int i = 1; i < nB; i++) {
             z[i-1] = b[i]*x + z[i] - a[i]*y;
          }
 
         z[z.length - 1] = y;
-
         return z;
 
     }
@@ -122,6 +121,11 @@ public class Filter {
             filtSignal[i] = z[i][z[0].length - 1];
         }
         return filtSignal;
+    }
+
+    public static double extractFilteredSamples(double[] z) {
+        // Utility function to extract last value from array
+        return z[z.length - 1];
     }
 
     public int getNB() {
