@@ -25,7 +25,7 @@ An Interactive EEG tutorial that teaches EEG and BCI basics.
 ## How it works
 
 <p align="center">
-    <img alt="filterscreen" src="/images/FilterSlide.png/" width="100">
+    <img alt="screens" src="/images/ScreenBanner.png/" height="500">
 </p>
 
 Our goal with EEG 101 was to create a flexible base for EEG and BCI mobile development that novice programmers could build on top of, and could be adapted to work on multiple platforms with different EEG devices. To satisfy those concerns, we've built the app in React Native, which allows for fast, straight-forward front-end development and the promise of an easy port to iOS in the future (hopefully).  
