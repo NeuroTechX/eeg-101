@@ -9,14 +9,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { MediaQueryStyleSheet} from 'react-native-responsive';
-
 import{
   Actions,
 }from 'react-native-router-flux';
-import { connect } from 'react-redux';
-
+import {connect } from 'react-redux';
 import WhiteButton from '../components/WhiteButton';
-
 
 class End extends Component {
   constructor(props) {

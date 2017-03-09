@@ -2,7 +2,6 @@
 // Child component for an upcoming ListView component.
 // Not currently used in the app.
 
-'use strict';
 
 import React, { Component } from 'react';
 import { MediaQueryStyleSheet} from 'react-native-responsive';

@@ -1,8 +1,7 @@
 package com.eeg_project;
 
-
 import com.eeg_project.components.managers.FilterGraphManager;
-import com.eeg_project.components.managers.GraphManager;
+import com.eeg_project.components.managers.EEGGraphManager;
 import com.eeg_project.components.managers.PSDGraphManager;
 import com.eeg_project.components.connector.ConnectorModule;
 import com.facebook.react.ReactPackage;
@@ -33,7 +32,7 @@ public class EEGPackage implements ReactPackage {
 	// Registers Java ViewManagers to JS
 	public List<ViewManager> createViewManagers(ReactApplicationContext reactApplicationContext) {
 		return Arrays.<ViewManager>asList(
-				new GraphManager(),
+				new EEGGraphManager(),
 				new FilterGraphManager(),
 				new PSDGraphManager()
 		);

@@ -13,7 +13,7 @@ import thunk from 'redux-thunk';
 import config from './src/redux/config';
 import { setConnectionStatus } from './src/redux/actions';
 
-//  Scenes
+// Scenes
 import Landing from './src/scenes/begin-landing';
 import ConnectorOne from './src/scenes/connector-01';
 import ConnectorTwo from './src/scenes/connector-02';
@@ -58,8 +58,9 @@ class EEG_Project extends Component {
   render() {
     // Provider component wraps everything in Redux and gives access to the store
     // RouterWithRedux manages transitions between Scenes with Actions.SCENE_KEY calls
-    // Each Scene component of Router corresponds to a different lesson module.
+    // Each Scene component of Router corresponds to a different scene of the tutorial.
     // All scenes are wrapped in a root NavigationBar component that provides a custom navbar at the top of the screen
+    // previous slide info is currently harcoded in as the 'previous' prop
     return (
       <Provider store={store}>
         <RouterWithRedux>

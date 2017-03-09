@@ -1,17 +1,27 @@
 package com.eeg_project.components.signal;
+
 import android.util.Log;
 
 import java.util.Arrays; // For printing arrays when debugging
 
+// This class implements a simple EEG noise detector based on
+// variance thresholding of a short epoch.
 public class NoiseDetector {
-    // This class implements a simple EEG noise detector based on
-    // variance thresholding of a short epoch.
+
+    // ------------------------------------------------------------------------
+    // Variables
 
     private double t;
+
+    // ------------------------------------------------------------------------
+    // Constructor
 
     public NoiseDetector(double threshold) {
         t = threshold;
     }
+
+    // ------------------------------------------------------------------------
+    // Methods
 
     public boolean detectArtefact(double[] epoch) {
         // Flag noise/artefact in epoch.
@@ -68,6 +78,7 @@ public class NoiseDetector {
 
     }
 
+    // Example main for testing
     public static void main(String[] args) {
 
         // Initialize array to filter

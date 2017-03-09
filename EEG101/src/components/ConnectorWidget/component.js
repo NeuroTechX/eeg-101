@@ -1,5 +1,6 @@
 // ConnectorWidget.js
 // An interface component with a picker and two buttons that handles connection to Muse devices
+
 import React, { Component } from 'react';
 import {
   Text,
@@ -8,14 +9,9 @@ import {
   StyleSheet,
   PermissionsAndroid
 } from 'react-native';
-import Button from '../Button';
-
 import config from '../../redux/config'
-
 import Connector from '../../interface/Connector';
-
 import WhiteButton from '../WhiteButton'
-
 
 export default class ConnectorWidget extends Component {
   constructor(props) {
@@ -26,6 +22,8 @@ export default class ConnectorWidget extends Component {
     };
   }
 
+  // Checks if user has enabled coarse location permission neceessary for BLE function
+  // If not, displays request popup, otherwise proceeds to startConnector()
   async requestLocationPermission() {
     try {
       const granted = await PermissionsAndroid.request(
@@ -47,6 +45,7 @@ export default class ConnectorWidget extends Component {
     }
   }
 
+  // Calls getAndConnectoToDevice in native ConnectorModule after creating promise listeners
   startConnector() {
     // This listner will update connection status if no Muses are found in getMuses call
     const noMuseListener = DeviceEventEmitter.addListener('NO_MUSES', (event) => {
@@ -72,11 +71,7 @@ export default class ConnectorWidget extends Component {
     Connector.stopConnector();
   }
 
-
-
-
 	render() {
-
     // switch could also further functionality to handle multiple connection conditions
     switch(this.props.connectionStatus) {
       case config.connectionStatus.CONNECTED:

@@ -12,12 +12,12 @@ import{
 import { connect } from 'react-redux';
 import config from '../redux/config';
 import { MediaQueryStyleSheet} from 'react-native-responsive';
-
 import Button from '../components/Button';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
 import ElectrodeSelector from '../components/ElectrodeSelector';
 
+//Interfaces. For elements that bridge to native
 import GraphView from '../interface/GraphView';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene

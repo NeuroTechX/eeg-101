@@ -9,11 +9,9 @@ import {
   StyleSheet,
 } from 'react-native';
 
-
 export default class WhiteButton extends Component{
   constructor(props){
     super(props);
-
   }
 
 	render() {

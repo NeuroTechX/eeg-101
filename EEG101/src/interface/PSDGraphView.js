@@ -1,5 +1,6 @@
 // PSDGraphView.js
-// The interface layer between JS and Java. Most of the work is handled internally by react-native, so all that is necessary to here is to define the PropTypes that will be communicated from JS to the Java component
+// In addition to importing the native PSDGraph, this component also draws axis and lines and labels with react-native-svg
+
 import { PropTypes } from 'react';
 import { requireNativeComponent, View, StyleSheet, Text } from 'react-native';
 import React, { Component } from 'react';
@@ -10,10 +11,6 @@ let PSDGraph = requireNativeComponent('PSD_GRAPH', PSDGraphView);
 export default class PSDGraphView extends Component{
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount() {
-    //console.log(this.graphRef);
   }
 
   // Returns the callback ref from the child PSDGraph so that it can be used in SanboxGraph to send commands.

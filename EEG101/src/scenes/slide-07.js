@@ -10,12 +10,10 @@ import{
   Actions,
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
-
 import Button from '../components/Button';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
-
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {

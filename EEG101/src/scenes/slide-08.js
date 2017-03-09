@@ -11,14 +11,12 @@ import{
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
-
-
-//Interfaces. For advanced elements such as graphs
-import PSDGraphView from '../interface/PSDGraphView';
-
 import Button from '../components/Button';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
+
+//Interfaces. For elements that bridge to native
+import PSDGraphView from '../interface/PSDGraphView';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {

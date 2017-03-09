@@ -4,24 +4,28 @@ import android.util.Log;
 
 import org.jtransforms.fft.DoubleFFT_1D;
 import java.lang.Math; // For log10
-// import java.lang.arraycopy; 
 import java.util.Arrays; // For printing arrays when debugging
 
+/*
+This class uses the DoubleFFT_1D object from JTransforms to
+compute the DFT of an array of fixed size.
+
+Args:
+inputLength (int) : length of the input signal (number of samples)
+fftLength (int) : FFT length; if different than inputLength, the input
+will be zero-padded (larger) or truncated (smaller)
+samplingFrequency (double) : sampling frequency of the input signal, in Hz.
+used to define frequency bins
+
+The use of an encapsulated class (rather than using JTransforms
+directly in the Android graph code) is meant to simplify
+interpretation of the code and allow an eventual custom
+FFT implementation.
+*/
 public class FFT {
-// This class uses the DoubleFFT_1D object from JTransforms to 
-// compute the DFT of an array of fixed size.
-//
-// Args:
-// 	inputLength (int) : length of the input signal (number of samples)
-//  fftLength (int) : FFT length; if different than inputLength, the input 
-//		will be zero-padded (larger) or truncated (smaller)
-//  samplingFrequency (double) : sampling frequency of the input signal, in Hz.
-//		used to define frequency bins
-//
-// The use of an encapsulated class (rather than using JTransforms
-// directly in the Android graph code) is meant to simplify 
-// interpretation of the code and allow an eventual custom
-// FFT implementation.
+
+	// ------------------------------------------------------------------------
+	// Variables
 
 	private int inputLength;
 	private int fftLength;
@@ -35,10 +39,11 @@ public class FFT {
 	private double[] f;
 	private double[] hammingWin;
 	private double[] complexMagnitude;
-
 	private double samplingFrequency;
 	private DoubleFFT_1D fft_1D;
 
+	// ------------------------------------------------------------------------
+	// Constructor
 
 	public FFT(int inputLength, int fftLength, double samplingFrequency) {
 
@@ -80,8 +85,10 @@ public class FFT {
 
 		// Initialize Hamming window
 		hammingWin = hamming(this.inputLength);
-
 	}
+
+	// ------------------------------------------------------------------------
+	// Methods
 
 	public double[] computePSD(double[] x) {
 		// Compute PSD of x
@@ -196,13 +203,13 @@ public class FFT {
 		}
 
 		return w;
-		
 	}
 
 	public double[] getFreqBins() {
 		return f;
 	}
 
+	// Example main for testing and using this FFT class
 	public static void main(String[] args) {
 
 		int inputLength = 16;

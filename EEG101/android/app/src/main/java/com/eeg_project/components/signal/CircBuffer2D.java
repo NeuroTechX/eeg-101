@@ -1,31 +1,35 @@
 package com.eeg_project.components.signal;
 import java.util.Arrays; // For printing arrays when debugging
 
+// This class implements a circular (or ring) buffer to hold
+// the most recent values of a 2D time series efficiently.
 public class CircBuffer2D {
-    // This class implements a circular (or ring) buffer to hold
-    // the most recent values of a 2D time series efficiently.
+
+    // -----------------------------------------------------------------------
+    // Variables
 
     protected int bufferLength;
     protected int nbCh;
     protected int nbBins;
-
     protected int index;
     protected int pts;
-
     protected double[][][] buffer;
+
+    // -----------------------------------------------------------------------
+    // Constructor
 
     public CircBuffer2D(int n, int m, int l) {
 
         bufferLength = n;
         nbCh = m;
         nbBins = l;
-
         index = 0;
         pts = 0;
-
         buffer = new double[bufferLength][nbCh][nbBins];
-
     }
+
+    // -----------------------------------------------------------------------
+    // Methods
 
     // Updates the 3D buffer array with the 2D newData array at the current index. When index reaches the maximum bufferLength it returns to 0.
     public void update(double[][] newData) {
@@ -72,6 +76,7 @@ public class CircBuffer2D {
         return (c < 0) ? c + b : c;
     }
 
+    // Main with example code for testing and using this class
     public static void main(String[] args ) {
 
         // Create test buffer

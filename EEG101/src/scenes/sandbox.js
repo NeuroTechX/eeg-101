@@ -14,8 +14,6 @@ import { setGraphViewDimensions } from '../redux/actions';
 import Button from '../components/Button';
 import SandboxButton from '../components/SandboxButton';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
-
-//Interfaces. For advanced elements such as graphs
 import SandboxGraph from '../components/SandboxGraph';
 import ElectrodeSelector from '../components/ElectrodeSelector';
 

@@ -1,5 +1,6 @@
 // GraphView.js
-// The interface layer between JS and Java. Most of the work is handled internally by react-native, so all that is necessary to here is to define the PropTypes that will be communicated from JS to the Java component
+// The interface layer between JS and Java. Most of the work is handled internally by react-native, so all that is necessary to here is to define the PropTypes that will be communicated from JS to the Java component\
+
 import { PropTypes } from 'react';
 import { requireNativeComponent, View } from 'react-native';
 

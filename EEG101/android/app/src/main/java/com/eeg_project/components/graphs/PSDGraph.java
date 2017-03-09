@@ -27,11 +27,23 @@ import com.eeg_project.components.signal.FFT;
 import com.eeg_project.components.signal.PSDBuffer;
 
 
-// A dynamic power spectra density (PSD) graph generated from a circular buffer
+/*
+View that plots a dynamic power spectral density (PSD) curve
+
+Plotting process:
+1. Creates AndroidPlot graph and MuseDataListener for EEG data packets
+2. MuseDataListener updates circular eegBuffer at 220-260hz
+3. When view is visible, dataThread and renderingThread perform PSD computations and plot
+dataSeries, respectively
+4. dataThread computes smoothed log PSD with FFT from JTransforms library (in FFT class)
+5. renderingThread plots PSDseries at fixed frequency. PSDseries just points to smoothLogPower in
+ dataSource
+*/
 public class PSDGraph extends FrameLayout {
 
     // ------------------------------------------------------------------------
     // Variables
+
     private XYPlot psdPlot;
     private PSDDataSource dataSource;
     public  int PLOT_LENGTH = 50;
@@ -40,13 +52,11 @@ public class PSDGraph extends FrameLayout {
     public MuseDataListener dataListener;
     Thread dataThread;
     Thread renderingThread;
+    public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
+    public double[] newData = new double[4];
 
     // Reference to global application state used for connected Muse
     MainApplication appState;
-
-    // CircBuffer specific variables
-    public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
-    public double[] newData = new double[4];
 
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
@@ -54,6 +64,7 @@ public class PSDGraph extends FrameLayout {
 
     // ------------------------------------------------------------------------
     // Constructors
+
     public PSDGraph(Context context) {
         super(context);
         appState = ((MainApplication) context.getApplicationContext());
@@ -62,17 +73,20 @@ public class PSDGraph extends FrameLayout {
 
     // -----------------------------------------------------------------------
     // Bridge functions (can be called from JS by setting props)
+
     public void setChannelOfInterest(int channel) {
         channelOfInterest = channel;
         dataSource.clearDataBuffer();
     }
 
+    // -----------------------------------------------------------------------
+    // Lifecycle methods (initView and onVisibilityChanged)
+
     // Initializes and styles the AndroidPlot XYPlot component of EEGGraph
     // All styling is performed entirely within this function, XML is not used
-
     public void initView(Context context) {
 
-        // Create circBufferPlot
+        // Create psdPlot
         psdPlot = new XYPlot(context, "PSD Plot");
 
         // Create plotUpdater
@@ -127,6 +141,7 @@ public class PSDGraph extends FrameLayout {
         this.addView(psdPlot, new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
+        // Explicity visibility setting handles bug on older devices where graph wasn't starting
         onVisibilityChanged(this, View.VISIBLE);
     }
 
@@ -269,7 +284,7 @@ public class PSDGraph extends FrameLayout {
                 while (keepRunning) {
                     if (eegBuffer.getPts() >= stepSize) {
 
-                        // Extract latest raw and filtered samples
+                        // Extract latest raw samples
                         latestSamples = eegBuffer.extractSingleChannelTransposed(windowLength, channelOfInterest - 1);
 
                         // Compute log-PSD for channel of interest

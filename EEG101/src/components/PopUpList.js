@@ -11,9 +11,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { MediaQueryStyleSheet} from 'react-native-responsive';
-
 import Button from './Button';
-
 
 export default class PopUpList extends Component{
   

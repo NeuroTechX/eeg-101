@@ -8,13 +8,8 @@ import{
   Actions,
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
-
-import config from '../redux/config'
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
-
-// Components. For JS UI elements
 import WhiteButton from '../components/WhiteButton';
-import ConnectorWidget from '../components/ConnectorWidget';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
@@ -59,7 +54,6 @@ const styles = MediaQueryStyleSheet.create(
     color: '#ffffff',
     textAlign: 'center',
   },
-
 
   instructions: {
     fontFamily: 'Roboto-Bold',

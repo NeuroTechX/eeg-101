@@ -139,6 +139,7 @@ android {
 }
 
 dependencies {
+    compile project(':lottie-react-native')
     compile project(':react-native-svg')
     compile fileTree(dir: "libs", include: ["*.jar"])
     // Animated Gif support
@@ -149,6 +150,7 @@ dependencies {
     compile files('libs/libmuse_android.jar')
     compile "com.androidplot:androidplot-core:1.2.2"
     compile group: 'com.github.wendykierp', name: 'JTransforms', version: '3.1'
+    compile 'com.airbnb.android:lottie:1.5.2'
 }
 
 // Run this once to be able to run the application with BUCK

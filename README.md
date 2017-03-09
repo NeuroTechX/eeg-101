@@ -1,31 +1,38 @@
 
 <p align="center">
-    <img alt="babel" src="/EEG101graphic.png/" width="600">
+    <img alt="banner" src="/images/EEG101graphic.png/" width="600">
 </p>
 
 # EEG 101
 
-An Interactive EEG tutorial app project to teach EEG and BCI basics.
+An Interactive EEG tutorial that teaches EEG and BCI basics.
 
 ## Overview
 
+- Teaches what EEG is, where signals come from, how devices work, and how to work with EEG data
+- Streams data from the Muse with LibMuse Java API
 - Built with React Native for Android
-- Streams data from the Muse EEG device
-- Works with Libmuse Java API
-- Presents information about EEG basics (neurobiology -> hardware -> signal processing)
+- Completely free, open-source, and available for use/adaption in any project
 
-## In Development
+## Currently In Development
 
-- Brain-Computer Interface
-- Dynamic artifact removal
-- Bandpass Filter
-- Machine learning (Logistic Regression, Naive Bayes, [Riemannian Potato](http://alexandre.barachant.org/papers/conferences/potato/))
+- Data collection (saving to csv)
+- Bandpass filtering
+- Dynamic artefact removal
+- General-purpose brain state classifier (Naive Bayes)
+- Advanced lesson content ([Riemannian Potato](http://alexandre.barachant.org/papers/conferences/potato/))
 
-## Overview
+## How it works
 
-EEG 101 is built in React Native, so one half is written in JavaScript (front-end and general app framework) and the other half in Java for Android (Muse data and EEG plotting code). The JavaScript layer, based on the React framework, provides the basic app structure, including all the lesson content and UI. Connecting to the Muse, streaming incoming data, and plotting that data at 30fps all occurs in the native Java layer. There are a number of different Java Views (e.g. EEGGraph, PSDGraph, CircularBufferGraph) that are imported into our app as [native UI components](https://facebook.github.io/react-native/docs/native-components-android.html). Additionally, connecting to the Muse headband occurs through a [native module](https://facebook.github.io/react-native/docs/native-modules-android.html), ConnectorModule.
+<p align="center">
+    <img alt="filterscreen" src="/images/FilterSlide.png/" width="100">
+</p>
 
-EEG 101 is entirely free to use or modify for your own purposes. You might be interested in how we've used React Native to create a flexible, easy-to-develop-for platform for EEG apps. Or, you might just be interested in how we connect and handle data from the Muse. In any case, we hope that you find EEG 101 educational and helpful!
+Our goal with EEG 101 was to create a flexible base for EEG and BCI mobile development that novice programmers could build on top of, and could be adapted to work on multiple platforms with different EEG devices. To satisfy those concerns, we've built the app in React Native, which allows for fast, straight-forward front-end development and the promise of an easy port to iOS in the future (hopefully).  
+
+EEG 101 is split right down the middle between Java and React. If you're interested in how we communicate with the Muse, process EEG data, and plot the results in real time, check out the graph and signal classes in the android source folders. Our implementations are all (for the most part) typical Android components written in Java.
+
+If you'd like to use EEG 101 as a base for your own React Native app, take a look at how we've written the tutorial in the src folder. Connecting to a Muse and plotting real-time EEG data is as simple as using one of the React components we have already defined.
 
 ## Setup
 
@@ -54,32 +61,3 @@ EEG 101 is entirely free to use or modify for your own purposes. You might be in
 
 - Solution: Run `adb reverse tcp:8081 tcp:8081` again and reload
 
-## JS Packages used in this project
-All libraries are noted in the dependencies section of package.json and will automatically be imported by running "npm install" in the main folder
-
-**react**
-Standard React library.
-
-**react-native**
-Standard React Native Library.
-
-**react-native-router-flux**
-Routing package that allows all scenes to be defined in a central location and for transitions to be called anywhere in the app.
-
-**react-redux**
-Library containing necessary redux functions such as connect and store
-
-**redux**
-Basic redux library
-
-**redux-thunk**
-Provides middleware for Redux that improves handling of asynchronous events
-
-## Android packages used in this project
-These are especially important for analysing and plotting data
-
-**LibMuse**
-Handles all of the connecting to and reading data from the Muse device
-
-**AndroidPlot**
-Takes care of plotting incoming EEG data

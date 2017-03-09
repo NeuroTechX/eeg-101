@@ -14,17 +14,13 @@ import {
   Image,
 } from 'react-native';
 import { MediaQueryStyleSheet} from 'react-native-responsive';
-
-
 import Button from '../components/Button';
 
-
-export default class PopUp extends Component{
+export default class PopUp extends Component {
   
   render() {
     let imageStyle = (this.props.image != null) ? styles.activeImage: styles.disabledImage
     return(
-
       <Modal
           animationType={"fade"}
           transparent={true}
