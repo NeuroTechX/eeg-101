@@ -9,7 +9,6 @@ import {
 	setConnectionStatus,
 } from '../../redux/actions';
 
-
 // Import properties stored in Redux
 function mapStateToProps(state) {
 	return {

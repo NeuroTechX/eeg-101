@@ -1,5 +1,6 @@
-// PSDGraphView.js
-// The interface layer between JS and Java. Most of the work is handled internally by react-native, so all that is necessary to here is to define the PropTypes that will be communicated from JS to the Java component
+// WaveGraphView.js
+// Same as PSDGraphView, but also draws colored bands representing different brain waves
+
 import { PropTypes } from 'react';
 import { requireNativeComponent, View, StyleSheet, Text } from 'react-native';
 import React, { Component } from 'react';

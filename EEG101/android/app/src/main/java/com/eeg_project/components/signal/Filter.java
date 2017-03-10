@@ -1,7 +1,5 @@
 package com.eeg_project.components.signal;
 
-import android.util.Log;
-
 import biz.source_code.dsp.filter.FilterPassType;
 import biz.source_code.dsp.filter.FilterCharacteristicsType;
 import biz.source_code.dsp.filter.IirFilterCoefficients;
@@ -9,11 +7,12 @@ import biz.source_code.dsp.filter.IirFilterDesignFisher;
 
 // import java.util.Arrays; // For printing arrays when debugging
 
-// Contains transform function for performing bandpass filter of EEG data. Also contains python-generated coefficients
+// Implements Butterworth filter coefficient generation and filter with DSP library
 public class Filter {
 
     // ------------------------------------------------------------------------
     // Variables
+
     private String filterType;
     private double fs;
     private double[] b;
@@ -56,13 +55,13 @@ public class Filter {
 
         nB = b.length;
         nA = a.length;
-
     }
 
     // ---------------------------------------------------------------------
     // Methods
+
     public double[] transform(double x, double[] z) {
-        // This function implements the Discrete Form II Transposed of 
+        // This function implements the Discrete Form II Transposed of
         // a linear filter.
         //
         // Args:
@@ -70,9 +69,9 @@ public class Filter {
         //  z: the internal state of the filter
         //
         // Returns:
-        //  the updated internal state of the filter, with the new 
+        //  the updated internal state of the filter, with the new
         //  filtered value in the last position. This is a hack
-        //  that allows to pass both the internal state and the 
+        //  that allows to pass both the internal state and the
         //  output of the filter at once.
         z[z.length - 1] = 0;
         double y = b[0]*x + z[0];
@@ -86,7 +85,7 @@ public class Filter {
     }
 
     public double[][] transform(double[] x, double[][] z) {
-        // This function implements the Discrete Form II Transposed of 
+        // This function implements the Discrete Form II Transposed of
         // a linear filter for multichannel signals
         //
         // Args:
@@ -94,9 +93,9 @@ public class Filter {
         //  z: the internal state of the filter for each channels [nbCh,nbPoints]
         //
         // Returns:
-        //  the updated internal states of the filter, with the new 
+        //  the updated internal states of the filter, with the new
         //  filtered values in the last position. [nbCh,nbPoints]
-        //  This is a hack that allows to pass both the internal state and the 
+        //  This is a hack that allows to pass both the internal state and the
         //  output of the filter at once.
 
         // double[] zNew = new double[z[0].length];

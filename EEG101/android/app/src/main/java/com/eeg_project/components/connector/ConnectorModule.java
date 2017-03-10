@@ -1,6 +1,5 @@
 package com.eeg_project.components.connector;
 
-
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.Nullable;
@@ -23,8 +22,19 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import java.util.List;
 
-// React Native module that handles connecting to Muses with LibMuse functions
-// Calling getAndConnectToDevice from JS handles entire connection process.
+/*
+Handles connecting to Muses with LibMuse functions.
+Calling getAndConnectToDevice from JS handles entire connection process.
+
+Connection process:
+1. Creates a MuseManager and a MuseListener which detects available Muses
+2. Creates a HandlerThread which will host searchRunnable and connectRunnable tasks syncronously
+3. Checks for available muses (searchRunnable) and returns NO_MUSES promise if none
+4. Attempts to connect to Muse (connectRunnable) with a connection listener and runAsynchronous
+5. On successful connection, returns CONNECT promise
+6. On unsuccessful connection, attempts connecting to next Muse in list availableMuses
+7. If no muses can be connected to, repeats steps 3-6 a max of 4 times
+*/
 public class  ConnectorModule extends ReactContextBaseJavaModule {
 
     // ----------------------------------------------------------
@@ -257,7 +267,6 @@ public class  ConnectorModule extends ReactContextBaseJavaModule {
                     }
                 }
             }
-
         }
     }
 }

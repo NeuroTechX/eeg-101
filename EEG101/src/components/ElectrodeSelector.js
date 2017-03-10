@@ -12,8 +12,6 @@ import {
 } from 'react-native';
 import { MediaQueryStyleSheet} from 'react-native-responsive';
 
-import Connector from '../interface/Connector';
-
 export default class ElectrodeSelector extends Component {
 	constructor(props) {
 		super(props);
@@ -60,6 +58,7 @@ export default class ElectrodeSelector extends Component {
 		);
 	}
 }
+
 const styles = MediaQueryStyleSheet.create(
   // Base styles
   {

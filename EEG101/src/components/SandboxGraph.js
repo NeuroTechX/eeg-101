@@ -12,14 +12,13 @@ import {
   UIManager,
   findNodeHandle
 } from 'react-native';
-
 import config from '../redux/config'
 
+// Interfaces
 import GraphView from '../interface/GraphView';
 import FilterGraphView from '../interface/FilterGraphView';
 import PSDGraphView from '../interface/PSDGraphView';
 import WaveGraphView from '../interface/WaveGraphView';
-
 
 export default class SandboxGraph extends Component {
   constructor(props) {

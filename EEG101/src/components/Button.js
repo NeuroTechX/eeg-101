@@ -15,7 +15,6 @@ import { MediaQueryStyleSheet } from 'react-native-responsive';
 export default class Button extends Component{
   constructor(props){
     super(props);
-
   }
 
 	render() {
@@ -28,7 +27,6 @@ export default class Button extends Component{
 		</TouchableOpacity>
 		)
 	}
-
 };
 
 const styles = MediaQueryStyleSheet.create(

@@ -10,17 +10,15 @@ import{
   Actions,
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
-
-//Interfaces. For advanced elements such as graphs
-import GraphView from '../interface/GraphView';
-import FilterGraphView from '../interface/FilterGraphView';
-
-
 import Button from '../components/Button';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
-import ElectrodeSelector from '../components/ElectrodeSelector';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
+
+
+//Interfaces. For elements that bridge to native
+import GraphView from '../interface/GraphView';
+import FilterGraphView from '../interface/FilterGraphView';
 
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene

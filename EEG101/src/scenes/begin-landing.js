@@ -12,17 +12,13 @@ import{
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
-
-import config from '../redux/config'
-
-// Components. For JS UI elements
+// import Animation from 'lottie-react-native';
 import WhiteButton from '../components/WhiteButton';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to this scene's ley
 function  mapStateToProps(state) {
   return {isVisible: state.scene.sceneKey === 'Landing',
     connectionStatus: state.connectionStatus,
-
   };
 }
 

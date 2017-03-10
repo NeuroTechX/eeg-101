@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import { MediaQueryStyleSheet} from 'react-native-responsive';
 
-
 export default class PopUpLink extends Component{
 
   render() {

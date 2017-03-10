@@ -11,11 +11,6 @@ import{
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
-
-
-//Interfaces. For advanced elements such as graphs
-import GraphView from '../interface/GraphView';
-
 import Button from '../components/Button';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';

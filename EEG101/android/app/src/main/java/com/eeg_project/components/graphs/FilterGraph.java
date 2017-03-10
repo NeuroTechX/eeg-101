@@ -2,9 +2,9 @@ package com.eeg_project.components.graphs;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+
 import com.androidplot.Plot;
 import com.androidplot.ui.HorizontalPositioning;
 import com.androidplot.ui.Size;
@@ -24,18 +24,28 @@ import com.eeg_project.MainApplication;
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
 
-// Android View that graphs processed EEG data
+/*
+View that plots a single-channel filtered EEG graph
+Bandstop, bandpass, high-pass, and low-pass filters are availabe in Filter class
+
+Plotting process:
+1. Creates AndroidPlot graph and MuseDataListener for EEG data packets
+2. MuseDataListener updates circular eegBuffer at 220-260hz
+3. raw data is filtered as it comes in with Butterworth filters from DSP Library
+3. dataThread and renderThread add latest filter result to dataSeries and render plot at a fixed
+frequency
+*/
 public class FilterGraph extends FrameLayout {
 
     // ----------------------------------------------------------------------
     // Variables
-    public XYPlot circBufferPlot;
+
+    public XYPlot filterPlot;
     private static final int PLOT_LENGTH = 220;
     public MyPlotUpdater plotUpdater;
     private FilterDataSource dataSource;
     public DynamicSeries dataSeries;
     public museDataListener dataListener;
-    public boolean eegFresh;
     double filtResult;
     Thread dataThread;
     Thread renderingThread;
@@ -47,7 +57,6 @@ public class FilterGraph extends FrameLayout {
     public int filterFreq;
     public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
     public Filter activeFilter;
-
     // Filter states represent info about previous samples; intermediate values that represent
     // polynomial components determined by previous samples in the epoch. For more info, read the Rational Transfer Function description here: https://www.mathworks.com/help/matlab/ref/filter.html
     public double[] filtState;
@@ -60,6 +69,7 @@ public class FilterGraph extends FrameLayout {
 
     // ------------------------------------------------------------------------
     // Constructors
+
     public FilterGraph(Context context) {
         super(context);
         appState = ((MainApplication)context.getApplicationContext());
@@ -69,6 +79,7 @@ public class FilterGraph extends FrameLayout {
 
     // -----------------------------------------------------------------------
     // Bridge functions (can be called from JS by setting props)
+
     public void setChannelOfInterest(int channel) {
         dataSeries.clear();
         channelOfInterest = channel;
@@ -103,12 +114,10 @@ public class FilterGraph extends FrameLayout {
 
     // Initialize and style AndroidPlot Graph. XML styling is not used.
     public void initView(Context context) {
-
-        // Create circBufferPlot
-        circBufferPlot = new XYPlot(context, "EEG Circ Buffer Plot");
+        filterPlot = new XYPlot(context, "EEG Circ Buffer Plot");
 
         // Create plotUpdater
-        plotUpdater = new MyPlotUpdater(circBufferPlot);
+        plotUpdater = new MyPlotUpdater(filterPlot);
 
         // Create dataSource
         dataSource = new FilterDataSource(appState.connectedMuse.isLowEnergy());
@@ -117,55 +126,55 @@ public class FilterGraph extends FrameLayout {
         dataSeries = new DynamicSeries("Buffer Plot");
 
         // Set X and Y domain
-        circBufferPlot.setRangeBoundaries(-200, 200, BoundaryMode.FIXED);
-        circBufferPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
+        filterPlot.setRangeBoundaries(-200, 200, BoundaryMode.FIXED);
+        filterPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
         // add dataSeries to plot and define color of plotted line
-        circBufferPlot.addSeries(dataSeries,
+        filterPlot.addSeries(dataSeries,
                 new LineAndPointFormatter(Color.rgb(255,255,255), null, null, null));
 
         // Format plot layout
         //Remove margins, padding and border
-        circBufferPlot.setPlotMargins(0, 0, 0, 0);
-        circBufferPlot.setPlotPadding(0, 0, 0, 0);
-        circBufferPlot.getBorderPaint().setColor(Color.WHITE);
+        filterPlot.setPlotMargins(0, 0, 0, 0);
+        filterPlot.setPlotPadding(0, 0, 0, 0);
+        filterPlot.getBorderPaint().setColor(Color.WHITE);
 
         // Set plot background color
-        circBufferPlot.getGraph().getBackgroundPaint().setColor(Color.rgb(114,194,241));
+        filterPlot.getGraph().getBackgroundPaint().setColor(Color.rgb(114,194,241));
 
         // Remove gridlines
-        circBufferPlot.getGraph().getGridBackgroundPaint().setColor(Color.TRANSPARENT);
-        circBufferPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
-        circBufferPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
-        circBufferPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
-        circBufferPlot.getGraph().getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
-
+        filterPlot.getGraph().getGridBackgroundPaint().setColor(Color.TRANSPARENT);
+        filterPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
+        filterPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
+        filterPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
+        filterPlot.getGraph().getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
 
         // Remove axis labels and values
         // Domain = X; Range = Y
-        circBufferPlot.setDomainLabel(null);
-        circBufferPlot.setRangeLabel(null);
-        circBufferPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
-        circBufferPlot.getGraph().getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
-        circBufferPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
-        circBufferPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
+        filterPlot.setDomainLabel(null);
+        filterPlot.setRangeLabel(null);
+        filterPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
+        filterPlot.getGraph().getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
+        filterPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
+        filterPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
 
         // Remove extraneous elements
-        circBufferPlot.getLayoutManager().remove(circBufferPlot.getLegend());
+        filterPlot.getLayoutManager().remove(filterPlot.getLegend());
 
         // Set size of plot
         SizeMetric height = new SizeMetric(1, SizeMode.FILL);
         SizeMetric width = new SizeMetric(1, SizeMode.FILL);
-        circBufferPlot.getGraph().setSize(new Size(height, width));
+        filterPlot.getGraph().setSize(new Size(height, width));
 
         // Set position of plot (should be tweaked in order to center chart position)
-        circBufferPlot.getGraph().position(0, HorizontalPositioning.ABSOLUTE_FROM_LEFT.ABSOLUTE_FROM_LEFT,
+        filterPlot.getGraph().position(0, HorizontalPositioning.ABSOLUTE_FROM_LEFT.ABSOLUTE_FROM_LEFT,
                 0, VerticalPositioning.ABSOLUTE_FROM_TOP);
 
         // Add plot to FilterGraph
-        this.addView(circBufferPlot, new LayoutParams(
+        this.addView(filterPlot, new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
+        // Explicity visibility setting handles bug on older devices where graph wasn't starting
         onVisibilityChanged(this, View.VISIBLE);
     }
 
@@ -184,7 +193,7 @@ public class FilterGraph extends FrameLayout {
         }
     }
 
-    // ---------------------------------------------------------
+    // --f-------------------------------------------------------
     // Thread management functions
 
     // Start thread that will  update the data whenever a Muse data packet is receive series
@@ -233,7 +242,8 @@ public class FilterGraph extends FrameLayout {
         // Updates newData array based on incoming EEG channel values
         private void getEegChannelValues(double[] newData, MuseDataPacket p) {
             newData[0] = p.getEegChannelValue(Eeg.EEG1);
-            newData[1] = p.getEegChannelValue(Eeg.EEG2);
+            newData[1] = p.        // Explicity visibility setting handles bug on older devices where graph wasn't starting
+                    getEegChannelValue(Eeg.EEG2);
             newData[2] = p.getEegChannelValue(Eeg.EEG3);
             newData[3] = p.getEegChannelValue(Eeg.EEG4);
         }

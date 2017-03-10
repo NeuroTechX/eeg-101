@@ -1,19 +1,21 @@
 package com.eeg_project.components.signal;
-import java.util.Arrays; // For printing arrays when debugging
 
+// This class implements a PSD-specific single channel buffer with methods
+// such as noise marking in a joined buffer, and mean across epochs
 public class PSDBuffer {
-
-    // This class implements a PSD-specific single channel buffer with methods
-    // such as noise marking in a joined buffer, and mean across epochs
 
     // ------------------------------------------------------------------------
     // Variables
+
     private int bufferlength;
     private int nbBins;
     private int pts;
     private int index;
     private double[][] buffer;
     private boolean[] noiseBuffer;
+
+    // ------------------------------------------------------------------------
+    // Constructor
 
     public PSDBuffer(int bl, int nb) {
         this.bufferlength = bl;
@@ -24,9 +26,11 @@ public class PSDBuffer {
         this.noiseBuffer = new boolean[bl];
     }
 
+    // ------------------------------------------------------------------------
+    // Methods
+
     // Updates the 2D buffer array with the 1D newData array at the current index. When index reaches the maximum bufferLength it returns to 0.
     public void update(double[] newData) {
-
 
             // loop through bins
             for(int j = 0; j < nbBins; j++) {
@@ -36,7 +40,6 @@ public class PSDBuffer {
         index = (index + 1) % this.bufferlength;
         pts++;
     }
-
 
     public double[] mean() {
         // Compute the mean of the buffer across epochs (1st dimension of `buffer`).
@@ -64,5 +67,4 @@ public class PSDBuffer {
         this.pts = 0;
         this.noiseBuffer = new boolean[this.bufferlength];
     }
-
 }

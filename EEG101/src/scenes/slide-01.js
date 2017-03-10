@@ -19,7 +19,7 @@ import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
 import { MediaQueryStyleSheet} from 'react-native-responsive';
 
-//Interfaces. For advanced elements such as graphs
+//Interfaces. For elements that bridge to native
 import GraphView from '../interface/GraphView';
 
 

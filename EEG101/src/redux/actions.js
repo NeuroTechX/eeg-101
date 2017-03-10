@@ -1,5 +1,5 @@
 // actions.js
-// Where we build functions that interact with the Redux store.
+// Where we store functions that interact with the Redux store.
 
 import Connector from '../interface/Connector';
 import {

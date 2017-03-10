@@ -15,3 +15,4 @@ This project is maintained by the [NeuroTechX](www.neurotechx.com) community. Jo
 We are currently keeping track of our work in progress on [this Trello board](https://trello.com/b/Da3A090M/interactive-eeg-bci-app-tutorial)
 
 
+

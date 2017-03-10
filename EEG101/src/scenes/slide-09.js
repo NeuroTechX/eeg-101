@@ -11,17 +11,14 @@ import{
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
-
-
-//Interfaces. For advanced elements such as graphs
-import WaveGraphView from '../interface/WaveGraphView';
-
 import Button from '../components/Button';
 import PopUp from '../components/PopUp';
 import PopUpList from '../components/PopUpList';
 import ListItemBlock from '../components/ListItemBlock';
 import PopUpLink from '../components/PopUpLink';
-import ElectrodeSelector from '../components/ElectrodeSelector';
+
+//Interfaces. For elements that bridge to native
+import WaveGraphView from '../interface/WaveGraphView';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {

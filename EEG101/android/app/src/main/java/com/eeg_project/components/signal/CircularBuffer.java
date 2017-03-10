@@ -1,5 +1,4 @@
 package com.eeg_project.components.signal;
-import android.util.Log;
 
 import java.util.Arrays; // For printing arrays when debugging
 
@@ -8,6 +7,7 @@ public class CircularBuffer {
 
     // ------------------------------------------------------------------------
     // Variables
+
     private int bufferLength;
     private int nbCh;
     private int index;
@@ -16,6 +16,7 @@ public class CircularBuffer {
 
     // ------------------------------------------------------------------------
     // Constructor
+
     public CircularBuffer(int bufferLength, int nChannels) {
         this.bufferLength = bufferLength;
         this.nbCh = nChannels;

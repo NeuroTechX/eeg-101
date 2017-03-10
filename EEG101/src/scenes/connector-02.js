@@ -11,11 +11,7 @@ import{
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
-
-
 import config from '../redux/config'
-
-// Components. For JS UI elements
 import WhiteButton from '../components/WhiteButton';
 import ConnectorWidget from '../components/ConnectorWidget';
 

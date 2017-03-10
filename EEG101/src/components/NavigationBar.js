@@ -2,7 +2,6 @@
 // Custom built navbar for navigating the app
 
 import React, {Component} from 'react';
-
 import {
   Animated,
   StatusBar,
@@ -12,9 +11,7 @@ import {
   View,
   Image
 } from 'react-native';
-
 import { connect } from 'react-redux';
-
 import {Actions, DefaultRenderer} from "react-native-router-flux";
 import backButtonIcon from '../assets/back_chevron.png';
 
@@ -22,7 +19,6 @@ import backButtonIcon from '../assets/back_chevron.png';
 function  getSceneKey(state) {
     return {sceneKey: state.scene.sceneKey};
   }
-
 
 class NavigationBar extends Component {
   constructor (props) {
@@ -66,7 +62,6 @@ class NavigationBar extends Component {
     }
   }
 
-
   // If scene does not have a previous prop, will display a blank View as a placeholder
   renderCenterContent (childState: NavigationState) {
     if (childState.previous != null) {
@@ -84,12 +79,9 @@ class NavigationBar extends Component {
     } 
 
     return (
-      <View style={styles.centerImageContainer}>
-        
-      </View>
+      <View style={styles.centerImageContainer}/>
     );
   }
-
 
   renderNavBar (navigationState) {
     let selected = this.getSelectedComponent(navigationState);
