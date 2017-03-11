@@ -7,6 +7,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "covgen": "^2.1.0",
+    "global": "^4.3.1",
     "lodash": "^4.16.4",
     "lottie": "^0.0.1",
     "lottie-react-native": "^1.0.6",

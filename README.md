@@ -1,10 +1,5 @@
-
-<p align="center">
-    <img alt="banner" src="/images/EEG101graphic.png/" width="600">
-</p>
-
-# EEG 101
-
+<img alt="banner" src="/images/EEG101graphic.png/" width="600">
+[![Join the EEG 101 discussion on NeuroTechX Slack](http://neurotechx.herokuapp.com/badge.svg)](http://neurotechx.herokuapp.com/)
 An Interactive EEG tutorial that teaches EEG and BCI basics.
 
 ## Overview
@@ -39,7 +34,7 @@ If you'd like to use EEG 101 as a base for your own React Native app, take a loo
 1. Install and setup React Native from the [Source website](https://facebook.github.io/react-native/docs/getting-started.html). We recommend setting up the [Gradle Daemon](https://docs.gradle.org/2.9/userguide/gradle_daemon.html) as well
 2. Import android folder as a new project into Android Studio
 3. Install [yarn](https://github.com/yarnpkg/yarn) and run `yarn install`. npm might work as well.
-4. Connect an Android device with USB debug mode enabled. There can be issues running this app on a virtual device and we recommend real hardware. 
+4. Connect an Android device with USB debug mode enabled. There can be issues running this app on a virtual device and we recommend real hardware.
 5. run `react-native start` to start React packager
 5. In new terminal, `adb reverse tcp:8081 tcp:8081` to ensure debug server is connected to the device and `react-native run-android` to install
 
@@ -60,4 +55,3 @@ If you'd like to use EEG 101 as a base for your own React Native app, take a loo
 4. Could not get BatchedBridge
 
 - Solution: Run `adb reverse tcp:8081 tcp:8081` again and reload
-
