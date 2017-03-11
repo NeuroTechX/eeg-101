@@ -1,10 +1,10 @@
 <img alt="banner" src="/images/EEG101graphic.png/" width="600">
 
 [![Join the EEG 101 discussion on NeuroTechX Slack](http://neurotechx.herokuapp.com/badge.svg)](http://neurotechx.herokuapp.com/)
+
 An Interactive EEG tutorial that teaches EEG and BCI basics.
 
 ## Overview
-
 - Teaches what EEG is, where signals come from, how devices work, and how to work with EEG data
 - Streams data from the Muse with LibMuse Java API
 - Built with React Native for Android
