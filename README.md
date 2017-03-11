@@ -1,4 +1,5 @@
 <img alt="banner" src="/images/EEG101graphic.png/" width="600">
+
 [![Join the EEG 101 discussion on NeuroTechX Slack](http://neurotechx.herokuapp.com/badge.svg)](http://neurotechx.herokuapp.com/)
 An Interactive EEG tutorial that teaches EEG and BCI basics.
 
