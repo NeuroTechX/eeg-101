@@ -22,7 +22,7 @@ public class PSDGraphManager extends SimpleViewManager<PSDGraph> {
         return REACT_CLASS;
     }
 
-    // Creates new PSDGraph views, accepting context as an argument. Context links the EEGGraph
+    // Creates new PSDGraph views, accepting context as an argument. Context links the PSDGraph
     // view to MainActivity
     @Override
     public PSDGraph createViewInstance(ThemedReactContext context) {
@@ -40,10 +40,16 @@ public class PSDGraphManager extends SimpleViewManager<PSDGraph> {
         }
     }
 
-    // Bridge function for channelOfInterestProp. Calls setChannelOfInterest in EEGGraph
+    // Bridge function for channelOfInterestProp. Calls setChannelOfInterest in PSDGraph
     @ReactProp(name = "channelOfInterest")
     public void setChannelOfInterest(PSDGraph graph, @Nullable int channel) {
         graph.setChannelOfInterest(channel);
+    }
+
+    // Bridge function for isRecording Prop. Calls setIsRecording in PSDGraph
+    @ReactProp(name = "isRecording")
+    public void setIsRecording(PSDGraph graph, @Nullable boolean isRecording) {
+        graph.setIsRecording(isRecording);
     }
 
     // Bridge function for receiving 'start threads' and 'stop threads' commands from the

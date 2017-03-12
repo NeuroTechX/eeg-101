@@ -141,6 +141,7 @@ public class EEGGraph extends FrameLayout {
         dataSeries = new DynamicSeries("EEG data");
 
         // Create high pass filter as well as bandstop filter if Muse is lowEnergy
+        /*
         if (appState.connectedMuse.isLowEnergy()) {
             Log.w("EEG", "Created Filters");
             filterFreq = 256;
@@ -149,7 +150,7 @@ public class EEGGraph extends FrameLayout {
         } else { filterFreq = 220; }
         highPassFilter = new Filter(filterFreq, "highpass", 2, .1, 0);
         highPassFiltState = new double[bandstopFilter.getNB()];
-
+        */
         // Set X and Y domain
         eegPlot.setRangeBoundaries(600, 1000, BoundaryMode.FIXED);
         eegPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);

@@ -126,7 +126,7 @@ public class FilterGraph extends FrameLayout {
         dataSeries = new DynamicSeries("Buffer Plot");
 
         // Set X and Y domain
-        filterPlot.setRangeBoundaries(-200, 200, BoundaryMode.FIXED);
+        filterPlot.setRangeBoundaries(600, 1000, BoundaryMode.FIXED);
         filterPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
         // add dataSeries to plot and define color of plotted line

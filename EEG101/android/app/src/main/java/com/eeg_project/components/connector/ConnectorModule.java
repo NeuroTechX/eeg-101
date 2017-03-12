@@ -35,7 +35,7 @@ Connection process:
 6. On unsuccessful connection, attempts connecting to next Muse in list availableMuses
 7. If no muses can be connected to, repeats steps 3-6 a max of 4 times
 */
-public class  ConnectorModule extends ReactContextBaseJavaModule {
+public class ConnectorModule extends ReactContextBaseJavaModule {
 
     // ----------------------------------------------------------
     // Variables

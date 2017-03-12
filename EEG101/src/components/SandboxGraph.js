@@ -54,7 +54,8 @@ export default class SandboxGraph extends Component {
         return (
           <FilterGraphView style={{flex: 1}} visibility={this.props.visibility}
                            ref={(ref) => this.graphRef = ref}
-                           channelOfInterest={this.props.channelOfInterest}/>
+                           channelOfInterest={this.props.channelOfInterest}
+                           filterType={'lowpass'}/>
         );
 
       case config.graphType.PSD:
@@ -62,7 +63,8 @@ export default class SandboxGraph extends Component {
           <PSDGraphView visibility={this.props.visibility}
                         ref={(ref) => {if(ref !== null) {this.graphRef = ref.getChildRef()}}}
                         channelOfInterest={this.props.channelOfInterest}
-                        dimensions={this.props.dimensions}/>
+                        dimensions={this.props.dimensions}
+                        isRecording={this.props.isRecording}/>
         );
 
       case config.graphType.WAVES:
@@ -70,7 +72,8 @@ export default class SandboxGraph extends Component {
           <WaveGraphView visibility={this.props.visibility}
                          ref={(ref) => {if(ref !== null) {this.graphRef = ref.getChildRef()}}}
                          channelOfInterest={this.props.channelOfInterest}
-                         dimensions={this.props.dimensions}/>
+                         dimensions={this.props.dimensions}
+                         isRecording={this.props.isRecording}/>
         );
     }
   }

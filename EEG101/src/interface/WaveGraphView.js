@@ -144,6 +144,7 @@ WaveGraphView.propTypes = {
   dimensions: PropTypes.object,
   visibility: PropTypes.bool,
   channelOfInterest: PropTypes.number,
+  isRecording: PropTypes.bool,
   ...View.propTypes // include the default view properties
 };
 

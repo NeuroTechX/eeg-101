@@ -41,6 +41,7 @@ class Sandbox extends Component {
     this.state = {
       graphType: config.graphType.EEG,
       channelOfInterest: 1,
+      isRecording: false,
     };
   }
 
@@ -72,6 +73,7 @@ class Sandbox extends Component {
                         channelOfInterest={this.state.channelOfInterest}
                         graphType={this.state.graphType}
                         dimensions={this.props.dimensions}
+                        isRecording={this.state.isRecording}
           />
         </View>
 
@@ -86,6 +88,7 @@ class Sandbox extends Component {
                              active={this.state.graphType === config.graphType.FILTER}>Filtered</SandboxButton>
               <SandboxButton onPress={() => this.setState({graphType: config.graphType.WAVES})}
                              active={this.state.graphType === config.graphType.WAVES}>PSD</SandboxButton>
+              <SandboxButton onPress={() => this.setState({isRecording: !this.state.isRecording})}>Start/Stop Recording</SandboxButton>
             </View>
 
             <View style={styles.textContainer}>

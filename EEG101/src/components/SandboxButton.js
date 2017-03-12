@@ -57,13 +57,13 @@ const styles = MediaQueryStyleSheet.create(
 
     activeText:{
       color: '#484848',
-      fontFamily: 'Roboto-Bold',
+      fontFamily: 'Roboto-Regular',
       fontSize: 15
     },
 
     inactiveText:{
       color: 'gray',
-      fontFamily: 'Roboto-Bold',
+      fontFamily: 'Roboto-Regular',
       fontSize: 15
     },
   },
