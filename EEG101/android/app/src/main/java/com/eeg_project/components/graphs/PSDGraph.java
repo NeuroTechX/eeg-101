@@ -24,6 +24,7 @@ import com.choosemuse.libmuse.MuseDataListener;
 import com.choosemuse.libmuse.MuseDataPacket;
 import com.choosemuse.libmuse.MuseDataPacketType;
 import com.eeg_project.MainApplication;
+import com.eeg_project.components.EEGFileWriter;
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.FFT;
 import com.eeg_project.components.signal.PSDBuffer;
@@ -92,8 +93,8 @@ public class PSDGraph extends FrameLayout {
         isRecording = recording;
 
         // if writer = writing, close and save file
-        if (dataSource != null && dataSource.isRecording()) {
-            dataSource.writeFile();
+        if (dataSource != null && dataSource.fileWriter.isRecording()) {
+            dataSource.fileWriter.writeFile("Power Spectral Density");
         }
     }
 
@@ -271,6 +272,7 @@ public class PSDGraph extends FrameLayout {
         double[] latestSamples;
         private boolean keepRunning = true;
         int stepSize = 26;
+        EEGFileWriter fileWriter = new EEGFileWriter(getContext(), "Power Spectral Density");
 
         // Initialize FFT transform
         int fs = 256;
@@ -285,10 +287,6 @@ public class PSDGraph extends FrameLayout {
         int nbBins = f.length;
         PSDBuffer psdBuffer = new PSDBuffer(fftBufferLength, nbBins);
 
-        // File writing stuff
-        StringBuilder builder = new StringBuilder();
-        int fileNum = 1;
-        public FileWriter fileWriter;
 
         double[] logpower = new double[nbBins];
         public double[] smoothLogPower = new double[nbBins];
@@ -319,55 +317,13 @@ public class PSDGraph extends FrameLayout {
                         // Compute average PSD over buffer
                         smoothLogPower = psdBuffer.mean();
 
-                        if (isRecording) { addPSDToFile(smoothLogPower);}
+                        if (isRecording) { fileWriter.addDataToFile(smoothLogPower);}
 
                         eegBuffer.resetPts();
                     }
                 }
             } catch (Exception e) {
             }
-        }
-
-        public void addPSDToFile(double[] PSD) {
-            // Loops through every PSD bin
-            for (int j = 0; j < PSD.length; j++) {
-                builder.append(Double.toString(PSD[j]));
-                if (j < PSD.length - 1) {
-                    builder.append(",");
-                }
-            }
-            builder.append("\n");
-        }
-
-        // Writes listOfPSDs to MuseData#.csv
-        public void writeFile() {
-            FileOutputStream outputStream ;
-            try {
-                final File dir = getContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
-                final File file = new File(dir,
-                        "MuseRecording"+fileNum+"" +
-                                ".csv");
-                Log.w("Listener", "Creating new file " + file);
-                fileWriter = new FileWriter(file);
-
-                if (!dir.exists()) {
-                    dir.mkdir();
-                }
-
-                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-                bufferedWriter.write(builder.toString());
-                Log.w("Listener", "wrote file to " + file.getAbsolutePath());
-                bufferedWriter.close();
-                fileNum ++;
-            } catch (IOException e) {}
-            builder = new StringBuilder();
-        }
-
-        public boolean isRecording() {
-            if (builder.length() > 1) {
-                return true;
-            }
-            return false;
         }
 
         public void clearDataBuffer() {
@@ -410,9 +366,5 @@ public class PSDGraph extends FrameLayout {
             return datasource.smoothLogPower[index];
         }
     }
-
-    // Internal methods
-
-
 
 }
