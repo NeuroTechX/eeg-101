@@ -30,7 +30,6 @@ public class EEGFileWriter {
     // Constructor
 
     public EEGFileWriter(Context context, String title) {
-        this.context = context;
         initFile(title);
     }
 
@@ -56,24 +55,26 @@ public class EEGFileWriter {
     }
 
     public void writeFile(String title) {
-        FileOutputStream outputStream ;
         try {
-            final File dir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
-            final File file = new File(dir,
-                    "MuseRecording"+fileNum+"" +
+            final File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                    +"/EEG " +
+                    "101");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            final File file = new File(dir, title+"_"+fileNum+
                             ".csv");
+
             Log.w("Listener", "Creating new file " + file);
             fileWriter = new java.io.FileWriter(file);
 
-            if (!dir.exists()) {
-                dir.mkdir();
-            }
+
 
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(builder.toString());
             Log.w("Listener", "wrote file to " + file.getAbsolutePath());
             bufferedWriter.close();
-            fileNum ++;
+            fileNum = fileNum + 1;
         } catch (IOException e) {}
         initFile(title);
     }

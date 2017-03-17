@@ -3,6 +3,8 @@ package com.eeg_project.components.managers;
 import android.view.View;
 
 import com.eeg_project.components.graphs.EEGGraph;
+import com.eeg_project.components.graphs.FilterGraph;
+import com.eeg_project.components.graphs.PSDGraph;
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.SimpleViewManager;
@@ -44,6 +46,12 @@ public class EEGGraphManager extends SimpleViewManager<EEGGraph> {
     @ReactProp(name = "channelOfInterest")
     public void setChannelOfInterest(EEGGraph graph, @Nullable int channel) {
         graph.setChannelOfInterest(channel);
+    }
+
+    // Bridge function for isRecording Prop. Calls setIsRecording in PSDGraph
+    @ReactProp(name = "isRecording")
+    public void setIsRecording(FilterGraph graph, @Nullable boolean isRecording) {
+        graph.setIsRecording(isRecording);
     }
 
     // Bridge function for receiving 'start threads' and 'stop threads' commands from the

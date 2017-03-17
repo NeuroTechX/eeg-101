@@ -82,6 +82,11 @@
 -dontwarn org.apache.commons.**
 -dontwarn pl.edu.icm.jlargearrays.**
 
+# DSP
+-dontwarn biz.source_code.**
+-dontwarn javax.**
+
+
 
 
 

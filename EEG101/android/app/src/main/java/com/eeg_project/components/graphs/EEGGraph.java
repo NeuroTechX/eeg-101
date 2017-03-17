@@ -25,6 +25,7 @@ import com.choosemuse.libmuse.MuseDataListener;
 import com.choosemuse.libmuse.MuseDataPacket;
 import com.choosemuse.libmuse.MuseDataPacketType;
 import com.eeg_project.MainApplication;
+import com.eeg_project.components.EEGFileWriter;
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
 
@@ -60,6 +61,7 @@ public class EEGGraph extends FrameLayout {
     public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
     public double[] newData = new double[4];
 
+
     // Filter variables
     public int filterFreq;
     public Filter highPassFilter;
@@ -70,6 +72,7 @@ public class EEGGraph extends FrameLayout {
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
     public int channelOfInterest = 1;
+    public boolean isRecording;
 
     // grab reference to global Muse
     MainApplication appState;
@@ -121,6 +124,15 @@ public class EEGGraph extends FrameLayout {
                 break;
         }
         */
+    }
+
+    public void setIsRecording(boolean recording) {
+        isRecording = recording;
+
+        // if writer = writing, close and save file
+        if (data != null && data.fileWriter.isRecording()) {
+            data.fileWriter.writeFile("Raw EEG");
+        }
     }
 
     // -----------------------------------------------------------------------
@@ -327,6 +339,7 @@ public class EEGGraph extends FrameLayout {
     public final class EEGDataSource implements Runnable {
         private boolean keepRunning;
         private int stepSize;
+        EEGFileWriter fileWriter = new EEGFileWriter(getContext(), "Raw EEG");
 
         // Choosing these step sizes arbitrarily based on how they look
         public EEGDataSource(Boolean isLowEnergy) {
@@ -348,6 +361,8 @@ public class EEGGraph extends FrameLayout {
 
                         // Add last 1 datpoint from channel of interest in eegBuffer to dataseries
                         dataSeries.addLast(eegBuffer.extract(1)[0][channelOfInterest -1]);
+
+                        if (isRecording) { fileWriter.addDataToFile(eegBuffer.extract(1)[0]);}
 
                         // resets the 'points-since-data-read' value
                         eegBuffer.resetPts();

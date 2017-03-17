@@ -3,6 +3,7 @@ package com.eeg_project.components.managers;
 import android.view.View;
 
 import com.eeg_project.components.graphs.FilterGraph;
+import com.eeg_project.components.graphs.PSDGraph;
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.SimpleViewManager;
@@ -49,6 +50,12 @@ public class FilterGraphManager extends SimpleViewManager<FilterGraph> {
     @ReactProp(name = "filterType")
     public void setFilterType(FilterGraph graph, @Nullable String filterType) {
         graph.setFilterType(filterType);
+    }
+
+    // Bridge function for isRecording Prop. Calls setIsRecording in PSDGraph
+    @ReactProp(name = "isRecording")
+    public void setIsRecording(FilterGraph graph, @Nullable boolean isRecording) {
+        graph.setIsRecording(isRecording);
     }
 
     // Bridge function for receiving 'start threads' and 'stop threads' commands from the

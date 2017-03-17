@@ -21,6 +21,7 @@ import com.choosemuse.libmuse.MuseDataListener;
 import com.choosemuse.libmuse.MuseDataPacket;
 import com.choosemuse.libmuse.MuseDataPacketType;
 import com.eeg_project.MainApplication;
+import com.eeg_project.components.EEGFileWriter;
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
 
@@ -46,7 +47,7 @@ public class FilterGraph extends FrameLayout {
     private FilterDataSource dataSource;
     public DynamicSeries dataSeries;
     public museDataListener dataListener;
-    double filtResult;
+    double[] filtResult;
     Thread dataThread;
     Thread renderingThread;
 
@@ -59,13 +60,14 @@ public class FilterGraph extends FrameLayout {
     public Filter activeFilter;
     // Filter states represent info about previous samples; intermediate values that represent
     // polynomial components determined by previous samples in the epoch. For more info, read the Rational Transfer Function description here: https://www.mathworks.com/help/matlab/ref/filter.html
-    public double[] filtState;
+    public double[][] filtState;
 
     public double[] newData = new double[4];
 
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
     public int channelOfInterest = 1;
+    public boolean isRecording;
 
     // ------------------------------------------------------------------------
     // Constructors
@@ -94,18 +96,27 @@ public class FilterGraph extends FrameLayout {
         switch(filterType) {
             case "lowpass":
                 activeFilter = new Filter(filterFreq, "lowpass", 5, 36, 0);
-                filtState = new double[activeFilter.getNB()];
+                filtState = new double[4][activeFilter.getNB()];
                 break;
 
             case "bandpass":
                 activeFilter = new Filter(filterFreq, "bandpass", 5, 1, 36);
-                filtState = new double[activeFilter.getNB()];
+                filtState = new double[4][activeFilter.getNB()];
                 break;
 
             case "highpass":
                 activeFilter = new Filter(filterFreq, "highpass", 2, 1, 0);
-                filtState = new double[activeFilter.getNB()];
+                filtState = new double[4][activeFilter.getNB()];
                 break;
+        }
+    }
+
+    public void setIsRecording(boolean recording) {
+        isRecording = recording;
+
+        // if writer = writing, close and save file
+        if (dataSource != null && dataSource.fileWriter.isRecording()) {
+            dataSource.fileWriter.writeFile("Filtered EEG");
         }
     }
 
@@ -235,7 +246,7 @@ public class FilterGraph extends FrameLayout {
             eegBuffer.update(newData);
 
             // Filter new raw sample
-            filtState = activeFilter.transform(newData[channelOfInterest - 1], filtState);
+            filtState = activeFilter.transform(newData, filtState);
             filtResult = activeFilter.extractFilteredSamples(filtState);
         }
 
@@ -290,6 +301,7 @@ public class FilterGraph extends FrameLayout {
     public class FilterDataSource implements Runnable {
         int stepSize;
         private boolean keepRunning = true;
+        EEGFileWriter fileWriter = new EEGFileWriter(getContext(), "Filtered EEG");
 
 
         // Choosing these step sizes arbitrarily based on how they look
@@ -309,7 +321,9 @@ public class FilterGraph extends FrameLayout {
                         if (dataSeries.size() >= PLOT_LENGTH) {
                             dataSeries.removeFirst();
                         }
-                        dataSeries.addLast(filtResult);
+                        dataSeries.addLast(filtResult[channelOfInterest - 1]);
+
+                        if (isRecording) { fileWriter.addDataToFile(filtResult);}
 
                         eegBuffer.resetPts();
                     }

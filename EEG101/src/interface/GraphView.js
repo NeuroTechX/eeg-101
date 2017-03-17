@@ -10,6 +10,7 @@ const iface = {
         visibility: PropTypes.bool,
         channelOfInterest: PropTypes.number,
         graphType: PropTypes.string,
+        isRecording: PropTypes.bool,
     ...View.propTypes // include the default view properties
   },
 };

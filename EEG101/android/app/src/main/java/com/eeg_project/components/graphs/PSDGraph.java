@@ -63,7 +63,6 @@ public class PSDGraph extends FrameLayout {
     Thread renderingThread;
     public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
     public double[] newData = new double[4];
-    public boolean isRecording;
 
     // Reference to global application state used for connected Muse
     MainApplication appState;
@@ -71,6 +70,8 @@ public class PSDGraph extends FrameLayout {
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
     public int channelOfInterest = 1;
+    public boolean isRecording;
+
 
     // ------------------------------------------------------------------------
     // Constructors
