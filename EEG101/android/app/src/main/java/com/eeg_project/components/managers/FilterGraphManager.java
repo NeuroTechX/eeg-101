@@ -1,5 +1,6 @@
 package com.eeg_project.components.managers;
 
+import android.util.Log;
 import android.view.View;
 
 import com.eeg_project.components.graphs.FilterGraph;

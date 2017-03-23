@@ -89,7 +89,9 @@ class Sandbox extends Component {
                              active={this.state.graphType === config.graphType.FILTER}>Filtered</SandboxButton>
               <SandboxButton onPress={() => this.setState({graphType: config.graphType.WAVES})}
                              active={this.state.graphType === config.graphType.WAVES}>PSD</SandboxButton>
-              <SandboxButton onPress={() => this.setState({isRecording: !this.state.isRecording})}>Start/Stop Recording</SandboxButton>
+              <SandboxButton onPress={() => {
+                console.log('isRecording state flipped');
+                this.setState({isRecording: !this.state.isRecording})}}>Start/Stop Recording</SandboxButton>
             </View>
 
             <View style={styles.textContainer}>

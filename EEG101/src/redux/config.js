@@ -16,6 +16,11 @@ export default {
     PSD: 'PSD',
     WAVES: 'WAVES',
     ARTEFACT: 'ARTEFACT'
-  }
-
+  },
+  filterType: {
+    LOWPASS: 'LOWPASS',
+    HIGHPASS: 'HIGHPASS',
+    BANDSTOP: 'BANDSTOP',
+    BANDPASS: 'BANDPASS',
+  },
 }

@@ -1,5 +1,6 @@
 package com.eeg_project.components.managers;
 
+import android.util.Log;
 import android.view.View;
 
 import com.eeg_project.components.graphs.EEGGraph;
@@ -48,9 +49,9 @@ public class EEGGraphManager extends SimpleViewManager<EEGGraph> {
         graph.setChannelOfInterest(channel);
     }
 
-    // Bridge function for isRecording Prop. Calls setIsRecording in PSDGraph
+    // Bridge function for isRecording Prop. Calls setIsRecording in EEGGraph
     @ReactProp(name = "isRecording")
-    public void setIsRecording(FilterGraph graph, @Nullable boolean isRecording) {
+    public void setIsRecording(EEGGraph graph, @Nullable boolean isRecording) {
         graph.setIsRecording(isRecording);
     }
 

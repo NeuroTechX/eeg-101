@@ -1,6 +1,7 @@
 package com.eeg_project;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.choosemuse.libmuse.Muse;
 import com.facebook.react.BuildConfig;
@@ -22,7 +23,8 @@ public class MainApplication extends Application implements ReactApplication {
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
     protected boolean getUseDeveloperSupport() {
-      return BuildConfig.DEBUG;
+      Log.w("MainApplication", "build config is " + BuildConfig.DEBUG);
+      return true;
     }
 
     // All packages for native libraries must be added to the array returned by this method

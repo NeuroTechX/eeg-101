@@ -1,5 +1,6 @@
 package com.eeg_project.components.managers;
 
+import android.util.Log;
 import android.view.View;
 
 import com.eeg_project.components.graphs.PSDGraph;
@@ -49,7 +50,11 @@ public class PSDGraphManager extends SimpleViewManager<PSDGraph> {
     // Bridge function for isRecording Prop. Calls setIsRecording in PSDGraph
     @ReactProp(name = "isRecording")
     public void setIsRecording(PSDGraph graph, @Nullable boolean isRecording) {
-        graph.setIsRecording(isRecording);
+        if(isRecording) {
+            graph.startRecording();
+        } else {
+            graph.stopRecording();
+        }
     }
 
     // Bridge function for receiving 'start threads' and 'stop threads' commands from the

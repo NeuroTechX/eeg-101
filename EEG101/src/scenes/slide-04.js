@@ -52,7 +52,7 @@ class SlideFour extends Component {
           <Text style={styles.halfGraphLabelText}>Raw</Text>
         </View>
         <View style={styles.halfGraphContainer}>
-          <FilterGraphView style={{flex:1}} visibility={this.props.isVisible} filterType={'lowpass'}/>
+          <FilterGraphView style={{flex:1}} visibility={this.props.isVisible} filterType={'highpass'}/>
           <Text style={styles.halfGraphLabelText}>Low-Pass Filter</Text>
         </View>
 

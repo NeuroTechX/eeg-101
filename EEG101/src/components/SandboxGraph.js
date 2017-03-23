@@ -56,7 +56,7 @@ export default class SandboxGraph extends Component {
           <FilterGraphView style={{flex: 1}} visibility={this.props.visibility}
                            ref={(ref) => this.graphRef = ref}
                            channelOfInterest={this.props.channelOfInterest}
-                           filterType={'lowpass'}
+                           filterType={'bandpass'}
                            isRecording={this.props.isRecording}/>
         );
 

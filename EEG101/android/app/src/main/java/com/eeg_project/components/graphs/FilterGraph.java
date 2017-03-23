@@ -2,6 +2,7 @@ package com.eeg_project.components.graphs;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -113,10 +114,13 @@ public class FilterGraph extends FrameLayout {
 
     public void setIsRecording(boolean recording) {
         isRecording = recording;
+        Log.w("FilterGraph", "setIsRecording called " + isRecording);
+
 
         // if writer = writing, close and save file
         if (dataSource != null && dataSource.fileWriter.isRecording()) {
-            dataSource.fileWriter.writeFile("Filtered EEG");
+            dataSource.fileWriter.writeFile("Filtered_EEG");
+            dataSource.rawWriter.writeFile("Raw_EEG");
         }
     }
 
@@ -125,7 +129,7 @@ public class FilterGraph extends FrameLayout {
 
     // Initialize and style AndroidPlot Graph. XML styling is not used.
     public void initView(Context context) {
-        filterPlot = new XYPlot(context, "EEG Circ Buffer Plot");
+        filterPlot = new XYPlot(context, "EEG Filter Plot");
 
         // Create plotUpdater
         plotUpdater = new MyPlotUpdater(filterPlot);
@@ -134,10 +138,10 @@ public class FilterGraph extends FrameLayout {
         dataSource = new FilterDataSource(appState.connectedMuse.isLowEnergy());
 
         // Create dataSeries that will be drawn on plot (Y will be obtained from dataSource, x will be implicitly generated):
-        dataSeries = new DynamicSeries("Buffer Plot");
+        dataSeries = new DynamicSeries("Filter Plot");
 
         // Set X and Y domain
-        filterPlot.setRangeBoundaries(600, 1000, BoundaryMode.FIXED);
+        filterPlot.setRangeBoundaries(-200, 200, BoundaryMode.FIXED);
         filterPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
         // add dataSeries to plot and define color of plotted line
@@ -301,8 +305,8 @@ public class FilterGraph extends FrameLayout {
     public class FilterDataSource implements Runnable {
         int stepSize;
         private boolean keepRunning = true;
-        EEGFileWriter fileWriter = new EEGFileWriter(getContext(), "Filtered EEG");
-
+        EEGFileWriter fileWriter = new EEGFileWriter(getContext(), "Filtered-EEG");
+        EEGFileWriter rawWriter = new EEGFileWriter(getContext(), "Raw-EEG");
 
         // Choosing these step sizes arbitrarily based on how they look
         public FilterDataSource(Boolean isLowEnergy) {
@@ -323,7 +327,10 @@ public class FilterGraph extends FrameLayout {
                         }
                         dataSeries.addLast(filtResult[channelOfInterest - 1]);
 
-                        if (isRecording) { fileWriter.addDataToFile(filtResult);}
+                        if (isRecording) {
+                            fileWriter.addDataToFile(filtResult);
+                            rawWriter.addDataToFile(eegBuffer.extract(1)[0]);
+                        }
 
                         eegBuffer.resetPts();
                     }

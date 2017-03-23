@@ -128,6 +128,8 @@ public class EEGGraph extends FrameLayout {
 
     public void setIsRecording(boolean recording) {
         isRecording = recording;
+        Log.w("EEGGraph", "setIsRecording called " + isRecording);
+
 
         // if writer = writing, close and save file
         if (data != null && data.fileWriter.isRecording()) {
@@ -339,7 +341,7 @@ public class EEGGraph extends FrameLayout {
     public final class EEGDataSource implements Runnable {
         private boolean keepRunning;
         private int stepSize;
-        EEGFileWriter fileWriter = new EEGFileWriter(getContext(), "Raw EEG");
+        EEGFileWriter fileWriter = new EEGFileWriter(getContext(), "Raw_EEG");
 
         // Choosing these step sizes arbitrarily based on how they look
         public EEGDataSource(Boolean isLowEnergy) {

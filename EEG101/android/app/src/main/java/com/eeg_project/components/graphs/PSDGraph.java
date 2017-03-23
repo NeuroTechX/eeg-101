@@ -29,13 +29,6 @@ import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.FFT;
 import com.eeg_project.components.signal.PSDBuffer;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-
-
 /*
 View that plots a dynamic power spectral density (PSD) curve
 
@@ -55,7 +48,7 @@ public class PSDGraph extends FrameLayout {
 
     private XYPlot psdPlot;
     private PSDDataSource dataSource;
-    public  int PLOT_LENGTH = 50;
+    public  int PLOT_LENGTH = 128;
     private PSDSeries dataSeries;
     public PlotUpdater plotUpdater;
     public MuseDataListener dataListener;
@@ -70,7 +63,7 @@ public class PSDGraph extends FrameLayout {
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
     public int channelOfInterest = 1;
-    public boolean isRecording;
+
 
 
     // ------------------------------------------------------------------------
@@ -90,9 +83,14 @@ public class PSDGraph extends FrameLayout {
         dataSource.clearDataBuffer();
     }
 
-    public void setIsRecording(boolean recording) {
-        isRecording = recording;
+    public void startRecording() {
+        Log.w("PSDGraph", "StartRecording called");
+        dataSource.isRecording = true;
+    }
 
+    public void stopRecording() {
+        Log.w("PSDGraph", "StopRecording called");
+        dataSource.isRecording = false;
         // if writer = writing, close and save file
         if (dataSource != null && dataSource.fileWriter.isRecording()) {
             dataSource.fileWriter.writeFile("Power Spectral Density");
@@ -273,13 +271,14 @@ public class PSDGraph extends FrameLayout {
         double[] latestSamples;
         private boolean keepRunning = true;
         int stepSize = 26;
-        EEGFileWriter fileWriter = new EEGFileWriter(getContext(), "Power Spectral Density");
+        public boolean isRecording;
+        EEGFileWriter fileWriter = new EEGFileWriter(getContext(), "Power_Spectral_Density");
 
         // Initialize FFT transform
         int fs = 256;
         int bufferLength = fs;
         int windowLength = (int)fs;
-        int fftLength = 256; // Should be 256
+        int fftLength = 256;
         FFT fft = new FFT(windowLength, fftLength, fs);
         double[] f = fft.getFreqBins();
 
@@ -287,8 +286,6 @@ public class PSDGraph extends FrameLayout {
         int fftBufferLength = 20;
         int nbBins = f.length;
         PSDBuffer psdBuffer = new PSDBuffer(fftBufferLength, nbBins);
-
-
         double[] logpower = new double[nbBins];
         public double[] smoothLogPower = new double[nbBins];
 
