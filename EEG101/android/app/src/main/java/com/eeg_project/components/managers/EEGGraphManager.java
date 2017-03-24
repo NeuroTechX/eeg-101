@@ -52,7 +52,11 @@ public class EEGGraphManager extends SimpleViewManager<EEGGraph> {
     // Bridge function for isRecording Prop. Calls setIsRecording in EEGGraph
     @ReactProp(name = "isRecording")
     public void setIsRecording(EEGGraph graph, @Nullable boolean isRecording) {
-        graph.setIsRecording(isRecording);
+        if(isRecording) {
+            graph.startRecording();
+        } else {
+            graph.stopRecording();
+        }
     }
 
     // Bridge function for receiving 'start threads' and 'stop threads' commands from the

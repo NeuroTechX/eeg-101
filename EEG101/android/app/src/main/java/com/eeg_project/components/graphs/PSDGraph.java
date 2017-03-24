@@ -33,7 +33,7 @@ import com.eeg_project.components.signal.PSDBuffer;
 View that plots a dynamic power spectral density (PSD) curve
 
 Plotting process:
-1. Creates AndroidPlot graph and MuseDataListener for EEG data packets
+1. Creates AndroidPlot graph and MuseDataListener for EEG dataSource packets
 2. MuseDataListener updates circular eegBuffer at 220-260hz
 3. When view is visible, dataThread and renderingThread perform PSD computations and plot
 dataSeries, respectively
@@ -48,7 +48,8 @@ public class PSDGraph extends FrameLayout {
 
     private XYPlot psdPlot;
     private PSDDataSource dataSource;
-    public  int PLOT_LENGTH = 128;
+    public  int PLOT_LENGTH = 60;
+    private static final String PLOT_TITLE = "Power_Spectral_Density";
     private PSDSeries dataSeries;
     public PlotUpdater plotUpdater;
     public MuseDataListener dataListener;
@@ -84,16 +85,15 @@ public class PSDGraph extends FrameLayout {
     }
 
     public void startRecording() {
-        Log.w("PSDGraph", "StartRecording called");
+        dataSource.fileWriter.initFile(PLOT_TITLE);
         dataSource.isRecording = true;
     }
 
     public void stopRecording() {
-        Log.w("PSDGraph", "StopRecording called");
         dataSource.isRecording = false;
         // if writer = writing, close and save file
         if (dataSource != null && dataSource.fileWriter.isRecording()) {
-            dataSource.fileWriter.writeFile("Power Spectral Density");
+            dataSource.fileWriter.writeFile(PLOT_TITLE);
         }
     }
 
@@ -173,7 +173,7 @@ public class PSDGraph extends FrameLayout {
             startDataThread();
             startRenderingThread();
             dataListener = new psdDataListener();
-            // Register a listener to receive data packets from Muse. Second argument defines which type(s) of data will be transmitted to listener
+            // Register a listener to receive dataSource packets from Muse. Second argument defines which type(s) of dataSource will be transmitted to listener
             appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         }
     }
@@ -181,8 +181,8 @@ public class PSDGraph extends FrameLayout {
     // ---------------------------------------------------------
     // Thread management functions
 
-    // Start thread that will  update the data whenever a Muse data packet is receive series
-    // and perform data processing
+    // Start thread that will  update the dataSource whenever a Muse dataSource packet is receive series
+    // and perform dataSource processing
     public void startDataThread() {
         dataThread = new Thread (dataSource);
         dataThread.start();
@@ -207,14 +207,14 @@ public class PSDGraph extends FrameLayout {
     // --------------------------------------------------------------
     // Listeners
 
-    // Listener that receives incoming Muse data packets and updates the eegbuffer
+    // Listener that receives incoming Muse dataSource packets and updates the eegbuffer
     class psdDataListener extends MuseDataListener {
 
         // Constructor
         psdDataListener() {
         }
 
-        // Called whenever an incoming data packet is received. Handles different types of incoming data packets and updates data correctly
+        // Called whenever an incoming dataSource packet is received. Handles different types of incoming dataSource packets and updates dataSource correctly
         @Override
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
             getEegChannelValues(newData, p);
@@ -266,7 +266,7 @@ public class PSDGraph extends FrameLayout {
     }
 
     // Data source runnable
-    // Processes raw EEG data and updates dataSeries
+    // Processes raw EEG dataSource and updates dataSeries
     public class PSDDataSource implements Runnable {
         double[] latestSamples;
         private boolean keepRunning = true;
@@ -331,6 +331,9 @@ public class PSDGraph extends FrameLayout {
 
         public void stopThread() {
             keepRunning = false;
+            if (isRecording) {
+                fileWriter.writeFile(PLOT_TITLE);
+            }
         }
     }
 

@@ -1,9 +1,12 @@
 package com.eeg_project.components;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -25,13 +28,14 @@ public class EEGFileWriter {
     StringBuilder builder;
     int fileNum = 1;
     public FileWriter fileWriter;
+    private static boolean isRecording;
 
     // ---------------------------------------------------------------------------
     // Constructor
 
     public EEGFileWriter(Context context, String title) {
         this.context = context;
-        initFile(title);
+        isRecording = false;
     }
 
     // ---------------------------------------------------------------------------
@@ -51,6 +55,8 @@ public class EEGFileWriter {
             }
             builder.append("\n");
         }
+        makeToast(title);
+        isRecording = true;
     }
 
     public void addDataToFile(double[] data) {
@@ -75,7 +81,7 @@ public class EEGFileWriter {
         try {
             final File dir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
             final File file = new File(dir,
-                    title+fileNum+"" +
+                    title+fileNum+
                             ".csv");
             Log.w("Listener", "Creating new file " + file);
             fileWriter = new java.io.FileWriter(file);
@@ -84,19 +90,32 @@ public class EEGFileWriter {
                 dir.mkdir();
             }
 
+
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(builder.toString());
-            Log.w("Listener", "wrote file to " + file.getAbsolutePath());
             bufferedWriter.close();
+
+            sendData(file);
             fileNum ++;
+            isRecording = false;
         } catch (IOException e) {}
-        initFile(title);
+    }
+
+    public void makeToast(String title) {
+        CharSequence toastText = "Recording data in " + title+fileNum+".csv";
+        Toast toast = Toast.makeText(context, toastText, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    public void sendData(File dataCSV) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.setType("application/csv");
+        sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(dataCSV));
+        context.startActivity(Intent.createChooser(sendIntent, "Export data to..."));
     }
 
     public boolean isRecording() {
-        if (builder.length() > 200) {
-            return true;
-        }
-        return false;
+        return isRecording;
     }
 }

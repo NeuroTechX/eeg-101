@@ -56,7 +56,11 @@ public class FilterGraphManager extends SimpleViewManager<FilterGraph> {
     // Bridge function for isRecording Prop. Calls setIsRecording in PSDGraph
     @ReactProp(name = "isRecording")
     public void setIsRecording(FilterGraph graph, @Nullable boolean isRecording) {
-        graph.setIsRecording(isRecording);
+        if(isRecording) {
+            graph.startRecording();
+        } else {
+            graph.stopRecording();
+        }
     }
 
     // Bridge function for receiving 'start threads' and 'stop threads' commands from the

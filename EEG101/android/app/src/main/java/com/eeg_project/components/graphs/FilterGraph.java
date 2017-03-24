@@ -31,9 +31,9 @@ View that plots a single-channel filtered EEG graph
 Bandstop, bandpass, high-pass, and low-pass filters are availabe in Filter class
 
 Plotting process:
-1. Creates AndroidPlot graph and MuseDataListener for EEG data packets
+1. Creates AndroidPlot graph and MuseDataListener for EEG dataSource packets
 2. MuseDataListener updates circular eegBuffer at 220-260hz
-3. raw data is filtered as it comes in with Butterworth filters from DSP Library
+3. raw dataSource is filtered as it comes in with Butterworth filters from DSP Library
 3. dataThread and renderThread add latest filter result to dataSeries and render plot at a fixed
 frequency
 */
@@ -44,11 +44,13 @@ public class FilterGraph extends FrameLayout {
 
     public XYPlot filterPlot;
     private static final int PLOT_LENGTH = 220;
+    private static final String PLOT_TITLE = "Filtered_EEG";
     public MyPlotUpdater plotUpdater;
     private FilterDataSource dataSource;
     public DynamicSeries dataSeries;
     public museDataListener dataListener;
     double[] filtResult;
+
     Thread dataThread;
     Thread renderingThread;
 
@@ -68,7 +70,6 @@ public class FilterGraph extends FrameLayout {
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
     public int channelOfInterest = 1;
-    public boolean isRecording;
 
     // ------------------------------------------------------------------------
     // Constructors
@@ -112,15 +113,16 @@ public class FilterGraph extends FrameLayout {
         }
     }
 
-    public void setIsRecording(boolean recording) {
-        isRecording = recording;
-        Log.w("FilterGraph", "setIsRecording called " + isRecording);
+    public void startRecording() {
+        dataSource.fileWriter.initFile(PLOT_TITLE);
+        dataSource.isRecording = true;
+    }
 
-
+    public void stopRecording() {
+        dataSource.isRecording = false;
         // if writer = writing, close and save file
         if (dataSource != null && dataSource.fileWriter.isRecording()) {
-            dataSource.fileWriter.writeFile("Filtered_EEG");
-            dataSource.rawWriter.writeFile("Raw_EEG");
+            dataSource.fileWriter.writeFile(PLOT_TITLE);
         }
     }
 
@@ -129,7 +131,7 @@ public class FilterGraph extends FrameLayout {
 
     // Initialize and style AndroidPlot Graph. XML styling is not used.
     public void initView(Context context) {
-        filterPlot = new XYPlot(context, "EEG Filter Plot");
+        filterPlot = new XYPlot(context, PLOT_TITLE);
 
         // Create plotUpdater
         plotUpdater = new MyPlotUpdater(filterPlot);
@@ -138,7 +140,7 @@ public class FilterGraph extends FrameLayout {
         dataSource = new FilterDataSource(appState.connectedMuse.isLowEnergy());
 
         // Create dataSeries that will be drawn on plot (Y will be obtained from dataSource, x will be implicitly generated):
-        dataSeries = new DynamicSeries("Filter Plot");
+        dataSeries = new DynamicSeries(PLOT_TITLE);
 
         // Set X and Y domain
         filterPlot.setRangeBoundaries(-200, 200, BoundaryMode.FIXED);
@@ -203,7 +205,7 @@ public class FilterGraph extends FrameLayout {
             startDataThread();
             startRenderingThread();
             dataListener = new museDataListener();
-            // Register a listener to receive data packets from Muse. Second argument defines which type(s) of data will be transmitted to listener
+            // Register a listener to receive dataSource packets from Muse. Second argument defines which type(s) of dataSource will be transmitted to listener
             appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         }
     }
@@ -211,8 +213,8 @@ public class FilterGraph extends FrameLayout {
     // --f-------------------------------------------------------
     // Thread management functions
 
-    // Start thread that will  update the data whenever a Muse data packet is receive series
-    // and perform data processing
+    // Start thread that will  update the dataSource whenever a Muse dataSource packet is receive series
+    // and perform dataSource processing
     public void startDataThread() {
         dataThread = new Thread (dataSource);
         dataThread.start();
@@ -232,18 +234,19 @@ public class FilterGraph extends FrameLayout {
         if (dataListener != null) {
             appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
         }
+
     }
 
     // --------------------------------------------------------------
     // Listeners
 
-    // Listener that receives incoming Muse data packets and updates the eegbuffer
+    // Listener that receives incoming Muse dataSource packets and updates the eegbuffer
     class museDataListener extends MuseDataListener {
         // Constructor
         museDataListener() {
         }
 
-        // Called whenever an incoming data packet is received. Handles different types of incoming data packets and updates data correctly
+        // Called whenever an incoming dataSource packet is received. Handles different types of incoming dataSource packets and updates dataSource correctly
         @Override
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
             getEegChannelValues(newData, p);
@@ -301,12 +304,12 @@ public class FilterGraph extends FrameLayout {
     }
 
     // Data source runnable
-    // Processes raw EEG data and updates dataSeries
+    // Processes raw EEG dataSource and updates dataSeries
     public class FilterDataSource implements Runnable {
         int stepSize;
         private boolean keepRunning = true;
-        EEGFileWriter fileWriter = new EEGFileWriter(getContext(), "Filtered-EEG");
-        EEGFileWriter rawWriter = new EEGFileWriter(getContext(), "Raw-EEG");
+        EEGFileWriter fileWriter = new EEGFileWriter(getContext(),PLOT_TITLE);
+        public boolean isRecording;
 
         // Choosing these step sizes arbitrarily based on how they look
         public FilterDataSource(Boolean isLowEnergy) {
@@ -329,7 +332,6 @@ public class FilterGraph extends FrameLayout {
 
                         if (isRecording) {
                             fileWriter.addDataToFile(filtResult);
-                            rawWriter.addDataToFile(eegBuffer.extract(1)[0]);
                         }
 
                         eegBuffer.resetPts();
@@ -340,6 +342,9 @@ public class FilterGraph extends FrameLayout {
 
         public void stopThread() {
             keepRunning = false;
+            if (isRecording) {
+                fileWriter.writeFile(PLOT_TITLE);
+            }
         }
 
     }

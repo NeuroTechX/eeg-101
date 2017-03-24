@@ -13,6 +13,7 @@ import config from '../redux/config';
 import { bindActionCreators } from 'redux';
 import { setGraphViewDimensions } from '../redux/actions';
 import Button from '../components/Button';
+import RecorderButton from '../components/RecorderButton';
 import SandboxButton from '../components/SandboxButton';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
 import SandboxGraph from '../components/SandboxGraph';
@@ -83,15 +84,14 @@ class Sandbox extends Component {
         <View style={styles.pageContainer}>
           <View style={styles.infoContainer}>
             <View style={styles.buttonContainer}>
-              <SandboxButton onPress={() => this.setState({graphType: config.graphType.EEG})}
+              <SandboxButton onPress={() => this.setState({graphType: config.graphType.EEG, isRecording: false})}
                              active={this.state.graphType === config.graphType.EEG}>Raw</SandboxButton>
-              <SandboxButton onPress={() => this.setState({graphType: config.graphType.FILTER})}
+              <SandboxButton onPress={() => this.setState({graphType: config.graphType.FILTER, isRecording: false})}
                              active={this.state.graphType === config.graphType.FILTER}>Filtered</SandboxButton>
-              <SandboxButton onPress={() => this.setState({graphType: config.graphType.WAVES})}
+              <SandboxButton onPress={() => this.setState({graphType: config.graphType.WAVES, isRecording: false})}
                              active={this.state.graphType === config.graphType.WAVES}>PSD</SandboxButton>
-              <SandboxButton onPress={() => {
-                console.log('isRecording state flipped');
-                this.setState({isRecording: !this.state.isRecording})}}>Start/Stop Recording</SandboxButton>
+              <RecorderButton isRecording={this.state.isRecording} onPress={() => {
+                this.setState({isRecording: !this.state.isRecording})}}/>
             </View>
 
             <View style={styles.textContainer}>
@@ -104,7 +104,10 @@ class Sandbox extends Component {
 
           </View>
 
-          <Button onPress={Actions.End}>END</Button>
+          <Button onPress={() => {
+            this.setState({isRecording: false});
+            Actions.End();
+          }}>END</Button>
         </View>
       </View>
     );

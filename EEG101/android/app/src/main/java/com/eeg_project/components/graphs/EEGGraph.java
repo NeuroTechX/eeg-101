@@ -38,7 +38,7 @@ Bandstop filter is present to remove 60hz noise in 2016 Muse. High pass filter c
 around 0
 
 Plotting process:
-1. Creates AndroidPlot graph and MuseDataListener for EEG data packets
+1. Creates AndroidPlot graph and MuseDataListener for EEG dataSource packets
 2. MuseDataListener updates circular eegBuffer at 220-260hz
 3. When view is visible, dataThread and renderingThread add newest values to dataSeries and plot
 dataSeries, respectively
@@ -50,8 +50,9 @@ public class EEGGraph extends FrameLayout {
 
     public XYPlot eegPlot;
     public static final int PLOT_LENGTH = 220;
+    private static final String PLOT_TITLE = "Raw_EEG";
     public PlotUpdater plotUpdater;
-    EEGDataSource data;
+    EEGDataSource dataSource;
     public DynamicSeries dataSeries;
     String TAG = "EEGGraph";
     Thread dataThread;
@@ -72,7 +73,7 @@ public class EEGGraph extends FrameLayout {
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
     public int channelOfInterest = 1;
-    public boolean isRecording;
+
 
     // grab reference to global Muse
     MainApplication appState;
@@ -126,14 +127,16 @@ public class EEGGraph extends FrameLayout {
         */
     }
 
-    public void setIsRecording(boolean recording) {
-        isRecording = recording;
-        Log.w("EEGGraph", "setIsRecording called " + isRecording);
+    public void startRecording() {
+        dataSource.fileWriter.initFile(PLOT_TITLE);
+        dataSource.isRecording = true;
+    }
 
-
+    public void stopRecording() {
+        dataSource.isRecording = false;
         // if writer = writing, close and save file
-        if (data != null && data.fileWriter.isRecording()) {
-            data.fileWriter.writeFile("Raw EEG");
+        if (dataSource != null && dataSource.fileWriter.isRecording()) {
+            dataSource.fileWriter.writeFile(PLOT_TITLE);
         }
     }
 
@@ -151,8 +154,8 @@ public class EEGGraph extends FrameLayout {
         plotUpdater = new PlotUpdater(eegPlot);
 
         // get datasets (Y will be dataSeries, x will be implicitly generated):
-        data = new EEGDataSource(appState.connectedMuse.isLowEnergy());
-        dataSeries = new DynamicSeries("EEG data");
+        dataSource = new EEGDataSource(appState.connectedMuse.isLowEnergy());
+        dataSeries = new DynamicSeries("EEG dataSource");
 
         // Create high pass filter as well as bandstop filter if Muse is lowEnergy
         /*
@@ -179,8 +182,8 @@ public class EEGGraph extends FrameLayout {
         eegPlot.addSeries(dataSeries,
                 lineFormatter);
 
-        // hook up series to data source
-        //data.addObserver(plotUpdater);
+        // hook up series to dataSource source
+        //dataSource.addObserver(plotUpdater);
 
         // Format plot layout
         //Remove margins, padding and border
@@ -247,10 +250,10 @@ public class EEGGraph extends FrameLayout {
     // ---------------------------------------------------------
     // Thread management functions
 
-    // Start thread that will  update the data whenever a Muse data packet is received
+    // Start thread that will  update the dataSource whenever a Muse dataSource packet is received
     public void startDataThread() {
 
-        dataThread = new Thread (data);
+        dataThread = new Thread (dataSource);
         dataThread.start();
     }
 
@@ -264,7 +267,7 @@ public class EEGGraph extends FrameLayout {
 
     public void stopThreads(){
         plotUpdater.stopThread();
-        data.stopThread();
+        dataSource.stopThread();
 
         if (dataListener != null) {
             appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
@@ -274,8 +277,8 @@ public class EEGGraph extends FrameLayout {
     // --------------------------------------------------------------
     // Listeners
 
-    // Listener that receives incoming data from the Muse.
-    // Will call receiveMuseDataPacket as data comes in around 220hz (260hz for Muse 2016)
+    // Listener that receives incoming dataSource from the Muse.
+    // Will call receiveMuseDataPacket as dataSource comes in around 220hz (260hz for Muse 2016)
     // Updates eegBuffer with latest values for all 4 electrodes
     class DataListener extends MuseDataListener {
         Boolean isLowEnergy;
@@ -337,11 +340,12 @@ public class EEGGraph extends FrameLayout {
     }
 
 
-    // Updates dataSeries, performs data processing
+    // Updates dataSeries, performs dataSource processing
     public final class EEGDataSource implements Runnable {
         private boolean keepRunning;
         private int stepSize;
-        EEGFileWriter fileWriter = new EEGFileWriter(getContext(), "Raw_EEG");
+        EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
+        public boolean isRecording;
 
         // Choosing these step sizes arbitrarily based on how they look
         public EEGDataSource(Boolean isLowEnergy) {
@@ -366,7 +370,7 @@ public class EEGGraph extends FrameLayout {
 
                         if (isRecording) { fileWriter.addDataToFile(eegBuffer.extract(1)[0]);}
 
-                        // resets the 'points-since-data-read' value
+                        // resets the 'points-since-dataSource-read' value
                         eegBuffer.resetPts();
                     }
                 }
@@ -375,6 +379,9 @@ public class EEGGraph extends FrameLayout {
 
         public void stopThread() {
             keepRunning = false;
+            if (isRecording) {
+                fileWriter.writeFile(PLOT_TITLE);
+            }
         }
     }
 }
