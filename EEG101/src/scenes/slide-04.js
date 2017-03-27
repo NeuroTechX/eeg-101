@@ -19,6 +19,7 @@ import { MediaQueryStyleSheet }  from 'react-native-responsive';
 //Interfaces. For elements that bridge to native
 import GraphView from '../interface/GraphView';
 import FilterGraphView from '../interface/FilterGraphView';
+import config from '../redux/config';
 
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
@@ -52,7 +53,7 @@ class SlideFour extends Component {
           <Text style={styles.halfGraphLabelText}>Raw</Text>
         </View>
         <View style={styles.halfGraphContainer}>
-          <FilterGraphView style={{flex:1}} visibility={this.props.isVisible} filterType={'highpass'}/>
+          <FilterGraphView style={{flex:1}} visibility={this.props.isVisible} filterType={config.filterType.LOWPASS}/>
           <Text style={styles.halfGraphLabelText}>Low-Pass Filter</Text>
         </View>
 

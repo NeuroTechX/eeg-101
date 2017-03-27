@@ -1,5 +1,7 @@
 package com.eeg_project.components.signal;
 
+import android.util.Log;
+
 import java.util.Arrays; // For printing arrays when debugging
 
 // A pure Java implementation of a circular buffer
@@ -89,6 +91,27 @@ public class CircularBuffer {
 
         int extractIndex;
         double[] extractedArray = new double[nbSamples];
+
+        for(int i = 0; i < nbSamples; i++) {
+            extractIndex = mod(index - nbSamples + i, bufferLength);
+            extractedArray[i] = buffer[extractIndex][channelofinterest];
+        }
+
+        return extractedArray;
+    }
+
+    public Double[] extractSingleChannelTransposedAsDouble(int nbSamples, int channelofinterest) {
+        // Return an array containing the last `nbSamples` collected in
+        // the circular buffer.
+        //
+        // The shape of the returned array is [nbSamples].
+        //
+        // This transposed version is useful to avoid additional looping
+        // through the returned array when computing FFT (the looping is
+        // instead done here.)
+
+        int extractIndex;
+        Double[] extractedArray = new Double[nbSamples];
 
         for(int i = 0; i < nbSamples; i++) {
             extractIndex = mod(index - nbSamples + i, bufferLength);

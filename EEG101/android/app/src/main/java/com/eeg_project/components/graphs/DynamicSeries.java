@@ -64,7 +64,7 @@ class DynamicSeries implements XYSeries, PlotListener {
         }
     }
 
-    public void addAll(Number[] y) {
+    public void addAll(Double[] y) {
         lock.writeLock().lock();
         try {
             yVals.addAll(Arrays.asList(y));
@@ -80,6 +80,21 @@ class DynamicSeries implements XYSeries, PlotListener {
                 throw new NoSuchElementException();
             }
             yVals.removeFirst();
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    public void remove(int nbsamples) {
+        lock.writeLock().lock();
+        try {
+            if (size() <= 0) {
+                throw new NoSuchElementException();
+            }
+
+            for(int i = 0; i<nbsamples; i++){
+                yVals.removeFirst();
+            }
         } finally {
             lock.writeLock().unlock();
         }

@@ -50,6 +50,7 @@ public class FilterGraphManager extends SimpleViewManager<FilterGraph> {
     // Bridge function for filterType Prop. Calls setFilterType in FilterGraph
     @ReactProp(name = "filterType")
     public void setFilterType(FilterGraph graph, @Nullable String filterType) {
+        Log.w("filterType", filterType);
         graph.setFilterType(filterType);
     }
 

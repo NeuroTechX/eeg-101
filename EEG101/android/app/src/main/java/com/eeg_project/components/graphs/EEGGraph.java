@@ -49,7 +49,7 @@ public class EEGGraph extends FrameLayout {
     // Variables
 
     public XYPlot eegPlot;
-    public static final int PLOT_LENGTH = 220;
+    public static final int PLOT_LENGTH = 1100;
     private static final String PLOT_TITLE = "Raw_EEG";
     public PlotUpdater plotUpdater;
     EEGDataSource dataSource;
@@ -175,8 +175,14 @@ public class EEGGraph extends FrameLayout {
         // This is critical for being able to set the color of the plot
         PixelUtils.init(getContext());
 
+
+
         // Create line formatter with set color
         lineFormatter = new FastLineAndPointRenderer.Formatter(Color.rgb(255, 255, 255), null, null, null);
+
+        // Set line thickness
+        //Float linethickness = new Float(1);
+        //lineFormatter.getLinePaint().setStrokeWidth(linethickness);
 
         // add series to plot
         eegPlot.addSeries(dataSeries,
@@ -284,8 +290,6 @@ public class EEGGraph extends FrameLayout {
         Boolean isLowEnergy;
 
         DataListener() {
-            Log.w("EEG", "Created Data Listener");
-            isLowEnergy = appState.connectedMuse.isLowEnergy();
         }
 
         @Override
@@ -294,11 +298,11 @@ public class EEGGraph extends FrameLayout {
             eegBuffer.update(newData);
         }
 
-        private void getEegChannelValues(double[] buffer, MuseDataPacket p) {
-            buffer[0] = p.getEegChannelValue(Eeg.EEG1);
-            buffer[1] = p.getEegChannelValue(Eeg.EEG2);
-            buffer[2] = p.getEegChannelValue(Eeg.EEG3);
-            buffer[3] = p.getEegChannelValue(Eeg.EEG4);
+        private void getEegChannelValues(double[] newData, MuseDataPacket p) {
+            newData[0] = p.getEegChannelValue(Eeg.EEG1);
+            newData[1] = p.getEegChannelValue(Eeg.EEG2);
+            newData[2] = p.getEegChannelValue(Eeg.EEG3);
+            newData[3] = p.getEegChannelValue(Eeg.EEG4);
         }
 
         @Override
@@ -365,9 +369,9 @@ public class EEGGraph extends FrameLayout {
                             dataSeries.removeFirst();
                         }
 
-                        // Add last 1 datpoint from channel of interest in eegBuffer to dataseries
-                        dataSeries.addLast(eegBuffer.extract(1)[0][channelOfInterest -1]);
 
+                        //dataSeries.addAll(eegBuffer.extractSingleChannelTransposedAsDouble(10,                         channelOfInterest - 1));
+                        dataSeries.addLast(eegBuffer.extract(1)[0][channelOfInterest - 1]);
                         if (isRecording) { fileWriter.addDataToFile(eegBuffer.extract(1)[0]);}
 
                         // resets the 'points-since-dataSource-read' value

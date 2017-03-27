@@ -43,8 +43,10 @@ public class FilterGraph extends FrameLayout {
     // Variables
 
     public XYPlot filterPlot;
-    private static final int PLOT_LENGTH = 220;
+    private static final int PLOT_LENGTH = 1100;
     private static final String PLOT_TITLE = "Filtered_EEG";
+    private int PLOT_LOW_BOUND = 600;
+    private int PLOT_HIGH_BOUND = 1000;
     public MyPlotUpdater plotUpdater;
     private FilterDataSource dataSource;
     public DynamicSeries dataSeries;
@@ -65,7 +67,6 @@ public class FilterGraph extends FrameLayout {
     // polynomial components determined by previous samples in the epoch. For more info, read the Rational Transfer Function description here: https://www.mathworks.com/help/matlab/ref/filter.html
     public double[][] filtState;
 
-    public double[] newData = new double[4];
 
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
@@ -90,27 +91,46 @@ public class FilterGraph extends FrameLayout {
     }
 
     public void setFilterType(String filterType) {
+        stopThreads();
         dataSeries.clear();
+        Log.w("FilterGraph", "set Filter type");
 
         if(appState.connectedMuse.isLowEnergy()) { filterFreq = 256; }
         else { filterFreq = 220; }
 
+        Log.w("FilterGraph", filterType);
+
         switch(filterType) {
-            case "lowpass":
+            case "LOWPASS":
+                PLOT_LOW_BOUND = 600;
+                PLOT_HIGH_BOUND = 1000;
+                filterPlot.setRangeBoundaries(PLOT_LOW_BOUND, PLOT_HIGH_BOUND, BoundaryMode.FIXED);
                 activeFilter = new Filter(filterFreq, "lowpass", 5, 36, 0);
                 filtState = new double[4][activeFilter.getNB()];
+                Log.w("FilterGraph", "set Rangeboundaries in setFilterType");
                 break;
 
-            case "bandpass":
+            case "BANDPASS":
+                PLOT_LOW_BOUND = -200;
+                PLOT_HIGH_BOUND = 200;
+                filterPlot.setRangeBoundaries(PLOT_LOW_BOUND, PLOT_HIGH_BOUND, BoundaryMode.FIXED);
                 activeFilter = new Filter(filterFreq, "bandpass", 5, 1, 36);
                 filtState = new double[4][activeFilter.getNB()];
+                Log.w("FilterGraph", "set Rangeboundaries in setFilterType");
                 break;
 
-            case "highpass":
+            case "HIGHPASS":
+                PLOT_LOW_BOUND = -200;
+                PLOT_HIGH_BOUND = 200;
+                filterPlot.setRangeBoundaries(PLOT_LOW_BOUND, PLOT_HIGH_BOUND, BoundaryMode.FIXED);
                 activeFilter = new Filter(filterFreq, "highpass", 2, 1, 0);
                 filtState = new double[4][activeFilter.getNB()];
+                Log.w("FilterGraph", "set Rangeboundaries in setFilterType");
                 break;
+
         }
+        startDataThread();
+        startRenderingThread();
     }
 
     public void startRecording() {
@@ -143,7 +163,8 @@ public class FilterGraph extends FrameLayout {
         dataSeries = new DynamicSeries(PLOT_TITLE);
 
         // Set X and Y domain
-        filterPlot.setRangeBoundaries(-200, 200, BoundaryMode.FIXED);
+        Log.w("FilterGraph", "Setting plot boundaries in init");
+        filterPlot.setRangeBoundaries(PLOT_LOW_BOUND, PLOT_HIGH_BOUND, BoundaryMode.FIXED);
         filterPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
         // add dataSeries to plot and define color of plotted line
@@ -202,11 +223,8 @@ public class FilterGraph extends FrameLayout {
             stopThreads();
         }
         else if (dataThread == null || !dataThread.isAlive()) {
-            startDataThread();
-            startRenderingThread();
-            dataListener = new museDataListener();
-            // Register a listener to receive dataSource packets from Muse. Second argument defines which type(s) of dataSource will be transmitted to listener
-            appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
+            //startDataThread();
+            //startRenderingThread();
         }
     }
 
@@ -216,22 +234,30 @@ public class FilterGraph extends FrameLayout {
     // Start thread that will  update the dataSource whenever a Muse dataSource packet is receive series
     // and perform dataSource processing
     public void startDataThread() {
+        Log.w("FilterGraph", "starting threads");
+        dataListener = new museDataListener();
+
+        // Register a listener to receive dataSource packets from Muse. Second argument defines which type(s) of dataSource will be transmitted to listener
+        appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         dataThread = new Thread (dataSource);
         dataThread.start();
     }
 
     // Start thread that will render the plot at a fixed speed
     public void startRenderingThread(){
+        Log.w("FilterGraph", "start renderThread");
         renderingThread = new Thread (plotUpdater);
         renderingThread.start();
     }
 
     // Stop all threads
     public void stopThreads(){
+        Log.w("FilterGraph", "Stopping threads");
         plotUpdater.stopThread();
         dataSource.stopThread();
 
         if (dataListener != null) {
+            Log.w("FilterGraph", "unregistering dataListener");
             appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
         }
 
@@ -242,8 +268,12 @@ public class FilterGraph extends FrameLayout {
 
     // Listener that receives incoming Muse dataSource packets and updates the eegbuffer
     class museDataListener extends MuseDataListener {
+        private double[] newData;
+
         // Constructor
         museDataListener() {
+            Log.w("FilterGraph", "dataListener constructed");
+            newData = new double[4];
         }
 
         // Called whenever an incoming dataSource packet is received. Handles different types of incoming dataSource packets and updates dataSource correctly
@@ -260,8 +290,7 @@ public class FilterGraph extends FrameLayout {
         // Updates newData array based on incoming EEG channel values
         private void getEegChannelValues(double[] newData, MuseDataPacket p) {
             newData[0] = p.getEegChannelValue(Eeg.EEG1);
-            newData[1] = p.        // Explicity visibility setting handles bug on older devices where graph wasn't starting
-                    getEegChannelValue(Eeg.EEG2);
+            newData[1] = p.getEegChannelValue(Eeg.EEG2);
             newData[2] = p.getEegChannelValue(Eeg.EEG3);
             newData[3] = p.getEegChannelValue(Eeg.EEG4);
         }
@@ -308,7 +337,7 @@ public class FilterGraph extends FrameLayout {
     public class FilterDataSource implements Runnable {
         int stepSize;
         private boolean keepRunning = true;
-        EEGFileWriter fileWriter = new EEGFileWriter(getContext(),PLOT_TITLE);
+        EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
         public boolean isRecording;
 
         // Choosing these step sizes arbitrarily based on how they look
@@ -323,11 +352,13 @@ public class FilterGraph extends FrameLayout {
         @Override
         public void run() {
             try {
+                keepRunning = true;
                 while (keepRunning) {
                     if (eegBuffer.getPts() >= stepSize) {
                         if (dataSeries.size() >= PLOT_LENGTH) {
                             dataSeries.removeFirst();
                         }
+
                         dataSeries.addLast(filtResult[channelOfInterest - 1]);
 
                         if (isRecording) {

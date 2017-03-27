@@ -44,24 +44,30 @@ class Sandbox extends Component {
       graphType: config.graphType.EEG,
       channelOfInterest: 1,
       isRecording: false,
+      filterType: config.filterType.LOWPASS,
     };
   }
 
-  render() {
-
+  renderInfoView() {
     switch (this.state.graphType) {
       case config.graphType.EEG:
-        infoString = 'Single-channel EEG displays raw, unprocessed data from one electrode';
-        break;
+        return(<Text style={styles.body}>Single-channel EEG displays raw, unprocessed data from one electrode</Text>);
 
       case config.graphType.FILTER:
-        infoString = 'Low-pass filtering removes high frequency noise';
-        break;
+        return(
+          <View>
+            <SandboxButton onPress={()=>this.setState({filterType: config.filterType.LOWPASS, isRecording: false})}>Low Pass</SandboxButton>
+            <SandboxButton onPress={()=>this.setState({filterType: config.filterType.HIGHPASS, isRecording: false})}>High Pass</SandboxButton>
+            <SandboxButton onPress={()=>this.setState({filterType: config.filterType.BANDPASS, isRecording: false})}>Band Pass</SandboxButton>
+          </View>
+        );
 
       case config.graphType.WAVES:
-        infoString ='The PSD curve represents the strength of different frequencies in the EEG';
-        break;
+        return(<Text style={styles.body}>The PSD curve represents the strength of different frequencies in the EEG</Text>)
     }
+  }
+
+  render() {
 
     return (
       <View style={styles.container}>
@@ -76,6 +82,7 @@ class Sandbox extends Component {
                         graphType={this.state.graphType}
                         dimensions={this.props.dimensions}
                         isRecording={this.state.isRecording}
+                        filterType={this.state.filterType}
           />
         </View>
 
@@ -95,9 +102,7 @@ class Sandbox extends Component {
             </View>
 
             <View style={styles.textContainer}>
-              <Text style={styles.body}>
-              {infoString}
-              </Text>
+              {this.renderInfoView()}
             </View>
 
             <ElectrodeSelector channelOfInterest={(channel) => this.setState({channelOfInterest: channel})}/>
