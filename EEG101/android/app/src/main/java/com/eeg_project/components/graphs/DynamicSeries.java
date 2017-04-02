@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 // AndroidPlot class that stores dataSource to be plotted. getX() and getY() are called by XYPlot to to draw graph
 // This implementation only stores Y values, with X values implicitily determined by the index of the dataSource in the LinkedList
 // readwritelocks prevent flickering issue when dataseries is modified while being rendered
-class DynamicSeries implements XYSeries, PlotListener {
+public class DynamicSeries implements XYSeries, PlotListener {
 
     // -------------------------------------------------------------
     // Variables

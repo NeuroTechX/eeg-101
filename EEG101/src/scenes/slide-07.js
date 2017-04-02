@@ -9,6 +9,7 @@ import {
 import{
   Actions,
 }from 'react-native-router-flux';
+import Animation from 'lottie-react-native';
 import { connect } from 'react-redux';
 import Button from '../components/Button';
 import PopUp from '../components/PopUp';
@@ -17,8 +18,10 @@ import { MediaQueryStyleSheet }  from 'react-native-responsive';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
-  return {isVisible: state.scene.sceneKey === 'SlideSeven'};
-
+  return {
+    isVisible: state.scene.sceneKey === 'SlideSeven',
+    dimensions: state.graphViewDimensions,
+  };
 }
 
 class SlideSeven extends Component {
@@ -33,14 +36,22 @@ class SlideSeven extends Component {
     }
   }
 
+  componentDidMount() {
+    this.animation.play();
+  }
+
   render() {
     return (
       <View style={styles.container}>
 
         <View style={styles.graphContainer}>
-          <Image source={require('../assets/wavedecomposition.gif')}
-                 style={styles.image}
-                 resizeMode='contain'/>
+          <Animation
+            ref={animation => {this.animation = animation;}}
+            style={{height: this.props.dimensions.height,
+            width: this.props.dimensions.width}}
+            source="fourier.json"
+            loop={true}
+          />
         </View>
 
         <Text style={styles.currentTitle}>FEATURE EXTRACTION</Text>

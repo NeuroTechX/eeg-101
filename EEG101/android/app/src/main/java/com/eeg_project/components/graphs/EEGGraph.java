@@ -48,27 +48,18 @@ public class EEGGraph extends FrameLayout {
     // ----------------------------------------------------------------------
     // Variables
 
-    public XYPlot eegPlot;
-    public static final int PLOT_LENGTH = 1100;
+    public static XYPlot eegPlot;
+    public static final int PLOT_LENGTH = 366;
     private static final String PLOT_TITLE = "Raw_EEG";
     public PlotUpdater plotUpdater;
-    EEGDataSource dataSource;
+    private EEGDataSource dataSource;
     public DynamicSeries dataSeries;
-    String TAG = "EEGGraph";
-    Thread dataThread;
-    Thread renderingThread;
-    LineAndPointFormatter lineFormatter;
-    public DataListener dataListener;
-    public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
-    public double[] newData = new double[4];
+    private Thread dataThread;
+    private Thread renderingThread;
+    private LineAndPointFormatter lineFormatter;
+    public  DataListener dataListener;
+    public  CircularBuffer eegBuffer = new CircularBuffer(220, 4);
 
-
-    // Filter variables
-    public int filterFreq;
-    public Filter highPassFilter;
-    public Filter bandstopFilter;
-    public double[] bandstopFiltState;
-    public double[] highPassFiltState;
 
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
@@ -83,7 +74,6 @@ public class EEGGraph extends FrameLayout {
     public EEGGraph(Context context) {
         super(context);
         appState = ((MainApplication)context.getApplicationContext());
-
         initView(context);
         // Data threads are started in onVisibilityChanged function
     }
@@ -101,7 +91,6 @@ public class EEGGraph extends FrameLayout {
     // -----------------------------------------------------------------------
     // Bridge functions
     public void setChannelOfInterest(int channel) {
-
         channelOfInterest = channel;
         dataSeries.clear();
 
@@ -168,6 +157,7 @@ public class EEGGraph extends FrameLayout {
         highPassFilter = new Filter(filterFreq, "highpass", 2, .1, 0);
         highPassFiltState = new double[bandstopFilter.getNB()];
         */
+
         // Set X and Y domain
         eegPlot.setRangeBoundaries(600, 1000, BoundaryMode.FIXED);
         eegPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
@@ -175,21 +165,15 @@ public class EEGGraph extends FrameLayout {
         // This is critical for being able to set the color of the plot
         PixelUtils.init(getContext());
 
-
-
         // Create line formatter with set color
         lineFormatter = new FastLineAndPointRenderer.Formatter(Color.rgb(255, 255, 255), null, null, null);
 
         // Set line thickness
-        //Float linethickness = new Float(1);
-        //lineFormatter.getLinePaint().setStrokeWidth(linethickness);
+        lineFormatter.getLinePaint().setStrokeWidth(3);
 
         // add series to plot
         eegPlot.addSeries(dataSeries,
                 lineFormatter);
-
-        // hook up series to dataSource source
-        //dataSource.addObserver(plotUpdater);
 
         // Format plot layout
         //Remove margins, padding and border
@@ -216,12 +200,12 @@ public class EEGGraph extends FrameLayout {
         eegPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
 
         // Remove extraneous elements
-        //eegPlot.setTitle(null);
         eegPlot.getLayoutManager().remove(eegPlot.getLegend());
 
         // Set size of plot
         SizeMetric height = new SizeMetric(1, SizeMode.FILL);
         SizeMetric width = new SizeMetric(1, SizeMode.FILL);
+
         // Set size of plot
         eegPlot.getGraph().setSize(new Size(height, width));
 
@@ -233,7 +217,6 @@ public class EEGGraph extends FrameLayout {
         this.addView(eegPlot, new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-        eegPlot.setDrawingCacheEnabled(true);
 
         // Explicity visibility setting handles bug on older devices where graph wasn't starting
         onVisibilityChanged(this, View.VISIBLE);
@@ -247,9 +230,6 @@ public class EEGGraph extends FrameLayout {
         else if (dataThread == null || !dataThread.isAlive()) {
             startDataThread();
             startRenderingThread();
-            // Register a listener to receive connection state changes.
-            dataListener = new DataListener();
-            appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         }
     }
 
@@ -258,7 +238,10 @@ public class EEGGraph extends FrameLayout {
 
     // Start thread that will  update the dataSource whenever a Muse dataSource packet is received
     public void startDataThread() {
+        dataListener = new DataListener();
 
+        // Register a listener to receive dataSource packets from Muse. Second argument defines which type(s) of dataSource will be transmitted to listener
+        appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         dataThread = new Thread (dataSource);
         dataThread.start();
     }
@@ -269,7 +252,6 @@ public class EEGGraph extends FrameLayout {
         renderingThread = new Thread (plotUpdater);
         renderingThread.start();
     }
-
 
     public void stopThreads(){
         plotUpdater.stopThread();
@@ -286,18 +268,36 @@ public class EEGGraph extends FrameLayout {
     // Listener that receives incoming dataSource from the Muse.
     // Will call receiveMuseDataPacket as dataSource comes in around 220hz (260hz for Muse 2016)
     // Updates eegBuffer with latest values for all 4 electrodes
-    class DataListener extends MuseDataListener {
-        Boolean isLowEnergy;
+    public class DataListener extends MuseDataListener {
+        public double[] newData;
+
+        // Filter variables
+        public boolean filterOn = false;
+        public Filter bandstopFilter;
+        public double[][] bandstopFiltState;
+        public double[] bandstopFiltResult;
 
         DataListener() {
+            if (appState.connectedMuse.isLowEnergy()) {
+                filterOn = true;
+                bandstopFilter = new Filter(256, "bandstop", 5, 55, 65);
+                bandstopFiltState = new double[4][bandstopFilter.getNB()];
+            }
+            newData = new double[4];
         }
 
         @Override
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
             getEegChannelValues(newData, p);
+
+            if(filterOn) {
+                bandstopFiltState = bandstopFilter.transform(newData, bandstopFiltState);
+                newData = bandstopFilter.extractFilteredSamples(bandstopFiltState);
+            }
             eegBuffer.update(newData);
         }
 
+        // Updates newData array based on incoming EEG channel values
         private void getEegChannelValues(double[] newData, MuseDataPacket p) {
             newData[0] = p.getEegChannelValue(Eeg.EEG1);
             newData[1] = p.getEegChannelValue(Eeg.EEG2);
@@ -347,16 +347,11 @@ public class EEGGraph extends FrameLayout {
     // Updates dataSeries, performs dataSource processing
     public final class EEGDataSource implements Runnable {
         private boolean keepRunning;
-        private int stepSize;
-        EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
+        public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
         public boolean isRecording;
 
         // Choosing these step sizes arbitrarily based on how they look
         public EEGDataSource(Boolean isLowEnergy) {
-            if (isLowEnergy) {stepSize = 6;}
-            else {
-                stepSize = 5;
-            }
         }
 
         @Override
@@ -364,13 +359,15 @@ public class EEGGraph extends FrameLayout {
             try {
                 keepRunning = true;
                 while (keepRunning) {
-                    if (eegBuffer.getPts() >= stepSize) {
+                    if (eegBuffer.getPts() >= 3) {
                         if (dataSeries.size() >= PLOT_LENGTH) {
                             dataSeries.removeFirst();
                         }
 
-
+                        // For adding 10 data points at a time (Full sampling)
                         //dataSeries.addAll(eegBuffer.extractSingleChannelTransposedAsDouble(10,                         channelOfInterest - 1));
+
+                        // For adding every 5th or 6th data point (Down sampling)
                         dataSeries.addLast(eegBuffer.extract(1)[0][channelOfInterest - 1]);
                         if (isRecording) { fileWriter.addDataToFile(eegBuffer.extract(1)[0]);}
 

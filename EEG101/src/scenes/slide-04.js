@@ -53,8 +53,8 @@ class SlideFour extends Component {
           <Text style={styles.halfGraphLabelText}>Raw</Text>
         </View>
         <View style={styles.halfGraphContainer}>
-          <FilterGraphView style={{flex:1}} visibility={this.props.isVisible} filterType={config.filterType.LOWPASS}/>
-          <Text style={styles.halfGraphLabelText}>Low-Pass Filter</Text>
+          <FilterGraphView style={{flex:1}} visibility={this.props.isVisible} filterType={config.filterType.BANDPASS}/>
+          <Text style={styles.halfGraphLabelText}>Band-Pass Filter</Text>
         </View>
 
           <Text style={styles.currentTitle}>FILTERING</Text>
@@ -74,7 +74,7 @@ class SlideFour extends Component {
 
         <PopUp onClose={() => this.setState({popUpVisible: false})} visible={this.state.popUpVisible}
                title="Filters">
-          Filters remove frequencies that sit outside the spectrum of signals produced by the brain, getting rid of some of the noise produced by muscles or environmental electrical activity. Filters are normally either high-pass (removing low frequencies), low-pass (removing high frequencies) or band-pass (allowing only a specific band of frequencies through). Here, we have implemented a low-pass filter that removes high frequency noise.
+          Filters remove frequencies that sit outside the spectrum of signals produced by the brain, getting rid of some of the noise produced by muscles or environmental electrical activity. Filters are normally either high-pass (removing low frequencies), low-pass (removing high frequencies) or band-pass (allowing only a specific band of frequencies through). Here, we have implemented a band-pass filter that removes frequencies outside the range of those typically produced by the brain.
         </PopUp>
 
       </View>

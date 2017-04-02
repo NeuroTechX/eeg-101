@@ -36,7 +36,7 @@ function  mapStateToProps(state) {
           <Text style={styles.body}>Fit the earpieces snugly behind your ears and adjust the headband so that it rests mid forehead. Clear any hair that might prevent the device from making contact with your skin.</Text>
         </View>
 
-        <TouchableOpacity onPress={Actions.Sandbox}>
+        <TouchableOpacity onPress={() => Actions.Sandbox({type: 'push'})}>
           <View style={{borderColor: 'white',
             borderWidth: 1,
             alignSelf: 'center',

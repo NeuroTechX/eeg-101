@@ -34,10 +34,9 @@ class End extends Component {
 
             <View style={styles.listBox}>
               <Text style={styles.header}>What's Next?</Text>
-              <Text style={styles.body}>1. Interactive Brain Computer Interface</Text>
-              <Text style={styles.body}>2. Band-Pass Filtering</Text>
-              <Text style={styles.body}>3. Live Artifact Removal</Text>
-              <Text style={styles.body}>4. Machine Learning!</Text>
+                <Text style={styles.body}>1. Live Artifact Removal</Text>
+                <Text style={styles.body}>2. Offline Mode</Text>
+                <Text style={styles.body}>3. Interactive Brain Computer Interface!</Text>
             </View>
 
             <View style={{marginBottom: 20}}>

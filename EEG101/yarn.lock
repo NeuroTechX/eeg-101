@@ -2562,16 +2562,16 @@ loose-envify@^1.0.0, loose-envify@^1.1.0:
   dependencies:
     js-tokens "^2.0.0"
 
-lottie-ios@^1.0.2:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/lottie-ios/-/lottie-ios-1.5.0.tgz#9ddd1394bfbcd96b044356c72d9c84270fb665c6"
+lottie-ios@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/lottie-ios/-/lottie-ios-1.5.2.tgz#c188f1baa1c308a291538fc585a76e0cfc060711"
 
-lottie-react-native@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/lottie-react-native/-/lottie-react-native-1.0.6.tgz#f9f074372addc1fbb365072f022ed0291e2b866a"
+lottie-react-native@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/lottie-react-native/-/lottie-react-native-1.1.1.tgz#1c87a3afca96edfa0869227140a2cff9bcc62c9b"
   dependencies:
     invariant "^2.2.2"
-    lottie-ios "^1.0.2"
+    lottie-ios "^1.5.2"
     react-native-safe-module "^1.1.0"
 
 lottie@^0.0.1:
@@ -2678,13 +2678,13 @@ mime-db@~1.23.0:
   version "1.23.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.23.0.tgz#a31b4070adaea27d732ea333740a64d0ec9a6659"
 
-mime-types@2.1.11, mime-types@~2.1.7, mime-types@~2.1.9:
+mime-types@2.1.11, mime-types@~2.1.7:
   version "2.1.11"
   resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.11.tgz#c259c471bda808a85d6cd193b430a5fae4473b3c"
   dependencies:
     mime-db "~1.23.0"
 
-mime-types@^2.1.12, mime-types@~2.1.11, mime-types@~2.1.13, mime-types@~2.1.6:
+mime-types@^2.1.12, mime-types@~2.1.11, mime-types@~2.1.13, mime-types@~2.1.6, mime-types@~2.1.9:
   version "2.1.13"
   resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.13.tgz#e07aaa9c6c6b9a7ca3012c69003ad25a39e92a88"
   dependencies:

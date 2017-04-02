@@ -12,7 +12,6 @@ import{
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
-// import Animation from 'lottie-react-native';
 import WhiteButton from '../components/WhiteButton';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to this scene's ley
@@ -30,12 +29,6 @@ class Landing extends Component {
     };
   }
 
-  componentDidMount() {
-    Animated.timing(this.state.progress, {
-      toValue: 1,
-      duration: 5000,
-    }).start();
-  }
 
   render() {
     return (

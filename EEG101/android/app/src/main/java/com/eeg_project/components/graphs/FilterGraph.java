@@ -13,6 +13,7 @@ import com.androidplot.ui.SizeMetric;
 import com.androidplot.ui.SizeMode;
 import com.androidplot.ui.VerticalPositioning;
 import com.androidplot.xy.BoundaryMode;
+import com.androidplot.xy.FastLineAndPointRenderer;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.XYPlot;
 import com.choosemuse.libmuse.Eeg;
@@ -25,6 +26,8 @@ import com.eeg_project.MainApplication;
 import com.eeg_project.components.EEGFileWriter;
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
+
+import java.lang.ref.WeakReference;
 
 /*
 View that plots a single-channel filtered EEG graph
@@ -43,15 +46,15 @@ public class FilterGraph extends FrameLayout {
     // Variables
 
     public XYPlot filterPlot;
-    private static final int PLOT_LENGTH = 1100;
+    private static final int PLOT_LENGTH = 366;
     private static final String PLOT_TITLE = "Filtered_EEG";
     private int PLOT_LOW_BOUND = 600;
     private int PLOT_HIGH_BOUND = 1000;
-    public MyPlotUpdater plotUpdater;
+    public PlotUpdater plotUpdater;
     private FilterDataSource dataSource;
+    private LineAndPointFormatter lineFormatter;
     public DynamicSeries dataSeries;
     public museDataListener dataListener;
-    double[] filtResult;
 
     Thread dataThread;
     Thread renderingThread;
@@ -93,30 +96,25 @@ public class FilterGraph extends FrameLayout {
     public void setFilterType(String filterType) {
         stopThreads();
         dataSeries.clear();
-        Log.w("FilterGraph", "set Filter type");
 
         if(appState.connectedMuse.isLowEnergy()) { filterFreq = 256; }
         else { filterFreq = 220; }
-
-        Log.w("FilterGraph", filterType);
 
         switch(filterType) {
             case "LOWPASS":
                 PLOT_LOW_BOUND = 600;
                 PLOT_HIGH_BOUND = 1000;
                 filterPlot.setRangeBoundaries(PLOT_LOW_BOUND, PLOT_HIGH_BOUND, BoundaryMode.FIXED);
-                activeFilter = new Filter(filterFreq, "lowpass", 5, 36, 0);
+                activeFilter = new Filter(filterFreq, "lowpass", 5, 35, 0);
                 filtState = new double[4][activeFilter.getNB()];
-                Log.w("FilterGraph", "set Rangeboundaries in setFilterType");
                 break;
 
             case "BANDPASS":
                 PLOT_LOW_BOUND = -200;
                 PLOT_HIGH_BOUND = 200;
                 filterPlot.setRangeBoundaries(PLOT_LOW_BOUND, PLOT_HIGH_BOUND, BoundaryMode.FIXED);
-                activeFilter = new Filter(filterFreq, "bandpass", 5, 1, 36);
+                activeFilter = new Filter(filterFreq, "bandpass", 5, 2, 35);
                 filtState = new double[4][activeFilter.getNB()];
-                Log.w("FilterGraph", "set Rangeboundaries in setFilterType");
                 break;
 
             case "HIGHPASS":
@@ -125,9 +123,7 @@ public class FilterGraph extends FrameLayout {
                 filterPlot.setRangeBoundaries(PLOT_LOW_BOUND, PLOT_HIGH_BOUND, BoundaryMode.FIXED);
                 activeFilter = new Filter(filterFreq, "highpass", 2, 1, 0);
                 filtState = new double[4][activeFilter.getNB()];
-                Log.w("FilterGraph", "set Rangeboundaries in setFilterType");
                 break;
-
         }
         startDataThread();
         startRenderingThread();
@@ -154,7 +150,7 @@ public class FilterGraph extends FrameLayout {
         filterPlot = new XYPlot(context, PLOT_TITLE);
 
         // Create plotUpdater
-        plotUpdater = new MyPlotUpdater(filterPlot);
+        plotUpdater = new PlotUpdater(filterPlot);
 
         // Create dataSource
         dataSource = new FilterDataSource(appState.connectedMuse.isLowEnergy());
@@ -163,13 +159,18 @@ public class FilterGraph extends FrameLayout {
         dataSeries = new DynamicSeries(PLOT_TITLE);
 
         // Set X and Y domain
-        Log.w("FilterGraph", "Setting plot boundaries in init");
         filterPlot.setRangeBoundaries(PLOT_LOW_BOUND, PLOT_HIGH_BOUND, BoundaryMode.FIXED);
-        filterPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
+        filterPlot.setDomainBoundaries(0, 366, BoundaryMode.FIXED);
 
         // add dataSeries to plot and define color of plotted line
+        // Create line formatter with set color
+        lineFormatter = new FastLineAndPointRenderer.Formatter(Color.rgb(255, 255, 255), null, null, null);
+
+        // Set line thickness
+        lineFormatter.getLinePaint().setStrokeWidth(3);
+
         filterPlot.addSeries(dataSeries,
-                new LineAndPointFormatter(Color.rgb(255,255,255), null, null, null));
+                lineFormatter);
 
         // Format plot layout
         //Remove margins, padding and border
@@ -212,8 +213,6 @@ public class FilterGraph extends FrameLayout {
         this.addView(filterPlot, new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-        // Explicity visibility setting handles bug on older devices where graph wasn't starting
-        onVisibilityChanged(this, View.VISIBLE);
     }
 
     // Called when user navigates away from parent React Native component. Stops active threads in order to limit memory usage
@@ -223,8 +222,8 @@ public class FilterGraph extends FrameLayout {
             stopThreads();
         }
         else if (dataThread == null || !dataThread.isAlive()) {
-            //startDataThread();
-            //startRenderingThread();
+            startDataThread();
+            startRenderingThread();
         }
     }
 
@@ -234,7 +233,6 @@ public class FilterGraph extends FrameLayout {
     // Start thread that will  update the dataSource whenever a Muse dataSource packet is receive series
     // and perform dataSource processing
     public void startDataThread() {
-        Log.w("FilterGraph", "starting threads");
         dataListener = new museDataListener();
 
         // Register a listener to receive dataSource packets from Muse. Second argument defines which type(s) of dataSource will be transmitted to listener
@@ -245,19 +243,16 @@ public class FilterGraph extends FrameLayout {
 
     // Start thread that will render the plot at a fixed speed
     public void startRenderingThread(){
-        Log.w("FilterGraph", "start renderThread");
         renderingThread = new Thread (plotUpdater);
         renderingThread.start();
     }
 
     // Stop all threads
     public void stopThreads(){
-        Log.w("FilterGraph", "Stopping threads");
         plotUpdater.stopThread();
         dataSource.stopThread();
 
         if (dataListener != null) {
-            Log.w("FilterGraph", "unregistering dataListener");
             appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
         }
 
@@ -272,7 +267,6 @@ public class FilterGraph extends FrameLayout {
 
         // Constructor
         museDataListener() {
-            Log.w("FilterGraph", "dataListener constructed");
             newData = new double[4];
         }
 
@@ -280,11 +274,8 @@ public class FilterGraph extends FrameLayout {
         @Override
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
             getEegChannelValues(newData, p);
-            eegBuffer.update(newData);
-
-            // Filter new raw sample
             filtState = activeFilter.transform(newData, filtState);
-            filtResult = activeFilter.extractFilteredSamples(filtState);
+            eegBuffer.update(activeFilter.extractFilteredSamples(filtState));
         }
 
         // Updates newData array based on incoming EEG channel values
@@ -305,12 +296,12 @@ public class FilterGraph extends FrameLayout {
     // Runnables
 
     // Runnable class that redraws plot at a fixed frequency
-    class MyPlotUpdater implements Runnable {
-        Plot plot;
+    class PlotUpdater implements Runnable {
+        WeakReference<Plot> plot;
         private boolean keepRunning = true;
 
-        public MyPlotUpdater(Plot plot) {
-            this.plot = plot;
+        public PlotUpdater(Plot plot) {
+            this.plot = new WeakReference<Plot>(plot);
         }
 
         @Override
@@ -320,7 +311,7 @@ public class FilterGraph extends FrameLayout {
                 while (keepRunning) {
                     // 33ms sleep = 30 fps
                     Thread.sleep(33);
-                    plot.redraw();
+                    plot.get().redraw();
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -334,19 +325,13 @@ public class FilterGraph extends FrameLayout {
 
     // Data source runnable
     // Processes raw EEG dataSource and updates dataSeries
-    public class FilterDataSource implements Runnable {
-        int stepSize;
-        private boolean keepRunning = true;
-        EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
+    public final class FilterDataSource implements Runnable {
+        private boolean keepRunning;
+        public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
         public boolean isRecording;
 
         // Choosing these step sizes arbitrarily based on how they look
         public FilterDataSource(Boolean isLowEnergy) {
-            if (isLowEnergy) {
-                stepSize = 6;
-            } else {
-                stepSize = 5;
-            }
         }
 
         @Override
@@ -354,16 +339,13 @@ public class FilterGraph extends FrameLayout {
             try {
                 keepRunning = true;
                 while (keepRunning) {
-                    if (eegBuffer.getPts() >= stepSize) {
+                    if (eegBuffer.getPts() >= 3) {
                         if (dataSeries.size() >= PLOT_LENGTH) {
                             dataSeries.removeFirst();
                         }
 
-                        dataSeries.addLast(filtResult[channelOfInterest - 1]);
-
-                        if (isRecording) {
-                            fileWriter.addDataToFile(filtResult);
-                        }
+                        dataSeries.addLast(eegBuffer.extract(1)[0][channelOfInterest - 1]);
+                        if (isRecording) { fileWriter.addDataToFile(eegBuffer.extract(1)[0]);}
 
                         eegBuffer.resetPts();
                     }

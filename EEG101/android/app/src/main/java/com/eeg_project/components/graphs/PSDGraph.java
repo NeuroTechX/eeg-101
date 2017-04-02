@@ -2,8 +2,6 @@ package com.eeg_project.components.graphs;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -29,6 +27,8 @@ import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.FFT;
 import com.eeg_project.components.signal.PSDBuffer;
 
+import java.lang.ref.WeakReference;
+
 /*
 View that plots a dynamic power spectral density (PSD) curve
 
@@ -48,7 +48,7 @@ public class PSDGraph extends FrameLayout {
 
     private XYPlot psdPlot;
     private PSDDataSource dataSource;
-    public  int PLOT_LENGTH = 60;
+    public  int PLOT_LENGTH = 50;
     private static final String PLOT_TITLE = "Power_Spectral_Density";
     private PSDSeries dataSeries;
     public PlotUpdater plotUpdater;
@@ -56,7 +56,7 @@ public class PSDGraph extends FrameLayout {
     Thread dataThread;
     Thread renderingThread;
     public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
-    public double[] newData = new double[4];
+
 
     // Reference to global application state used for connected Muse
     MainApplication appState;
@@ -172,7 +172,7 @@ public class PSDGraph extends FrameLayout {
         else if (dataThread == null || !dataThread.isAlive()) {
             startDataThread();
             startRenderingThread();
-            dataListener = new psdDataListener();
+            dataListener = new DataListener();
             // Register a listener to receive dataSource packets from Muse. Second argument defines which type(s) of dataSource will be transmitted to listener
             appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         }
@@ -184,7 +184,7 @@ public class PSDGraph extends FrameLayout {
     // Start thread that will  update the dataSource whenever a Muse dataSource packet is receive series
     // and perform dataSource processing
     public void startDataThread() {
-        dataThread = new Thread (dataSource);
+        dataThread = new Thread(dataSource);
         dataThread.start();
     }
 
@@ -207,11 +207,15 @@ public class PSDGraph extends FrameLayout {
     // --------------------------------------------------------------
     // Listeners
 
-    // Listener that receives incoming Muse dataSource packets and updates the eegbuffer
-    class psdDataListener extends MuseDataListener {
+    // Listener that receives incoming dataSource from the Muse.
+    // Will call receiveMuseDataPacket as dataSource comes in around 220hz (260hz for Muse 2016)
+    // Updates eegBuffer with latest values for all 4 electrodes
+    class DataListener extends MuseDataListener {
+        public double[] newData;
 
         // Constructor
-        psdDataListener() {
+        DataListener() {
+            newData  = new double[4];
         }
 
         // Called whenever an incoming dataSource packet is received. Handles different types of incoming dataSource packets and updates dataSource correctly
@@ -240,10 +244,10 @@ public class PSDGraph extends FrameLayout {
 
     // Runnable class that redraws plot at a fixed frequency
     class PlotUpdater implements Runnable {
-        Plot plot;
+        WeakReference<Plot> plot;
         private boolean keepRunning = true;
         public PlotUpdater(Plot plot) {
-            this.plot = plot;
+            this.plot = new WeakReference<Plot>(plot);
         }
 
         @Override
@@ -253,7 +257,7 @@ public class PSDGraph extends FrameLayout {
                 while (keepRunning) {
                     // 33ms sleep = 30 fps
                     Thread.sleep(33);
-                    plot.redraw();
+                    plot.get().redraw();
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -267,44 +271,46 @@ public class PSDGraph extends FrameLayout {
 
     // Data source runnable
     // Processes raw EEG dataSource and updates dataSeries
-    public class PSDDataSource implements Runnable {
-        double[] latestSamples;
+    public final class PSDDataSource implements Runnable {
         private boolean keepRunning = true;
+        double[] latestSamples;
         int stepSize = 26;
         public boolean isRecording;
-        EEGFileWriter fileWriter = new EEGFileWriter(getContext(), "Power_Spectral_Density");
-
-        // Initialize FFT transform
-        int fs = 256;
-        int bufferLength = fs;
-        int windowLength = (int)fs;
-        int fftLength = 256;
-        FFT fft = new FFT(windowLength, fftLength, fs);
-        double[] f = fft.getFreqBins();
-
-        // Initialize FFT 2D Buffer
-        int fftBufferLength = 20;
-        int nbBins = f.length;
-        PSDBuffer psdBuffer = new PSDBuffer(fftBufferLength, nbBins);
-        double[] logpower = new double[nbBins];
-        public double[] smoothLogPower = new double[nbBins];
+        public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), "Power_Spectral_Density");
+        private int samplingFrequency;
+        private FFT fft;
+        private PSDBuffer psdBuffer;
+        private double[] logpower;
+        private double[] smoothLogPower;
 
         public PSDDataSource(Boolean isLowEnergy) {
             if (isLowEnergy) {
+                samplingFrequency = 256;
                 stepSize = 26;
             } else {
+                samplingFrequency = 220;
                 stepSize = 22;
             }
+
+            // Initialize FFT transform
+            fft = new FFT(256, 256, samplingFrequency);
+
+            // Initialize FFT 2D Buffer
+            int nbBins =fft.getFreqBins().length;
+            psdBuffer = new PSDBuffer(20, nbBins);
+            logpower = new double[nbBins];
+            smoothLogPower = new double[nbBins];
         }
 
         @Override
         public void run() {
             try {
+                keepRunning = true;
                 while (keepRunning) {
                     if (eegBuffer.getPts() >= stepSize) {
 
                         // Extract latest raw samples
-                        latestSamples = eegBuffer.extractSingleChannelTransposed(windowLength, channelOfInterest - 1);
+                        latestSamples = eegBuffer.extractSingleChannelTransposed(256,channelOfInterest - 1);
 
                         // Compute log-PSD for channel of interest
                         logpower = fft.computeLogPSD(latestSamples);
@@ -339,7 +345,6 @@ public class PSDGraph extends FrameLayout {
 
     class PSDSeries implements XYSeries {
         private PSDDataSource datasource;
-        private int seriesIndex;
         private String title;
 
         public PSDSeries(PSDDataSource datasource, String title) {

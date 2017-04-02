@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import config from '../redux/config';
 import { bindActionCreators } from 'redux';
 import { setGraphViewDimensions } from '../redux/actions';
+import PopUp from '../components/PopUp';
 import Button from '../components/Button';
 import RecorderButton from '../components/RecorderButton';
 import SandboxButton from '../components/SandboxButton';
@@ -49,16 +50,32 @@ class Sandbox extends Component {
   }
 
   renderInfoView() {
+    let text = '';
     switch (this.state.graphType) {
       case config.graphType.EEG:
         return(<Text style={styles.body}>Single-channel EEG displays raw, unprocessed data from one electrode</Text>);
 
       case config.graphType.FILTER:
+        switch (this.state.filterType) {
+          case config.filterType.LOWPASS:
+            text = '< 35hz';
+            break;
+          case config.filterType.HIGHPASS:
+            text = '> 2hz';
+            break;
+          case config.filterType.BANDPASS:
+            text = '2-35hz';
+            break;
+        }
         return(
-          <View>
-            <SandboxButton onPress={()=>this.setState({filterType: config.filterType.LOWPASS, isRecording: false})}>Low Pass</SandboxButton>
-            <SandboxButton onPress={()=>this.setState({filterType: config.filterType.HIGHPASS, isRecording: false})}>High Pass</SandboxButton>
-            <SandboxButton onPress={()=>this.setState({filterType: config.filterType.BANDPASS, isRecording: false})}>Band Pass</SandboxButton>
+          <View style={styles.filterButtonContainer}>
+            <Text style={styles.filterText}>{text}</Text>
+            <SandboxButton onPress={()=>this.setState({filterType: config.filterType.LOWPASS, isRecording: false})}
+                           active={this.state.filterType === config.filterType.LOWPASS}>Low-pass</SandboxButton>
+            <SandboxButton onPress={()=>this.setState({filterType: config.filterType.HIGHPASS, isRecording: false})}
+                           active={this.state.filterType === config.filterType.HIGHPASS}>High-pass</SandboxButton>
+            <SandboxButton onPress={()=>this.setState({filterType: config.filterType.BANDPASS, isRecording: false})}
+                           active={this.state.filterType === config.filterType.BANDPASS}>Band-pass</SandboxButton>
           </View>
         );
 
@@ -105,7 +122,7 @@ class Sandbox extends Component {
               {this.renderInfoView()}
             </View>
 
-            <ElectrodeSelector channelOfInterest={(channel) => this.setState({channelOfInterest: channel})}/>
+            <ElectrodeSelector style={{alignSelf: 'center'}} channelOfInterest={(channel) => this.setState({channelOfInterest: channel})}/>
 
           </View>
 
@@ -114,6 +131,8 @@ class Sandbox extends Component {
             Actions.End();
           }}>END</Button>
         </View>
+        <PopUp onClose={Actions.ConnectorOne} visible={(this.props.isVisible && this.props.connectionStatus === config.connectionStatus.DISCONNECTED)} title='Muse Disconnected'>
+          Please reconnect to continue the tutorial</PopUp>
       </View>
     );
   }
@@ -139,12 +158,14 @@ const styles = MediaQueryStyleSheet.create(
     currentTitle: {
       marginLeft: 20,
       marginTop: 10,
+      marginBottom: 10,
       fontSize: 13,
       fontFamily: 'Roboto-Medium',
       color: '#6CCBEF',
     },
 
     buttonContainer: {
+      paddingTop: 10,
       flex: 1,
       alignItems: 'flex-start',
       justifyContent: 'space-between',
@@ -155,6 +176,18 @@ const styles = MediaQueryStyleSheet.create(
       fontFamily: 'Roboto-Light',
       color: '#484848',
       fontSize: 17,
+    },
+
+    filterButtonContainer: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+
+    filterText: {
+      fontFamily: 'Roboto-Light',
+      color: '#484848',
+      fontSize: 14,
     },
 
     pageContainer: {
@@ -173,6 +206,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     textContainer: {
+      justifyContent: 'center',
       flex: 2,
     },
 

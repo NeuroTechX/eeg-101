@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  Animated,
   StyleSheet,
   Text,
   View,
@@ -9,6 +10,8 @@ import {
 import{
   Actions,
 }from 'react-native-router-flux';
+import Animation from 'lottie-react-native';
+
 import { connect } from 'react-redux';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
 import Button from '../components/Button';
@@ -17,13 +20,15 @@ import PopUpLink from '../components/PopUpLink';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
-    return {isVisible: state.scene.sceneKey === 'SlideFive'};
+    return {
+      isVisible: state.scene.sceneKey === 'SlideFive',
+      dimensions: state.graphViewDimensions,
+    };
   }
 
 class SlideFive extends Component {
   constructor(props) {
     super(props);
-
 
       // Initialize States
     this.state = {
@@ -31,14 +36,38 @@ class SlideFive extends Component {
     }
   }
 
+  componentDidMount() {
+    this.animation.play();
+  }
+
+  loopAnimation() {
+    Animated.sequence([
+      Animated.timing(this.state.progress, {
+      toValue: 1,
+      duration: 10000,
+    }),
+      Animated.timing(this.state.progress, {
+        toValue: 1,
+        duration: 10000,
+      })]).start(event => {
+        if (event.finished) {
+          this.loopAnimation();
+        }
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>
       
         <View style={styles.graphContainer}>
-            <Image source={require('../assets/epoching.gif')}
-                style={styles.image}
-                resizeMode='contain'/>
+          <Animation
+            ref={animation => {this.animation = animation; }}
+            style={{height: this.props.dimensions.height,
+            width: this.props.dimensions.width}}
+            source="epoching.json"
+            loop={true}
+          />
           </View>
 
           <Text style={styles.currentTitle}>EPOCHING</Text>
@@ -60,6 +89,8 @@ class SlideFive extends Component {
         <PopUp onClose={() => this.setState({popUpVisible: false})} visible={this.state.popUpVisible}
         title='Epochs'>The brain is constantly changing and the EEG changes with it. Dividing the EEG into epochs allows each moment in time to be analyzed individually. Analyzing how the properties of these epochs vary allows us to quantify how the brain changes over time.
         </PopUp>
+
+
 
       </View>
     );

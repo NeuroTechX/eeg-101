@@ -59,6 +59,8 @@ class SlideSix extends Component {
         <PopUp onClose={() => this.setState({popUpVisible: false})} visible={this.state.popUpVisible}
         title="Artefact detection">One simple way to define what a 'significant amount of noise' is to compare how variable an epoch is in comparison to its neighbours. If the signal moves around in one epoch a lot more than in its neighbours, it is probably because there was an eyeblink or some other source of noise. Get rid of it!</PopUp>
 
+
+
       </View>
     );
   }

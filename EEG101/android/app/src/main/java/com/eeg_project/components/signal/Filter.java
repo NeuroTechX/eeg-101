@@ -13,8 +13,9 @@ public class Filter {
     // ------------------------------------------------------------------------
     // Variables
 
-    private String filterType;
-    private double fs;
+    private static FilterPassType filterPassType;
+    private static FilterCharacteristicsType filterCharacteristicsType;
+    private static IirFilterCoefficients coeffs;
     private double[] b;
     private double[] a;
     private int nB;
@@ -23,12 +24,10 @@ public class Filter {
     // ------------------------------------------------------------------------
     // Constructor
 
-    public Filter(double samplingFrequency, String inputFilterType, int filterOrder, double fc1, double fc2) {
+    public Filter(double samplingFrequency, String filterType, int filterOrder, double fc1, double
+            fc2) {
 
-        filterType = inputFilterType;
-        FilterCharacteristicsType filterCharacteristicsType = FilterCharacteristicsType.butterworth;
-
-        FilterPassType filterPassType = FilterPassType.lowpass;
+        filterCharacteristicsType = FilterCharacteristicsType.butterworth;
 
         if (filterType.contains("lowpass")) {
             filterPassType = FilterPassType.lowpass;
@@ -46,9 +45,7 @@ public class Filter {
             throw new RuntimeException("Filter type not recognized.");
         }  
 
-        double fc1Norm = fc1/samplingFrequency;
-        double fc2Norm = fc2/samplingFrequency;
-        IirFilterCoefficients coeffs = IirFilterDesignFisher.design(filterPassType, filterCharacteristicsType, filterOrder, 0., fc1Norm, fc2Norm);
+        coeffs = IirFilterDesignFisher.design(filterPassType, filterCharacteristicsType, filterOrder, 0., fc1/samplingFrequency, fc2/samplingFrequency);
 
         b = coeffs.b;
         a = coeffs.a;
@@ -100,11 +97,9 @@ public class Filter {
 
         // double[] zNew = new double[z[0].length];
 
-        for (int i = 0; i < x.length; i++) { 
+        int len = x.length;
+        for (int i = 0; i < len; i++) {
             z[i] = transform(x[i],z[i]);
-            // System.arraycopy(z[i], 0, zNew, 0, z[i].length);
-            // zNew = transform(x[i],zNew);
-            // System.arraycopy(zNew, 0, z[i], 0, z[i].length);
         }
 
         return z;
@@ -116,7 +111,8 @@ public class Filter {
         // of transform()
         
         double[] filtSignal = new double[z.length];
-        for (int i = 0; i < z.length; i++) {
+        int len = z.length;
+        for (int i = 0; i < len; i++) {
             filtSignal[i] = z[i][z[0].length - 1];
         }
         return filtSignal;

@@ -100,28 +100,6 @@ public class CircularBuffer {
         return extractedArray;
     }
 
-    public Double[] extractSingleChannelTransposedAsDouble(int nbSamples, int channelofinterest) {
-        // Return an array containing the last `nbSamples` collected in
-        // the circular buffer.
-        //
-        // The shape of the returned array is [nbSamples].
-        //
-        // This transposed version is useful to avoid additional looping
-        // through the returned array when computing FFT (the looping is
-        // instead done here.)
-
-        int extractIndex;
-        Double[] extractedArray = new Double[nbSamples];
-
-        for(int i = 0; i < nbSamples; i++) {
-            extractIndex = mod(index - nbSamples + i, bufferLength);
-            extractedArray[i] = buffer[extractIndex][channelofinterest];
-        }
-
-        return extractedArray;
-    }
-
-
     public int getPts() { return pts; }
 
     public void resetPts() {

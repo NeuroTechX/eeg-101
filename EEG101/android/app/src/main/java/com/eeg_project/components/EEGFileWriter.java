@@ -16,7 +16,9 @@ import java.io.IOException;
 import java.util.Arrays;
 
 /**
- * Created by dano on 14/03/17.
+ * Writes EEG data (either raw/filtered EEG or computed FFT) into a csv. Presents a toast when
+ * recording is started and starts sharing intent for sending data to email when recording is
+ * completed
  */
 
 public class EEGFileWriter {
@@ -63,9 +65,6 @@ public class EEGFileWriter {
         // Append timestamp
         Long tsLong = System.currentTimeMillis();
         builder.append(tsLong.toString() +",");
-
-        // Loops through every FFT bin
-
         for (int j = 0; j < data.length; j++) {
             builder.append(Double.toString(data[j]));
             if (j < data.length - 1) {
@@ -75,26 +74,14 @@ public class EEGFileWriter {
         builder.append("\n");
     }
 
-
     public void writeFile(String title) {
-        FileOutputStream outputStream ;
         try {
             final File dir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
-            final File file = new File(dir,
-                    title+fileNum+
-                            ".csv");
-            Log.w("Listener", "Creating new file " + file);
+            final File file = new File(dir, title + fileNum + ".csv");
             fileWriter = new java.io.FileWriter(file);
-
-            if (!dir.exists()) {
-                dir.mkdir();
-            }
-
-
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(builder.toString());
             bufferedWriter.close();
-
             sendData(file);
             fileNum ++;
             isRecording = false;

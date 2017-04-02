@@ -23,9 +23,8 @@ public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
-    protected boolean getUseDeveloperSupport() {
-      Log.w("MainApplication", "build config is " + BuildConfig.DEBUG);
-      return true;
+    public boolean getUseDeveloperSupport() {
+      return BuildConfig.DEBUG;
     }
 
     // All packages for native libraries must be added to the array returned by this method
@@ -33,7 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new LottiePackage(),
+          new LottiePackage(),
           new SvgPackage(),
           new EEGPackage()
       );

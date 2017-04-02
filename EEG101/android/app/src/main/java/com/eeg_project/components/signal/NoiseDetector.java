@@ -45,8 +45,8 @@ public class NoiseDetector {
         // Flag noise/artefact in epoch on an array of size [nbCh,nbWindowLength]
 
         boolean[] decisions = new boolean[epoch.length];
-
-        for (int c = 0; c < epoch.length; c++) {
+        int len = epoch.length;
+        for (int c = 0; c < len; c++) {
             decisions[c] = detectArtefact(epoch[c]);
             if (c==0) {Log.w("variance", "" + variance(epoch[c]));}
         }
