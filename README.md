@@ -1,8 +1,13 @@
-<p align="center"><img alt="banner" src="/images/EEG101graphic.png/" width="600"></p>
-<p align="center">An Interactive EEG tutorial that teaches EEG and BCI basics.
+<p align="center">
+  <img alt="banner" src="/images/EEG101graphic.png/" width="600">
+</p>
+<p align="center" href="">
+  An Interactive EEG tutorial that teaches EEG and BCI basics.
 </p>
 <p align="center">
-[![Join the EEG 101 discussion on NeuroTechX Slack](http://neurotechx.herokuapp.com/badge.svg)](http://neurotechx.herokuapp.com/)
+  <a href="http://neurotechx.herokuapp.com/">
+    <img src="http://neurotechx.herokuapp.com/badge.svg">
+  </a>
 </p>
 
 ## Overview
