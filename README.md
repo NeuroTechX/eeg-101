@@ -1,19 +1,17 @@
-<img alt="banner" src="/images/EEG101graphic.png/" width="600">
-
+<p align="center"><img alt="banner" src="/images/EEG101graphic.png/" width="600"></p>
+<p align="center">An Interactive EEG tutorial that teaches EEG and BCI basics.
+</p>
+<p align="center">
 [![Join the EEG 101 discussion on NeuroTechX Slack](http://neurotechx.herokuapp.com/badge.svg)](http://neurotechx.herokuapp.com/)
-
-An Interactive EEG tutorial that teaches EEG and BCI basics.
+</p>
 
 ## Overview
-- Teaches what EEG is, where signals come from, how devices work, and how to work with EEG data
+- Teaches the very basics of EEG, including where signals come from, how EEG devices work, and how to process EEG data
 - Streams data from the Muse with LibMuse Java API
 - Built with React Native for Android
 - Completely free, open-source, and available for use/adaption in any project
 
 ## Currently In Development
-
-- Data collection (saving to csv)
-- Bandpass filtering
 - Dynamic artefact removal
 - General-purpose brain state classifier (Naive Bayes)
 - Advanced lesson content ([Riemannian Potato](http://alexandre.barachant.org/papers/conferences/potato/))
