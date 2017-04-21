@@ -1,12 +1,10 @@
 import java.util.Arrays;
-import org.apache.commons.lang3.ArrayUtils;
+import java.util.*;
 import java.util.stream.*;
 
 //
 // TODO:
 // - Continue implementing the partial_fit method
-// - Implement subfunctions (unique, count, etc.)
-//   -> Currently having problems using LinkedHashSet
 //
 
 public class GaussianNaiveBayesClassifier {
@@ -54,34 +52,36 @@ public class GaussianNaiveBayesClassifier {
 	// 	partial_fit(X,y);
 	// }
 
-	// public void partialFit(double[][] X, int[] y) {
-	// 	// Fit or update the GNB model
-	// 	//
-	// 	// Args:
-	// 	// 	X: training data, [nb examples, nb features]
-	// 	//  y: labels [nb examples]
-	// 	//
-	// 	// Using `partialFit()` allows to update the model given new data.
+	public void partialFit(double[][] X, int[] y) {
+		// Fit or update the GNB model
+		//
+		// Args:
+		// 	X: training data, [nb examples, nb features]
+		//  y: labels [nb examples]
+		//
+		// Using `partialFit()` allows to update the model given new data.
 
-	// 	if (!fitted) { // model has not been trained yet, initialize parameters
-	// 		classes = unique(y);
-	// 		nbClasses = classes.length;
-	// 		nbFeats = X[0].length;
+		if (!fitted) { // model has not been trained yet, initialize parameters
+			classes = unique(y);
+			nbClasses = classes.length;
+			nbFeats = X[0].length;
 
-	// 		classCounts = new int[nbClasses];
-	// 		sum = new double[nbClasses][nbFeats];
-	// 		sumSquares = new double[nbClasses][nbFeats];
-	// 	}
+			classCounts = new int[nbClasses];
+			classPriors = new double[nbClasses];
+			sum = new double[nbClasses][nbFeats];
+			sumSquares = new double[nbClasses][nbFeats];
+		}
 
-	// 	// Update class priors
-	// 	int[] newClassCounts = count(y,classes);
-	// 	for (int i = 0; i < nbClasses; i++) {
-	// 		classCounts[i] += newClassCounts[i];
-	// 	}
-	// 	int nbExamplesSeen =  IntStream.of(classCounts).sum();
-	// 	for (int i = 0; i < nbClasses; i++) {
-	// 		classPriors[i] = classCounts[i]/nbExamplesSeen;
-	// 	}
+		// Update class priors
+		int[] newClassCounts = count(y,classes);
+		for (int i = 0; i < nbClasses; i++) {
+			classCounts[i] += newClassCounts[i];
+		}
+		int nbExamplesSeen =  IntStream.of(classCounts).sum();
+		for (int i = 0; i < nbClasses; i++) {
+			classPriors[i] = (double) classCounts[i]/nbExamplesSeen;
+		}
+	}
 
 	// 	// Update sum and mean
 	// 	sum = ...
@@ -101,49 +101,49 @@ public class GaussianNaiveBayesClassifier {
 
 	// }
 
-	public int[] predict(double[][] X) {
-		// ...
-	}
+	// public int[] predict(double[][] X) {
+	// 	// ...
+	// }
 
-	public float[] predictProba(double[][] X) {
-		// ...
-	}
+	// public float[] predictProba(double[][] X) {
+	// 	// ...
+	// }
 
-	public float score(double[][] X, double[] y) {
-		// ...
-	}
+	// public float score(double[][] X, double[] y) {
+	// 	// ...
+	// }
 
-	public float[][] getMeans() {
-		// ...
-	}
+	// public float[][] getMeans() {
+	// 	// ...
+	// }
 
-	public float[][] getVariances() {
-		// ...
-	}
+	// public float[][] getVariances() {
+	// 	// ...
+	// }
 
-	public float[][] getClassPriors() {
-		// ...
-	}
+	// public float[][] getClassPriors() {
+	// 	// ...
+	// }
 
-	public void setMeans() {
-		// ...
-	}
+	// public void setMeans() {
+	// 	// ...
+	// }
 
-	public void setVariances() {
-		// ...
-	}
+	// public void setVariances() {
+	// 	// ...
+	// }
 
-	public void setClassPriors() {
-		// ...
-	}
+	// public void setClassPriors() {
+	// 	// ...
+	// }
 
-	public double[][] decisionBoundary() {
-		// ...
-	}
+	// public double[][] decisionBoundary() {
+	// 	// ...
+	// }
 
-	private double[][] gaussian(double[][] X, double[] mu, double[] var) {
-		// ...
-	}
+	// private double[][] gaussian(double[][] X, double[] mu, double[] var) {
+	// 	// ...
+	// }
 
 	private int[] unique(int[] numbers) {
 		// Find unique elements in array
@@ -157,48 +157,69 @@ public class GaussianNaiveBayesClassifier {
 		// Taken from http://stackoverflow.com/a/15752202
 
 		Set<Integer> setUniqueNumbers = new LinkedHashSet<Integer>();
-		for (int x : numbers) {
+		for(int x : numbers) {
 		    setUniqueNumbers.add(x);
 		}
 
-		int[] uniqueNumbers = new int[setUniqueNumbers.length];
-		for (int i = 0; i < setUniqueNumbers.length; i++) {
-			uniqueNumbers[i] = setUniqueNumbers[i];
-		}
+		int[] uniqueNumbers = new int[setUniqueNumbers.size()];
+		Iterator<Integer> itr = setUniqueNumbers.iterator();
+		int i = 0;
+		while(itr.hasNext()){
+			uniqueNumbers[i] = itr.next();
+            i++;
+        }
 
 		return uniqueNumbers;
 	}
 
-	// private int[] count(int[] numbers, int[] like) {
-	// 	// Count the number of occurences of a specific value in an array
-	// 	//
-	// 	// Args:
-	// 	// 	numbers: list of integers in which to look for 
-	// 	// 	like: integers to look for
-	// 	//
-	// 	// Returns:
-	// 	// 	number of occurences for each desired element
-	// 	//
-	// 	// TODO: THIS FUNCTION WILL NOT WORK AS IS! FIX IT!
+	public int[] count(int[] numbers, int[] like) {
+		// Count the number of occurences of a specific value in an array
+		//
+		// Args:
+		// 	numbers: list of integers in which to look for 
+		// 	like: integers to look for
+		//
+		// Returns:
+		// 	number of occurences for each desired element
+		//
+		// TODO: Make a more efficient version
 
-	// 	HashMap<Integer, Integer> repetitions = new HashMap<Integer, Integer>();
+		int[] counts = new int[like.length];
+		for (int i :like){
+			for (int j : numbers) {
+			   if (i == j){
+			   		counts[i]++;
+			   }
+			}
+		}
 
-	//  	for (int i = 0; i < numbers.length; ++i) {
-	// 		int item = numbers[i];
+		return counts;
+	}
 
-	// 		if (repetitions.containsKey(item))
-	// 	    	repetitions.put(item, repetitions.get(item) + 1);
-	// 		else
-	// 	    	repetitions.put(item, 1);
-	// 	}
-	// }
+	public void print() {
+		// Print the current state of the model
+		System.out.println("Classes: "+Arrays.toString(classes));
+		System.out.println("Number of classes: "+nbClasses);
+		System.out.println("Number of features: "+nbFeats);
+		System.out.println("Class counts: "+Arrays.toString(classCounts));
+		System.out.println("Class priors: "+Arrays.toString(classPriors));
+		System.out.println("Sums: "+Arrays.deepToString(sum));
+		System.out.println("Sums of squares: "+Arrays.deepToString(sumSquares));
+	}
 
 	public static void main(String[] args) {
 
 		GaussianNaiveBayesClassifier clf = new GaussianNaiveBayesClassifier();
 
 		// Test unique() method
+		double[][] X = new double[][]{{1, 2},
+									  {3, 4},
+									  {5, 6},
+									  {7, 8}};
+		int[] y = {0, 0, 0, 1};
 
+		clf.partialFit(X, y);
 
+		clf.print();
 	}
 }
