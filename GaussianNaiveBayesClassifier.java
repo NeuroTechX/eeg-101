@@ -18,6 +18,8 @@ public class GaussianNaiveBayesClassifier {
 	private int[] classCounts;
 	private double[][] sum;
 	private double[][] sumSquares;
+	private double[][] theta;
+	private double[][] sigma;
 
 	private double[] classPriors;
 
@@ -38,19 +40,19 @@ public class GaussianNaiveBayesClassifier {
 
 	}
 
-	// public void fit(double[][] X, int[] y) {
-	// 	// Fit a Gaussian Naive Bayes model
-	// 	//
-	// 	// Args:
-	// 	// 	X: training data, [nb examples, nb features]
-	// 	//  y: labels [nb examples]
- //  		//
- //  		// Note: Calling `fit()` overwrites previous information. Use `partial_fit()`
- // 		//  to update the model with new training data.
+	public void fit(double[][] X, int[] y) {
+		// Fit a Gaussian Naive Bayes model
+		//
+		// Args:
+		// 	X: training data, [nb examples, nb features]
+		//  y: labels [nb examples]
+  		//
+  		// Note: Calling `fit()` overwrites previous information. Use `partial_fit()`
+ 		//  to update the model with new training data.
 
-	// 	fitted = false; // if model has already been trained, re-initialize parameters
-	// 	partial_fit(X,y);
-	// }
+		fitted = false; // if model has already been trained, re-initialize parameters
+		partial_fit(X,y);
+	}
 
 	public void partialFit(double[][] X, int[] y) {
 		// Fit or update the GNB model
@@ -70,36 +72,38 @@ public class GaussianNaiveBayesClassifier {
 			classPriors = new double[nbClasses];
 			sum = new double[nbClasses][nbFeats];
 			sumSquares = new double[nbClasses][nbFeats];
+			theta = new double[nbClasses][nbFeats];
+			sigma = new double[nbClasses][nbFeats];
+		}
+
+		int[] newClassCounts = count(y,classes);
+
+		// Class count, sum, theta, sum of squares and sigma can all be computed per class
+		for (int i = 0; i < nbClasses; i++) {
+			classCounts[i] += newClassCounts[i];
+
+			for (int k = 0; k < nbFeats; k++) {
+				// Update sum and sum of squares
+				for (int j = 0; j < X.length; j++) {
+					if (y[j] == classes[i]) {
+						sum[i][k] += X[j][k];
+						sumSquares[i][k] += X[j][k] * X[j][k];
+					}
+				}
+				// Update theta and sigma 
+				theta[i][k] = sum[i][k] / classCounts[i];
+				sigma[i][k] = sumSquares[i][k] / classCounts[i] - theta[i][k] * theta[i][k];
+			}
 		}
 
 		// Update class priors
-		int[] newClassCounts = count(y,classes);
-		for (int i = 0; i < nbClasses; i++) {
-			classCounts[i] += newClassCounts[i];
-		}
 		int nbExamplesSeen =  IntStream.of(classCounts).sum();
 		for (int i = 0; i < nbClasses; i++) {
 			classPriors[i] = (double) classCounts[i]/nbExamplesSeen;
 		}
+
+		fitted = true;
 	}
-
-	// 	// Update sum and mean
-	// 	sum = ...
-
-	// 	// CONTINUE HERE!!!
-	// 	// TODO:
-	// 	// - The update can probably be done by first counting and summing
-	// 	//   the occurences of each class in X
-	// 	// - 
-
-
-
-	// 	// Update sum of squares and variance
-	// 	// ...
-
-	// 	fitted = true;
-
-	// }
 
 	// public int[] predict(double[][] X) {
 	// 	// ...
