@@ -4,7 +4,8 @@ import java.util.stream.*;
 
 //
 // TODO:
-// - Continue implementing the partial_fit method
+// 1. Implement predictProba
+// 2. Implement decision boundary method
 //
 
 public class GaussianNaiveBayesClassifier {
@@ -37,7 +38,6 @@ public class GaussianNaiveBayesClassifier {
 		//
 
 		fitted = false;
-
 	}
 
 	public void fit(double[][] X, int[] y) {
@@ -51,7 +51,7 @@ public class GaussianNaiveBayesClassifier {
  		//  to update the model with new training data.
 
 		fitted = false; // if model has already been trained, re-initialize parameters
-		partial_fit(X,y);
+		partialFit(X,y);
 	}
 
 	public void partialFit(double[][] X, int[] y) {
@@ -62,6 +62,8 @@ public class GaussianNaiveBayesClassifier {
 		//  y: labels [nb examples]
 		//
 		// Using `partialFit()` allows to update the model given new data.
+
+		assert (X.length == y.length) : "X and y must contain the same number of examples.";
 
 		if (!fitted) { // model has not been trained yet, initialize parameters
 			classes = unique(y);
@@ -105,41 +107,81 @@ public class GaussianNaiveBayesClassifier {
 		fitted = true;
 	}
 
-	// public int[] predict(double[][] X) {
-	// 	// ...
-	// }
+	public double[][] predictProba(double[][] X) {
+		// Evaluate the posterior for each class one by one
 
-	// public float[] predictProba(double[][] X) {
-	// 	// ...
-	// }
+	// 	double[][] prob = new double[nbClasses][X.length];
+	// 	for (int i = 0; i < nbClasses; i++) {
+	// 		prob[i] = gaussian(X, theta[i], sigma[i]);
+	// 	}
 
-	// public float score(double[][] X, double[] y) {
-	// 	// ...
-	// }
+	// 	for i in range(self.nb_classes_):
+	// 		np.prod(self._gaussian(X, self.theta_[i,:], self.sigma_[i,:]), axis=1)
+ //        proba = np.column_stack([np.prod(self._gaussian(X, self.theta_[i,:], self.sigma_[i,:]), axis=1) for i in range(self.nb_classes_)])
+        
+ //        return proba/np.sum(proba, axis=1).reshape(-1,1)
 
-	// public float[][] getMeans() {
-	// 	// ...
-	// }
+		return X;
+	}
 
-	// public float[][] getVariances() {
-	// 	// ...
-	// }
+	public int[] predict(double[][] X) {
+		// Classify each example in X
 
-	// public float[][] getClassPriors() {
-	// 	// ...
-	// }
+		double[][] prob = predictProba(X);
+		int[] yHat = new int[X.length];
 
-	// public void setMeans() {
-	// 	// ...
-	// }
+		for (int i = 0; i < X.length; i++) {
+			yHat[i] = classes[argmax(prob[i])];
+		}
+		
+		return yHat;
+	}
 
-	// public void setVariances() {
-	// 	// ...
-	// }
+	public double score(double[][] X, double[] y) {
+		// Return the accuracy of the current model on data X, y
 
-	// public void setClassPriors() {
-	// 	// ...
-	// }
+		assert (X.length == y.length) : "X and y must contain the same number of examples.";
+
+		int[] yHat = predict(X);
+		int nbGoodDecisions = 0;
+		for (int i = 0; i < y.length; i++) {
+			if (yHat[i] == y[i]) {
+				nbGoodDecisions += 1;
+			}
+		}
+        return nbGoodDecisions/y.length;
+	}
+
+	public double[][] getMeans() {
+		return this.theta;
+	}
+
+	public double[][] getStandardDeviations() {
+		return this.sigma;
+	}
+
+	public double[] getClassPriors() {
+		return this.classPriors;
+	}
+
+	public int[] getClassCounts() {
+		return this.classCounts;
+	}
+
+	public void setMeans(double[][] means) {
+		this.theta = means;
+		this.fitted = false; // Since the internal state is not known, we can't allow partial training...
+	}
+
+	public void setStandardDeviations(double[][] stds) {
+		this.sigma = stds;
+		this.fitted = false; // Since the internal state is not known, we can't allow partial training...
+	}
+
+	public void setClassPriors(double[] classPriors) {
+		this.classPriors = classPriors;
+		this.fitted = false; // Since the internal state is not known, we can't allow partial training...
+	}
 
 	// public double[][] decisionBoundary() {
 	// 	// ...
@@ -176,7 +218,7 @@ public class GaussianNaiveBayesClassifier {
 		return uniqueNumbers;
 	}
 
-	public int[] count(int[] numbers, int[] like) {
+	private int[] count(int[] numbers, int[] like) {
 		// Count the number of occurences of a specific value in an array
 		//
 		// Args:
@@ -189,7 +231,7 @@ public class GaussianNaiveBayesClassifier {
 		// TODO: Make a more efficient version
 
 		int[] counts = new int[like.length];
-		for (int i :like){
+		for (int i : like){
 			for (int j : numbers) {
 			   if (i == j){
 			   		counts[i]++;
@@ -200,15 +242,31 @@ public class GaussianNaiveBayesClassifier {
 		return counts;
 	}
 
+	private int argmax(double[] x) {
+		// Return the index of the element with the highest value in x
+
+		double max = x[0];
+		int maxInd = 0;
+		for (int i = 1; i < x.length; i++) {
+		    if (x[i] > max) {
+		      max = x[i];
+		      maxInd = i;
+		    }
+		}
+		return maxInd;
+	}
+
 	public void print() {
 		// Print the current state of the model
-		System.out.println("Classes: "+Arrays.toString(classes));
-		System.out.println("Number of classes: "+nbClasses);
-		System.out.println("Number of features: "+nbFeats);
-		System.out.println("Class counts: "+Arrays.toString(classCounts));
-		System.out.println("Class priors: "+Arrays.toString(classPriors));
-		System.out.println("Sums: "+Arrays.deepToString(sum));
-		System.out.println("Sums of squares: "+Arrays.deepToString(sumSquares));
+		System.out.println("Classes: "+Arrays.toString(this.classes));
+		System.out.println("Number of classes: "+this.nbClasses);
+		System.out.println("Number of features: "+this.nbFeats);
+		System.out.println("Class counts: "+Arrays.toString(getClassCounts()));
+		System.out.println("Class priors: "+Arrays.toString(getClassPriors()));
+		System.out.println("Sums: "+Arrays.deepToString(this.sum));
+		System.out.println("Sums of squares: "+Arrays.deepToString(this.sumSquares));
+		System.out.println("Means: "+Arrays.deepToString(getMeans()));
+		System.out.println("Standard deviations: "+Arrays.deepToString(getStandardDeviations()));
 	}
 
 	public static void main(String[] args) {
