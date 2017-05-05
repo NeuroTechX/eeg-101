@@ -1,8 +1,10 @@
 import java.util.Arrays;
+import org.apache.commons.lang3.ArrayUtils;
+import java.lang.Math;
 import java.util.*;
 import java.util.stream.*;
 
-//
+
 // TODO:
 // 1. Implement predictProba
 // 2. Implement decision boundary method
@@ -21,7 +23,6 @@ public class GaussianNaiveBayesClassifier {
 	private double[][] sumSquares;
 	private double[][] theta;
 	private double[][] sigma;
-
 	private double[] classPriors;
 
 	public GaussianNaiveBayesClassifier() {
@@ -62,7 +63,6 @@ public class GaussianNaiveBayesClassifier {
 		//  y: labels [nb examples]
 		//
 		// Using `partialFit()` allows to update the model given new data.
-
 		assert (X.length == y.length) : "X and y must contain the same number of examples.";
 
 		if (!fitted) { // model has not been trained yet, initialize parameters
@@ -99,7 +99,7 @@ public class GaussianNaiveBayesClassifier {
 		}
 
 		// Update class priors
-		int nbExamplesSeen =  IntStream.of(classCounts).sum();
+		int nbExamplesSeen = IntStream.of(classCounts).sum();
 		for (int i = 0; i < nbClasses; i++) {
 			classPriors[i] = (double) classCounts[i]/nbExamplesSeen;
 		}
@@ -187,9 +187,20 @@ public class GaussianNaiveBayesClassifier {
 	// 	// ...
 	// }
 
-	// private double[][] gaussian(double[][] X, double[] mu, double[] var) {
-	// 	// ...
-	// }
+	private double gaussian(double X, double mu, double var) {
+		double x = (X-mu);
+		return Math.exp(-x*x / (2*var)) / Math.sqrt(2 * Math.PI * var);
+	}
+
+	private double[][] gaussian(double[][] X, double[] mu, double[] var) {	
+		double[][] g = new double[X.length][mu.length];
+		for (int j=0; j<mu.length; j++){
+			for (int i=0; i<X.length; i++){
+				g[i][j] = gaussian(X[i][j], mu[j], var[j]);
+			}
+		}	
+		return g;
+	}
 
 	private int[] unique(int[] numbers) {
 		// Find unique elements in array
@@ -256,6 +267,7 @@ public class GaussianNaiveBayesClassifier {
 		return maxInd;
 	}
 
+
 	public void print() {
 		// Print the current state of the model
 		System.out.println("Classes: "+Arrays.toString(this.classes));
@@ -274,14 +286,23 @@ public class GaussianNaiveBayesClassifier {
 		GaussianNaiveBayesClassifier clf = new GaussianNaiveBayesClassifier();
 
 		// Test unique() method
+
+
 		double[][] X = new double[][]{{1, 2},
-									  {3, 4},
-									  {5, 6},
+									  {4, 4},
+									  {4, 6},
 									  {7, 8}};
 		int[] y = {0, 0, 0, 1};
 
 		clf.partialFit(X, y);
 
 		clf.print();
+
+		// Test gaussian() method
+		double[] mu = {4.0, 5.0};
+		double[] var = {0.2, 1.0};
+		double[][] g = clf.gaussian(X, mu, var);
+
+		System.out.println("gaussian: "+Arrays.deepToString(g));
 	}
 }
