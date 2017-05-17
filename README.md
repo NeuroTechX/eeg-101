@@ -35,12 +35,14 @@ If you'd like to use EEG 101 as a base for your own React Native app, take a loo
 
 ## Setup
 
-1. Install and setup React Native from the [Source website](https://facebook.github.io/react-native/docs/getting-started.html). We recommend setting up the [Gradle Daemon](https://docs.gradle.org/2.9/userguide/gradle_daemon.html) as well
-2. Import android folder as a new project into Android Studio
-3. Install [yarn](https://github.com/yarnpkg/yarn) and run `yarn install`. npm might work as well.
-4. Connect an Android device with USB debug mode enabled. There can be issues running this app on a virtual device and we recommend real hardware.
-5. run `react-native start` to start React packager
-5. In new terminal, `adb reverse tcp:8081 tcp:8081` to ensure debug server is connected to the device and `react-native run-android` to install
+1. Install and setup [React Native](https://facebook.github.io/react-native/docs/getting-started.html). This may involve also installing the [JDK](https://www3.ntu.edu.sg/home/ehchua/programming/howto/JDK_Howto.html), [Node](https://nodejs.org/en/download/package-manager/), [Watchman](https://medium.com/@vonchristian/how-to-setup-watchman-on-ubuntu-16-04-53196cc0227c), and the [Gradle Daemon](https://docs.gradle.org/2.9/userguide/gradle_daemon.html) as well
+2. Install [yarn](https://github.com/yarnpkg/yarn)
+3. Clone this repo `git clone https://github.com/NeuroTechX/eeg-101.git`
+4. run `yarn install` in the EEG101 folder
+3. Import android folder as a new project in Android Studio (may need to install particular Build Tools versions)
+5. Connect an Android device with USB debug mode enabled. There can be issues running this app on a virtual device and we recommend real hardware.
+6. Run `react-native start` to start React packager
+7. In new terminal, run `adb reverse tcp:8081 tcp:8081` to ensure debug server is connected to your device and then `react-native run-android` to install EEG 101
 
 ## Common setup problems
 
@@ -59,3 +61,8 @@ If you'd like to use EEG 101 as a base for your own React Native app, take a loo
 4. Could not get BatchedBridge
 
 - Solution: Run `adb reverse tcp:8081 tcp:8081` again and reload
+ 
+ 5. Error retrieving parent for item: No resource found that matches the given name 'android:TextAppearance.Material.Widget.Button.Borderless.Colored'
+ 
+ - Solution: Make sure [compileSdkVersion and appcompat match](http://stackoverflow.com/questions/32075498/error-retrieving-parent-for-item-no-resource-found-that-matches-the-given-name) in in app build.gradle
+
