@@ -117,7 +117,10 @@ public class GaussianNaiveBayesClassifier {
 		}
 
 		// Update class priors
-		int nbExamplesSeen = IntStream.of(classCounts).sum();
+		int nbExamplesSeen = 0;
+		for (int i = 0; i < this.nbClasses; i++) {
+			nbExamplesSeen += classCounts[i];
+		}
 		for (int i = 0; i < this.nbClasses; i++) {
 			this.classPriors[i] = (double) classCounts[i]/nbExamplesSeen;
 		}
