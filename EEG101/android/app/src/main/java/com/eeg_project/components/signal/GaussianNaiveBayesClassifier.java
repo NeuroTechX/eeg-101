@@ -40,8 +40,8 @@ public class GaussianNaiveBayesClassifier {
 		//  	examples)
 		//  sumSquares: used internally to update the Gaussian models (sum of 
 		//		squares of all seen examples)
-		//	theta: means of the Gaussian models [nbClasses x nbFeats]
-		//  sigma: variances of the Gaussian models [nbClasses x nbFeats]
+		//	theta: means of the Gaussian models [nbClasses, nbFeats]
+		//  sigma: variances of the Gaussian models [nbClasses, nbFeats]
 		//  classPriors: prior probability of each class, computed using the 
 		//		number of examples seen for each class during training
 		//
@@ -270,6 +270,68 @@ public class GaussianNaiveBayesClassifier {
 	// 	// ...
 	// }
 
+	public int[] rankFeats() {
+		// List the feature indices by decreasing discriminative power.
+		//
+		// Returns:
+		//  list of indices
+
+		double[] coeffs = computeFeatDiscrimPower();
+
+		int[] featInd = new int[this.nbFeats];
+		for (int i = 0; i < this.nbFeats; i++){
+			featInd[i] = argmax(coeffs);
+			coeffs[featInd[i]] = -1;
+		}
+		return featInd;
+
+	}
+
+	public double[] computeFeatDiscrimPower() {
+		// Compute the discriminative power of each feature.
+		//
+		// Compute the discriminative power of each feature using the 
+		// Battacharyya distance. This only works for binary classification, and 
+		// takes only one feature at a time into consideration.
+		// 1 -> perfectly discriminative
+		// 0 -> not discriminative at all
+		//
+		// Returns:
+		//  list of feature importance for each feature
+		//
+
+		assert (this.nbFeats == 2) : 
+			"Feature importance currently only supports binary classification.";
+
+		double[] coeffs = new double[this.nbFeats]; 
+		for (int i = 0; i < this.nbFeats; i++) {
+			coeffs[i] = 1 - battacharyyaCoefficient(theta[0][i], sigma[0][i], 
+													theta[1][i], sigma[1][i]);
+		}
+		return coeffs;
+	}
+
+	private double battacharyyaCoefficient(double mu1, double var1, double mu2,  
+										   double var2) {
+		// Battacharyya distance and coefficient between two univariate Gaussians.
+		//
+		// A coefficient of 0 means no overlap, while a coefficient of 1 means
+		// perfect overlap.
+		//
+		// Args:
+		//  mu1 (double): mean of the first gaussian
+		//  var1 (double): variance of the first gaussian
+		//  mu2 (double): mean of the second gaussian
+		//  var2 (double): variance of the second gaussian
+		//
+		// Returns:
+		//  (double): Battacharyya coefficient
+
+		double distance = Math.log((var1/var2 + var2/var1 + 2)/4)/4 + 
+						  Math.pow(mu1 - mu2, 2)/(var1 + var2)/4;
+		return Math.exp(-1*distance);
+	}
+
 	private double gaussian(double x, double mu, double var) {
 		// Compute the Gaussian pdf.
 		//
@@ -385,20 +447,28 @@ public class GaussianNaiveBayesClassifier {
 
 	public void print() {
 		// Print the current state of the model.
-		System.out.println(" ");
-		System.out.println("Summary of GaussianNaiveBayesClassifier");
-		System.out.println("=======================================");
-		System.out.println(" ");
-		System.out.println("Classes: "+Arrays.toString(this.classes));
-		System.out.println("Number of classes: "+this.nbClasses);
-		System.out.println("Number of features: "+this.nbFeats);
-		System.out.println("Class counts: "+Arrays.toString(getClassCounts()));
-		System.out.println("Class priors: "+Arrays.toString(getClassPriors()));
-		System.out.println("Sums: "+Arrays.deepToString(this.sum));
-		System.out.println("Sums of squares: "+Arrays.deepToString(this.sumSquares));
-		System.out.println("Means: "+Arrays.deepToString(getMeans()));
-		System.out.println("Variances: "+Arrays.deepToString(getVariances()));
-		System.out.println(" ");
+		if (this.fitted) {
+			System.out.println(" ");
+			System.out.println("Summary of GaussianNaiveBayesClassifier");
+			System.out.println("=======================================");
+			System.out.println(" ");
+			System.out.println("Classes: "+Arrays.toString(this.classes));
+			System.out.println("Number of classes: "+this.nbClasses);
+			System.out.println("Number of features: "+this.nbFeats);
+			System.out.println("Class counts: "+Arrays.toString(getClassCounts()));
+			System.out.println("Class priors: "+Arrays.toString(getClassPriors()));
+			System.out.println("Sums: "+Arrays.deepToString(this.sum));
+			System.out.println("Sums of squares: "+Arrays.deepToString(this.sumSquares));
+			System.out.println("Means: "+Arrays.deepToString(getMeans()));
+			System.out.println("Variances: "+Arrays.deepToString(getVariances()));
+			System.out.println("Discriminative power: "+
+							   Arrays.toString(computeFeatDiscrimPower()));
+			System.out.println("Feature ranking: "+Arrays.toString(rankFeats()));
+			System.out.println(" ");
+		}
+		else {
+			System.out.println("Model has not been fitted yet.");
+		}
 	}
 
 	public static void main(String[] args) {
@@ -410,8 +480,8 @@ public class GaussianNaiveBayesClassifier {
 									   		{4, 4},
 									  		{4, 6},
 									  		{7, 8},
-									 		{10, 10},
-									  		{30, 30}};
+									 		{8, 20},
+									  		{9, 30}};
 		int[] y_train = {0, 0, 0, 0, 1, 1};
 
 		// Make second training set for update
@@ -419,15 +489,15 @@ public class GaussianNaiveBayesClassifier {
 									   		 {5, 5},
 									  		 {5, 7},
 									  		 {8, 9},
-									 		 {11, 11},
-									  		 {31, 31}};
+									 		 {9, 21},
+									  		 {10, 31}};
 		int[] y_train2 = {0, 0, 0, 0, 1, 1};
 
 		// Make test set
 		double[][] X_test = new double[][]{{0, 0},
 										   {4, 5},
-										   {20, 20},
-										   {100, 115}};
+										   {10, 20},
+										   {10, 115}};
 		int[] y_test = {0, 0, 1, 1};
 
 		// Fit initial model
@@ -453,5 +523,5 @@ public class GaussianNaiveBayesClassifier {
 		// Score
 		double acc = clf.score(X_test, y_test);
 		System.out.println("Accuracy: "+acc);
-	}
+		}
 }
