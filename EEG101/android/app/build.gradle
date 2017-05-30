@@ -147,6 +147,7 @@ dependencies {
     compile 'com.facebook.fresco:animated-gif:0.11.0'
     compile "com.android.support:appcompat-v7:25.1.1"
     compile "com.facebook.react:react-native:+"  // From node_modules
+    compile 'org.apache.commons:commons-lang3:3.4'
     compile files('libs/libmuse_android.jar')
     compile "com.androidplot:androidplot-core:1.2.2"
     compile group: 'com.github.wendykierp', name: 'JTransforms', version: '3.1'
