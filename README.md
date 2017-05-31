@@ -16,6 +16,10 @@
 - Built with React Native for Android
 - Completely free, open-source, and available for use/adaption in any project
 
+## Video Walkthrough
+
+https://www.youtube.com/watch?v=GunGP1yrqM8&feature=youtu.be
+
 ## Currently In Development
 - Dynamic artefact removal
 - General-purpose brain state classifier (Naive Bayes)
