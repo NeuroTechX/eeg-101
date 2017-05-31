@@ -13,21 +13,28 @@ samples = eegData.shape[0] - 1
 samplingRate = samples/time
 print('estimated sampling rate: ',  samplingRate)
 
+
 plt.figure()
 plt.subplot(2,2,1)
-plt.specgram(eegData['Electrode 1'], Fs=samplingRate, interpolation='bilinear', noverlap=198)
-plt.ylim(0,65)
+plt.psd(eegData['Electrode 1'], Fs=samplingRate)
+plt.xlim(0,65)
+plt.ylim(-60,20)
 
 plt.subplot(2,2,2)
-plt.specgram(eegData['Electrode 2'], Fs=samplingRate, interpolation='bilinear', noverlap=198)
-plt.ylim(0,65)
+plt.psd(eegData['Electrode 2'], Fs=samplingRate)
+plt.xlim(0,65)
+plt.ylim(-60,20)
+plt.ylabel('')
 
 plt.subplot(2,2,3)
-plt.specgram(eegData['Electrode 3'], Fs=samplingRate, interpolation='bilinear', noverlap=198)
-plt.ylim(0,65)
+plt.psd(eegData['Electrode 3'], Fs=samplingRate)
+plt.xlim(0,65)
+plt.ylim(-60,20)
+plt.ylabel('')
 
 plt.subplot(2,2,4)
-plt.specgram(eegData['Electrode 4'], Fs=samplingRate, interpolation='bilinear', noverlap=198)
-plt.ylim(0,65)
-
+plt.psd(eegData['Electrode 4'], Fs=samplingRate)
+plt.xlim(0,65)
+plt.ylim(-60,20)
+plt.ylabel('')
 plt.show()

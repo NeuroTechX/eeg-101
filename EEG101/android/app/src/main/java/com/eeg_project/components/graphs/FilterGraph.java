@@ -54,7 +54,7 @@ public class FilterGraph extends FrameLayout {
     private FilterDataSource dataSource;
     private LineAndPointFormatter lineFormatter;
     public DynamicSeries dataSeries;
-    public museDataListener dataListener;
+    private museDataListener dataListener;
 
     Thread dataThread;
     Thread renderingThread;
@@ -63,7 +63,7 @@ public class FilterGraph extends FrameLayout {
     MainApplication appState;
 
     // Filter specific variables
-    public int filterFreq;
+    public int samplingRate;
     public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
     public Filter activeFilter;
     // Filter states represent info about previous samples; intermediate values that represent
@@ -74,6 +74,8 @@ public class FilterGraph extends FrameLayout {
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
     public int channelOfInterest = 1;
+
+    public double[] latestData;
 
     // ------------------------------------------------------------------------
     // Constructors
@@ -97,15 +99,15 @@ public class FilterGraph extends FrameLayout {
         stopThreads();
         dataSeries.clear();
 
-        if(appState.connectedMuse.isLowEnergy()) { filterFreq = 256; }
-        else { filterFreq = 220; }
+        if(appState.connectedMuse.isLowEnergy()) { samplingRate = 256; }
+        else { samplingRate = 220; }
 
         switch(filterType) {
             case "LOWPASS":
                 PLOT_LOW_BOUND = 600;
                 PLOT_HIGH_BOUND = 1000;
                 filterPlot.setRangeBoundaries(PLOT_LOW_BOUND, PLOT_HIGH_BOUND, BoundaryMode.FIXED);
-                activeFilter = new Filter(filterFreq, "lowpass", 5, 35, 0);
+                activeFilter = new Filter(samplingRate, "lowpass", 5, 35, 0);
                 filtState = new double[4][activeFilter.getNB()];
                 break;
 
@@ -113,7 +115,7 @@ public class FilterGraph extends FrameLayout {
                 PLOT_LOW_BOUND = -200;
                 PLOT_HIGH_BOUND = 200;
                 filterPlot.setRangeBoundaries(PLOT_LOW_BOUND, PLOT_HIGH_BOUND, BoundaryMode.FIXED);
-                activeFilter = new Filter(filterFreq, "bandpass", 5, 2, 35);
+                activeFilter = new Filter(samplingRate, "bandpass", 5, 2, 35);
                 filtState = new double[4][activeFilter.getNB()];
                 break;
 
@@ -121,7 +123,7 @@ public class FilterGraph extends FrameLayout {
                 PLOT_LOW_BOUND = -200;
                 PLOT_HIGH_BOUND = 200;
                 filterPlot.setRangeBoundaries(PLOT_LOW_BOUND, PLOT_HIGH_BOUND, BoundaryMode.FIXED);
-                activeFilter = new Filter(filterFreq, "highpass", 2, 1, 0);
+                activeFilter = new Filter(samplingRate, "highpass", 2, 1, 0);
                 filtState = new double[4][activeFilter.getNB()];
                 break;
         }
@@ -160,7 +162,7 @@ public class FilterGraph extends FrameLayout {
 
         // Set X and Y domain
         filterPlot.setRangeBoundaries(PLOT_LOW_BOUND, PLOT_HIGH_BOUND, BoundaryMode.FIXED);
-        filterPlot.setDomainBoundaries(0, 366, BoundaryMode.FIXED);
+        filterPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
         // add dataSeries to plot and define color of plotted line
         // Create line formatter with set color
@@ -233,8 +235,8 @@ public class FilterGraph extends FrameLayout {
     // Start thread that will  update the dataSource whenever a Muse dataSource packet is receive series
     // and perform dataSource processing
     public void startDataThread() {
+        Log.w("Filter", "startDataThread called");
         dataListener = new museDataListener();
-
         // Register a listener to receive dataSource packets from Muse. Second argument defines which type(s) of dataSource will be transmitted to listener
         appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         dataThread = new Thread (dataSource);
@@ -262,11 +264,20 @@ public class FilterGraph extends FrameLayout {
     // Listeners
 
     // Listener that receives incoming Muse dataSource packets and updates the eegbuffer
-    class museDataListener extends MuseDataListener {
+    private final class museDataListener extends MuseDataListener {
         private double[] newData;
+        // Filter variables
+        public boolean filterOn = false;
+        public Filter bandstopFilter;
+        public double[][] bandstopFiltState;
+        public double[] bandstopFiltResult;
 
-        // Constructor
         museDataListener() {
+            if (appState.connectedMuse.isLowEnergy()) {
+                filterOn = true;
+                bandstopFilter = new Filter(256, "bandstop", 5, 55, 65);
+                bandstopFiltState = new double[4][bandstopFilter.getNB()];
+            }
             newData = new double[4];
         }
 
@@ -274,8 +285,15 @@ public class FilterGraph extends FrameLayout {
         @Override
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
             getEegChannelValues(newData, p);
+
+            if(filterOn) {
+                bandstopFiltState = bandstopFilter.transform(newData, bandstopFiltState);
+                newData = bandstopFilter.extractFilteredSamples(bandstopFiltState);
+            }
+
             filtState = activeFilter.transform(newData, filtState);
             eegBuffer.update(activeFilter.extractFilteredSamples(filtState));
+            if (dataSource.isRecording) { dataSource.fileWriter.addDataToFile(eegBuffer.extract(1)[channelOfInterest - 1]);}
         }
 
         // Updates newData array based on incoming EEG channel values
@@ -329,24 +347,27 @@ public class FilterGraph extends FrameLayout {
         private boolean keepRunning;
         public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
         public boolean isRecording;
+        double lastData = 100;
 
         // Choosing these step sizes arbitrarily based on how they look
         public FilterDataSource(Boolean isLowEnergy) {
         }
+
+        // with getPts = 1, est. sampling rate 193-203hz
+        // with no pts, sleep = 5s, 155hz
+        // with pts = 1, sleep = 4s, 25HZ
+        // with eeg processing code in muse listener, 256hz
 
         @Override
         public void run() {
             try {
                 keepRunning = true;
                 while (keepRunning) {
-                    if (eegBuffer.getPts() >= 3) {
+                    if(eegBuffer.getPts()>=3) {
                         if (dataSeries.size() >= PLOT_LENGTH) {
                             dataSeries.removeFirst();
                         }
-
                         dataSeries.addLast(eegBuffer.extract(1)[0][channelOfInterest - 1]);
-                        if (isRecording) { fileWriter.addDataToFile(eegBuffer.extract(1)[0]);}
-
                         eegBuffer.resetPts();
                     }
                 }
@@ -359,7 +380,5 @@ public class FilterGraph extends FrameLayout {
                 fileWriter.writeFile(PLOT_TITLE);
             }
         }
-
     }
-
 }
