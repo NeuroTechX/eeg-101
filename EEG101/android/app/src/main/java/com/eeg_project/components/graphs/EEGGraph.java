@@ -49,20 +49,21 @@ public class EEGGraph extends FrameLayout {
     // Variables
 
     public static XYPlot eegPlot;
-    public static final int PLOT_LENGTH = 366;
+    public static final int PLOT_LENGTH = 256  * 4;
     private static final String PLOT_TITLE = "Raw_EEG";
     public PlotUpdater plotUpdater;
-    private EEGDataSource dataSource;
     public DynamicSeries dataSeries;
     private Thread dataThread;
     private Thread renderingThread;
     private LineAndPointFormatter lineFormatter;
     public  DataListener dataListener;
     public  CircularBuffer eegBuffer = new CircularBuffer(220, 4);
+    public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
+    public boolean isRecording;
 
 
     // Bridged props
-    // Default channelOfInterest = 1 (left ear)
+    // Default channelOfInterest = 0 (left ear)
     public int channelOfInterest = 1;
 
 
@@ -80,11 +81,6 @@ public class EEGGraph extends FrameLayout {
 
     public EEGGraph(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initView(context);
-    }
-
-    public EEGGraph(Context context, AttributeSet attrs, int defStyle) {
-        this(context, attrs);
         initView(context);
     }
 
@@ -117,15 +113,15 @@ public class EEGGraph extends FrameLayout {
     }
 
     public void startRecording() {
-        dataSource.fileWriter.initFile(PLOT_TITLE);
-        dataSource.isRecording = true;
+        fileWriter.initFile(PLOT_TITLE);
+        isRecording = true;
     }
 
     public void stopRecording() {
-        dataSource.isRecording = false;
+        isRecording = false;
         // if writer = writing, close and save file
-        if (dataSource != null && dataSource.fileWriter.isRecording()) {
-            dataSource.fileWriter.writeFile(PLOT_TITLE);
+        if (fileWriter.isRecording()) {
+            fileWriter.writeFile(PLOT_TITLE);
         }
     }
 
@@ -143,20 +139,8 @@ public class EEGGraph extends FrameLayout {
         plotUpdater = new PlotUpdater(eegPlot);
 
         // get datasets (Y will be dataSeries, x will be implicitly generated):
-        dataSource = new EEGDataSource(appState.connectedMuse.isLowEnergy());
+        //dataSource = new EEGDataSource(appState.connectedMuse.isLowEnergy());
         dataSeries = new DynamicSeries("EEG dataSource");
-
-        // Create high pass filter as well as bandstop filter if Muse is lowEnergy
-        /*
-        if (appState.connectedMuse.isLowEnergy()) {
-            Log.w("EEG", "Created Filters");
-            filterFreq = 256;
-            bandstopFilter = new Filter(filterFreq, "bandstop", 5, 55, 65);
-            bandstopFiltState = new double[bandstopFilter.getNB()];
-        } else { filterFreq = 220; }
-        highPassFilter = new Filter(filterFreq, "highpass", 2, .1, 0);
-        highPassFiltState = new double[bandstopFilter.getNB()];
-        */
 
         // Set X and Y domain
         eegPlot.setRangeBoundaries(600, 1000, BoundaryMode.FIXED);
@@ -217,9 +201,6 @@ public class EEGGraph extends FrameLayout {
         this.addView(eegPlot, new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-
-        // Explicity visibility setting handles bug on older devices where graph wasn't starting
-        onVisibilityChanged(this, View.VISIBLE);
     }
 
     @Override
@@ -227,8 +208,8 @@ public class EEGGraph extends FrameLayout {
         if (visibility == View.INVISIBLE){
             stopThreads();
         }
-        else if (dataThread == null || !dataThread.isAlive()) {
-            startDataThread();
+        else if (renderingThread == null || !renderingThread.isAlive()) {
+            startDataListener();
             startRenderingThread();
         }
     }
@@ -236,26 +217,19 @@ public class EEGGraph extends FrameLayout {
     // ---------------------------------------------------------
     // Thread management functions
 
-    // Start thread that will  update the dataSource whenever a Muse dataSource packet is received
-    public void startDataThread() {
-        dataListener = new DataListener();
-
-        // Register a listener to receive dataSource packets from Muse. Second argument defines which type(s) of dataSource will be transmitted to listener
-        appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
-        dataThread = new Thread (dataSource);
-        dataThread.start();
-    }
-
     // Start thread that will render the plot at a fixed speed
-    //
     public void startRenderingThread(){
         renderingThread = new Thread (plotUpdater);
         renderingThread.start();
     }
 
+    public void startDataListener(){
+        dataListener = new DataListener();
+        appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
+    }
+
     public void stopThreads(){
         plotUpdater.stopThread();
-        dataSource.stopThread();
 
         if (dataListener != null) {
             appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
@@ -268,15 +242,15 @@ public class EEGGraph extends FrameLayout {
     // Listener that receives incoming dataSource from the Muse.
     // Will call receiveMuseDataPacket as dataSource comes in around 220hz (260hz for Muse 2016)
     // Updates eegBuffer with latest values for all 4 electrodes
-    public class DataListener extends MuseDataListener {
+    public final class DataListener extends MuseDataListener {
         public double[] newData;
 
         // Filter variables
         public boolean filterOn = false;
         public Filter bandstopFilter;
         public double[][] bandstopFiltState;
-        public double[] bandstopFiltResult;
 
+        // if connected Muse is a 2016 BLE version, init a bandstop filter to remove 60hz noise
         DataListener() {
             if (appState.connectedMuse.isLowEnergy()) {
                 filterOn = true;
@@ -286,6 +260,7 @@ public class EEGGraph extends FrameLayout {
             newData = new double[4];
         }
 
+        // Updates eegBuffer with new data from all 4 channels. Bandstop filter for 2016 Muse
         @Override
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
             getEegChannelValues(newData, p);
@@ -294,6 +269,7 @@ public class EEGGraph extends FrameLayout {
                 bandstopFiltState = bandstopFilter.transform(newData, bandstopFiltState);
                 newData = bandstopFilter.extractFilteredSamples(bandstopFiltState);
             }
+
             eegBuffer.update(newData);
         }
 
@@ -315,11 +291,12 @@ public class EEGGraph extends FrameLayout {
     // --------------------------------------------------------------
     // Runnables
 
-    // Runnable class that redraws plot at a fixed frequency
+    // Runnable class that updates data series and redraws plot at a fixed frequency
     public final class PlotUpdater implements Runnable {
         WeakReference<Plot> plot;
         private boolean keepRunning = true;
 
+        // Sets WeakReference to plot to avoid memory leaks
         public PlotUpdater(Plot plot) {
             this.plot = new WeakReference<Plot>(plot);
         }
@@ -329,60 +306,35 @@ public class EEGGraph extends FrameLayout {
             try {
                 keepRunning = true;
                 while (keepRunning) {
-                    // 33ms sleep = 30 fps
+
+                    // 33ms sleep = 30 fps?
+                    // Expect 8 eeg samples per loop
                     Thread.sleep(33);
+
+                    Log.w("EEG", eegBuffer.getPts() + " samples");
+
+                    if (dataSeries.size() >= PLOT_LENGTH) {
+                        dataSeries.remove(eegBuffer.getPts());
+                    }
+
+                    // For adding all data points (Full sampling)
+                    dataSeries.addAll(eegBuffer.extractSingleChannelTransposedAsDouble(eegBuffer.getPts(), channelOfInterest -1));
+
+                    // For adding every 5th or 6th data point (Down sampling)
+                    //dataSeries.addLast(eegBuffer.extract(1)[0][channelOfInterest - 1]);
+
+                    // resets the 'points-since-dataSource-read' value
+                    eegBuffer.resetPts();
+
                     plot.get().redraw();
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        public void stopThread() {
-            keepRunning = false;
+            e.printStackTrace();
         }
     }
 
-
-    // Updates dataSeries, performs dataSource processing
-    public final class EEGDataSource implements Runnable {
-        private boolean keepRunning;
-        public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
-        public boolean isRecording;
-
-        // Choosing these step sizes arbitrarily based on how they look
-        public EEGDataSource(Boolean isLowEnergy) {
-        }
-
-        @Override
-        public void run() {
-            try {
-                keepRunning = true;
-                while (keepRunning) {
-                    if (eegBuffer.getPts() >= 3) {
-                        if (dataSeries.size() >= PLOT_LENGTH) {
-                            dataSeries.removeFirst();
-                        }
-
-                        // For adding 10 data points at a time (Full sampling)
-                        //dataSeries.addAll(eegBuffer.extractSingleChannelTransposedAsDouble(10,                         channelOfInterest - 1));
-
-                        // For adding every 5th or 6th data point (Down sampling)
-                        dataSeries.addLast(eegBuffer.extract(1)[0][channelOfInterest - 1]);
-                        if (isRecording) { fileWriter.addDataToFile(eegBuffer.extract(1)[0]);}
-
-                        // resets the 'points-since-dataSource-read' value
-                        eegBuffer.resetPts();
-                    }
-                }
-            } catch (Exception e) {}
-        }
-
         public void stopThread() {
             keepRunning = false;
-            if (isRecording) {
-                fileWriter.writeFile(PLOT_TITLE);
-            }
         }
     }
 }
