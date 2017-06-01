@@ -30,6 +30,8 @@ import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
 
 import java.lang.ref.WeakReference;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /*
@@ -51,16 +53,14 @@ public class EEGGraph extends FrameLayout {
     public static XYPlot eegPlot;
     public static final int PLOT_LENGTH = 256  * 4;
     private static final String PLOT_TITLE = "Raw_EEG";
-    public PlotUpdater plotUpdater;
     public DynamicSeries dataSeries;
-    private Thread dataThread;
-    private Thread renderingThread;
     private LineAndPointFormatter lineFormatter;
     public  DataListener dataListener;
     public  CircularBuffer eegBuffer = new CircularBuffer(220, 4);
     public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
     public boolean isRecording;
-
+    public Timer plotTimer;
+    public PlotUpdateTask plotTimerTask;
 
     // Bridged props
     // Default channelOfInterest = 0 (left ear)
@@ -136,7 +136,7 @@ public class EEGGraph extends FrameLayout {
         eegPlot = new XYPlot(context, "Raw EEG Plot");
 
         // set up PlotUpdater
-        plotUpdater = new PlotUpdater(eegPlot);
+        plotTimer = new Timer();
 
         // get datasets (Y will be dataSeries, x will be implicitly generated):
         //dataSource = new EEGDataSource(appState.connectedMuse.isLowEnergy());
@@ -208,9 +208,9 @@ public class EEGGraph extends FrameLayout {
         if (visibility == View.INVISIBLE){
             stopThreads();
         }
-        else if (renderingThread == null || !renderingThread.isAlive()) {
+        else {
             startDataListener();
-            startRenderingThread();
+            startRendering();
         }
     }
 
@@ -218,9 +218,9 @@ public class EEGGraph extends FrameLayout {
     // Thread management functions
 
     // Start thread that will render the plot at a fixed speed
-    public void startRenderingThread(){
-        renderingThread = new Thread (plotUpdater);
-        renderingThread.start();
+    public void startRendering(){
+        plotTimerTask = new PlotUpdateTask(eegPlot);
+        plotTimer.schedule(plotTimerTask, 20, 20);
     }
 
     public void startDataListener(){
@@ -229,7 +229,6 @@ public class EEGGraph extends FrameLayout {
     }
 
     public void stopThreads(){
-        plotUpdater.stopThread();
 
         if (dataListener != null) {
             appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
@@ -289,52 +288,38 @@ public class EEGGraph extends FrameLayout {
 
 
     // --------------------------------------------------------------
-    // Runnables
+    // TimerTasks
 
-    // Runnable class that updates data series and redraws plot at a fixed frequency
-    public final class PlotUpdater implements Runnable {
+    // TimerTask class that updates data series and redraws plot at a fixed frequency
+    public class PlotUpdateTask extends TimerTask {
         WeakReference<Plot> plot;
-        private boolean keepRunning = true;
+        int numEEGPoints;
 
         // Sets WeakReference to plot to avoid memory leaks
-        public PlotUpdater(Plot plot) {
+        public PlotUpdateTask(Plot plot) {
             this.plot = new WeakReference<Plot>(plot);
         }
 
         @Override
         public void run() {
-            try {
-                keepRunning = true;
-                while (keepRunning) {
+            numEEGPoints = eegBuffer.getPts();
+            if (numEEGPoints >= 12) {
 
-                    // 33ms sleep = 30 fps?
-                    // Expect 8 eeg samples per loop
-                    Thread.sleep(33);
-
-                    Log.w("EEG", eegBuffer.getPts() + " samples");
-
-                    if (dataSeries.size() >= PLOT_LENGTH) {
-                        dataSeries.remove(eegBuffer.getPts());
-                    }
-
-                    // For adding all data points (Full sampling)
-                    dataSeries.addAll(eegBuffer.extractSingleChannelTransposedAsDouble(eegBuffer.getPts(), channelOfInterest -1));
-
-                    // For adding every 5th or 6th data point (Down sampling)
-                    //dataSeries.addLast(eegBuffer.extract(1)[0][channelOfInterest - 1]);
-
-                    // resets the 'points-since-dataSource-read' value
-                    eegBuffer.resetPts();
-
-                    plot.get().redraw();
+                if (dataSeries.size() >= PLOT_LENGTH) {
+                    dataSeries.remove(numEEGPoints);
                 }
-            } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
-        public void stopThread() {
-            keepRunning = false;
+                // For adding all data points (Full sampling)
+                dataSeries.addAll(eegBuffer.extractSingleChannelTransposedAsDouble(numEEGPoints, channelOfInterest - 1));
+
+                // For adding every 5th or 6th data point (Down sampling)
+                //dataSeries.addLast(eegBuffer.extract(1)[0][channelOfInterest - 1]);
+
+                // resets the 'points-since-dataSource-read' value
+                eegBuffer.resetPts();
+
+                plot.get().redraw();
+            }
         }
     }
 }
