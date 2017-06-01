@@ -12,7 +12,7 @@ import{
 import { connect } from 'react-redux';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
 import config from '../redux/config';
-import Button from '../components/Button';
+import LinkButton from '../components/LinkButton';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
 
@@ -22,7 +22,6 @@ import PSDGraphView from '../interface/PSDGraphView';
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
   return {
-    isVisible: state.scene.sceneKey === 'SlideEight',
     dimensions: state.graphViewDimensions,
     connectionStatus: state.connectionStatus,
   };
@@ -32,6 +31,7 @@ function  mapStateToProps(state) {
 class SlideEight extends Component {
   constructor(props) {
     super(props);
+    isVisible: true;
 
     // Initialize States
     this.state = {
@@ -56,7 +56,7 @@ class SlideEight extends Component {
             <Text style={styles.header}>Power Spectral Density (PSD)</Text>
             <Text style={styles.body}>When we apply the Fourier Transform to the EEG, we obtain a measure of signal strength at given frequencies, represented in units of <PopUpLink onPress={() => this.setState({popUp1Visible: true})}>power.</PopUpLink>
             </Text>
-            <Button onPress={Actions.SlideNine}>NEXT</Button>
+            <LinkButton path='/slideNine'> NEXT </LinkButton>
           </View>
 
         </ViewPagerAndroid>
@@ -66,7 +66,7 @@ class SlideEight extends Component {
           In this graph, the X axis represents frequency and the Y axis represents power (microvolts squared, in decibels (dB)). Power represents how strong a certain frequency is in a complex signal. When power is high for only a few frequencies, it means that the signal is primarily composed of those few elements. If all frequencies have similar power, the signal will look random and be difficult to interpret.
         </PopUp>
 
-        <PopUp onClose={Actions.ConnectorOne} visible={(this.props.isVisible && this.props.connectionStatus === config.connectionStatus.DISCONNECTED)} title='Muse Disconnected'>
+        <PopUp onClose={Actions.ConnectorOne} visible={this.props.connectionStatus === config.connectionStatus.DISCONNECTED} title='Muse Disconnected'>
           Please reconnect to continue the tutorial</PopUp>
 
       </View>

@@ -13,14 +13,13 @@ import{
 import { connect } from 'react-redux';
 import config from '../redux/config';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
-import Button from '../components/Button';
+import LinkButton from '../components/LinkButton';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
     return {
-      isVisible: state.scene.sceneKey === 'SlideTwo',
       connectionStatus: state.connectionStatus,
     };
   }
@@ -28,6 +27,7 @@ function  mapStateToProps(state) {
 class SlideTwo extends Component {
   constructor(props) {
     super(props);
+    isVisible: true;
 
       // Initialize States
     this.state = {
@@ -53,7 +53,7 @@ class SlideTwo extends Component {
     }});
     return (
       <View style={styles.container}>
-        
+
         <View style={styles.graphContainer}>
           <Image source={imageSource(this.state.slidePosition)}
                 style={styles.image}
@@ -73,7 +73,7 @@ class SlideTwo extends Component {
             <Text style={styles.body}>The EEG measures the electrical activity that occurs when <PopUpLink onPress={() => this.setState({popUp1Visible: true})}>neurons</PopUpLink> receive and transmit information.
             </Text>
           </View>
-          
+
           <View style={styles.pageStyle}>
           <Text style={styles.header}>Organized neural activity produces electric fields</Text>
             <Text style={styles.body}>When billions of neurons <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>work together</PopUpLink> to produce thoughts, feelings, and behaviours, their electricity can be detected by electrodes on the scalp.
@@ -84,7 +84,7 @@ class SlideTwo extends Component {
             <Text style={styles.header}>EEG detects the "state" of the brain</Text>
             <Text style={styles.body}>This organized electrical activity varies between different brain states, such as <PopUpLink onPress={() => this.setState({popUp3Visible: true})}>sleep and wakefulness.</PopUpLink>
             </Text>
-            <Button onPress={Actions.SlideThree}>NEXT</Button>
+            <LinkButton path='/slideThree'> NEXT </LinkButton>
           </View>
         </ViewPagerAndroid>
 
@@ -97,15 +97,15 @@ class SlideTwo extends Component {
         title='Neural basis of EEG'>
           The electric fields produced by single neurons are vanishingly small. However, when large numbers of cortical neurons fire rhythmically, their activity can produce electric fields that are large enough to cross the surface of the skull. This process is influenced by many factors, including depth, orientation, and subtype of neurons, and is a topic of ongoing research.
         </PopUp>
-        
+
         <PopUp onClose={() => this.setState({popUp3Visible: false})} visible={this.state.popUp3Visible}
         title='Brain states'>
           During sleep our brains produce very different kinds of rhythmic electrical activity. When awake, brain rhythms tend to be rapidly-changing and irregular, while slowly-changing, organized rhythms become more dominant as we fall asleep and pass through the multiple sleep stages. {"\n"}Certain emotions and cognitive processes have also been linked with characteristic patterns of rhythmic activity that can be identified with EEG.
         </PopUp>
 
-       <PopUp onClose={Actions.ConnectorOne} visible={(this.props.isVisible && this.props.connectionStatus === config.connectionStatus.DISCONNECTED)} title='Muse Disconnected'>
+       <PopUp onClose={Actions.ConnectorOne} visible={this.props.connectionStatus === config.connectionStatus.DISCONNECTED} title='Muse Disconnected'>
         Please reconnect to continue the tutorial</PopUp>
-        
+
       </View>
     );
   }

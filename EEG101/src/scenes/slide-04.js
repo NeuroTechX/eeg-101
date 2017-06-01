@@ -10,7 +10,7 @@ import{
   Actions,
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import Button from '../components/Button';
+import LinkButton from '../components/LinkButton';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
@@ -25,7 +25,6 @@ import config from '../redux/config';
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
     return {
-      isVisible: state.scene.sceneKey === 'SlideFour',
       connectionStatus: state.connectionStatus,
       dimensions: state.graphviewDimensions,
     };
@@ -36,6 +35,7 @@ function  mapStateToProps(state) {
 class SlideFour extends Component {
   constructor(props) {
     super(props);
+    isVisible: true;
 
 
       // Initialize States
@@ -47,7 +47,7 @@ class SlideFour extends Component {
   render() {
     return (
       <View style={styles.container}>
-      
+
         <View style={styles.halfGraphContainer}>
           <GraphView style={{flex:1}} visibility={this.props.isVisible}/>
           <Text style={styles.halfGraphLabelText}>Raw</Text>
@@ -67,7 +67,7 @@ class SlideFour extends Component {
             <Text style={styles.header}>How do we get meaningful data from the EEG?</Text>
             <Text style={styles.body}>First, the EEG must be <PopUpLink onPress={() => this.setState({popUpVisible: true})}>filtered</PopUpLink> to reduce signals that don't come from the brain.
             </Text>
-            <Button onPress={Actions.SlideFive}>NEXT</Button>
+            <LinkButton path='/slideFive'> NEXT </LinkButton>
           </View>
 
         </ViewPagerAndroid>

@@ -11,7 +11,7 @@ import{
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
-import Button from '../components/Button';
+import LinkButton from '../components/LinkButton';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
 
@@ -33,7 +33,7 @@ class SlideSix extends Component {
   render() {
     return (
       <View style={styles.container}>
-      
+
         <View style={styles.graphContainer}>
           <Image source={require('../assets/artifact.png')}
                 style={styles.image}
@@ -46,12 +46,12 @@ class SlideSix extends Component {
           style={styles.viewPager}
           initialPage={0}>
 
-          
+
           <View style={styles.pageStyle}>
             <Text style={styles.header}>Removing noise</Text>
             <Text style={styles.body}>After the EEG has been divided into epochs, those that contain a <PopUpLink onPress={() => this.setState({popUpVisible: true})}>significant</PopUpLink> amount of noise can be ignored.
             </Text>
-            <Button onPress={Actions.SlideSeven}>NEXT</Button>
+            <LinkButton path='/slideSeven'> NEXT </LinkButton>
           </View>
 
         </ViewPagerAndroid>

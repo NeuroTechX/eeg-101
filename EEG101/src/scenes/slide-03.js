@@ -12,7 +12,7 @@ import{
 import { connect } from 'react-redux';
 import config from '../redux/config';
 import { MediaQueryStyleSheet} from 'react-native-responsive';
-import Button from '../components/Button';
+import LinkButton from '../components/LinkButton';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
 import ElectrodeSelector from '../components/ElectrodeSelector';
@@ -23,7 +23,6 @@ import GraphView from '../interface/GraphView';
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
     return {
-      isVisible: state.scene.sceneKey === 'SlideThree',
       connectionStatus: state.connectionStatus,
     };
   }
@@ -31,6 +30,7 @@ function  mapStateToProps(state) {
 class SlideThree extends Component {
   constructor(props) {
     super(props);
+    isVisible: true;
 
       // Initialize States
     this.state = {
@@ -44,7 +44,7 @@ class SlideThree extends Component {
   render() {
     return (
       <View style={styles.container}>
-        
+
         <View style={styles.graphContainer}>
           <GraphView style={{flex:1}} visibility={this.props.isVisible} channelOfInterest={this.state.channelOfInterest}/>
         </View>
@@ -59,7 +59,7 @@ class SlideThree extends Component {
             <Text style={styles.header}>How does an EEG device work?</Text>
             <Text style={styles.body}>The electrical activity of the brain is sensed by <PopUpLink onPress={() => this.setState({popUp1Visible: true})}>electrodes</PopUpLink> placed on the scalp.</Text>
           </View>
-          
+
           <View style={styles.pageStyle}>
             <Text style={styles.header}>This device has 4 electrodes</Text>
             <View style={{flexDirection: 'row'}}>
@@ -71,7 +71,7 @@ class SlideThree extends Component {
           <View style={styles.pageStyle}>
             <Text style={styles.header}>What do electrodes measure?</Text>
             <Text style={styles.body}>Each electrode detects voltage fluctuations that are compared to a <PopUpLink onPress={() => this.setState({popUp3Visible: true})}>reference electrode</PopUpLink> and then amplified around 1,000,000 times.</Text>
-            <Button onPress={Actions.SlideFour}>NEXT</Button>
+            <LinkButton path='/slideFour'> NEXT </LinkButton>
           </View>
         </ViewPagerAndroid>
 
@@ -90,9 +90,9 @@ class SlideThree extends Component {
         Each electrode's signal reflects the difference in electrical potential between that electrode and the reference. Thus, the placement of the reference electrode is very important. With Muse, the reference is located on the front of the forehead.
         </PopUp>
 
-        <PopUp onClose={Actions.ConnectorOne} visible={(this.props.isVisible && this.props.connectionStatus === config.connectionStatus.DISCONNECTED)} title='Muse Disconnected'>
+        <PopUp onClose={Actions.ConnectorOne} visible={this.props.connectionStatus === config.connectionStatus.DISCONNECTED} title='Muse Disconnected'>
         Please reconnect to continue the tutorial</PopUp>
-        
+
       </View>
     );
   }

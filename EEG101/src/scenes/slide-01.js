@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import config from '../redux/config';
 import { bindActionCreators } from 'redux';
 import { setGraphViewDimensions } from '../redux/actions';
-import Button from '../components/Button';
+import LinkButton from '../components/LinkButton';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
 import { MediaQueryStyleSheet} from 'react-native-responsive';
@@ -26,7 +26,6 @@ import GraphView from '../interface/GraphView';
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
   return {
-    isVisible: state.scene.sceneKey === 'SlideOne',
     connectionStatus: state.connectionStatus,
   };
 }
@@ -41,6 +40,7 @@ function mapDispatchToProps(dispatch) {
 class SlideOne extends Component {
   constructor(props) {
     super(props);
+    isVisible = true;
 
     // Initialize States
     this.state = {
@@ -96,7 +96,7 @@ class SlideOne extends Component {
               <Text style={styles.header}>Now try closing your eyes for 10 seconds</Text>
               <Text style={styles.body}>You may notice a change in your signal due to an increase in <PopUpLink onPress={() => this.setState({popUp4Visible: true})}>alpha waves.</PopUpLink>
               </Text>
-              <Button onPress={Actions.SlideTwo}>NEXT</Button>
+              <LinkButton path='/slideTwo'> NEXT </LinkButton>
             </View>
 
           </ViewPagerAndroid>
@@ -122,7 +122,7 @@ class SlideOne extends Component {
           When the eyes are closed, there is often a large increase in rhythmic brain activity in the range of 8-13 cycles per second (Hz). These alpha waves were one of the first discoveries that Hans Berger made with EEG. The ability to detect alpha waves when the eyes are closed varies greatly from person to person, however. Don't feel bad if you can't see them!
         </PopUp>
 
-        <PopUp onClose={Actions.ConnectorOne} visible={(this.props.isVisible && this.props.connectionStatus === config.connectionStatus.DISCONNECTED)} title='Muse Disconnected'>
+        <PopUp onClose={Actions.ConnectorOne} visible={this.props.connectionStatus === config.connectionStatus.DISCONNECTED} title='Muse Disconnected'>
           Please reconnect to continue the tutorial</PopUp>
       </View>
     );

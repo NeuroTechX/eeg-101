@@ -7,9 +7,10 @@ import {
 import{
   Actions,
 }from 'react-native-router-flux';
+import { Link } from 'react-router-native';
 import { connect } from 'react-redux';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
-import WhiteButton from '../components/WhiteButton';
+import LinkButton from '../components/WhiteLinkButton';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
@@ -34,7 +35,7 @@ function  mapStateToProps(state) {
           <Text style={styles.body}>If you are using a first generation Muse you may need to pair your device in bluetooth settings</Text>
         </View>
         <View style={styles.buttonContainer}>
-          <WhiteButton onPress={Actions.ConnectorTwo}>OK, IT'S ON</WhiteButton>
+          <LinkButton path='/connectorTwo'> OK, IT'S ON </LinkButton>
         </View>
       </View>
     );

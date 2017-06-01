@@ -11,7 +11,7 @@ import{
 }from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
-import Button from '../components/Button';
+import LinkButton from '../components/LinkButton';
 import config from '../redux/config';
 import PopUp from '../components/PopUp';
 import PopUpList from '../components/PopUpList';
@@ -24,7 +24,6 @@ import WaveGraphView from '../interface/WaveGraphView';
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
   return {
-    isVisible: state.scene.sceneKey === 'SlideNine',
     dimensions: state.graphViewDimensions,
     connectionStatus: state.connectionStatus,
   };
@@ -33,6 +32,7 @@ function  mapStateToProps(state) {
 class SlideNine extends Component {
   constructor(props) {
     super(props);
+    isVisible: true;
 
     // Initialize States
     this.state = {
@@ -70,7 +70,7 @@ class SlideNine extends Component {
             <Text style={styles.header}>Harnessing Brain Waves</Text>
             <Text style={styles.body}>Notice how the power in a given frequency band changes over time. It is possible to harness these changes to create a simple <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>Brain-Computer Interface (BCI)</PopUpLink>.
             </Text>
-            <Button onPress={Actions.Sandbox}>NEXT</Button>
+            <LinkButton path='/sandbox'> NEXT </LinkButton>
           </View>
 
         </ViewPagerAndroid>
@@ -98,7 +98,7 @@ class SlideNine extends Component {
           A Brain-Computer Interface is a direct communication channel between the brain and an external device. For example, one can feed information about brain state based on EEG frequency bands to a computer; that computer then analyzes the EEG data and decides what the user intent was. The computer can use that command to control an external device such as a wheelchair or a display.
         </PopUp>
 
-        <PopUp onClose={Actions.ConnectorOne} visible={(this.props.isVisible && this.props.connectionStatus === config.connectionStatus.DISCONNECTED)} title='Muse Disconnected'>
+        <PopUp onClose={Actions.ConnectorOne} visible={this.props.connectionStatus === config.connectionStatus.DISCONNECTED} title='Muse Disconnected'>
           Please reconnect to continue the tutorial</PopUp>
 
       </View>

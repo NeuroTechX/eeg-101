@@ -10,9 +10,10 @@ import {
 import{
   Actions,
 }from 'react-native-router-flux';
+import { Link } from 'react-router-native';
 import { connect } from 'react-redux';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
-import WhiteButton from '../components/WhiteButton';
+import LinkButton from '../components/WhiteLinkButton';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to this scene's ley
 function  mapStateToProps(state) {
@@ -38,7 +39,7 @@ class Landing extends Component {
           <Text style={styles.body}>At the end of this tutorial, you will have learned how EEG devices can be used to measure the electrical activity of the brain.</Text>
         </View>
         <View style={styles.buttonContainer}>
-          <WhiteButton onPress={Actions.ConnectorOne}>GET STARTED</WhiteButton>
+          <LinkButton path='/connectorOne'> GET STARTED </LinkButton>
         </View>
       </Image>
     );

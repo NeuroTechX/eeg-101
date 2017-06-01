@@ -14,7 +14,7 @@ import Animation from 'lottie-react-native';
 
 import { connect } from 'react-redux';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
-import Button from '../components/Button';
+import LinkButton from '../components/LinkButton';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
 
@@ -59,7 +59,7 @@ class SlideFive extends Component {
   render() {
     return (
       <View style={styles.container}>
-      
+
         <View style={styles.graphContainer}>
           <Animation
             ref={animation => {this.animation = animation; }}
@@ -79,11 +79,11 @@ class SlideFive extends Component {
           <View style={styles.pageStyle}>
             <Text style={styles.header}>Chunking the signal</Text>
             <Text style={styles.body}>Next, the EEG is divided into small segments or <PopUpLink onPress={() => this.setState({popUpVisible: true})}>'epochs.'</PopUpLink>
-             
+
             </Text>
-            <Button onPress={Actions.SlideSix}>NEXT</Button>
+            <LinkButton path='/slideSix'> NEXT </LinkButton>
           </View>
-          
+
         </ViewPagerAndroid>
 
         <PopUp onClose={() => this.setState({popUpVisible: false})} visible={this.state.popUpVisible}

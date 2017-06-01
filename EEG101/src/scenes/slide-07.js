@@ -11,7 +11,7 @@ import{
 }from 'react-native-router-flux';
 import Animation from 'lottie-react-native';
 import { connect } from 'react-redux';
-import Button from '../components/Button';
+import LinkButton from '../components/LinkButton';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
@@ -72,7 +72,7 @@ class SlideSeven extends Component {
             <Text style={styles.header}>How is the EEG broken down?</Text>
             <Text style={ styles.body }>Complex signals can be broken down into simpler signals with a mathematical function known as the <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>Fourier Transform.</PopUpLink>
             </Text>
-            <Button onPress={Actions.SlideEight}>NEXT</Button>
+            <LinkButton path='/slideEight'> NEXT </LinkButton>
           </View>
 
         </ViewPagerAndroid>

@@ -10,9 +10,11 @@ import {
 import{
   Actions,
 }from 'react-native-router-flux';
+import { Link } from 'react-router-native';
 import { connect } from 'react-redux';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
-import WhiteButton from '../components/WhiteButton';
+import LinkButton from '../components/WhiteLinkButton';
+
 
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
@@ -36,23 +38,31 @@ function  mapStateToProps(state) {
           <Text style={styles.body}>Fit the earpieces snugly behind your ears and adjust the headband so that it rests mid forehead. Clear any hair that might prevent the device from making contact with your skin.</Text>
         </View>
 
+        <Link
+          to={'/sandbox'}
+          replace={true}
+          component={TouchableOpacity}
+        >
+        <View style={{borderColor: 'white',
+          borderWidth: 1,
+          alignSelf: 'center',
+          margin: 5,
+          padding: 5,
+        }}>
+          <Text style={{color: 'white',
+            fontFamily: 'Roboto-Bold',
+            fontSize: 15,
+          }}>SANDBOX MODE</Text>
+        </View>
+  		</Link>
+
         <TouchableOpacity onPress={() => Actions.Sandbox({type: 'push'})}>
-          <View style={{borderColor: 'white',
-            borderWidth: 1,
-            alignSelf: 'center',
-            margin: 5,
-            padding: 5,
-          }}>
-            <Text style={{color: 'white',
-              fontFamily: 'Roboto-Bold',
-              fontSize: 15,
-            }}>SANDBOX MODE</Text>
-          </View>
+
         </TouchableOpacity>
 
-        
+
         <View style={styles.buttonContainer}>
-          <WhiteButton onPress={Actions.SlideOne}>BEGIN LESSON</WhiteButton>
+        <LinkButton path='/slideOne'> BEGIN LESSON </LinkButton>
         </View>
       </View>
     );

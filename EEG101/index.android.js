@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import {
+  View,
   AppRegistry,
   DeviceEventEmitter,
 } from 'react-native';
-import{
-  Router,
-  Scene,
-}from 'react-native-router-flux';
+import { NativeRouter, AndroidBackButton, Route, Link } from 'react-router-native'
 import{ Provider, connect }from 'react-redux';
 import{ createStore, applyMiddleware }from 'redux';
 import thunk from 'redux-thunk';
@@ -37,10 +35,10 @@ import NavigationBar from './src/components/NavigationBar.js';
 import reducer from './src/redux/reducer';
 
 // Connect Router to Redux
-const RouterWithRedux = connect()(Router);
+const RouterWithRedux = connect()(NativeRouter);
 
 // Create store
-const store = createStore(reducer, applyMiddleware(thunk)); 
+const store = createStore(reducer, applyMiddleware(thunk));
 
 class EEG_Project extends Component {
 
@@ -63,25 +61,27 @@ class EEG_Project extends Component {
     // previous slide info is currently harcoded in as the 'previous' prop
     return (
       <Provider store={store}>
-        <RouterWithRedux>
-          <Scene key="root" navBar={NavigationBar}>
-            <Scene component={Landing} key='Landing' initial={true} hideNavBar={true}/>
-            <Scene component={ConnectorOne} key='ConnectorOne' hideNavBar={true}/>
-            <Scene component={ConnectorTwo} key='ConnectorTwo' hideNavBar={true}/>
-            <Scene component={ConnectorThree} key='ConnectorThree' hideNavBar={true} type="reset"/>
-            <Scene component={SlideOne} key='SlideOne' previous='CONNECTION' hideNavBar={false}/>
-            <Scene component={SlideTwo} key='SlideTwo'previous='INTRODUCTION'/>
-            <Scene component={SlideThree} key='SlideThree'previous='PHYSIOLOGY'/>
-            <Scene component={SlideFour} key='SlideFour' previous='HARDWARE'/>
-            <Scene component={SlideFive} key='SlideFive' previous='FILTERING'/>
-            <Scene component={SlideSix} key='SlideSix' previous='EPOCHING'/>
-            <Scene component={SlideSeven} key='SlideSeven' previous='ARTEFACT REMOVAL'/>
-            <Scene component={SlideEight} key='SlideEight' previous='FEATURE EXTRACTION'/>
-            <Scene component={SlideNine} key='SlideNine' previous='PSD'/>
-            <Scene component={Sandbox} key='Sandbox' previous='LESSON' hideNavBar={true} type="reset"/>
-            <Scene component={End} key='End' previous='SANDBOX'/>
-          </Scene>
-        </RouterWithRedux>
+        <NativeRouter>
+          <AndroidBackButton>
+            <View style={{flex: 1}}>
+              <Route exact path="/" component={Landing}/>
+              <Route path="/connectorOne" component={ConnectorOne}/>
+              <Route path="/connectorTwo" component={ConnectorTwo}/>
+              <Route path="/connectorThree" component={ConnectorThree}/>
+              <Route path="/slideOne" component={SlideOne}/>
+              <Route path="/slideTwo" component={SlideTwo}/>
+              <Route path="/slideThree" component={SlideThree}/>
+              <Route path="/slideFour" component={SlideFour}/>
+              <Route path="/slideFive" component={SlideFive}/>
+              <Route path="/slideSix" component={SlideSix}/>
+              <Route path="/slideSeven" component={SlideSeven}/>
+              <Route path="/slideEight" component={SlideEight}/>
+              <Route path="/slideNine" component={SlideNine}/>
+              <Route path="/sandbox" component={Sandbox}/>
+              <Route path="/end" component={End}/>
+            </View>
+          </AndroidBackButton>
+        </NativeRouter>
       </Provider>
     );
   }

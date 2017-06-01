@@ -13,7 +13,7 @@ import{
   Actions,
 }from 'react-native-router-flux';
 import {connect } from 'react-redux';
-import WhiteButton from '../components/WhiteButton';
+import LinkButton from '../components/WhiteLinkButton';
 
 class End extends Component {
   constructor(props) {
@@ -29,7 +29,7 @@ class End extends Component {
           <View style={styles.page}>
             <View style={styles.titleBox}>
               <Text style={styles.title}> Thanks for completing {"\n"} EEG 101</Text>
-              <Text style={[styles.body, {margin: 10}]}> We hope you enjoyed learning about the basics of EEG. Soon, this tutorial will cover more advanced topics, such as how to create a simple brain-machine interface!</Text>      
+              <Text style={[styles.body, {margin: 10}]}> We hope you enjoyed learning about the basics of EEG. Soon, this tutorial will cover more advanced topics, such as how to create a simple brain-machine interface!</Text>
             </View>
 
             <View style={styles.listBox}>
@@ -90,10 +90,10 @@ class End extends Component {
             </View>
 
             <View style={styles.buttonBox}>
-              <WhiteButton onPress={Actions.ConnectorThree}>BACK TO BEGINNING</WhiteButton>
+              <LinkButton path='/slideConnectorThree'> NEXT </LinkButton>
             </View>
           </View>
-          
+
         </ViewPagerAndroid>
 
       </Image>
