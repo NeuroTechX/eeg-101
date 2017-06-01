@@ -19,7 +19,7 @@ import LinkButton from '../components/WhiteLinkButton';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
-    return {isVisible: state.scene.sceneKey === 'ConnectorTwo',
+    return {
       connectionStatus: state.connectionStatus,
     };
   }

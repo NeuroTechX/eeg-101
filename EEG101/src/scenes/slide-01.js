@@ -37,18 +37,24 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
+
 class SlideOne extends Component {
   constructor(props) {
     super(props);
-    isVisible = true;
 
     // Initialize States
     this.state = {
+      isVisible: true,
       popUp1Visible: false,
       popUp2Visible: false,
       popUp3Visible: false,
       popUp4Visible: false,
     };
+  }
+
+  componentWillUnmount() {
+    console.log('componentWillUnMount called');
+    this.setState({isVisible: false});
   }
 
   render() {
@@ -61,7 +67,7 @@ class SlideOne extends Component {
           console.log(x, y, width, height);
           this.props.setGraphViewDimensions({x: x, y: y, width: width, height: height})
         }}>
-          <GraphView style={{flex:1}} visibility={this.props.isVisible}/>
+          <GraphView style={{flex:1}} visibility={this.state.isVisible}/>
         </View>
 
         <Text style={styles.currentTitle}>INTRODUCTION</Text>
@@ -157,7 +163,6 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     container: {
-      marginTop:55,
       flex: 1,
       justifyContent: 'space-around',
       alignItems: 'stretch',

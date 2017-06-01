@@ -15,7 +15,6 @@ export default class WhiteButton extends Component{
     replace = true;
     super(props);
   }
-  // Need to make this disableable. Example here: https://github.com/CodeKoalas/react-router-native-button/blob/master/index.js
 
 	render() {
     const dynamicStyle = (this.props.disabled) ? styles.disabled: styles.active;

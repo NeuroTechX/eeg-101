@@ -63,7 +63,7 @@ public class EEGGraph extends FrameLayout {
     public PlotUpdateTask plotTimerTask;
 
     // Bridged props
-    // Default channelOfInterest = 0 (left ear)
+    // Default channelOfInterest = 1 (left ear)
     public int channelOfInterest = 1;
 
 
@@ -191,11 +191,11 @@ public class EEGGraph extends FrameLayout {
         // Add plot to EEGGraph
         this.addView(eegPlot, new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-
     }
 
     @Override
     public void onVisibilityChanged(View changedView, int visibility){
+        Log.w("EEG", "onVisibilityChanged called with visiblity " + visibility);
         if (visibility == View.INVISIBLE){
             stopRendering();
         }
@@ -217,17 +217,15 @@ public class EEGGraph extends FrameLayout {
 
     public void startDataListener(){
         dataListener = new DataListener();
-        appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
+         appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
     }
 
     public void stopRendering(){
+        Log.w("EEG", "stopRendering called");
         if (dataListener != null) {
             appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
         }
-        if(isRunning) {
-            plotTimer.cancel();
-        }
-        isRunning = false;
+        plotTimer.cancel();
     }
 
     // --------------------------------------------------------------
@@ -257,6 +255,7 @@ public class EEGGraph extends FrameLayout {
         // Updates eegBuffer with new data from all 4 channels. Bandstop filter for 2016 Muse
         @Override
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
+            Log.w("EEG", "data packet received");
             getEegChannelValues(newData, p);
 
             if (filterOn) {
@@ -301,6 +300,7 @@ public class EEGGraph extends FrameLayout {
         @Override
         public void run() {
             if (eegBuffer.getPts() >= 12) {
+                Log.w("EEG", "plot updated");
 
                 int numEEGPoints = eegBuffer.getPts();
                 if (dataSeries.size() >= PLOT_LENGTH) {

@@ -22,11 +22,11 @@ export default class WhiteButton extends Component{
 		return(
       <Link
         to={this.props.path}
-        replace={this.props.replace}
+        replace={true}
         component={TouchableOpacity}
       >
   			<View style={dynamicStyle}>
-            		<Text style={{color: '#6CCBEF', fontFamily: 'Roboto-Bold', fontSize: 15}}>{this.props.children}</Text>
+            		<Text style={{color: 'white', fontFamily: 'Roboto-Bold', fontSize: 15}}>{this.props.children}</Text>
           	</View>
 		</Link>
 		)

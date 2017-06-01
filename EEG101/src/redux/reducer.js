@@ -9,7 +9,6 @@ import {
 } from './constants';
 
 const initialState = {
-  scene: {},
   connectionStatus: config.connectionStatus.DISCONNECTED,
   availableMuses: false,
   graphViewDimensions: {x: 0, y: 0, width: 300, height: 250}
@@ -17,14 +16,6 @@ const initialState = {
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    // focus action is dispatched when a new screen comes into focus
-    case ActionConst.FOCUS:
-
-      return {
-        ...state,
-        scene: action.scene
-      };
-
     case SET_CONNECTION_STATUS:
 
       return {

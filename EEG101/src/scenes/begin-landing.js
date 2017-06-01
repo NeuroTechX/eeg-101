@@ -17,7 +17,7 @@ import LinkButton from '../components/WhiteLinkButton';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to this scene's ley
 function  mapStateToProps(state) {
-  return {isVisible: state.scene.sceneKey === 'Landing',
+  return {
     connectionStatus: state.connectionStatus,
   };
 }

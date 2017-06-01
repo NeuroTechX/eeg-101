@@ -23,7 +23,6 @@ import ElectrodeSelector from '../components/ElectrodeSelector';
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
   return {
-    isVisible: state.scene.sceneKey === 'Sandbox',
     connectionStatus: state.connectionStatus,
     dimensions: state.graphViewDimensions,
   };

@@ -13,11 +13,13 @@ import { connect } from 'react-redux';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
 import config from '../redux/config'
 import LinkButton from '../components/WhiteLinkButton';
+import WhiteButton from '../components/WhiteButton';
+
 import ConnectorWidget from '../components/ConnectorWidget';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
-    return {isVisible: state.scene.sceneKey === 'ConnectorTwo',
+    return {
       connectionStatus: state.connectionStatus,
     };
   }
@@ -26,6 +28,12 @@ function  mapStateToProps(state) {
   constructor(props) {
     super(props);
   }
+
+  renderButton() {
+    return this.props.connectionStatus === config.connectionStatus.CONNECTED ?
+      <LinkButton path='/connectorThree' disabled={!(this.props.connectionStatus === config.connectionStatus.CONNECTED)}> GET STARTED </LinkButton> :
+      <WhiteButton onPress={()=>null} disabled={true}> GET STARTED </WhiteButton>
+    }
 
 
   render() {
@@ -37,7 +45,7 @@ function  mapStateToProps(state) {
         </View>
         <ConnectorWidget/>
         <View style={styles.buttonContainer}>
-          <LinkButton path='/connectorThree' disabled={!(this.props.connectionStatus === config.connectionStatus.CONNECTED)}> GET STARTED </LinkButton>
+          {this.renderButton()}
         </View>
       </View>
     );
