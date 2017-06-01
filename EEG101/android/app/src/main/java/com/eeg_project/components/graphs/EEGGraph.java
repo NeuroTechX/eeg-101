@@ -41,9 +41,8 @@ around 0
 
 Plotting process:
 1. Creates AndroidPlot graph and MuseDataListener for EEG dataSource packets
-2. MuseDataListener updates circular eegBuffer at 220-260hz
-3. When view is visible, dataThread and renderingThread add newest values to dataSeries and plot
-dataSeries, respectively
+2. MuseDataListener updates circular eegBuffer at 220-256hz
+3. plotTimer runs plotTimerTask every 20ms, adding new data to dataseries and plotting graph
 */
 public class EEGGraph extends FrameLayout {
 
@@ -59,7 +58,8 @@ public class EEGGraph extends FrameLayout {
     public  CircularBuffer eegBuffer = new CircularBuffer(220, 4);
     public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
     public boolean isRecording;
-    public Timer plotTimer;
+    public boolean isRunning = false;
+    public Timer plotTimer = new Timer();
     public PlotUpdateTask plotTimerTask;
 
     // Bridged props
@@ -79,10 +79,6 @@ public class EEGGraph extends FrameLayout {
         // Data threads are started in onVisibilityChanged function
     }
 
-    public EEGGraph(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initView(context);
-    }
 
     // -----------------------------------------------------------------------
     // Bridge functions
@@ -135,9 +131,6 @@ public class EEGGraph extends FrameLayout {
         // Create eegPlot
         eegPlot = new XYPlot(context, "Raw EEG Plot");
 
-        // set up PlotUpdater
-        plotTimer = new Timer();
-
         // get datasets (Y will be dataSeries, x will be implicitly generated):
         //dataSource = new EEGDataSource(appState.connectedMuse.isLowEnergy());
         dataSeries = new DynamicSeries("EEG dataSource");
@@ -189,15 +182,13 @@ public class EEGGraph extends FrameLayout {
         // Set size of plot
         SizeMetric height = new SizeMetric(1, SizeMode.FILL);
         SizeMetric width = new SizeMetric(1, SizeMode.FILL);
-
-        // Set size of plot
         eegPlot.getGraph().setSize(new Size(height, width));
 
         // Set position of plot (should be tweaked in order to center chart position)
         eegPlot.getGraph().position(0, HorizontalPositioning.ABSOLUTE_FROM_LEFT.ABSOLUTE_FROM_LEFT,
                 0, VerticalPositioning.ABSOLUTE_FROM_TOP);
 
-        // Add children to EEGGraph
+        // Add plot to EEGGraph
         this.addView(eegPlot, new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
@@ -206,7 +197,7 @@ public class EEGGraph extends FrameLayout {
     @Override
     public void onVisibilityChanged(View changedView, int visibility){
         if (visibility == View.INVISIBLE){
-            stopThreads();
+            stopRendering();
         }
         else {
             startDataListener();
@@ -219,6 +210,7 @@ public class EEGGraph extends FrameLayout {
 
     // Start thread that will render the plot at a fixed speed
     public void startRendering(){
+        plotTimer = new Timer();
         plotTimerTask = new PlotUpdateTask(eegPlot);
         plotTimer.schedule(plotTimerTask, 20, 20);
     }
@@ -228,11 +220,14 @@ public class EEGGraph extends FrameLayout {
         appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
     }
 
-    public void stopThreads(){
-
+    public void stopRendering(){
         if (dataListener != null) {
             appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
         }
+        if(isRunning) {
+            plotTimer.cancel();
+        }
+        isRunning = false;
     }
 
     // --------------------------------------------------------------
@@ -241,7 +236,7 @@ public class EEGGraph extends FrameLayout {
     // Listener that receives incoming dataSource from the Muse.
     // Will call receiveMuseDataPacket as dataSource comes in around 220hz (260hz for Muse 2016)
     // Updates eegBuffer with latest values for all 4 electrodes
-    public final class DataListener extends MuseDataListener {
+    private final class DataListener extends MuseDataListener {
         public double[] newData;
 
         // Filter variables
@@ -264,12 +259,16 @@ public class EEGGraph extends FrameLayout {
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
             getEegChannelValues(newData, p);
 
-            if(filterOn) {
+            if (filterOn) {
                 bandstopFiltState = bandstopFilter.transform(newData, bandstopFiltState);
                 newData = bandstopFilter.extractFilteredSamples(bandstopFiltState);
             }
 
             eegBuffer.update(newData);
+
+            if (isRecording) {
+                fileWriter.addDataToFile(newData);
+            }
         }
 
         // Updates newData array based on incoming EEG channel values
@@ -293,7 +292,6 @@ public class EEGGraph extends FrameLayout {
     // TimerTask class that updates data series and redraws plot at a fixed frequency
     public class PlotUpdateTask extends TimerTask {
         WeakReference<Plot> plot;
-        int numEEGPoints;
 
         // Sets WeakReference to plot to avoid memory leaks
         public PlotUpdateTask(Plot plot) {
@@ -302,18 +300,15 @@ public class EEGGraph extends FrameLayout {
 
         @Override
         public void run() {
-            numEEGPoints = eegBuffer.getPts();
-            if (numEEGPoints >= 12) {
+            if (eegBuffer.getPts() >= 12) {
 
+                int numEEGPoints = eegBuffer.getPts();
                 if (dataSeries.size() >= PLOT_LENGTH) {
                     dataSeries.remove(numEEGPoints);
                 }
 
                 // For adding all data points (Full sampling)
                 dataSeries.addAll(eegBuffer.extractSingleChannelTransposedAsDouble(numEEGPoints, channelOfInterest - 1));
-
-                // For adding every 5th or 6th data point (Down sampling)
-                //dataSeries.addLast(eegBuffer.extract(1)[0][channelOfInterest - 1]);
 
                 // resets the 'points-since-dataSource-read' value
                 eegBuffer.resetPts();

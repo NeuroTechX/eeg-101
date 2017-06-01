@@ -2,7 +2,6 @@ package com.eeg_project.components.graphs;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -28,6 +27,8 @@ import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
 
 import java.lang.ref.WeakReference;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /*
 View that plots a single-channel filtered EEG graph
@@ -46,18 +47,19 @@ public class FilterGraph extends FrameLayout {
     // Variables
 
     public XYPlot filterPlot;
-    private static final int PLOT_LENGTH = 366;
+    private static final int PLOT_LENGTH = 256 * 4;
     private static final String PLOT_TITLE = "Filtered_EEG";
     private int PLOT_LOW_BOUND = 600;
     private int PLOT_HIGH_BOUND = 1000;
-    public PlotUpdater plotUpdater;
-    private FilterDataSource dataSource;
     private LineAndPointFormatter lineFormatter;
     public DynamicSeries dataSeries;
     private museDataListener dataListener;
+    public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
+    public boolean isRecording;
+    public boolean isRunning = false;
+    public Timer plotTimer = new Timer();
+    public PlotUpdateTask plotTimerTask;
 
-    Thread dataThread;
-    Thread renderingThread;
 
     // Reference to global application state used for connected Muse
     MainApplication appState;
@@ -75,7 +77,6 @@ public class FilterGraph extends FrameLayout {
     // Default channelOfInterest = 1 (left ear)
     public int channelOfInterest = 1;
 
-    public double[] latestData;
 
     // ------------------------------------------------------------------------
     // Constructors
@@ -96,7 +97,7 @@ public class FilterGraph extends FrameLayout {
     }
 
     public void setFilterType(String filterType) {
-        stopThreads();
+        stopRendering();
         dataSeries.clear();
 
         if(appState.connectedMuse.isLowEnergy()) { samplingRate = 256; }
@@ -126,21 +127,23 @@ public class FilterGraph extends FrameLayout {
                 activeFilter = new Filter(samplingRate, "highpass", 2, 1, 0);
                 filtState = new double[4][activeFilter.getNB()];
                 break;
+
         }
-        startDataThread();
-        startRenderingThread();
+
+        startDataListener();
+        startRendering();
     }
 
     public void startRecording() {
-        dataSource.fileWriter.initFile(PLOT_TITLE);
-        dataSource.isRecording = true;
+        fileWriter.initFile(PLOT_TITLE);
+        isRecording = true;
     }
 
     public void stopRecording() {
-        dataSource.isRecording = false;
+        isRecording = false;
         // if writer = writing, close and save file
-        if (dataSource != null && dataSource.fileWriter.isRecording()) {
-            dataSource.fileWriter.writeFile(PLOT_TITLE);
+        if (fileWriter.isRecording()) {
+            fileWriter.writeFile(PLOT_TITLE);
         }
     }
 
@@ -150,12 +153,6 @@ public class FilterGraph extends FrameLayout {
     // Initialize and style AndroidPlot Graph. XML styling is not used.
     public void initView(Context context) {
         filterPlot = new XYPlot(context, PLOT_TITLE);
-
-        // Create plotUpdater
-        plotUpdater = new PlotUpdater(filterPlot);
-
-        // Create dataSource
-        dataSource = new FilterDataSource(appState.connectedMuse.isLowEnergy());
 
         // Create dataSeries that will be drawn on plot (Y will be obtained from dataSource, x will be implicitly generated):
         dataSeries = new DynamicSeries(PLOT_TITLE);
@@ -221,43 +218,36 @@ public class FilterGraph extends FrameLayout {
     @Override
     public void onVisibilityChanged(View changedView, int visibility){
         if (visibility == View.INVISIBLE){
-            stopThreads();
+            stopRendering();
         }
-        else if (dataThread == null || !dataThread.isAlive()) {
-            startDataThread();
-            startRenderingThread();
+        else {
+            //startDataListener();
+            //startRendering();
         }
     }
 
     // --f-------------------------------------------------------
     // Thread management functions
 
-    // Start thread that will  update the dataSource whenever a Muse dataSource packet is receive series
-    // and perform dataSource processing
-    public void startDataThread() {
-        Log.w("Filter", "startDataThread called");
-        dataListener = new museDataListener();
-        // Register a listener to receive dataSource packets from Muse. Second argument defines which type(s) of dataSource will be transmitted to listener
-        appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
-        dataThread = new Thread (dataSource);
-        dataThread.start();
-    }
-
     // Start thread that will render the plot at a fixed speed
-    public void startRenderingThread(){
-        renderingThread = new Thread (plotUpdater);
-        renderingThread.start();
+    public void startRendering(){
+        plotTimer = new Timer();
+        plotTimerTask = new PlotUpdateTask(filterPlot);
+        plotTimer.schedule(plotTimerTask, 20, 20);
+        isRunning = true;
     }
 
-    // Stop all threads
-    public void stopThreads(){
-        plotUpdater.stopThread();
-        dataSource.stopThread();
+    public void startDataListener(){
+        dataListener = new museDataListener();
+        appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
+    }
 
+    public void stopRendering(){
         if (dataListener != null) {
             appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
         }
-
+        plotTimer.cancel();
+        isRunning = false;
     }
 
     // --------------------------------------------------------------
@@ -266,13 +256,14 @@ public class FilterGraph extends FrameLayout {
     // Listener that receives incoming Muse dataSource packets and updates the eegbuffer
     private final class museDataListener extends MuseDataListener {
         private double[] newData;
+
         // Filter variables
         public boolean filterOn = false;
         public Filter bandstopFilter;
         public double[][] bandstopFiltState;
-        public double[] bandstopFiltResult;
 
         museDataListener() {
+
             if (appState.connectedMuse.isLowEnergy()) {
                 filterOn = true;
                 bandstopFilter = new Filter(256, "bandstop", 5, 55, 65);
@@ -293,7 +284,7 @@ public class FilterGraph extends FrameLayout {
 
             filtState = activeFilter.transform(newData, filtState);
             eegBuffer.update(activeFilter.extractFilteredSamples(filtState));
-            if (dataSource.isRecording) { dataSource.fileWriter.addDataToFile(eegBuffer.extract(1)[channelOfInterest - 1]);}
+            if (isRecording) { fileWriter.addDataToFile(eegBuffer.extract(1)[channelOfInterest - 1]);}
         }
 
         // Updates newData array based on incoming EEG channel values
@@ -311,73 +302,33 @@ public class FilterGraph extends FrameLayout {
     }
 
     // --------------------------------------------------------------
-    // Runnables
+    // TimerTasks
 
-    // Runnable class that redraws plot at a fixed frequency
-    class PlotUpdater implements Runnable {
+    // TimerTask class that updates data series and redraws plot at a fixed frequency
+    public class PlotUpdateTask extends TimerTask {
         WeakReference<Plot> plot;
-        private boolean keepRunning = true;
 
-        public PlotUpdater(Plot plot) {
+        // Sets WeakReference to plot to avoid memory leaks
+        public PlotUpdateTask(Plot plot) {
             this.plot = new WeakReference<Plot>(plot);
         }
 
         @Override
         public void run() {
-            try {
-                keepRunning = true;
-                while (keepRunning) {
-                    // 33ms sleep = 30 fps
-                    Thread.sleep(33);
-                    plot.get().redraw();
+            if (eegBuffer.getPts() >= 12) {
+                int numEEGPoints = eegBuffer.getPts();
+
+                if (dataSeries.size() >= PLOT_LENGTH) {
+                    dataSeries.remove(numEEGPoints);
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
 
-        public void stopThread() {
-            keepRunning = false;
-        }
-    }
+                // For adding all data points (Full sampling)
+                dataSeries.addAll(eegBuffer.extractSingleChannelTransposedAsDouble(numEEGPoints, channelOfInterest - 1));
 
-    // Data source runnable
-    // Processes raw EEG dataSource and updates dataSeries
-    public final class FilterDataSource implements Runnable {
-        private boolean keepRunning;
-        public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
-        public boolean isRecording;
-        double lastData = 100;
+                // resets the 'points-since-dataSource-read' value
+                eegBuffer.resetPts();
 
-        // Choosing these step sizes arbitrarily based on how they look
-        public FilterDataSource(Boolean isLowEnergy) {
-        }
-
-        // with getPts = 1, est. sampling rate 193-203hz
-        // with no pts, sleep = 5s, 155hz
-        // with pts = 1, sleep = 4s, 25HZ
-        // with eeg processing code in muse listener, 256hz
-
-        @Override
-        public void run() {
-            try {
-                keepRunning = true;
-                while (keepRunning) {
-                    if(eegBuffer.getPts()>=3) {
-                        if (dataSeries.size() >= PLOT_LENGTH) {
-                            dataSeries.removeFirst();
-                        }
-                        dataSeries.addLast(eegBuffer.extract(1)[0][channelOfInterest - 1]);
-                        eegBuffer.resetPts();
-                    }
-                }
-            } catch (Exception e) {}
-        }
-
-        public void stopThread() {
-            keepRunning = false;
-            if (isRecording) {
-                fileWriter.writeFile(PLOT_TITLE);
+                plot.get().redraw();
             }
         }
     }

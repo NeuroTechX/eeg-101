@@ -1,11 +1,8 @@
 package com.eeg_project.components.managers;
 
-import android.util.Log;
 import android.view.View;
 
 import com.eeg_project.components.graphs.EEGGraph;
-import com.eeg_project.components.graphs.FilterGraph;
-import com.eeg_project.components.graphs.PSDGraph;
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.uimanager.SimpleViewManager;
@@ -71,7 +68,7 @@ public class EEGGraphManager extends SimpleViewManager<EEGGraph> {
         Assertions.assertNotNull(args);
         switch (commandID) {
             case 0: {
-                view.stopThreads();
+                view.stopRendering();
                 return;
             }
             default:
