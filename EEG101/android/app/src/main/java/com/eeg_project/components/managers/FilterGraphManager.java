@@ -76,7 +76,7 @@ public class FilterGraphManager extends SimpleViewManager<FilterGraph> {
         Assertions.assertNotNull(args);
         switch (commandID) {
             case 0: {
-                view.stopRendering();
+                view.stopDataListener();
                 return;
             }
             default:
