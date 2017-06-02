@@ -14,7 +14,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 // AndroidPlot class that stores dataSource to be plotted. getX() and getY() are called by XYPlot to to draw graph
 // This implementation only stores Y values, with X values implicitily determined by the index of the dataSource in the LinkedList
-// readwritelocks prevent flickering issue when dataseries is modified while being rendered
 public class DynamicSeries implements XYSeries, PlotListener {
 
     // -------------------------------------------------------------
@@ -56,57 +55,25 @@ public class DynamicSeries implements XYSeries, PlotListener {
 
 
     public void addLast(Number y) {
-        lock.writeLock().lock();
-        try {
-            yVals.addLast(y);
-        } finally {
-            lock.writeLock().unlock();
-        }
+        yVals.addLast(y);
     }
 
     public void addAll(Double[] y) {
-        lock.writeLock().lock();
-        try {
-            yVals.addAll(Arrays.asList(y));
-        } finally {
-            lock.writeLock().unlock();
-        }
+        yVals.addAll(Arrays.asList(y));
     }
 
     public void removeFirst() {
-        lock.writeLock().lock();
-        try {
-            if (size() <= 0) {
-                throw new NoSuchElementException();
-            }
-            yVals.removeFirst();
-        } finally {
-            lock.writeLock().unlock();
-        }
+        yVals.removeFirst();
     }
 
     public void remove(int nbsamples) {
-        lock.writeLock().lock();
-        try {
-            if (size() <= 0) {
-                throw new NoSuchElementException();
-            }
-
-            for(int i = 0; i<nbsamples; i++){
-                yVals.removeFirst();
-            }
-        } finally {
-            lock.writeLock().unlock();
+        for(int i = 0; i<nbsamples; i++){
+            yVals.removeFirst();
         }
     }
 
     public void clear() {
-        lock.writeLock().lock();
-        try {
-            yVals.clear();
-        } finally {
-            lock.writeLock().unlock();
-        }
+        yVals.clear();
     }
 
     // ------------------------------------------------------------

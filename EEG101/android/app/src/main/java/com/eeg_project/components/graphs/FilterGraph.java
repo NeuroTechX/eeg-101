@@ -2,6 +2,7 @@ package com.eeg_project.components.graphs;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -11,9 +12,11 @@ import com.androidplot.ui.Size;
 import com.androidplot.ui.SizeMetric;
 import com.androidplot.ui.SizeMode;
 import com.androidplot.ui.VerticalPositioning;
+import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.FastLineAndPointRenderer;
 import com.androidplot.xy.LineAndPointFormatter;
+import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
 import com.choosemuse.libmuse.Eeg;
 import com.choosemuse.libmuse.Muse;
@@ -53,13 +56,9 @@ public class FilterGraph extends FrameLayout {
     private int PLOT_HIGH_BOUND = 1000;
     private LineAndPointFormatter lineFormatter;
     public DynamicSeries dataSeries;
-    private museDataListener dataListener;
+    private filterDataListener dataListener;
     public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
     public boolean isRecording;
-    public boolean isRunning = false;
-    public Timer plotTimer = new Timer();
-    public PlotUpdateTask plotTimerTask;
-
 
     // Reference to global application state used for connected Muse
     MainApplication appState;
@@ -97,7 +96,7 @@ public class FilterGraph extends FrameLayout {
     }
 
     public void setFilterType(String filterType) {
-        stopRendering();
+        stopDataListener();
         dataSeries.clear();
 
         if(appState.connectedMuse.isLowEnergy()) { samplingRate = 256; }
@@ -131,7 +130,6 @@ public class FilterGraph extends FrameLayout {
         }
 
         startDataListener();
-        startRendering();
     }
 
     public void startRecording() {
@@ -163,7 +161,8 @@ public class FilterGraph extends FrameLayout {
 
         // add dataSeries to plot and define color of plotted line
         // Create line formatter with set color
-        lineFormatter = new FastLineAndPointRenderer.Formatter(Color.rgb(255, 255, 255), null, null, null);
+
+        lineFormatter = new FastLineAndPointRenderer.Formatter(Color.WHITE, null,  null);
 
         // Set line thickness
         lineFormatter.getLinePaint().setStrokeWidth(3);
@@ -214,122 +213,117 @@ public class FilterGraph extends FrameLayout {
 
     }
 
-    // Called when user navigates away from parent React Native component. Stops active threads in order to limit memory usage
     @Override
     public void onVisibilityChanged(View changedView, int visibility){
         if (visibility == View.INVISIBLE){
-            stopRendering();
-        }
-        else {
-            //startDataListener();
-            //startRendering();
+            stopDataListener();
         }
     }
 
-    // --f-------------------------------------------------------
-    // Thread management functions
+    // ---------------------------------------------------------
+    // Listener management functions
 
-    // Start thread that will render the plot at a fixed speed
-    public void startRendering(){
-        plotTimer = new Timer();
-        plotTimerTask = new PlotUpdateTask(filterPlot);
-        plotTimer.schedule(plotTimerTask, 20, 20);
-        isRunning = true;
-    }
 
     public void startDataListener(){
-        dataListener = new museDataListener();
+        dataListener = new filterDataListener();
         appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
     }
 
-    public void stopRendering(){
+    public void stopDataListener(){
+        Log.w("Filter", "Stop Data listener called");
         if (dataListener != null) {
             appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
         }
-        plotTimer.cancel();
-        isRunning = false;
     }
 
     // --------------------------------------------------------------
     // Listeners
 
-    // Listener that receives incoming Muse dataSource packets and updates the eegbuffer
-    private final class museDataListener extends MuseDataListener {
-        private double[] newData;
+        // --------------------------------------------------------------
+        // Listeners
 
-        // Filter variables
-        public boolean filterOn = false;
-        public Filter bandstopFilter;
-        public double[][] bandstopFiltState;
+        // Listener that receives incoming dataSource from the Muse.
+        // Will call receiveMuseDataPacket as dataSource comes in around 220hz (256hz for Muse 2016)
+        // Updates eegBuffer with latest values for all 4 electrodes
+        private final class filterDataListener extends MuseDataListener {
+            public double[] newData;
 
-        museDataListener() {
+            // Filter variables
+            public boolean filterOn = false;
+            public Filter bandstopFilter;
+            public double[][] bandstopFiltState;
+            private int frameCounter = 0;
 
-            if (appState.connectedMuse.isLowEnergy()) {
-                filterOn = true;
-                bandstopFilter = new Filter(256, "bandstop", 5, 55, 65);
-                bandstopFiltState = new double[4][bandstopFilter.getNB()];
-            }
-            newData = new double[4];
-        }
-
-        // Called whenever an incoming dataSource packet is received. Handles different types of incoming dataSource packets and updates dataSource correctly
-        @Override
-        public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
-            getEegChannelValues(newData, p);
-
-            if(filterOn) {
-                bandstopFiltState = bandstopFilter.transform(newData, bandstopFiltState);
-                newData = bandstopFilter.extractFilteredSamples(bandstopFiltState);
+            // if connected Muse is a 2016 BLE version, init a bandstop filter to remove 60hz noise
+            filterDataListener() {
+                if (appState.connectedMuse.isLowEnergy()) {
+                    filterOn = true;
+                    bandstopFilter = new Filter(256, "bandstop", 5, 55, 65);
+                    bandstopFiltState = new double[4][bandstopFilter.getNB()];
+                }
+                newData = new double[4];
             }
 
-            filtState = activeFilter.transform(newData, filtState);
-            eegBuffer.update(activeFilter.extractFilteredSamples(filtState));
-            if (isRecording) { fileWriter.addDataToFile(eegBuffer.extract(1)[channelOfInterest - 1]);}
-        }
+            // Updates eegBuffer with new data from all 4 channels. Bandstop filter for 2016 Muse
+            @Override
+            public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
+                getEegChannelValues(newData, p);
 
-        // Updates newData array based on incoming EEG channel values
-        private void getEegChannelValues(double[] newData, MuseDataPacket p) {
-            newData[0] = p.getEegChannelValue(Eeg.EEG1);
-            newData[1] = p.getEegChannelValue(Eeg.EEG2);
-            newData[2] = p.getEegChannelValue(Eeg.EEG3);
-            newData[3] = p.getEegChannelValue(Eeg.EEG4);
-        }
-
-        @Override
-        public void receiveMuseArtifactPacket(final MuseArtifactPacket p, final Muse muse) {
-            // Put something here about marking noise maybe
-        }
-    }
-
-    // --------------------------------------------------------------
-    // TimerTasks
-
-    // TimerTask class that updates data series and redraws plot at a fixed frequency
-    public class PlotUpdateTask extends TimerTask {
-        WeakReference<Plot> plot;
-
-        // Sets WeakReference to plot to avoid memory leaks
-        public PlotUpdateTask(Plot plot) {
-            this.plot = new WeakReference<Plot>(plot);
-        }
-
-        @Override
-        public void run() {
-            if (eegBuffer.getPts() >= 12) {
-                int numEEGPoints = eegBuffer.getPts();
-
-                if (dataSeries.size() >= PLOT_LENGTH) {
-                    dataSeries.remove(numEEGPoints);
+                if (filterOn) {
+                    bandstopFiltState = bandstopFilter.transform(newData, bandstopFiltState);
+                    newData = bandstopFilter.extractFilteredSamples(bandstopFiltState);
                 }
 
-                // For adding all data points (Full sampling)
-                dataSeries.addAll(eegBuffer.extractSingleChannelTransposedAsDouble(numEEGPoints, channelOfInterest - 1));
+                filtState = activeFilter.transform(newData, filtState);
+                eegBuffer.update(activeFilter.extractFilteredSamples(filtState));
 
-                // resets the 'points-since-dataSource-read' value
-                eegBuffer.resetPts();
+                frameCounter++;
+                if (frameCounter % 15 == 0) {
+                    updatePlot();
+                }
 
-                plot.get().redraw();
+                if (isRecording) {
+                    fileWriter.addDataToFile(newData);
+                }
+            }
+
+            // Updates newData array based on incoming EEG channel values
+            private void getEegChannelValues(double[] newData, MuseDataPacket p) {
+                newData[0] = p.getEegChannelValue(Eeg.EEG1);
+                newData[1] = p.getEegChannelValue(Eeg.EEG2);
+                newData[2] = p.getEegChannelValue(Eeg.EEG3);
+                newData[3] = p.getEegChannelValue(Eeg.EEG4);
+            }
+
+            @Override
+            public void receiveMuseArtifactPacket(final MuseArtifactPacket p, final Muse muse) {
+                // Does nothing for now
             }
         }
+
+    // ---------------------------------------------------------
+    // Plot update functions
+
+    public void updatePlot() {
+
+        int numEEGPoints = eegBuffer.getPts();
+        if (dataSeries.size() >= PLOT_LENGTH) {
+            dataSeries.remove(numEEGPoints);
+        }
+
+        // For adding all data points (Full sampling)
+        dataSeries.addAll(eegBuffer.extractSingleChannelTransposedAsDouble(numEEGPoints, channelOfInterest - 1));
+
+        // resets the 'points-since-dataSource-read' value
+        eegBuffer.resetPts();
+
+        filterPlot.redraw();
     }
 }
+
+
+
+
+
+
+

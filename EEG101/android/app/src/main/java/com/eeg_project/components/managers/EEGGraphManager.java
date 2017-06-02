@@ -68,7 +68,7 @@ public class EEGGraphManager extends SimpleViewManager<EEGGraph> {
         Assertions.assertNotNull(args);
         switch (commandID) {
             case 0: {
-                view.stopRendering();
+                view.stopDataListener();
                 return;
             }
             default:

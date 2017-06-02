@@ -102,8 +102,7 @@ public class Filter {
 
         // double[] zNew = new double[z[0].length];
 
-        int len = x.length;
-        for (int i = 0; i < len; i++) {
+        for (int i = 0; i < 4; i++) {       // Careful!
             z[i] = transform(x[i],z[i]);
         }
 
@@ -115,7 +114,7 @@ public class Filter {
         // Utility function to extract the filtered samples from the returned array
         // of transform()
         
-        double[] filtSignal = new double[z.length];
+        double[] filtSignal = new double[z.length];     // TODO can this instantiation be avoided?
         int len = z.length;
         for (int i = 0; i < len; i++) {
             filtSignal[i] = z[i][z[0].length - 1];

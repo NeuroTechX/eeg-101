@@ -2,12 +2,10 @@ package com.eeg_project.components.graphs;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.androidplot.Plot;
 import com.androidplot.ui.HorizontalPositioning;
 import com.androidplot.ui.Size;
 import com.androidplot.ui.SizeMetric;
@@ -17,6 +15,7 @@ import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.FastLineAndPointRenderer;
 import com.androidplot.xy.LineAndPointFormatter;
+import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
 import com.choosemuse.libmuse.Eeg;
 import com.choosemuse.libmuse.Muse;
@@ -29,9 +28,7 @@ import com.eeg_project.components.EEGFileWriter;
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
 
-import java.lang.ref.WeakReference;
 import java.util.Timer;
-import java.util.TimerTask;
 
 
 /*
@@ -42,13 +39,17 @@ around 0
 Plotting process:
 1. Creates AndroidPlot graph and MuseDataListener for EEG dataSource packets
 2. MuseDataListener updates circular eegBuffer at 220-256hz
-3. plotTimer runs plotTimerTask every 20ms, adding new data to dataseries and plotting graph
+3. Every 15 samples, data is added to dataSeries and plot is updated
 */
+
+
 public class EEGGraph extends FrameLayout {
 
     // ----------------------------------------------------------------------
     // Variables
 
+    public static final int BACKGROUND_COLOUR = Color.rgb(114, 194, 241);
+    public static final int LINE_COLOUR = Color.rgb(255, 255, 255);
     public static XYPlot eegPlot;
     public static final int PLOT_LENGTH = 256  * 4;
     private static final String PLOT_TITLE = "Raw_EEG";
@@ -58,9 +59,6 @@ public class EEGGraph extends FrameLayout {
     public  CircularBuffer eegBuffer = new CircularBuffer(220, 4);
     public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
     public boolean isRecording;
-    public boolean isRunning = false;
-    public Timer plotTimer = new Timer();
-    public PlotUpdateTask plotTimerTask;
 
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
@@ -143,7 +141,7 @@ public class EEGGraph extends FrameLayout {
         PixelUtils.init(getContext());
 
         // Create line formatter with set color
-        lineFormatter = new FastLineAndPointRenderer.Formatter(Color.rgb(255, 255, 255), null, null, null);
+        lineFormatter = new FastLineAndPointRenderer.Formatter(Color.WHITE, null,  null);
 
         // Set line thickness
         lineFormatter.getLinePaint().setStrokeWidth(3);
@@ -159,22 +157,23 @@ public class EEGGraph extends FrameLayout {
         eegPlot.getBorderPaint().setColor(Color.WHITE);
 
         // Make plot background blue (including removing grid lines)
-        eegPlot.getGraph().getBackgroundPaint().setColor(Color.rgb(114, 194, 241));
+        XYGraphWidget graph = eegPlot.getGraph();
+        graph.getBackgroundPaint().setColor(BACKGROUND_COLOUR);
         //eegPlot.getGraph().setBackgroundPaint(null);
-        eegPlot.getGraph().getGridBackgroundPaint().setColor(Color.TRANSPARENT);
-        eegPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
-        eegPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
-        eegPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
-        eegPlot.getGraph().getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
+        graph.getGridBackgroundPaint().setColor(Color.TRANSPARENT);
+        graph.getDomainGridLinePaint().setColor(Color.TRANSPARENT);
+        graph.getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
+        graph.getRangeGridLinePaint().setColor(Color.TRANSPARENT);
+        graph.getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
 
         // Remove axis labels and values
         // Domain = X; Range = Y
         eegPlot.setDomainLabel(null);
         eegPlot.setRangeLabel(null);
-        eegPlot.getGraph().getRangeGridLinePaint().setColor(Color.TRANSPARENT);
-        eegPlot.getGraph().getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
-        eegPlot.getGraph().getDomainGridLinePaint().setColor(Color.TRANSPARENT);
-        eegPlot.getGraph().getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
+        graph.getRangeGridLinePaint().setColor(Color.TRANSPARENT);
+        graph.getRangeOriginLinePaint().setColor(Color.TRANSPARENT);
+        graph.getDomainGridLinePaint().setColor(Color.TRANSPARENT);
+        graph.getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
 
         // Remove extraneous elements
         eegPlot.getLayoutManager().remove(eegPlot.getLegend());
@@ -182,57 +181,49 @@ public class EEGGraph extends FrameLayout {
         // Set size of plot
         SizeMetric height = new SizeMetric(1, SizeMode.FILL);
         SizeMetric width = new SizeMetric(1, SizeMode.FILL);
-        eegPlot.getGraph().setSize(new Size(height, width));
+        graph.setSize(new Size(height, width));
 
         // Set position of plot (should be tweaked in order to center chart position)
-        eegPlot.getGraph().position(0, HorizontalPositioning.ABSOLUTE_FROM_LEFT.ABSOLUTE_FROM_LEFT,
+        graph.position(0, HorizontalPositioning.ABSOLUTE_FROM_LEFT.ABSOLUTE_FROM_LEFT,
                 0, VerticalPositioning.ABSOLUTE_FROM_TOP);
 
         // Add plot to EEGGraph
         this.addView(eegPlot, new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+
     }
 
     @Override
     public void onVisibilityChanged(View changedView, int visibility){
-        Log.w("EEG", "onVisibilityChanged called with visiblity " + visibility);
         if (visibility == View.INVISIBLE){
-            stopRendering();
+            stopDataListener();
         }
         else {
             startDataListener();
-            startRendering();
         }
     }
 
     // ---------------------------------------------------------
-    // Thread management functions
+    // Listener management functions
 
-    // Start thread that will render the plot at a fixed speed
-    public void startRendering(){
-        plotTimer = new Timer();
-        plotTimerTask = new PlotUpdateTask(eegPlot);
-        plotTimer.schedule(plotTimerTask, 20, 20);
-    }
 
     public void startDataListener(){
         dataListener = new DataListener();
-         appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
+        appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
     }
 
-    public void stopRendering(){
-        Log.w("EEG", "stopRendering called");
+    public void stopDataListener(){
+        Log.w("EEG", "Stop Data listener called");
         if (dataListener != null) {
             appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
         }
-        plotTimer.cancel();
     }
 
     // --------------------------------------------------------------
     // Listeners
 
     // Listener that receives incoming dataSource from the Muse.
-    // Will call receiveMuseDataPacket as dataSource comes in around 220hz (260hz for Muse 2016)
+    // Will call receiveMuseDataPacket as dataSource comes in around 220hz (256hz for Muse 2016)
     // Updates eegBuffer with latest values for all 4 electrodes
     private final class DataListener extends MuseDataListener {
         public double[] newData;
@@ -241,6 +232,7 @@ public class EEGGraph extends FrameLayout {
         public boolean filterOn = false;
         public Filter bandstopFilter;
         public double[][] bandstopFiltState;
+        private int frameCounter = 0;
 
         // if connected Muse is a 2016 BLE version, init a bandstop filter to remove 60hz noise
         DataListener() {
@@ -255,7 +247,6 @@ public class EEGGraph extends FrameLayout {
         // Updates eegBuffer with new data from all 4 channels. Bandstop filter for 2016 Muse
         @Override
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
-            Log.w("EEG", "data packet received");
             getEegChannelValues(newData, p);
 
             if (filterOn) {
@@ -264,6 +255,11 @@ public class EEGGraph extends FrameLayout {
             }
 
             eegBuffer.update(newData);
+
+            frameCounter++;
+            if (frameCounter % 15 == 0) {
+                updatePlot();
+            }
 
             if (isRecording) {
                 fileWriter.addDataToFile(newData);
@@ -284,37 +280,22 @@ public class EEGGraph extends FrameLayout {
         }
     }
 
+    // ---------------------------------------------------------
+    // Plot update functions
 
-    // --------------------------------------------------------------
-    // TimerTasks
+    public void updatePlot() {
 
-    // TimerTask class that updates data series and redraws plot at a fixed frequency
-    public class PlotUpdateTask extends TimerTask {
-        WeakReference<Plot> plot;
-
-        // Sets WeakReference to plot to avoid memory leaks
-        public PlotUpdateTask(Plot plot) {
-            this.plot = new WeakReference<Plot>(plot);
+        int numEEGPoints = eegBuffer.getPts();
+        if (dataSeries.size() >= PLOT_LENGTH) {
+            dataSeries.remove(numEEGPoints);
         }
 
-        @Override
-        public void run() {
-            if (eegBuffer.getPts() >= 12) {
-                Log.w("EEG", "plot updated");
+        // For adding all data points (Full sampling)
+        dataSeries.addAll(eegBuffer.extractSingleChannelTransposedAsDouble(numEEGPoints, channelOfInterest - 1));
 
-                int numEEGPoints = eegBuffer.getPts();
-                if (dataSeries.size() >= PLOT_LENGTH) {
-                    dataSeries.remove(numEEGPoints);
-                }
+        // resets the 'points-since-dataSource-read' value
+        eegBuffer.resetPts();
 
-                // For adding all data points (Full sampling)
-                dataSeries.addAll(eegBuffer.extractSingleChannelTransposedAsDouble(numEEGPoints, channelOfInterest - 1));
-
-                // resets the 'points-since-dataSource-read' value
-                eegBuffer.resetPts();
-
-                plot.get().redraw();
-            }
-        }
+        eegPlot.redraw();
     }
 }
