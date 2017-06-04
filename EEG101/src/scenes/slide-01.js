@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
-import { Actions, ActionConst } from "react-native-router-flux";
 import { connect } from "react-redux";
 import config from "../redux/config";
 import { bindActionCreators } from "redux";
@@ -36,23 +35,11 @@ class SlideOne extends Component {
 
     // Initialize States
     this.state = {
-      isVisible: true,
       popUp1Visible: false,
       popUp2Visible: false,
       popUp3Visible: false,
       popUp4Visible: false
     };
-  }
-
-  componentWillUnmount () {
-    console.log("componentWillUnmount called");
-    this.setState({isVisible: false});
-  }
-
-  componentDidMount () {
-    console.log("history info is ", this.props.history.length, this.props.history.action)
-    console.log("componentDidMount called. Location is " + this.props.location.pathname);
-    console.log("visibility is " , this.props.location.pathname === '/slideOne');
   }
 
   render() {
@@ -73,7 +60,7 @@ class SlideOne extends Component {
             });
           }}
         >
-          <GraphView style={{ flex: 1 }} visibility={this.state.isVisible} />
+          <GraphView style={{ flex: 1 }}/>
         </View>
 
         <Text style={styles.currentTitle}>INTRODUCTION</Text>

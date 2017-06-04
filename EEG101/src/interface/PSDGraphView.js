@@ -75,7 +75,6 @@ export default class PSDGraphView extends Component{
 
 PSDGraphView.propTypes = {
   dimensions: PropTypes.object,
-  visibility: PropTypes.bool,
   channelOfInterest: PropTypes.number,
   ...View.propTypes // include the default view properties
 };

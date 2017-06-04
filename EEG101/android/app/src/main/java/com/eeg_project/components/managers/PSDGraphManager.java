@@ -35,22 +35,8 @@ public class PSDGraphManager extends SimpleViewManager<PSDGraph> {
     // Necessary to clean up graph here with react-router
     @Override
     public void onDropViewInstance(PSDGraph graph) {
-        Log.w("FilterGraphManager", "onDropViewInstance called");
         graph.stopThreads();
         graph.removeAllViews();
-    }
-
-
-    // Bridge function for visibility prop. View.VISIBILITY is a native property of Android views
-    @ReactProp(name = "visibility")
-    public void setVisibility(PSDGraph graph, @Nullable boolean isVisible) {
-        if (isVisible){
-            graph.setVisibility(View.VISIBLE);
-        } else {
-            Log.w("FilterGraphManager", "setting visibility to false");
-
-            graph.setVisibility(View.INVISIBLE);
-        }
     }
 
     // Bridge function for channelOfInterestProp. Calls setChannelOfInterest in PSDGraph

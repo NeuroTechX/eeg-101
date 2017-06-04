@@ -6,9 +6,6 @@ import {
   ViewPagerAndroid,
   Image
 } from 'react-native';
-import{
-  Actions,
-}from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
 import config from '../redux/config';
@@ -31,7 +28,6 @@ function  mapStateToProps(state) {
 class SlideEight extends Component {
   constructor(props) {
     super(props);
-    isVisible: true;
 
     // Initialize States
     this.state = {
@@ -43,7 +39,7 @@ class SlideEight extends Component {
     return (
       <View style={styles.container}>
 
-        <PSDGraphView dimensions={this.props.dimensions} visibility={true} />
+        <PSDGraphView dimensions={this.props.dimensions} />
 
         <Text style={styles.currentTitle}>PSD</Text>
 
@@ -66,8 +62,8 @@ class SlideEight extends Component {
           In this graph, the X axis represents frequency and the Y axis represents power (microvolts squared, in decibels (dB)). Power represents how strong a certain frequency is in a complex signal. When power is high for only a few frequencies, it means that the signal is primarily composed of those few elements. If all frequencies have similar power, the signal will look random and be difficult to interpret.
         </PopUp>
 
-        <PopUp onClose={Actions.ConnectorOne} visible={this.props.connectionStatus === config.connectionStatus.DISCONNECTED} title='Muse Disconnected'>
-          Please reconnect to continue the tutorial</PopUp>
+        <PopUp onClose={()=>this.props.history.push('/connectorOne')} visible={this.props.connectionStatus === config.connectionStatus.DISCONNECTED} title='Muse Disconnected'>
+        Please reconnect to continue the tutorial</PopUp>
 
       </View>
     );
@@ -92,7 +88,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     container: {
-      marginTop: 55,
+
       flex: 1,
       justifyContent: 'space-around',
       alignItems: 'stretch',

@@ -1,7 +1,6 @@
 // reducer.js
 // Our Redux reducer. Handles the routing actions produced by react-native-router-flux as well as Muse connection actions
 
-import { ActionConst } from 'react-native-router-flux';
 import config from './config';
 import {
   SET_CONNECTION_STATUS,

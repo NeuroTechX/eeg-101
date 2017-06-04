@@ -7,7 +7,6 @@ import { requireNativeComponent, View } from 'react-native';
 const iface = {
   name: 'FilterGraphView',
   propTypes: {
-        visibility: PropTypes.bool,
         channelOfInterest: PropTypes.number,
         filterType: PropTypes.string,
         isRecording: PropTypes.bool,

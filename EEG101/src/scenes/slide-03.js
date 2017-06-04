@@ -6,9 +6,6 @@ import {
   ViewPagerAndroid,
   Image,
 } from 'react-native';
-import{
-  Actions,
-}from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import config from '../redux/config';
 import { MediaQueryStyleSheet} from 'react-native-responsive';
@@ -30,7 +27,6 @@ function  mapStateToProps(state) {
 class SlideThree extends Component {
   constructor(props) {
     super(props);
-    isVisible: true;
 
       // Initialize States
     this.state = {
@@ -46,7 +42,7 @@ class SlideThree extends Component {
       <View style={styles.container}>
 
         <View style={styles.graphContainer}>
-          <GraphView style={{flex:1}} visibility={this.props.isVisible} channelOfInterest={this.state.channelOfInterest}/>
+          <GraphView style={{flex:1}} channelOfInterest={this.state.channelOfInterest}/>
         </View>
 
         <Text style={styles.currentTitle}>HARDWARE</Text>
@@ -90,7 +86,7 @@ class SlideThree extends Component {
         Each electrode's signal reflects the difference in electrical potential between that electrode and the reference. Thus, the placement of the reference electrode is very important. With Muse, the reference is located on the front of the forehead.
         </PopUp>
 
-        <PopUp onClose={Actions.ConnectorOne} visible={this.props.connectionStatus === config.connectionStatus.DISCONNECTED} title='Muse Disconnected'>
+        <PopUp onClose={()=>this.props.history.push('/connectorOne')} visible={this.props.connectionStatus === config.connectionStatus.DISCONNECTED} title='Muse Disconnected'>
         Please reconnect to continue the tutorial</PopUp>
 
       </View>
@@ -122,7 +118,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     container: {
-      marginTop: 55,
+
       flex: 1,
       justifyContent: 'space-around',
       alignItems: 'stretch',

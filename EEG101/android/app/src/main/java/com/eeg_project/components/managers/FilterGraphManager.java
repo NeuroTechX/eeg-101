@@ -35,22 +35,10 @@ public class FilterGraphManager extends SimpleViewManager<FilterGraph> {
     // Necessary to clean up graph here with react-router
     @Override
     public void onDropViewInstance(FilterGraph graph) {
-        Log.w("FilterGraphManager", "onDropViewInstance called");
         graph.stopDataListener();
         graph.removeAllViews();
     }
 
-    // Bridge function for visibility prop. View.VISIBILITY is a native property of Android views
-    @ReactProp(name = "visibility")
-    public void setVisibility(FilterGraph graph, @Nullable boolean isVisible) {
-        if (isVisible){
-            graph.setVisibility(View.VISIBLE);
-        } else {
-            Log.w("FilterGraphManager", "setting visibility to false");
-
-            graph.setVisibility(View.INVISIBLE);
-        }
-    }
 
     // Bridge function for channelOfInterest Prop. Calls setChannelOfInterest in FilterGraph
     @ReactProp(name = "channelOfInterest")

@@ -2,8 +2,7 @@ package com.eeg_project.components.graphs;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
-import android.view.View;
+
 import android.widget.FrameLayout;
 
 import com.androidplot.ui.HorizontalPositioning;
@@ -72,7 +71,7 @@ public class EEGGraph extends FrameLayout {
         super(context);
         appState = ((MainApplication)context.getApplicationContext());
         initView(context);
-        // Data threads are started in onVisibilityChanged function
+        startDataListener();
     }
 
 
@@ -188,19 +187,6 @@ public class EEGGraph extends FrameLayout {
         // Add plot to EEGGraph
         this.addView(eegPlot, new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-
-    }
-
-    @Override
-    public void onVisibilityChanged(View changedView, int visibility){
-        Log.w("EEG", "onVisibilityChanged called");
-
-        if (visibility == View.INVISIBLE){
-            stopDataListener();
-        }
-        else {
-            startDataListener();
-        }
     }
 
     // ---------------------------------------------------------
@@ -213,10 +199,8 @@ public class EEGGraph extends FrameLayout {
     }
 
     public void stopDataListener(){
-        Log.w("EEG", "Stop Data listener called");
         if (dataListener != null) {
             appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
-            Log.w("EEG", "dataListener unregistered");
         }
     }
 
@@ -285,8 +269,6 @@ public class EEGGraph extends FrameLayout {
     // Plot update functions
 
     public void updatePlot() {
-        Log.w("EEG", "updatePlot called");
-
         int numEEGPoints = eegBuffer.getPts();
         if (dataSeries.size() >= PLOT_LENGTH) {
             dataSeries.remove(numEEGPoints);

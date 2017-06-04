@@ -2,21 +2,20 @@ package com.eeg_project.components.graphs;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
-import android.view.View;
+
 import android.widget.FrameLayout;
 
-import com.androidplot.Plot;
+
 import com.androidplot.ui.HorizontalPositioning;
 import com.androidplot.ui.Size;
 import com.androidplot.ui.SizeMetric;
 import com.androidplot.ui.SizeMode;
 import com.androidplot.ui.VerticalPositioning;
-import com.androidplot.util.PixelUtils;
+
 import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.FastLineAndPointRenderer;
 import com.androidplot.xy.LineAndPointFormatter;
-import com.androidplot.xy.XYGraphWidget;
+
 import com.androidplot.xy.XYPlot;
 import com.choosemuse.libmuse.Eeg;
 import com.choosemuse.libmuse.Muse;
@@ -29,9 +28,6 @@ import com.eeg_project.components.EEGFileWriter;
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
 
-import java.lang.ref.WeakReference;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /*
 View that plots a single-channel filtered EEG graph
@@ -84,7 +80,7 @@ public class FilterGraph extends FrameLayout {
         super(context);
         appState = ((MainApplication)context.getApplicationContext());
         initView(context);
-        // Data threads are started in onVisibilityChanged function
+        // Data listener is started in setFilterType method
     }
 
     // -----------------------------------------------------------------------
@@ -210,15 +206,8 @@ public class FilterGraph extends FrameLayout {
         // Add plot to FilterGraph
         this.addView(filterPlot, new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-
     }
 
-    @Override
-    public void onVisibilityChanged(View changedView, int visibility){
-        if (visibility == View.INVISIBLE){
-            stopDataListener();
-        }
-    }
 
     // ---------------------------------------------------------
     // Listener management functions
@@ -230,7 +219,6 @@ public class FilterGraph extends FrameLayout {
     }
 
     public void stopDataListener(){
-        Log.w("Filter", "Stop Data listener called");
         if (dataListener != null) {
             appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
         }
@@ -305,8 +293,6 @@ public class FilterGraph extends FrameLayout {
     // Plot update functions
 
     public void updatePlot() {
-        Log.w("Filter", "updatePlot called");
-
         int numEEGPoints = eegBuffer.getPts();
         if (dataSeries.size() >= PLOT_LENGTH) {
             dataSeries.remove(numEEGPoints);

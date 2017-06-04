@@ -142,7 +142,6 @@ export default class WaveGraphView extends Component{
 
 WaveGraphView.propTypes = {
   dimensions: PropTypes.object,
-  visibility: PropTypes.bool,
   channelOfInterest: PropTypes.number,
   isRecording: PropTypes.bool,
   ...View.propTypes // include the default view properties

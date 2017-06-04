@@ -2,8 +2,6 @@ package com.eeg_project.components.graphs;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import com.androidplot.Plot;
@@ -75,6 +73,9 @@ public class PSDGraph extends FrameLayout {
         super(context);
         appState = ((MainApplication) context.getApplicationContext());
         initView(context);
+        startDataListener();
+        startDataThread();
+        startRenderingThread();
     }
 
     // -----------------------------------------------------------------------
@@ -159,28 +160,17 @@ public class PSDGraph extends FrameLayout {
         // Add plot to FilterGraph
         this.addView(psdPlot, new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-
-        // Explicity visibility setting handles bug on older devices where graph wasn't starting
-        onVisibilityChanged(this, View.VISIBLE);
     }
 
-    // Called when user navigates away from parent React Native component. Stops active threads in order to limit memory usage
-    @Override
-    public void onVisibilityChanged(View changedView, int visibility){
-        if (visibility == View.INVISIBLE){
-            stopThreads();
-        }
-        else if (dataThread == null || !dataThread.isAlive()) {
-            startDataThread();
-            startRenderingThread();
-            dataListener = new DataListener();
-            // Register a listener to receive dataSource packets from Muse. Second argument defines which type(s) of dataSource will be transmitted to listener
-            appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
-        }
-    }
 
     // ---------------------------------------------------------
     // Thread management functions
+
+    public void startDataListener() {
+        dataListener = new DataListener();
+        // Register a listener to receive dataSource packets from Muse. Second argument defines which type(s) of dataSource will be transmitted to listener
+        appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
+    }
 
     // Start thread that will  update the dataSource whenever a Muse dataSource packet is receive series
     // and perform dataSource processing
@@ -224,7 +214,6 @@ public class PSDGraph extends FrameLayout {
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
             getEegChannelValues(newData, p);
             eegBuffer.update(newData);
-            Log.w("PSD", "museDataListener ran");
 
         }
 
@@ -261,7 +250,6 @@ public class PSDGraph extends FrameLayout {
                     // 33ms sleep = 30 fps
                     Thread.sleep(33);
                     plot.get().redraw();
-                    Log.w("PSD", "plotUpdater ran");
 
                 }
             } catch (InterruptedException e) {
@@ -313,7 +301,6 @@ public class PSDGraph extends FrameLayout {
                 keepRunning = true;
                 while (keepRunning) {
                     if (eegBuffer.getPts() >= stepSize) {
-                        Log.w("PSD", "dataSource ran");
 
                         // Extract latest raw samples
                         latestSamples = eegBuffer.extractSingleChannelTransposed(256,channelOfInterest - 1);

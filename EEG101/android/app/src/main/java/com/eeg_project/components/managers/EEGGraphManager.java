@@ -35,20 +35,8 @@ public class EEGGraphManager extends SimpleViewManager<EEGGraph> {
     // Necessary to clean up graph here with react-router
     @Override
     public void onDropViewInstance(EEGGraph graph) {
-        Log.w("EEGGraphManager", "onDropViewInstance called");
         graph.stopDataListener();
         graph.removeAllViews();
-    }
-
-    // Bridge function for visibility prop. View.VISIBILITY is a native property of Android views
-    @ReactProp(name = "visibility", defaultBoolean = false)
-    public void setVisibility(EEGGraph graph, @Nullable boolean isVisible) {
-        if (isVisible) {
-            graph.setVisibility(View.VISIBLE);
-        } else {
-            Log.w("EEGGraphManager", "setting visibility to false");
-            graph.setVisibility(View.INVISIBLE);
-        }
     }
 
     // Bridge function for channelOfInterestProp. Calls setChannelOfInterest in EEGGraph

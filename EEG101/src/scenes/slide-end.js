@@ -9,9 +9,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { MediaQueryStyleSheet} from 'react-native-responsive';
-import{
-  Actions,
-}from 'react-native-router-flux';
 import {connect } from 'react-redux';
 import LinkButton from '../components/WhiteLinkButton';
 
@@ -77,7 +74,7 @@ class End extends Component {
 
           <View style={styles.page}>
 
-            <View style={[styles.listBox, {marginTop: 100}]}>
+            <View style={[styles.listBox, {marginTop: 75}]}>
               <Text style={styles.header}>The EEG 101 Team</Text>
               <Text style={styles.body}>Hubert Banville - Visionary</Text>
               <Text style={styles.body}>Dano Morrison - Developer</Text>
@@ -90,7 +87,7 @@ class End extends Component {
             </View>
 
             <View style={styles.buttonBox}>
-              <LinkButton path='/slideConnectorThree'> NEXT </LinkButton>
+              <LinkButton path='/connectorThree'> NEXT </LinkButton>
             </View>
           </View>
 

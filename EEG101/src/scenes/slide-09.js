@@ -6,9 +6,6 @@ import {
   ViewPagerAndroid,
   Image
 } from 'react-native';
-import{
-  Actions,
-}from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { MediaQueryStyleSheet }  from 'react-native-responsive';
 import LinkButton from '../components/LinkButton';
@@ -32,7 +29,6 @@ function  mapStateToProps(state) {
 class SlideNine extends Component {
   constructor(props) {
     super(props);
-    isVisible: true;
 
     // Initialize States
     this.state = {
@@ -46,7 +42,7 @@ class SlideNine extends Component {
     return (
       <View style={styles.container}>
 
-        <WaveGraphView dimensions={this.props.dimensions} visibility={true} />
+        <WaveGraphView dimensions={this.props.dimensions} />
 
         <Text style={styles.currentTitle}>BRAIN WAVES</Text>
 
@@ -98,8 +94,8 @@ class SlideNine extends Component {
           A Brain-Computer Interface is a direct communication channel between the brain and an external device. For example, one can feed information about brain state based on EEG frequency bands to a computer; that computer then analyzes the EEG data and decides what the user intent was. The computer can use that command to control an external device such as a wheelchair or a display.
         </PopUp>
 
-        <PopUp onClose={Actions.ConnectorOne} visible={this.props.connectionStatus === config.connectionStatus.DISCONNECTED} title='Muse Disconnected'>
-          Please reconnect to continue the tutorial</PopUp>
+        <PopUp onClose={()=>this.props.history.push('/connectorOne')} visible={this.props.connectionStatus === config.connectionStatus.DISCONNECTED} title='Muse Disconnected'>
+        Please reconnect to continue the tutorial</PopUp>
 
       </View>
     );
@@ -124,7 +120,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     container: {
-      marginTop: 55,
+
       flex: 1,
       justifyContent: 'space-around',
       alignItems: 'stretch',

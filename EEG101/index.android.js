@@ -28,9 +28,6 @@ import SlideNine from './src/scenes/slide-09';
 import Sandbox from './src/scenes/sandbox';
 import End from './src/scenes/slide-end';
 
-// Navbar import
-import NavigationBar from './src/components/NavigationBar.js';
-
 // reducer is a function
 import reducer from './src/redux/reducer';
 
