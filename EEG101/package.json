@@ -14,11 +14,12 @@
     "lottie-react-native": "^1.1.1",
     "react": "16.0.0-alpha.6",
     "react-addons-pure-render-mixin": "^15.5.2",
-    "react-dom":  "^15.4.1",
+    "react-dom": "^15.4.1",
     "react-native": "0.44.2",
     "react-native-responsive": "^1.0.1",
     "react-native-router-flux": "^3.36.0",
     "react-native-svg": "^5.1.8",
+    "react-navigation": "^1.0.0-beta.11",
     "react-redux": "^4.4.5",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0"

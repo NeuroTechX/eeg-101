@@ -284,7 +284,6 @@ public class EEGGraph extends FrameLayout {
     // Plot update functions
 
     public void updatePlot() {
-
         int numEEGPoints = eegBuffer.getPts();
         if (dataSeries.size() >= PLOT_LENGTH) {
             dataSeries.remove(numEEGPoints);

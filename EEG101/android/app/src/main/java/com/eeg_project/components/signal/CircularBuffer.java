@@ -54,6 +54,8 @@ public class CircularBuffer {
         return extractedArray;
     }
 
+
+
     public double[][] extractTransposed(int nbSamples) {
         // Return an array containing the last `nbSamples` collected in
         // the circular buffer.

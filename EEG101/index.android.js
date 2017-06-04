@@ -3,10 +3,7 @@ import {
   AppRegistry,
   DeviceEventEmitter,
 } from 'react-native';
-import{
-  Router,
-  Scene,
-}from 'react-native-router-flux';
+import { StackNavigator } from 'react-navigation';
 import{ Provider, connect }from 'react-redux';
 import{ createStore, applyMiddleware }from 'redux';
 import thunk from 'redux-thunk';
@@ -40,7 +37,7 @@ import reducer from './src/redux/reducer';
 const RouterWithRedux = connect()(Router);
 
 // Create store
-const store = createStore(reducer, applyMiddleware(thunk)); 
+const store = createStore(reducer, applyMiddleware(thunk));
 
 class EEG_Project extends Component {
 
