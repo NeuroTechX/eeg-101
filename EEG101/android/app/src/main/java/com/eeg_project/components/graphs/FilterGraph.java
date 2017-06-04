@@ -305,6 +305,7 @@ public class FilterGraph extends FrameLayout {
     // Plot update functions
 
     public void updatePlot() {
+        Log.w("Filter", "updatePlot called");
 
         int numEEGPoints = eegBuffer.getPts();
         if (dataSeries.size() >= PLOT_LENGTH) {

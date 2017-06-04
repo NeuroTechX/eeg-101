@@ -15,10 +15,11 @@ import LinkButton from '../components/LinkButton';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
 
-// Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
-    return {isVisible: state.scene.sceneKey === 'SlideSix'};
-  }
+  return {
+    dimensions: state.graphViewDimensions,
+  };
+}
 
 class SlideSix extends Component {
   constructor(props) {

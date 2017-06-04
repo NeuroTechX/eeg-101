@@ -46,7 +46,7 @@ class SlideNine extends Component {
     return (
       <View style={styles.container}>
 
-        <WaveGraphView dimensions={this.props.dimensions} visibility={this.props.isVisible} />
+        <WaveGraphView dimensions={this.props.dimensions} visibility={true} />
 
         <Text style={styles.currentTitle}>BRAIN WAVES</Text>
 

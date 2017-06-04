@@ -2,6 +2,7 @@ package com.eeg_project.components.graphs;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -223,6 +224,8 @@ public class PSDGraph extends FrameLayout {
         public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
             getEegChannelValues(newData, p);
             eegBuffer.update(newData);
+            Log.w("PSD", "museDataListener ran");
+
         }
 
         // Updates newData array based on incoming EEG channel values
@@ -258,6 +261,8 @@ public class PSDGraph extends FrameLayout {
                     // 33ms sleep = 30 fps
                     Thread.sleep(33);
                     plot.get().redraw();
+                    Log.w("PSD", "plotUpdater ran");
+
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -308,6 +313,7 @@ public class PSDGraph extends FrameLayout {
                 keepRunning = true;
                 while (keepRunning) {
                     if (eegBuffer.getPts() >= stepSize) {
+                        Log.w("PSD", "dataSource ran");
 
                         // Extract latest raw samples
                         latestSamples = eegBuffer.extractSingleChannelTransposed(256,channelOfInterest - 1);

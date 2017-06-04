@@ -49,7 +49,7 @@ class SlideFour extends Component {
       <View style={styles.container}>
 
         <View style={styles.halfGraphContainer}>
-          <GraphView style={{flex:1}} visibility={this.props.isVisible}/>
+          <GraphView style={{flex:1}} visibility={true}/>
           <Text style={styles.halfGraphLabelText}>Raw</Text>
         </View>
         <View style={styles.halfGraphContainer}>

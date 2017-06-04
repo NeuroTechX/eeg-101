@@ -1,5 +1,6 @@
 package com.eeg_project.components.managers;
 
+import android.util.Log;
 import android.view.View;
 
 import com.eeg_project.components.graphs.EEGGraph;
@@ -30,12 +31,22 @@ public class EEGGraphManager extends SimpleViewManager<EEGGraph> {
         return eegGraph;
     }
 
+    // Called when view is detached from view hierarchy
+    // Necessary to clean up graph here with react-router
+    @Override
+    public void onDropViewInstance(EEGGraph graph) {
+        Log.w("EEGGraphManager", "onDropViewInstance called");
+        graph.stopDataListener();
+        graph.removeAllViews();
+    }
+
     // Bridge function for visibility prop. View.VISIBILITY is a native property of Android views
     @ReactProp(name = "visibility", defaultBoolean = false)
     public void setVisibility(EEGGraph graph, @Nullable boolean isVisible) {
         if (isVisible) {
             graph.setVisibility(View.VISIBLE);
         } else {
+            Log.w("EEGGraphManager", "setting visibility to false");
             graph.setVisibility(View.INVISIBLE);
         }
     }

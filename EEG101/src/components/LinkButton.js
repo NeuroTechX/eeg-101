@@ -22,7 +22,7 @@ export default class WhiteButton extends Component{
 		return(
       <Link
         to={this.props.path}
-        replace={true}
+        replace={false}
         component={TouchableOpacity}
       >
   			<View style={dynamicStyle}>

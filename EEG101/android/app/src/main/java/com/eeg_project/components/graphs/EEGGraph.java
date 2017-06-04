@@ -28,8 +28,6 @@ import com.eeg_project.components.EEGFileWriter;
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
 
-import java.util.Timer;
-
 
 /*
 View that plots a single-channel EEG graph
@@ -195,6 +193,8 @@ public class EEGGraph extends FrameLayout {
 
     @Override
     public void onVisibilityChanged(View changedView, int visibility){
+        Log.w("EEG", "onVisibilityChanged called");
+
         if (visibility == View.INVISIBLE){
             stopDataListener();
         }
@@ -216,6 +216,7 @@ public class EEGGraph extends FrameLayout {
         Log.w("EEG", "Stop Data listener called");
         if (dataListener != null) {
             appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
+            Log.w("EEG", "dataListener unregistered");
         }
     }
 
@@ -284,6 +285,7 @@ public class EEGGraph extends FrameLayout {
     // Plot update functions
 
     public void updatePlot() {
+        Log.w("EEG", "updatePlot called");
 
         int numEEGPoints = eegBuffer.getPts();
         if (dataSeries.size() >= PLOT_LENGTH) {

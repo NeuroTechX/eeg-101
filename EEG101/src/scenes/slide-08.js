@@ -43,7 +43,7 @@ class SlideEight extends Component {
     return (
       <View style={styles.container}>
 
-        <PSDGraphView dimensions={this.props.dimensions} visibility={this.props.isVisible} />
+        <PSDGraphView dimensions={this.props.dimensions} visibility={true} />
 
         <Text style={styles.currentTitle}>PSD</Text>
 

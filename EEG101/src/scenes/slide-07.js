@@ -19,7 +19,6 @@ import { MediaQueryStyleSheet }  from 'react-native-responsive';
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
   return {
-    isVisible: state.scene.sceneKey === 'SlideSeven',
     dimensions: state.graphViewDimensions,
   };
 }

@@ -29,6 +29,14 @@ function  mapStateToProps(state) {
     super(props);
   }
 
+  componentWillUnmount () {
+    console.log("componentWillUnmount called.  Location is " + this.props.location.pathname);
+  }
+
+  componentDidMount () {
+    console.log("componentDidMount called. Location is " + this.props.location.pathname);
+  }
+
   render() {
     return (
       <View style={styles.container}>
