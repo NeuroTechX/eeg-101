@@ -31,7 +31,7 @@ public class CircBuffer2D {
     // -----------------------------------------------------------------------
     // Methods
 
-    // Updates the 3D buffer array with the 2D newData array at the current index. When index reaches the maximum bufferLength it returns to 0.
+    // Updates the 3D buffer array with the 2D newData array at the current index. When index reaches the maximum samplingFrequency it returns to 0.
     public void update(double[][] newData) {
 
         // loop through channels

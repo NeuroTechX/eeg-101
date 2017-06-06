@@ -38,7 +38,6 @@ public class NoiseDetector {
         } else {
             return false;
         }
-
     }
 
     public boolean[] detectArtefact(double[][] epoch) {

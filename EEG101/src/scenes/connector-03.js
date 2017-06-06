@@ -61,6 +61,28 @@ class ConnectorThree extends Component {
           </View>
         </Link>
 
+        <Link to={"/classifier"} replace={true} component={TouchableOpacity}>
+          <View
+            style={{
+              borderColor: "white",
+              borderWidth: 1,
+              alignSelf: "center",
+              margin: 5,
+              padding: 5
+            }}
+          >
+            <Text
+              style={{
+                color: "white",
+                fontFamily: "Roboto-Bold",
+                fontSize: 15
+              }}
+            >
+              CLASSIFIER TEST
+            </Text>
+          </View>
+        </Link>
+
         <TouchableOpacity onPress={() => Actions.Sandbox({ type: "push" })} />
 
         <View style={styles.buttonContainer}>

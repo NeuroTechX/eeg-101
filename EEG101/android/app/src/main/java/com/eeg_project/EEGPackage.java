@@ -1,5 +1,6 @@
 package com.eeg_project;
 
+import com.eeg_project.components.classifier.ClassifierModule;
 import com.eeg_project.components.managers.FilterGraphManager;
 import com.eeg_project.components.managers.EEGGraphManager;
 import com.eeg_project.components.managers.PSDGraphManager;
@@ -19,7 +20,8 @@ public class EEGPackage implements ReactPackage {
 	// Register Native Modules to JS
 	public List<NativeModule> createNativeModules(ReactApplicationContext reactApplicationContext) {
 		return Arrays.<NativeModule>asList(
-				new ConnectorModule(reactApplicationContext)
+				new ConnectorModule(reactApplicationContext),
+				new ClassifierModule(reactApplicationContext)
 		);
 	}
 
