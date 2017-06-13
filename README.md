@@ -16,6 +16,8 @@
 - Built with React Native for Android
 - Completely free, open-source, and available for use/adaption in any project
 
+Find [EEG 101](https://play.google.com/store/apps/details?id=com.eeg_project&hl=en) on the Android Play Store!
+
 ## Video Walkthrough
 
 https://www.youtube.com/watch?v=GunGP1yrqM8&feature=youtu.be
