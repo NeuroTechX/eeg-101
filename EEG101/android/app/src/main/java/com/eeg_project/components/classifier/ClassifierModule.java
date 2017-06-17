@@ -10,6 +10,7 @@ import com.eeg_project.MainApplication;
 import com.eeg_project.components.signal.BandPowerExtractor;
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.FFT;
+import com.eeg_project.components.signal.GaussianNaiveBayesClassifier;
 import com.eeg_project.components.signal.NoiseDetector;
 import com.eeg_project.components.signal.PSDBuffer2D;
 import com.facebook.react.bridge.Promise;
@@ -20,29 +21,37 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.LinkedList;
 
 /**
- * Created by dano on 05/06/17.
+ * Bridged native module for classifier.
+ * Starts ClassifierDataListener to record data from Muse
+ * Receives contents of CircularBuffer whenever it fills up in bufferFull
+ * Posts data to dataRunnable in background HandlerThread to get PSD and extract band powers
  */
 
 
 public class ClassifierModule extends ReactContextBaseJavaModule implements BufferListener {
 
+
     // ---------------------------------------------------------
     // Variables
+    public static final int FFT_LENGTH = 256;
+    public static final int M = 4;
     private final String TAG = "Classifier";
+    private int dataClass;
     public CircularBuffer eegBuffer;
     public int samplingFrequency;
     public ClassifierDataListener dataListener;
-    public List<Double> sampleData = new ArrayList<Double>();
     public NoiseDetector noiseDetector = new NoiseDetector(600);
     private double[][] smoothLogPower;
     private HandlerThread dataThread;
     private Handler dataHandler;
     boolean isLowEnergy;
+
+    public GaussianNaiveBayesClassifier classifier = new GaussianNaiveBayesClassifier();
+    public LinkedList<double[]> trainingData = new LinkedList<>();
+    public LinkedList<Integer> labels = new LinkedList<>();
 
     // grab reference to global Muse
     MainApplication appState;
@@ -57,6 +66,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     // ---------------------------------------------------------
     // React Native Module methods
     // Required by ReactContextBaseJavaModule
+
     @Override
     public String getName() {
         return "Classifier";
@@ -73,13 +83,15 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     // Bridged methods
 
     @ReactMethod
-    public void collectTrainingData(String dataClass, Promise promise) {
+    public void collectTrainingData(int dClass, Promise promise) {
         if (isLowEnergy) {
-            samplingFrequency = 256;
+            samplingFrequency = FFT_LENGTH;
         } else samplingFrequency = 220;
 
-        eegBuffer = new CircularBuffer(samplingFrequency, 4);
+        eegBuffer = new CircularBuffer(samplingFrequency, M);
         eegBuffer.addListener(this);
+
+        this.dataClass = dClass;
 
         // Data processing is handled in a background handler thread
         dataThread = new HandlerThread("dataThread");
@@ -104,7 +116,8 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
 
         Log.w(TAG, "stopCollecting");
-
+        Log.w(TAG, "trainingData: length = " + trainingData.size() + " example: " + trainingData.get(4).toString());
+        Log.w(TAG, "labels: " + labels.toString());
     }
 
     @ReactMethod
@@ -112,7 +125,8 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         // Train classifier on saved data arrays
         // Return promise with cross-val score
         // Use partialfit if partialFit is true
-        Log.w(TAG, "train");
+        classifier.fit(trainingData, labels);
+        classifier.print();
         promise.resolve(true);
     }
 
@@ -139,16 +153,16 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         private double[][] logpower;
         private double[][] smoothPSD;
         PSDBuffer2D psdBuffer;
-        private double[][] bandMeans;
+        private double[] bandMeans;
 
         public dataRunnable(double[][] buffer, int frequency) {
             this.samplingFrequency = frequency;
             this.rawBuffer = buffer;
-            fft = new FFT(samplingFrequency, 256, samplingFrequency);
+            fft = new FFT(samplingFrequency, FFT_LENGTH, samplingFrequency);
             int nbBins = fft.getFreqBins().length;
-            psdBuffer = new PSDBuffer2D(samplingFrequency,4, nbBins);
-            logpower = new double[4][nbBins];
-            smoothLogPower = new double[4][nbBins];
+            psdBuffer = new PSDBuffer2D(samplingFrequency, M, nbBins);
+            logpower = new double[M][nbBins];
+            smoothLogPower = new double[M][nbBins];
             bandExtractor = new BandPowerExtractor(fft.getFreqBins());
         }
 
@@ -159,8 +173,10 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
                     return;
                 }
              smoothPSD = getPSD(rawBuffer);
-             bandMeans = bandExtractor.extract(smoothPSD);
-            Log.w(TAG, Arrays.deepToString(bandMeans));
+             bandMeans = bandExtractor.extract1D(smoothPSD);
+             trainingData.add(bandMeans);
+             labels.add(dataClass);
+
             } catch (Exception e) {
                 Log.w(TAG, e);
                 return;
@@ -178,7 +194,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
 
         public double[][] getPSD(double[][] buffer) {
             // [nbch][nbsmp]
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < M; i++) {
                 double[] channelPower = fft.computeLogPSD(buffer[i]);
                 for (int j = 0; j < channelPower.length; j++){
                     logpower[i][j] = channelPower[j];

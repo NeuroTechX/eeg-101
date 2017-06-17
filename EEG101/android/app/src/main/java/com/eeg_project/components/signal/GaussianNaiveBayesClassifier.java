@@ -1,3 +1,7 @@
+package com.eeg_project.components.signal;
+
+import android.util.Log;
+
 import java.util.Arrays;
 import java.lang.Math;
 import java.util.*;
@@ -49,6 +53,26 @@ public class GaussianNaiveBayesClassifier {
 		//  Implement decision boundary method?
 
 		fitted = false;
+	}
+
+	public void fit(LinkedList<double[]> trainingData, LinkedList<Integer> labels) {
+		// Fit function with conversion for LinkedLists used in Classifier Module
+
+		double[][] X = new double[trainingData.size()][trainingData.get(0).length];
+
+		for (int i = 0; i < trainingData.size(); i++) {
+			for (int j = 0; j < trainingData.get(0).length; j++) {
+				X[i][j] = trainingData.get(i)[j];
+			}
+		}
+
+		int[] y = new int[labels.size()];
+
+		for (int k = 0; k < labels.size(); k++) {
+			y[k] = labels.get(k);
+		}
+
+		fit(X,y);
 	}
 
 	public void fit(double[][] X, int[] y) {
@@ -405,7 +429,7 @@ public class GaussianNaiveBayesClassifier {
 		// Count the number of occurences of a specific value in an array.
 		//
 		// Args:
-		// 	numbers: list of integers in which to look for 
+		// 	numbers: list of integers in which to look
 		// 	like: integers to look for
 		//
 		// Returns:
@@ -414,9 +438,9 @@ public class GaussianNaiveBayesClassifier {
 		// TODO: Make a more efficient version?
 
 		int[] counts = new int[like.length];
-		for (int i : like){
+		for (int i = 0; i<like.length; i++){
 			for (int j : numbers) {
-			   if (i == j){
+			   if (j == like[i]){
 			   		counts[i]++;
 			   }
 			}
@@ -448,26 +472,26 @@ public class GaussianNaiveBayesClassifier {
 	public void print() {
 		// Print the current state of the model.
 		if (this.fitted) {
-			System.out.println(" ");
-			System.out.println("Summary of GaussianNaiveBayesClassifier");
-			System.out.println("=======================================");
-			System.out.println(" ");
-			System.out.println("Classes: "+Arrays.toString(this.classes));
-			System.out.println("Number of classes: "+this.nbClasses);
-			System.out.println("Number of features: "+this.nbFeats);
-			System.out.println("Class counts: "+Arrays.toString(getClassCounts()));
-			System.out.println("Class priors: "+Arrays.toString(getClassPriors()));
-			System.out.println("Sums: "+Arrays.deepToString(this.sum));
-			System.out.println("Sums of squares: "+Arrays.deepToString(this.sumSquares));
-			System.out.println("Means: "+Arrays.deepToString(getMeans()));
-			System.out.println("Variances: "+Arrays.deepToString(getVariances()));
-			System.out.println("Discriminative power: "+
+			Log.w("GNB"," ");
+			Log.w("GNB","Summary of GaussianNaiveBayesClassifier");
+			Log.w("GNB","=======================================");
+			Log.w("GNB"," ");
+			Log.w("GNB","Classes: "+Arrays.toString(this.classes));
+			Log.w("GNB","Number of classes: "+this.nbClasses);
+			Log.w("GNB","Number of features: "+this.nbFeats);
+			Log.w("GNB","Class counts: "+Arrays.toString(getClassCounts()));
+			Log.w("GNB","Class priors: "+Arrays.toString(getClassPriors()));
+			Log.w("GNB","Sums: "+Arrays.deepToString(this.sum));
+			Log.w("GNB","Sums of squares: "+Arrays.deepToString(this.sumSquares));
+			Log.w("GNB","Means: "+Arrays.deepToString(getMeans()));
+			Log.w("GNB","Variances: "+Arrays.deepToString(getVariances()));
+			Log.w("GNB","Discriminative power: "+
 							   Arrays.toString(computeFeatDiscrimPower()));
-			System.out.println("Feature ranking: "+Arrays.toString(rankFeats()));
-			System.out.println(" ");
+			Log.w("GNB","Feature ranking: "+Arrays.toString(rankFeats()));
+			Log.w("GNB"," ");
 		}
 		else {
-			System.out.println("Model has not been fitted yet.");
+			Log.w("GNB","Model has not been fitted yet.");
 		}
 	}
 
@@ -514,14 +538,14 @@ public class GaussianNaiveBayesClassifier {
 
 		// Predict probability
 		double[][] proba = clf.predictProba(X_test);
-		System.out.println("Probability: "+Arrays.deepToString(proba));
+		Log.w("GNB","Probability: "+Arrays.deepToString(proba));
 
 		// Predict
 		int[] yHat = clf.predict(X_test);
-		System.out.println("Prediction: "+Arrays.toString(yHat));
+		Log.w("GNB","Prediction: "+Arrays.toString(yHat));
 
 		// Score
 		double acc = clf.score(X_test, y_test);
-		System.out.println("Accuracy: "+acc);
+		Log.w("GNB","Accuracy: "+acc);
 		}
 }

@@ -10,7 +10,9 @@ import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
 
 /**
- * Created by dano on 06/06/17.
+ * Simple Muse Listener that processes data with a bandstop filter at 60hz (if Muse 2016)
+ * Fills up a circularBuffer with fully sampled EEG data
+ * Data is shared with parent class (i.e. ClassifierModule) through bound reference to CircularBuffer passed in constructor
  */
 
 public class ClassifierDataListener extends MuseDataListener {
@@ -22,7 +24,6 @@ public class ClassifierDataListener extends MuseDataListener {
     public Filter bandstopFilter;
     public double[][] bandstopFiltState;
     CircularBuffer eegBuffer;
-
 
     // grab reference to global Muse
     MainApplication appState;

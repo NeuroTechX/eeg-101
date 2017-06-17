@@ -1,5 +1,7 @@
 package com.eeg_project.components.signal;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.util.Arrays; // For printing arrays when debugging
 
 public class BandPowerExtractor {
@@ -41,9 +43,10 @@ public class BandPowerExtractor {
 
     }
 
-    public double[][] extract(double[][] psd) {
+    public double[][] extract2D(double[][] psd) {
         // Extract mean power in each band for each channel in `psd`.
         // `psd` must be [nbCh,nbBins]
+        // Results are returned in 2D [nbCh][nbBands]
 
         double[][] bandMeans = new double[psd.length][nbBands];
 
@@ -52,7 +55,20 @@ public class BandPowerExtractor {
         }
 
         return bandMeans;
+    }
 
+    public double[] extract1D(double[][] psd) {
+        // Extract mean power in each band for each channel in `psd`.
+        // `psd` must be [nbCh,nbBins]
+        // Results are returned in 1D for Classifier [nbCh * nbBands]
+
+        double[] bandMeans = new double[0];
+
+        for (int i = 0; i < psd.length; i++) {
+            bandMeans = ArrayUtils.addAll(bandMeans, extract(psd[i]));
+        }
+
+        return bandMeans;
     }
 
     public int getNbBands() {

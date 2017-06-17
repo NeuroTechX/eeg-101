@@ -42,12 +42,18 @@ class ClassifierTest extends Component {
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>Test</Text>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', marginLeft: 50, marginRight: 50,}}>
 
-            <Button onPress={()=>Classifier.collectTrainingData("A")} active={true}>Collect</Button>
+              <Button onPress={()=>Classifier.collectTrainingData(1)} active={true}>Collect Class 1</Button>
+              <Button onPress={()=>Classifier.collectTrainingData(2)} active={true}>Collect Class 2</Button>
+            </View>
             <Button onPress={()=>Classifier.stopCollecting()} active={true}>Stop</Button>
-            <Button onPress={()=>Classifier.train()} active={true}>Train</Button>
-            <Button onPress={()=>Classifier.runClassification()} active={true}>Run</Button>
             <Button onPress={()=>Classifier.reset()} active={true}>Reset</Button>
+            <View style={{flexDirection: 'row', justifyContent: 'space-between', marginLeft: 50, marginRight: 50,}}>
+              <Button onPress={()=>Classifier.train(false).then((promiseReturn)=>console.log(promiseReturn))} active={true}>Train</Button>
+              <Button onPress={()=>Classifier.runClassification()} active={true}>Run</Button>
+            </View>
+
 
             <LinkButton path="/connectorThree"> NEXT </LinkButton>
           </View>
