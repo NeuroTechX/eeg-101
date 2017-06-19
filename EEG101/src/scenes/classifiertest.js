@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
+import { StyleSheet, Text, View, ViewPagerAndroid, Image, NativeEventEmitter, NativeModules } from "react-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import Classifier from "../interface/Classifier.js";
@@ -17,12 +17,34 @@ function mapStateToProps(state) {
 class ClassifierTest extends Component {
   constructor(props) {
     super(props);
+    this.predictSubscription = null
+    this.noiseSubscription = null
 
     // Initialize States
     this.state = {
-      popUp1Visible: false
+      popUp1Visible: false,
     };
   }
+
+  componentDidMount() {
+        const classifierListener = new NativeEventEmitter(NativeModules.Classifier);
+        this.predictSubscription = classifierListener.addListener(
+          'PREDICT_RESULT',
+          (message) => {
+            console.log('result is: ' + message)
+          })
+          this.noiseSubscription = classifierListener.addListener(
+            'NOISE',
+            (message) => {
+              console.log('noiseDetected: ' + Object.keys(message))
+          })
+      }
+
+    componentWillUnmount() {
+        this.predictSubscription.remove();
+        this.noiseSubscription.remove();
+        Classifier.reset();
+    }
 
   render() {
     return (

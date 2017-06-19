@@ -10,7 +10,6 @@ import com.eeg_project.MainApplication;
 import com.eeg_project.components.signal.BandPowerExtractor;
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.FFT;
-import com.eeg_project.components.signal.GaussianNaiveBayesClassifier;
 import com.eeg_project.components.signal.NoiseDetector;
 import com.eeg_project.components.signal.PSDBuffer2D;
 import com.facebook.react.bridge.Promise;
@@ -43,11 +42,13 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     public CircularBuffer eegBuffer;
     public int samplingFrequency;
     public ClassifierDataListener dataListener;
-    public NoiseDetector noiseDetector = new NoiseDetector(600);
+    public NoiseDetector noiseDetector = new NoiseDetector(600, getReactApplicationContext());
     private double[][] smoothLogPower;
     private HandlerThread dataThread;
     private Handler dataHandler;
     boolean isLowEnergy;
+    private boolean isTraining;
+    private boolean isPredicting;
 
     public GaussianNaiveBayesClassifier classifier = new GaussianNaiveBayesClassifier();
     public LinkedList<double[]> trainingData = new LinkedList<>();
@@ -55,6 +56,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
 
     // grab reference to global Muse
     MainApplication appState;
+
 
 
     // ---------------------------------------------------------
@@ -73,10 +75,10 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     }
 
     // Called to emit events to event listeners in JS
-    private void sendEvent(ReactContext reactContext, String eventName, @Nullable WritableMap params) {
-        reactContext
+    private void sendEvent(String eventName, int result) {
+        getReactApplicationContext()
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                .emit(eventName, params);
+                .emit(eventName, result);
     }
 
     // ---------------------------------------------------------
@@ -90,22 +92,16 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
 
         eegBuffer = new CircularBuffer(samplingFrequency, M);
         eegBuffer.addListener(this);
-
         this.dataClass = dClass;
-
-        // Data processing is handled in a background handler thread
-        dataThread = new HandlerThread("dataThread");
-        dataThread.start();
-        dataHandler = new Handler(dataThread.getLooper());
-
-
+        startThread();
         dataListener = new ClassifierDataListener(eegBuffer);
         appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
+
+        this.isTraining = true;
 
         // Save as arrays in appropriate format for classifier
         // Return promise once data has been successfully collected and formatted
 
-        Log.w(TAG, "collectTrainingData called " + dataClass);
         promise.resolve(true);
     }
 
@@ -114,10 +110,8 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         // Stop ongoing any ongoing data collection processes
         // Unregister datalistener
         appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
-
-        Log.w(TAG, "stopCollecting");
-        Log.w(TAG, "trainingData: length = " + trainingData.size() + " example: " + trainingData.get(4).toString());
-        Log.w(TAG, "labels: " + labels.toString());
+        isPredicting = false;
+        isTraining = false;
     }
 
     @ReactMethod
@@ -132,6 +126,12 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
 
     @ReactMethod
     public void runClassification() {
+        isTraining = false;
+        isPredicting = true;
+
+        dataListener = new ClassifierDataListener(eegBuffer);
+        appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
+
         Log.w(TAG, "run");
     }
 
@@ -139,6 +139,11 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     public void reset() {
         // Reset entire classifier, including clearing all variables and ongoing processes
         Log.w(TAG, "reset");
+        stopCollecting();
+        dataThread.quit();
+        trainingData = new LinkedList<>();
+        labels = new LinkedList<>();
+        classifier = new GaussianNaiveBayesClassifier();
     }
 
     // ------------------------------------------------------------------------------
@@ -174,8 +179,13 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
                 }
              smoothPSD = getPSD(rawBuffer);
              bandMeans = bandExtractor.extract1D(smoothPSD);
-             trainingData.add(bandMeans);
-             labels.add(dataClass);
+
+             if(isPredicting){
+                 sendEvent("PREDICT_RESULT", classifier.predict(bandMeans));
+             } else if(isTraining) {
+                 trainingData.add(bandMeans);
+                 labels.add(dataClass);
+             }
 
             } catch (Exception e) {
                 Log.w(TAG, e);
@@ -211,6 +221,12 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
 
         public void bufferFull(double[][] buffer) {
             dataHandler.post(new dataRunnable(buffer, samplingFrequency));
+        }
+
+        public void startThread(){
+            dataThread = new HandlerThread("dataThread");
+            dataThread.start();
+            dataHandler = new Handler(dataThread.getLooper());
         }
 
     }

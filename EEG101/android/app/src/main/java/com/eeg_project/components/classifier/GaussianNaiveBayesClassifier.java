@@ -1,12 +1,10 @@
-package com.eeg_project.components.signal;
+package com.eeg_project.components.classifier;
 
 import android.util.Log;
 
 import java.util.Arrays;
 import java.lang.Math;
 import java.util.*;
-import java.util.stream.*;
-import org.apache.commons.lang3.ArrayUtils;
 
 
 public class GaussianNaiveBayesClassifier {
@@ -56,7 +54,7 @@ public class GaussianNaiveBayesClassifier {
 	}
 
 	public void fit(LinkedList<double[]> trainingData, LinkedList<Integer> labels) {
-		// Fit function with conversion for LinkedLists used in Classifier Module
+		// Fit function with conversion from LinkedLists to primitives
 
 		double[][] X = new double[trainingData.size()][trainingData.get(0).length];
 
@@ -192,6 +190,43 @@ public class GaussianNaiveBayesClassifier {
 		return prob;
 	}
 
+	public double[] predictProba(double[] X) {
+		// Compute the posterior probability
+		//
+		// Compute the posterior probability of a single sample of data X given the learned model
+		// parameters.
+		//
+		// Args:
+		//  X: data for which to compute the posterior probability,
+		// 		[nbFeatures]
+		//
+		// Returns:
+		//  posterior probability of each class for each example in X,
+		//		[nbClasses]
+		//
+		// TODO:
+		// - Add option to use classPriors
+
+		double[] prob = new double[this.nbClasses];
+		double partition = 0;
+
+		for (int j = 0; j < this.nbClasses; j++) {
+			prob[j] = 1;
+			// Compute joint pdf of example i
+			for (int k = 0; k < X.length; k++) {
+				prob[j] *= gaussian(X[k], this.theta[j][k],
+						this.sigma[j][k]);
+			}
+			partition += prob[j]; // Compute the partition function
+		}
+		// Normalize the pdfs so prob sums to 1 for each example
+		for (int j = 0; j < this.nbClasses; j++) {
+			prob[j] /= partition;
+		}
+
+		return prob;
+	}
+
 	public int[] predict(double[][] X) {
 		// Classify examples.
 		//
@@ -210,6 +245,23 @@ public class GaussianNaiveBayesClassifier {
 			yHat[i] = this.classes[argmax(prob[i])];
 		}
 		
+		return yHat;
+	}
+
+	public int predict(double[] X) {
+		// Classify examples.
+		//
+		// Classify examples X given the learned model parameters.
+		//
+		// Args:
+		//  X: data to classify, [nbExamples, nbFeatures]
+		//
+		// Returns:
+		//  predicted labels, [nbExamples]
+
+		double[] prob = predictProba(X);
+		int yHat = this.classes[argmax(prob)];
+
 		return yHat;
 	}
 
