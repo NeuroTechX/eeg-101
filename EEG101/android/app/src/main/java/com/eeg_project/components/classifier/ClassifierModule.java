@@ -133,7 +133,6 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         // runs k fold cross validation on training data List
 
         if(trainingData.size() < 1) {
-            Log.w(TAG, "not enough data for cross val");
             promise.resolve(false);
             return;
         }
@@ -153,7 +152,6 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         int chunk = shuffledIndices.size() / k;
 
         for(int i = 0; i < k; i++){
-            Log.w(TAG, "chunk start = " + i * chunk);
 
 
             LinkedList<Integer> testIndices = new LinkedList<Integer>();
@@ -177,7 +175,6 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
                 trainData.add(trainingData.get(l));
                 trainLabels.add(labels.get(l));
             }
-            Log.w(TAG, "trainIndices = " + ArrayUtils.toString(trainIndices));
 
 
             // Create test data and label lists from indices
@@ -185,7 +182,6 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
                 testData.add(trainingData.get(l));
                 testLabels.add(labels.get(l));
             }
-            Log.w(TAG, "testIndices = " + ArrayUtils.toString(testIndices));
 
 
 
@@ -197,7 +193,6 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
             scoreSum = scoreSum + s;
         }
 
-        Log.w(TAG, "Cross val score is " + scoreSum / k);
 
         promise.resolve(scoreSum/k);
     }
