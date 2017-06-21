@@ -1,5 +1,6 @@
 package com.eeg_project.components.classifier;
 
+import android.provider.CalendarContract;
 import android.util.Log;
 
 import java.util.Arrays;
@@ -289,6 +290,46 @@ public class GaussianNaiveBayesClassifier {
 		}
         return (double) nbGoodDecisions/y.length;
 	}
+
+	public double score(LinkedList<double[]> testData, LinkedList<Integer> labels) {
+		// Estimate the accuracy of the current model
+		//
+		// Added conversion from LinkedList to primitive, same as in fit
+		//
+		// Args:
+		//  X: data to test on, [nbExamples, nbFeatures]
+		//  y: labels for X [nbExamples]
+		//
+		// Returns:
+		//  accuracy
+
+		double[][] X = new double[testData.size()][testData.get(0).length];
+
+		for (int i = 0; i < testData.size(); i++) {
+			for (int j = 0; j < testData.get(0).length; j++) {
+				X[i][j] = testData.get(i)[j];
+			}
+		}
+
+		int[] y = new int[labels.size()];
+
+		for (int k = 0; k < labels.size(); k++) {
+			y[k] = labels.get(k);
+		}
+
+		assert (X.length == y.length) :
+				"X and y must contain the same number of examples.";
+
+		int[] yHat = predict(X);
+		int nbGoodDecisions = 0;
+		for (int i = 0; i < y.length; i++) {
+			if (yHat[i] == y[i]) {
+				nbGoodDecisions += 1;
+			}
+		}
+		return (double) nbGoodDecisions/y.length;
+	}
+
 
 	public double[][] getMeans() {
 		return this.theta;

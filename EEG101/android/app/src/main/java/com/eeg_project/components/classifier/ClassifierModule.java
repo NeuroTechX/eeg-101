@@ -20,6 +20,10 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.lang.reflect.Array;
+import java.util.Collections;
 import java.util.LinkedList;
 
 /**
@@ -122,6 +126,75 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         classifier.fit(trainingData, labels);
         classifier.print();
         promise.resolve(true);
+    }
+
+    @ReactMethod
+    public void crossValidate(Integer k, Promise promise) {
+        // runs k fold cross validation on training data List
+
+        if(trainingData.size() < 1) {
+            promise.resolve(false);
+            return;
+        }
+
+        double[] scores = new double[k];
+        double scoreSum = 0;
+        LinkedList<Integer> shuffledIndices = new LinkedList<Integer>();
+
+
+
+        // equivalent of shuffleIndices = np.arange(0,trainingData.size)
+        for(Integer i = 0; i < trainingData.size(); i++){
+            shuffledIndices.add(i);
+        }
+        Collections.shuffle(shuffledIndices);
+
+        int chunk = shuffledIndices.size() / k;
+
+        for(int i = 0; i < k; i++){
+
+
+            LinkedList<Integer> testIndices = new LinkedList<Integer>();
+            LinkedList<Integer> trainIndices = new LinkedList<Integer>();
+            LinkedList<double[]> trainData = new LinkedList<double[]>();
+            LinkedList<double[]> testData = new LinkedList<double[]>();
+            LinkedList<Integer> trainLabels = new LinkedList<Integer>();
+            LinkedList<Integer> testLabels = new LinkedList<Integer>();
+
+            // Get indices for test and train chunks
+            for(int j = 0; j < shuffledIndices.size(); j++){
+                if(j >= i * chunk && j < i * chunk + chunk){
+                    testIndices.add(shuffledIndices.get(j));
+                } else {
+                    trainIndices.add(shuffledIndices.get(j));
+                }
+            }
+
+            // Create training data and label lists from indices
+            for(Integer l : trainIndices){
+                trainData.add(trainingData.get(l));
+                trainLabels.add(labels.get(l));
+            }
+
+
+            // Create test data and label lists from indices
+            for(Integer l : testIndices){
+                testData.add(trainingData.get(l));
+                testLabels.add(labels.get(l));
+            }
+
+
+
+            classifier.fit(trainData, trainLabels);
+            scores[i] = classifier.score(testData, testLabels);
+        }
+
+        for(double s : scores){
+            scoreSum = scoreSum + s;
+        }
+
+
+        promise.resolve(scoreSum/k);
     }
 
     @ReactMethod
