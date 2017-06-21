@@ -292,9 +292,9 @@ public class GaussianNaiveBayesClassifier {
 	}
 
 	public double score(LinkedList<double[]> testData, LinkedList<Integer> labels) {
-		// Estimate the accuracy of the current model.
+		// Estimate the accuracy of the current model
 		//
-		// Estimate the accuracy of the current model on data X, y.
+		// Added conversion from LinkedList to primitive, same as in fit
 		//
 		// Args:
 		//  X: data to test on, [nbExamples, nbFeatures]
