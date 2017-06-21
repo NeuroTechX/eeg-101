@@ -73,6 +73,7 @@ class ClassifierTest extends Component {
             <Button onPress={()=>Classifier.reset()} active={true}>Reset</Button>
             <View style={{flexDirection: 'row', justifyContent: 'space-between', marginLeft: 50, marginRight: 50,}}>
               <Button onPress={()=>Classifier.train(false).then((promiseReturn)=>console.log(promiseReturn))} active={true}>Train</Button>
+              <Button onPress={()=>Classifier.crossValidate(6).then((promiseReturn)=>console.log(promiseReturn))} active={true}>CrossVal</Button>
               <Button onPress={()=>Classifier.runClassification()} active={true}>Run</Button>
             </View>
 

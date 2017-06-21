@@ -291,36 +291,34 @@ public class GaussianNaiveBayesClassifier {
         return (double) nbGoodDecisions/y.length;
 	}
 
-	public double crossVal(double[][] X, int[] y, int k) {
-		// Estimate the accuracy of a model trained on the dataset X,y with cross validation
-		// Inspired by https://weka.wikispaces.com/Generating+cross-validation+folds+%28Java+approach%29
+	public double score(LinkedList<double[]> testData, LinkedList<Integer> labels) {
+		// Estimate the accuracy of the current model.
+		//
+		// Estimate the accuracy of the current model on data X, y.
 		//
 		// Args:
-		//  X: data to tst on, [nbExamples, nbFeatures]
+		//  X: data to test on, [nbExamples, nbFeatures]
 		//  y: labels for X [nbExamples]
-		// 	k: number of rounds of cross validation / size of subset
 		//
 		// Returns:
 		//  accuracy
 
-		assert (X.length == y.length) :
-				"X and y must contain the same number of examples.";
+		double[][] X = new double[testData.size()][testData.get(0).length];
 
-		int[][] train = new int[k][];
-		int[][] test = new int[k][];
-
-		for (int j; j < k; j++) {
-			double[][] shuffledData = shuffle(X);
-			int chunk = shuffledData.length / k;
-			for (int i = 0; i < k; i++) {
-				int start = chunk * i;
-				int end = chunk * (i + 1);
-				if (i == k-1) end = shuffledData.length;
-
-				train[i] = new int[shuffledData.length - end + start];
-				test[i] = new int[end - start];
+		for (int i = 0; i < testData.size(); i++) {
+			for (int j = 0; j < testData.get(0).length; j++) {
+				X[i][j] = testData.get(i)[j];
 			}
 		}
+
+		int[] y = new int[labels.size()];
+
+		for (int k = 0; k < labels.size(); k++) {
+			y[k] = labels.get(k);
+		}
+
+		assert (X.length == y.length) :
+				"X and y must contain the same number of examples.";
 
 		int[] yHat = predict(X);
 		int nbGoodDecisions = 0;
@@ -330,29 +328,6 @@ public class GaussianNaiveBayesClassifier {
 			}
 		}
 		return (double) nbGoodDecisions/y.length;
-	}
-
-	public static double[][] shuffle(double[][] data) {
-		Random rand = new Random();
-		Log.w("shuffled", "beginning: " + Arrays.deepToString(data));
-
-		for (int i = data.length - 1; i > 0; i--) {
-			swap(data, i, rand.nextInt(i + 1));
-		}
-		Log.w("shuffled", "end: " + Arrays.deepToString(data));
-		return data;
-	}
-
-	public static void swap(double[][] data, int i, int j) {
-		double[] tmp = data[i];
-		set(data[i], data[j]);
-		set(data[j], tmp);
-	}
-
-	public static void set(double[] x, double[] y) {
-		for(int i =0; i < x.length; i++) {
-			x[i] = y[i];
-		}
 	}
 
 
