@@ -12,17 +12,20 @@ import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.FFT;
 import com.eeg_project.components.signal.NoiseDetector;
 import com.eeg_project.components.signal.PSDBuffer2D;
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -53,6 +56,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     boolean isLowEnergy;
     private boolean isTraining;
     private boolean isPredicting;
+    private Promise collectionPromise;
 
     public GaussianNaiveBayesClassifier classifier = new GaussianNaiveBayesClassifier();
     public LinkedList<double[]> trainingData = new LinkedList<>();
@@ -77,7 +81,6 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     public String getName() {
         return "Classifier";
     }
-
     // Called to emit events to event listeners in JS
     private void sendEvent(String eventName, int result) {
         getReactApplicationContext()
@@ -94,6 +97,8 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
             samplingFrequency = FFT_LENGTH;
         } else samplingFrequency = 220;
 
+        this.collectionPromise = promise;
+
         eegBuffer = new CircularBuffer(samplingFrequency, M);
         eegBuffer.addListener(this);
         this.dataClass = dClass;
@@ -102,11 +107,6 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
 
         this.isTraining = true;
-
-        // Save as arrays in appropriate format for classifier
-        // Return promise once data has been successfully collected and formatted
-
-        promise.resolve(true);
     }
 
     @ReactMethod
@@ -116,85 +116,46 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
         isPredicting = false;
         isTraining = false;
+
+        if(collectionPromise != null) {
+            int numSamples = 0;
+            for(int l : labels){
+                if(l == dataClass){
+                    numSamples++;
+                }
+            }
+            collectionPromise.resolve(numSamples);
+            collectionPromise = null;
+        }
     }
 
     @ReactMethod
-    public void train(boolean partialFit, Promise promise) {
+    public void fit(boolean partialFit) {
         // Train classifier on saved data arrays
         // Return promise with cross-val score
         // Use partialfit if partialFit is true
-        classifier.fit(trainingData, labels);
-        classifier.print();
-        promise.resolve(true);
+        if(partialFit){
+            Log.w(TAG,"partial fit linkedlist fn needs to be written");
+            //classifier.partialFit(trainingData, labels);
+        } else {
+            classifier.fit(trainingData, labels);
+            classifier.print();
+        }
     }
 
     @ReactMethod
-    public void crossValidate(Integer k, Promise promise) {
-        // runs k fold cross validation on training data List
+    public void fitWithScore(Integer k, Promise promise) {
+        WritableMap classifierMap = Arguments.createMap();
 
-        if(trainingData.size() < 1) {
-            promise.resolve(false);
-            return;
-        }
-
-        double[] scores = new double[k];
-        double scoreSum = 0;
-        LinkedList<Integer> shuffledIndices = new LinkedList<Integer>();
-
-
-
-        // equivalent of shuffleIndices = np.arange(0,trainingData.size)
-        for(Integer i = 0; i < trainingData.size(); i++){
-            shuffledIndices.add(i);
-        }
-        Collections.shuffle(shuffledIndices);
-
-        int chunk = shuffledIndices.size() / k;
-
-        for(int i = 0; i < k; i++){
-
-
-            LinkedList<Integer> testIndices = new LinkedList<Integer>();
-            LinkedList<Integer> trainIndices = new LinkedList<Integer>();
-            LinkedList<double[]> trainData = new LinkedList<double[]>();
-            LinkedList<double[]> testData = new LinkedList<double[]>();
-            LinkedList<Integer> trainLabels = new LinkedList<Integer>();
-            LinkedList<Integer> testLabels = new LinkedList<Integer>();
-
-            // Get indices for test and train chunks
-            for(int j = 0; j < shuffledIndices.size(); j++){
-                if(j >= i * chunk && j < i * chunk + chunk){
-                    testIndices.add(shuffledIndices.get(j));
-                } else {
-                    trainIndices.add(shuffledIndices.get(j));
-                }
-            }
-
-            // Create training data and label lists from indices
-            for(Integer l : trainIndices){
-                trainData.add(trainingData.get(l));
-                trainLabels.add(labels.get(l));
-            }
-
-
-            // Create test data and label lists from indices
-            for(Integer l : testIndices){
-                testData.add(trainingData.get(l));
-                testLabels.add(labels.get(l));
-            }
-
-
-
-            classifier.fit(trainData, trainLabels);
-            scores[i] = classifier.score(testData, testLabels);
-        }
-
-        for(double s : scores){
-            scoreSum = scoreSum + s;
-        }
-
-
-        promise.resolve(scoreSum/k);
+        classifierMap.putDouble("score",crossValidate(k));
+        classifier.fit(trainingData, labels);
+        classifierMap.putString("counts", Arrays.toString(classifier.getClassCounts()));
+        classifierMap.putString("priors", Arrays.toString(classifier.getClassPriors()));
+        classifierMap.putString("means", Arrays.deepToString(classifier.getMeans()));
+        classifierMap.putString("variances", Arrays.deepToString(classifier.getVariances()));
+        classifierMap.putString("discrimPower", Arrays.toString(classifier.computeFeatDiscrimPower()));
+        classifierMap.putString("featureRanking", Arrays.toString(classifier.rankFeats()));
+        promise.resolve(classifierMap);
     }
 
     @ReactMethod
@@ -301,6 +262,70 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
             dataThread.start();
             dataHandler = new Handler(dataThread.getLooper());
         }
+
+    public double crossValidate(Integer k) {
+        // runs k fold cross validation on training data List
+
+        if(trainingData.size() < 1) {
+            return 0;
+        }
+
+        double[] scores = new double[k];
+        double scoreSum = 0;
+        LinkedList<Integer> shuffledIndices = new LinkedList<Integer>();
+
+        // equivalent of shuffleIndices = np.arange(0,trainingData.size)
+        for(Integer i = 0; i < trainingData.size(); i++){
+            shuffledIndices.add(i);
+        }
+        Collections.shuffle(shuffledIndices);
+
+        int chunk = shuffledIndices.size() / k;
+
+        for(int i = 0; i < k; i++){
+
+
+            LinkedList<Integer> testIndices = new LinkedList<Integer>();
+            LinkedList<Integer> trainIndices = new LinkedList<Integer>();
+            LinkedList<double[]> trainData = new LinkedList<double[]>();
+            LinkedList<double[]> testData = new LinkedList<double[]>();
+            LinkedList<Integer> trainLabels = new LinkedList<Integer>();
+            LinkedList<Integer> testLabels = new LinkedList<Integer>();
+
+            // Get indices for test and train chunks
+            for(int j = 0; j < shuffledIndices.size(); j++){
+                if(j >= i * chunk && j < i * chunk + chunk){
+                    testIndices.add(shuffledIndices.get(j));
+                } else {
+                    trainIndices.add(shuffledIndices.get(j));
+                }
+            }
+
+            // Create training data and label lists from indices
+            for(Integer l : trainIndices){
+                trainData.add(trainingData.get(l));
+                trainLabels.add(labels.get(l));
+            }
+
+
+            // Create test data and label lists from indices
+            for(Integer l : testIndices){
+                testData.add(trainingData.get(l));
+                testLabels.add(labels.get(l));
+            }
+
+
+
+            classifier.fit(trainData, trainLabels);
+            scores[i] = classifier.score(testData, testLabels);
+        }
+
+        for(double s : scores){
+            scoreSum = scoreSum + s;
+        }
+
+        return scoreSum/k;
+    }
 
     }
 

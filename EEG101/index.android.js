@@ -28,6 +28,7 @@ import SlideNine from './src/scenes/slide-09';
 import Sandbox from './src/scenes/sandbox';
 import End from './src/scenes/slide-end';
 import ClassifierTest from './src/scenes/classifiertest.js';
+import ClassifierRun from './src/scenes/classifier-run.js';
 
 // reducer is a function
 import reducer from './src/redux/reducer';
@@ -78,6 +79,7 @@ class EEG_Project extends Component {
               <Route path="/sandbox" component={Sandbox}/>
               <Route path="/end" component={End}/>
               <Route path="/classifier" component={ClassifierTest}/>
+                <Route path="/classifier-run" component={ClassifierRun}/>
             </View>
           </AndroidBackButton>
         </NativeRouter>

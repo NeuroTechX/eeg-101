@@ -83,7 +83,7 @@ class ConnectorThree extends Component {
           </View>
         </Link>
 
-        <TouchableOpacity onPress={() => Actions.Sandbox({ type: "push" })} />
+        <TouchableOpacity onPress={() => Actions.Sandbox()} />
 
         <View style={styles.buttonContainer}>
           <LinkButton path="/slideOne"> BEGIN LESSON </LinkButton>

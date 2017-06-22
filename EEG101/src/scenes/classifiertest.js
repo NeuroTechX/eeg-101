@@ -1,5 +1,14 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, ViewPagerAndroid, Image, NativeEventEmitter, NativeModules } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ViewPagerAndroid,
+  Image,
+  NativeEventEmitter,
+  NativeModules,
+  ActivityIndicator
+} from "react-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import Classifier from "../interface/Classifier.js";
@@ -17,71 +26,180 @@ function mapStateToProps(state) {
 class ClassifierTest extends Component {
   constructor(props) {
     super(props);
-    this.predictSubscription = null
-    this.noiseSubscription = null
+    this.predictSubscription = null;
+    this.noiseSubscription = null;
 
     // Initialize States
     this.state = {
       popUp1Visible: false,
+      class1Samples: 0,
+      class2Samples: 0,
+      isCollecting1: false,
+      isCollecting2: false,
+      isFitting: false,
+      score: "",
+      counts: "",
+      priors: "",
+      means: "",
+      variances: "",
+      discrimPower: "",
+      featureRanking: "",
     };
   }
 
-  componentDidMount() {
-        const classifierListener = new NativeEventEmitter(NativeModules.Classifier);
-        this.predictSubscription = classifierListener.addListener(
-          'PREDICT_RESULT',
-          (message) => {
-            console.log('result is: ' + message)
-          })
-          this.noiseSubscription = classifierListener.addListener(
-            'NOISE',
-            (message) => {
-              console.log('noiseDetected: ' + Object.keys(message))
-          })
-      }
-
-    componentWillUnmount() {
-        this.predictSubscription.remove();
-        this.noiseSubscription.remove();
-        Classifier.reset();
+  renderClass1() {
+    if (this.state.isCollecting1) {
+      return (
+        <View style={styles.dataClassContainer}>
+          <Text style={styles.header}>Class 1:</Text>
+          <ActivityIndicator color={"#6CCBEF"} size={"small"} />
+          <Button onPress={() => Classifier.stopCollecting()} active={true}>
+            Stop
+          </Button>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.dataClassContainer}>
+          <Text style={styles.header}>Class 1:</Text>
+          <Text style={styles.body}>{this.state.class1Samples} samples</Text>
+          <Button
+            onPress={() => {
+              this.setState({ isCollecting1: true });
+              Classifier.collectTrainingData(1).then(promise =>
+                this.setState({ class1Samples: promise, isCollecting1: false })
+              );
+            }}
+            active={true}
+          >
+            Collect
+          </Button>
+        </View>
+      );
     }
+  }
+
+  renderClass2() {
+    if (this.state.isCollecting2) {
+      return (
+        <View style={styles.dataClassContainer}>
+          <Text style={styles.header}>Class 2:</Text>
+          <ActivityIndicator color={"#6CCBEF"} size={"small"} />
+          <Button onPress={() => Classifier.stopCollecting()} active={true}>
+            Stop
+          </Button>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.dataClassContainer}>
+          <Text style={styles.header}>Class 2:</Text>
+          <Text style={styles.body}>{this.state.class2Samples} samples</Text>
+          <Button
+            onPress={() => {
+              this.setState({ isCollecting2: true });
+              Classifier.collectTrainingData(2).then(promise =>
+                this.setState({ class2Samples: promise, isCollecting2: false })
+              );
+            }}
+            active={this.state.class1Samples >= 1}
+          >
+            Collect
+          </Button>
+        </View>
+      );
+    }
+  }
+
+  renderClassifierContainer() {
+    if (this.state.score == "") {
+      return (
+        <View style={styles.classifierContainer}>
+          <Button
+            onPress={() => {
+              this.setState({ isFitting: true });
+              Classifier.fitWithScore(6).then(promise => {
+                this.setState(promise);
+                this.setState({ isFitting: false });
+              });
+            }}
+            active={
+              this.state.class2Samples >= 1 &&
+              !this.state.isCollecting2 &&
+              !this.state.isCollecting1
+            }
+          >
+            Fit Classifier
+          </Button>
+        </View>
+      );
+    } else if (this.state.isFitting) {
+      return (
+        <View style={styles.classifierContainer}>
+          <ActivityIndicator color={"#6CCBEF"} size={"small"} />
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.classifierContainer}>
+          <Text style={styles.body}>Score: {this.state.score}</Text>
+          <Text style={styles.body}>Class Priors: {this.state.priors}</Text>
+          <Text style={styles.body}>Feature Ranking: {this.state.featureRanking}</Text>
+          <Button
+            onPress={() => {
+              this.setState({ isFitting: true });
+              Classifier.fitWithScore(6).then(promise => {
+                this.setState(promise);
+                this.setState({ isFitting: false });
+              });
+            }}
+            active={
+              this.state.class2Samples >= 1 &&
+              !this.state.isCollecting2 &&
+              !this.state.isCollecting1
+            }
+          >
+            Re-Fit
+          </Button>
+        </View>
+      );
+    }
+  }
 
   render() {
     return (
       <View style={styles.container}>
+        <Text style={styles.currentTitle}>CLASSIFIER</Text>
+        <View style={styles.pageStyle}>
+          {this.renderClass1()}
+          {this.renderClass2()}
+          {this.renderClassifierContainer()}
 
-        <View style={styles.graphContainer}>
-          <Text>
-            Place visual component here. Probably GraphView, Image, or Lottie
-            animation
-            {" "}
-          </Text>
+
+          <View style={styles.buttonContainer}>
+
+          <Button onPress={() => {
+            Classifier.reset()
+            this.setState({popUp1Visible: false,
+            class1Samples: 0,
+            class2Samples: 0,
+            isCollecting1: false,
+            isCollecting2: false,
+            isFitting: false,
+            score: "",
+            counts: "",
+            priors: "",
+            means: "",
+            variances: "",
+            discrimPower: "",
+            featureRanking: "",})
+          }} active={true}>
+            Reset
+          </Button>
         </View>
 
-        <Text style={styles.currentTitle}>CLASSIFIER</Text>
-
-        <ViewPagerAndroid style={styles.viewPager} initialPage={0}>
-
-          <View style={styles.pageStyle}>
-            <Text style={styles.header}>Test</Text>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', marginLeft: 50, marginRight: 50,}}>
-
-              <Button onPress={()=>Classifier.collectTrainingData(1)} active={true}>Collect Class 1</Button>
-              <Button onPress={()=>Classifier.collectTrainingData(2)} active={true}>Collect Class 2</Button>
-            </View>
-            <Button onPress={()=>Classifier.stopCollecting()} active={true}>Stop</Button>
-            <Button onPress={()=>Classifier.reset()} active={true}>Reset</Button>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', marginLeft: 50, marginRight: 50,}}>
-              <Button onPress={()=>Classifier.train(false).then((promiseReturn)=>console.log(promiseReturn))} active={true}>Train</Button>
-              <Button onPress={()=>Classifier.crossValidate(6).then((promiseReturn)=>console.log(promiseReturn))} active={true}>CrossVal</Button>
-              <Button onPress={()=>Classifier.runClassification()} active={true}>Run</Button>
-            </View>
-
-
-            <LinkButton path="/connectorThree"> NEXT </LinkButton>
-          </View>
-
-        </ViewPagerAndroid>
+          <LinkButton path="/classifier-run" disabled={this.state.score==""}> TRY IT OUT </LinkButton>
+        </View>
       </View>
     );
   }
@@ -101,7 +219,7 @@ const styles = MediaQueryStyleSheet.create(
     body: {
       fontFamily: "Roboto-Light",
       color: "#484848",
-      fontSize: 19
+      fontSize: 15
     },
 
     container: {
@@ -110,11 +228,22 @@ const styles = MediaQueryStyleSheet.create(
       alignItems: "stretch"
     },
 
-    graphContainer: {
-      backgroundColor: "#72c2f1",
-      flex: 4,
+    dataClassContainer: {
+      flex: 1,
+      flexDirection: "row",
+      justifyContent: "space-between"
+    },
+
+    classifierContainer: {
+      flex: 3,
       justifyContent: "center",
-      alignItems: "stretch"
+      alignItems: "center"
+    },
+
+    buttonContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
 
     header: {
@@ -128,6 +257,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     pageStyle: {
+      flex: 4,
       padding: 20,
       alignItems: "stretch",
       justifyContent: "space-around"
