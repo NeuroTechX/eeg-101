@@ -7,6 +7,7 @@ import Button from "../components/SandboxButton.js";
 import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
+import I18n from '../i18n/i18n';
 
 function mapStateToProps(state) {
   return {
@@ -30,26 +31,26 @@ class ClassifierTest extends Component {
 
         <View style={styles.graphContainer}>
           <Text>
-            Place visual component here. Probably GraphView, Image, or Lottie
+            {I18n.t('welcomeEEG101')}Place visual component here. Probably GraphView, Image, or Lottie
             animation
             {" "}
           </Text>
         </View>
 
-        <Text style={styles.currentTitle}>CLASSIFIER</Text>
+        <Text style={styles.currentTitle}>{I18n.t('classifierTitle')}</Text>
 
         <ViewPagerAndroid style={styles.viewPager} initialPage={0}>
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>Test</Text>
 
-            <Button onPress={()=>Classifier.collectTrainingData("A")} active={true}>Collect</Button>
-            <Button onPress={()=>Classifier.stopCollecting()} active={true}>Stop</Button>
-            <Button onPress={()=>Classifier.train()} active={true}>Train</Button>
-            <Button onPress={()=>Classifier.runClassification()} active={true}>Run</Button>
-            <Button onPress={()=>Classifier.reset()} active={true}>Reset</Button>
+            <Button onPress={()=>Classifier.collectTrainingData("A")} active={true}>{I18n.t('collectButton')}</Button>
+            <Button onPress={()=>Classifier.stopCollecting()} active={true}>{I18n.t('stopButton')}</Button>
+            <Button onPress={()=>Classifier.train()} active={true}>{I18n.t('trainButton')}</Button>
+            <Button onPress={()=>Classifier.runClassification()} active={true}>{I18n.t('runButton')}</Button>
+            <Button onPress={()=>Classifier.reset()} active={true}>{I18n.t('resetButton')}</Button>
 
-            <LinkButton path="/connectorThree"> NEXT </LinkButton>
+            <LinkButton path="/connectorThree">{I18n.t('nextLink')}</LinkButton>
           </View>
 
         </ViewPagerAndroid>

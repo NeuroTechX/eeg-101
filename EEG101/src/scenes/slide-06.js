@@ -5,6 +5,7 @@ import { MediaQueryStyleSheet } from "react-native-responsive";
 import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
+import I18n from '../i18n/i18n';
 
 function mapStateToProps(state) {
   return {
@@ -34,7 +35,7 @@ class SlideSix extends Component {
           />
         </View>
 
-        <Text style={styles.currentTitle}>ARTIFACT REMOVAL</Text>
+        <Text style={styles.currentTitle}>{I18n.t('artifactRemovalSlideTitle')}</Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
@@ -42,17 +43,11 @@ class SlideSix extends Component {
         >
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>Removing noise</Text>
+            <Text style={styles.header}>{I18n.t('removingNoise')}</Text>
             <Text style={styles.body}>
-              After the EEG has been divided into epochs, those that contain a
-              {" "}<PopUpLink
-                onPress={() => this.setState({ popUpVisible: true })}
-              >
-                significant
-              </PopUpLink>
-              {" "}amount of noise can be ignored.
+		      {I18n.t('afterEEGDividedEpochs')}<PopUpLink onPress={() => this.setState({ popUpVisible: true })}>{I18n.t('significantLink')}</PopUpLink>{I18n.t('amountNoiseIgnored')}
             </Text>
-            <LinkButton path="/slideSeven"> NEXT </LinkButton>
+            <LinkButton path="/slideSeven">{I18n.t('nextLink')}</LinkButton>
           </View>
 
         </ViewPagerAndroid>
@@ -60,15 +55,20 @@ class SlideSix extends Component {
         <PopUp
           onClose={() => this.setState({ popUpVisible: false })}
           visible={this.state.popUpVisible}
-          title="Artefact detection"
+          title={I18n.t('artifactDetectionTitle')}
         >
-          One simple way to define what a 'significant amount of noise' is to
-          compare how variable an epoch is in comparison to its neighbours. If
-          the signal moves around in one epoch a lot more than in its
-          neighbours, it is probably because there was an eyeblink or some other
-          source of noise. Get rid of it!
+		  {I18n.t('artifactDetectionDescription')}
         </PopUp>
-
+		
+		<PopUp
+          onClose={()=>this.props.history.push('/connectorOne')}
+          visible={
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
+          }
+          title={I18n.t('museDisconnectedTitle')}
+        >
+			{I18n.t('museDisconnectedDescription')}
+        </PopUp>
       </View>
     );
   }

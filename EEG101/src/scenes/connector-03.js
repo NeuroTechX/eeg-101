@@ -11,6 +11,7 @@ import { Link } from "react-router-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import LinkButton from "../components/WhiteLinkButton";
+import I18n from '../i18n/i18n';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
@@ -28,15 +29,9 @@ class ConnectorThree extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.titleBox}>
-          <Text style={styles.title}>Step 3</Text>
-          <Text style={styles.instructions}>
-            Make sure the Muse is properly fit to your head
-          </Text>
-          <Text style={styles.body}>
-            Fit the earpieces snugly behind your ears and adjust the headband so
-            that it rests mid forehead. Clear any hair that might prevent the
-            device from making contact with your skin.
-          </Text>
+          <Text style={styles.title}>{I18n.t('step3Title')}</Text>
+          <Text style={styles.instructions}>{I18n.t('museFitProperly')}</Text>
+          <Text style={styles.body}>{I18n.t('fitInstructions')}</Text>
         </View>
 
         <Link to={"/sandbox"} replace={true} component={TouchableOpacity}>

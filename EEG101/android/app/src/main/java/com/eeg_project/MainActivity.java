@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.view.WindowManager;
 
 import com.facebook.react.ReactActivity;
+import com.horcrux.svg.SvgPackage;
+import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
+import com.airbnb.android.react.lottie.LottiePackage;
 
 //
 public class MainActivity extends ReactActivity {

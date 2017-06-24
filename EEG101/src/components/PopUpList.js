@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { MediaQueryStyleSheet} from 'react-native-responsive';
 import Button from './Button';
+import I18n from '../i18n/i18n';
 
 export default class PopUpList extends Component{
   
@@ -25,7 +26,7 @@ export default class PopUpList extends Component{
         <View style={styles.modalBackground}>
           <ScrollView contentContainerStyle={styles.modalInnerContainer}>
             {this.props.children}
-            <Button onPress={this.props.onClose}>Close</Button>
+            <Button onPress={this.props.onClose}>{I18n.t('closeButton')}</Button>
           </ScrollView>   
         </View>
       </Modal>

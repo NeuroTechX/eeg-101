@@ -141,6 +141,7 @@ android {
 dependencies {
     compile project(':lottie-react-native')
     compile project(':react-native-svg')
+	compile project(':react-native-i18n')
     compile fileTree(dir: "libs", include: ["*.jar"])
     // Animated Gif support
     compile 'com.facebook.fresco:fresco:1.3.0'
