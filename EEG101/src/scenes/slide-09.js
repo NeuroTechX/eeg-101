@@ -14,6 +14,7 @@ import PopUp from '../components/PopUp';
 import PopUpList from '../components/PopUpList';
 import ListItemBlock from '../components/ListItemBlock';
 import PopUpLink from '../components/PopUpLink';
+import I18n from '../i18n/i18n';
 
 //Interfaces. For elements that bridge to native
 import WaveGraphView from '../interface/WaveGraphView';
@@ -44,59 +45,57 @@ class SlideNine extends Component {
 
         <WaveGraphView dimensions={this.props.dimensions} />
 
-        <Text style={styles.currentTitle}>BRAIN WAVES</Text>
+        <Text style={styles.currentTitle}>{I18n.t('brainWavesSlideTitle')}</Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
           initialPage={0}>
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>What do these frequencies represent?</Text>
-            <Text style={styles.body}>The PSD can be divided into different frequency bands (named by the greek letters δ, θ, α, β, and γ).
-            </Text>
+            <Text style={styles.header}>{I18n.t('whatDoFrequenciesRepresent')}</Text>
+            <Text style={styles.body}>{I18n.t('PSDDividedBands')}</Text>
           </View>
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>Brain Waves</Text>
-            <Text style={styles.body}>Each frequency band exhibits activity correlated with different brain processes. These bands are often referred to as <PopUpLink onPress={() => this.setState({popUp1Visible: true})}>brain waves</PopUpLink>.
-            </Text>
+            <Text style={styles.header}>{I18n.t('brainWaves')}</Text>
+            <Text style={styles.body}>
+			  {I18n.t('freqCorrelatedBrain')}<PopUpLink onPress={() => this.setState({popUp1Visible: true})}>{I18n.t('brainWavesLink')}</PopUpLink>.
+			</Text>
           </View>
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>Harnessing Brain Waves</Text>
-            <Text style={styles.body}>Notice how the power in a given frequency band changes over time. It is possible to harness these changes to create a simple <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>Brain-Computer Interface (BCI)</PopUpLink>.
-            </Text>
-            <LinkButton path='/sandbox'> NEXT </LinkButton>
+            <Text style={styles.header}>{I18n.t('harnessingBrainWaves')}</Text>
+            <Text style={styles.body}>
+			  {I18n.t('noticePowerChanges')}<PopUpLink onPress={() => this.setState({popUp2Visible: true})}>{I18n.t('BCILink')}</PopUpLink>.
+			</Text>
+            <LinkButton path='/sandbox'>{I18n.t('nextLink')}</LinkButton>
           </View>
 
         </ViewPagerAndroid>
 
         <PopUpList onClose={() => this.setState({popUp1Visible: false})} visible={this.state.popUp1Visible}>
-          <ListItemBlock title = "Delta δ (0-4 Hz)">
-            Delta waves are the slowest (i.e. lowest frequency) brain waves. Delta waves dominate during deep sleep and tend to be high in amplitude because they represent the synchronized firing of large populations of neurons.
-          </ListItemBlock>
-          <ListItemBlock title = "Theta θ (4-8 Hz)">
-            Theta waves are most commonly observed in the 'hypnagogic' period just before falling asleep. They have also been observed during deep meditative and hypnotic states.
-          </ListItemBlock>
-          <ListItemBlock title = "Alpha α (8-13 Hz)">
-            Alpha waves can indicate the idling of a brain region. For example, they increase dramatically at when the eyes are closed. They are especially strong at the back of the head, where the vision centre of the brain is located.
-          </ListItemBlock>
-          <ListItemBlock title = "Beta β (13-30 Hz)">
-            Beta waves are prevalent when the brain is awake and active. They have been associated with alertness, concentration, and the active firing of neurons hard at work.
-          </ListItemBlock>
-          <ListItemBlock title = "Gamma γ (30-100 Hz)">
-            Gamma waves are the fastest form of neural oscillation. They are difficult to detect and analyze with ordinary EEG but are a topic of much ongoing research. They have been tentatively associated with attention, working memory, and even consciousness
-          </ListItemBlock>
+          <ListItemBlock title = {I18n.t('deltaTitle')}>{I18n.t('deltaDescription')}</ListItemBlock>
+          <ListItemBlock title = {I18n.t('thetaTitle')}>{I18n.t('thetaDescription')}</ListItemBlock>
+          <ListItemBlock title = {I18n.t('alphaTitle')}>{I18n.t('alphaDescription')}</ListItemBlock>
+          <ListItemBlock title = {I18n.t('betaTitle')}>{I18n.t('betaDescription')}</ListItemBlock>
+          <ListItemBlock title = {I18n.t('gammeTitle')}>{I18n.t('gammaDescription')}</ListItemBlock>
         </PopUpList>
 
         <PopUp onClose={() => this.setState({popUp2Visible: false})} visible={this.state.popUp2Visible}
-               title="Brain Computer Interfaces">
-          A Brain-Computer Interface is a direct communication channel between the brain and an external device. For example, one can feed information about brain state based on EEG frequency bands to a computer; that computer then analyzes the EEG data and decides what the user intent was. The computer can use that command to control an external device such as a wheelchair or a display.
+		  title={I18n.t('BCITitle')}
+		>
+		  {I18n.t('BCIDescription')}
         </PopUp>
 
-        <PopUp onClose={()=>this.props.history.push('/connectorOne')} visible={this.props.connectionStatus === config.connectionStatus.DISCONNECTED} title='Muse Disconnected'>
-        Please reconnect to continue the tutorial</PopUp>
-
+		<PopUp
+          onClose={()=>this.props.history.push('/connectorOne')}
+          visible={
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
+          }
+          title={I18n.t('museDisconnectedTitle')}
+        >
+			{I18n.t('museDisconnectedDescription')}
+        </PopUp>
       </View>
     );
   }

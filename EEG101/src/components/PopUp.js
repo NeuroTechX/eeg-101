@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { MediaQueryStyleSheet} from 'react-native-responsive';
 import Button from '../components/Button';
+import I18n from '../i18n/i18n';
 
 export default class PopUp extends Component {
   
@@ -33,7 +34,7 @@ export default class PopUp extends Component {
           <View style={styles.modalInnerContainer}>
             <Text style={styles.modalTitle}>{this.props.title}</Text>
             <Text style={styles.modalText}>{this.props.children}</Text>
-            <Button onPress={this.props.onClose}>Close</Button>
+            <Button onPress={this.props.onClose}>{I18n.t('closeButton')}</Button>
           </View>   
         </View>
       </Modal>

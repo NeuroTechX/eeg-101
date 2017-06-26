@@ -12,6 +12,7 @@ import config from '../redux/config';
 import LinkButton from '../components/LinkButton';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
+import I18n from '../i18n/i18n';
 
 //Interfaces. For elements that bridge to native
 import PSDGraphView from '../interface/PSDGraphView';
@@ -22,7 +23,6 @@ function  mapStateToProps(state) {
     dimensions: state.graphViewDimensions,
     connectionStatus: state.connectionStatus,
   };
-
 }
 
 class SlideEight extends Component {
@@ -41,7 +41,7 @@ class SlideEight extends Component {
 
         <PSDGraphView dimensions={this.props.dimensions} />
 
-        <Text style={styles.currentTitle}>PSD</Text>
+        <Text style={styles.currentTitle}>{I18n.t('PSDSlideTitle')}</Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
@@ -49,22 +49,31 @@ class SlideEight extends Component {
 
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>Power Spectral Density (PSD)</Text>
-            <Text style={styles.body}>When we apply the Fourier Transform to the EEG, we obtain a measure of signal strength at given frequencies, represented in units of <PopUpLink onPress={() => this.setState({popUp1Visible: true})}>power.</PopUpLink>
-            </Text>
-            <LinkButton path='/slideNine'> NEXT </LinkButton>
+            <Text style={styles.header}>{I18n.t('powerSpectralDesnity')}</Text>
+            <Text style={styles.body}>
+			  {I18n.t('whenWeApplyFourier')}<PopUpLink onPress={() => this.setState({popUp1Visible: true})}>{I18n.t('powerLink')}</PopUpLink>.
+			</Text>
+            <LinkButton path='/slideNine'>{I18n.t('nextLink')}</LinkButton>
           </View>
 
         </ViewPagerAndroid>
 
-        <PopUp onClose={() => this.setState({popUp1Visible: false})} visible={this.state.popUp1Visible}
-               title="Power">
-          In this graph, the X axis represents frequency and the Y axis represents power (microvolts squared, in decibels (dB)). Power represents how strong a certain frequency is in a complex signal. When power is high for only a few frequencies, it means that the signal is primarily composed of those few elements. If all frequencies have similar power, the signal will look random and be difficult to interpret.
+        <PopUp onClose={() => this.setState({popUp1Visible: false})} 
+		  visible={this.state.popUp1Visible}
+          title={I18n.t('powerTitle')}
+		>
+	      {I18n.t('powerDescription')}
         </PopUp>
 
-        <PopUp onClose={()=>this.props.history.push('/connectorOne')} visible={this.props.connectionStatus === config.connectionStatus.DISCONNECTED} title='Muse Disconnected'>
-        Please reconnect to continue the tutorial</PopUp>
-
+        <PopUp
+          onClose={()=>this.props.history.push('/connectorOne')}
+          visible={
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
+          }
+          title={I18n.t('museDisconnectedTitle')}
+        >
+			{I18n.t('museDisconnectedDescription')}
+        </PopUp>
       </View>
     );
   }

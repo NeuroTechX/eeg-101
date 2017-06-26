@@ -11,6 +11,7 @@ import {
 import { MediaQueryStyleSheet} from 'react-native-responsive';
 import {connect } from 'react-redux';
 import LinkButton from '../components/WhiteLinkButton';
+import I18n from '../i18n/i18n';
 
 class End extends Component {
   constructor(props) {
@@ -25,15 +26,15 @@ class End extends Component {
           initialPage={0} style={{flex:8}}>
           <View style={styles.page}>
             <View style={styles.titleBox}>
-              <Text style={styles.title}> Thanks for completing {"\n"} EEG 101</Text>
-              <Text style={[styles.body, {margin: 10}]}> We hope you enjoyed learning about the basics of EEG. Soon, this tutorial will cover more advanced topics, such as how to create a simple brain-machine interface!</Text>
+              <Text style={styles.title}>{I18n.t('thanksForCompleting')}</Text>
+              <Text style={[styles.body, {margin: 10}]}>{I18n.t('hopeYouEnjoyed')}</Text>
             </View>
 
             <View style={styles.listBox}>
-              <Text style={styles.header}>What's Next?</Text>
-                <Text style={styles.body}>1. Live Artifact Removal</Text>
-                <Text style={styles.body}>2. Offline Mode</Text>
-                <Text style={styles.body}>3. Interactive Brain Computer Interface!</Text>
+              <Text style={styles.header}>{I18n.t('whatsNext')}</Text>
+                <Text style={styles.body}>{I18n.t('liveArtifactRemoval')}</Text>
+                <Text style={styles.body}>{I18n.t('offlineMode')}</Text>
+                <Text style={styles.body}>{I18n.t('interactiveBCI')}</Text>
             </View>
 
             <View style={{marginBottom: 20}}>
@@ -44,10 +45,10 @@ class End extends Component {
 
           <View style={styles.page}>
             <View style={styles.titleBox}>
-              <Text style={styles.header}>This project is Open Source</Text>
-              <Text style={styles.body}>EEG101 is the result of a collaboration between NeuroTechX, the international neurotechnology network, and the developers at KBDGroup. Its source code is open for anyone to use or contribute to.</Text>
+              <Text style={styles.header}>{I18n.t('projectOpenSource')}</Text>
+              <Text style={styles.body}>{I18n.t('resultOfCollaboration')}</Text>
               <View style={styles.textBox}>
-                <Text style={styles.body}>Interested in how an EEG app is built? Want to contribute to this project? Check out the repo on Github and our community on Slack</Text>
+                <Text style={styles.body}>{I18n.t('interestedInApp')}</Text>
               </View>
             </View>
 
@@ -73,10 +74,9 @@ class End extends Component {
           </View>
 
           <View style={styles.page}>
-
             <View style={[styles.listBox, {marginTop: 75}]}>
-              <Text style={styles.header}>The EEG 101 Team</Text>
-              <Text style={styles.body}>Hubert Banville - Visionary</Text>
+              <Text style={styles.header}>{I18n.t('theTeam')}</Text>
+              <Text style={styles.body}>{I18n.t('teamMember1')}</Text>
               <Text style={styles.body}>Dano Morrison - Developer</Text>
               <Text style={styles.body}>Geordan King - Producer</Text>
               <Text style={styles.body}>Michael Vu - Author</Text>
@@ -87,12 +87,10 @@ class End extends Component {
             </View>
 
             <View style={styles.buttonBox}>
-              <LinkButton path='/connectorThree'> NEXT </LinkButton>
+              <LinkButton path='/connectorThree'>{I18n.t('nextLink')}</LinkButton>
             </View>
           </View>
-
         </ViewPagerAndroid>
-
       </Image>
     );
   }

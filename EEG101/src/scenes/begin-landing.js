@@ -4,6 +4,7 @@ import { Link } from "react-router-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import LinkButton from "../components/WhiteLinkButton";
+import I18n from '../i18n/i18n';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to this scene's ley
 function mapStateToProps(state) {
@@ -28,14 +29,11 @@ class Landing extends Component {
         resizeMode="stretch"
       >
         <View style={styles.titleBox}>
-          <Text style={styles.title}>Welcome to EEG 101</Text>
-          <Text style={styles.body}>
-            At the end of this tutorial, you will have learned how EEG devices
-            can be used to measure the electrical activity of the brain.
-          </Text>
+          <Text style={styles.title}>{I18n.t('welcomeEEG101')}</Text>
+          <Text style={styles.body}>{I18n.t('tutorialDescription')}</Text>
         </View>
         <View style={styles.buttonContainer}>
-          <LinkButton path="/connectorOne"> GET STARTED </LinkButton>
+          <LinkButton path="/connectorOne">{I18n.t('getStartedLink')}</LinkButton>
         </View>
       </Image>
     );
