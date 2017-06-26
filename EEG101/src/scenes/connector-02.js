@@ -20,6 +20,11 @@ class ConnectorTwo extends Component {
   }
 
   renderButton() {
+    return <LinkButton path="/connectorThree"> GET STARTED </LinkButton>
+  }
+
+  /*
+  renderButton() {
     return this.props.connectionStatus === config.connectionStatus.CONNECTED
       ? <LinkButton path="/connectorThree"> GET STARTED </LinkButton>
       : <WhiteButton onPress={() => null} disabled={true}>
@@ -27,6 +32,7 @@ class ConnectorTwo extends Component {
           {" "}
         </WhiteButton>;
   }
+  */
 
   render() {
     return (

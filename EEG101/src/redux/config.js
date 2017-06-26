@@ -23,4 +23,8 @@ export default {
     BANDSTOP: 'BANDSTOP',
     BANDPASS: 'BANDPASS',
   },
+  bciAction: {
+    LIGHT: 'the light',
+    VIBRATE: 'vibration',
+  },
 }

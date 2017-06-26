@@ -113,9 +113,8 @@ public class Filter {
     public static double[] extractFilteredSamples(double[][] z) {
         // Utility function to extract the filtered samples from the returned array
         // of transform()
-        
-        double[] filtSignal = new double[z.length];     // TODO can this instantiation be avoided?
         int len = z.length;
+        double[] filtSignal = new double[len];     // TODO can this instantiation be avoided?
         for (int i = 0; i < len; i++) {
             filtSignal[i] = z[i][z[0].length - 1];
         }
