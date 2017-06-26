@@ -8,6 +8,7 @@ import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
 import { MediaQueryStyleSheet } from "react-native-responsive";
+import I18n from '../i18n/i18n';
 
 //Interfaces. For elements that bridge to native
 import GraphView from "../interface/GraphView";
@@ -63,7 +64,7 @@ class SlideOne extends Component {
           <GraphView style={{ flex: 1 }}/>
         </View>
 
-        <Text style={styles.currentTitle}>INTRODUCTION</Text>
+        <Text style={styles.currentTitle}>{I18n.t('introductionSlideTitle')}</Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
@@ -71,16 +72,9 @@ class SlideOne extends Component {
         >
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>Your brain produces electricity</Text>
+            <Text style={styles.header}>{I18n.t('brainElectricity')}</Text>
             <Text style={styles.body}>
-              Using the
-              {" "}<PopUpLink
-                onPress={() => this.setState({ popUp1Visible: true })}
-              >
-                EEG
-              </PopUpLink>
-              {" "}device that you are wearing, we can detect the electrical
-              activity of your brain.
+			  {I18n.t('usingThe')}<PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>{I18n.t('EEGLink')}</PopUpLink>{I18n.t('deviceCanDetect')}
             </Text>
             <Image
               source={require("../assets/swipeicon.png")}
@@ -90,46 +84,27 @@ class SlideOne extends Component {
           </View>
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>Try blinking your eyes...</Text>
-            <Text style={styles.body}>Does the signal change?</Text>
+            <Text style={styles.header}>{I18n.t('tryBlinkingEyes')}</Text>
+            <Text style={styles.body}>{I18n.t('doesSignalChange')}</Text>
             <Text style={styles.body}>
-              Eye movements create
-              {" "}<PopUpLink
-                onPress={() => this.setState({ popUp2Visible: true })}
-              >
-                noise
-              </PopUpLink>
-              {" "}in the EEG signal.
+				{I18n.t('eyeMovementCreates')}<PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>{I18n.t('noiseLink')}</PopUpLink>{I18n.t('inEEGSignal')}
             </Text>
           </View>
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>Try thinking about a cat... </Text>
-            <Text style={styles.body}>Does the signal change?</Text>
+            <Text style={styles.header}>{I18n.t('tryThinkingAbout')}</Text>
+            <Text style={styles.body}>{I18n.t('doesSignalChange')}</Text>
             <Text style={styles.body}>
-              Although EEG can measure overall brain activity, it’s not capable
-              of
-              {" "}<PopUpLink
-                onPress={() => this.setState({ popUp3Visible: true })}
-              >
-                reading minds.
-              </PopUpLink>
+				{I18n.t('althoughEEG')}<PopUpLink onPress={() => this.setState({ popUp3Visible: true })}>{I18n.t('readingMindsLink')}</PopUpLink>.
             </Text>
           </View>
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>
-              Now try closing your eyes for 10 seconds
-            </Text>
+            <Text style={styles.header}>{I18n.t('tryClosingEyes10')}</Text>
             <Text style={styles.body}>
-              You may notice a change in your signal due to an increase in
-              {" "}<PopUpLink
-                onPress={() => this.setState({ popUp4Visible: true })}
-              >
-                alpha waves.
-              </PopUpLink>
+				{I18n.t('mayNoticeSignalChange')}<PopUpLink onPress={() => this.setState({ popUp4Visible: true })}>{I18n.t('alphaWavesLink')}</PopUpLink>
             </Text>
-            <LinkButton path="/slideTwo"> NEXT </LinkButton>
+            <LinkButton path="/slideTwo">{I18n.t('nextLink')}</LinkButton>
           </View>
 
         </ViewPagerAndroid>
@@ -137,52 +112,34 @@ class SlideOne extends Component {
         <PopUp
           onClose={() => this.setState({ popUp1Visible: false })}
           visible={this.state.popUp1Visible}
-          title="What exactly is EEG?"
+          title={I18n.t('whatIsEEGTitle')}
           image={require("../assets/hansberger.jpg")}
         >
-          Electroencephalography (EEG) is a technique that measures the
-          electrical activity of the brain with sensors that record fluctuations
-          in voltage at the surface of the skull. The first human
-          electroencephalogram was recorded in 1924 by Hans Berger, a German
-          psychiatrist whose interest in ‘psychic energy’ led him to experiment
-          with the electrical fields of the brain.
-        </PopUp>
+			{I18n.t('whatIsEEGDescription')}
+		</PopUp>
 
         <PopUp
           onClose={() => this.setState({ popUp2Visible: false })}
           visible={this.state.popUp2Visible}
-          title="Noise"
+          title={I18n.t('noiseTitle')}
         >
-          Movement of the eyes (which are electrically charged) and muscle
-          activity produce electrical activity. Thus, blinking, swallowing, and
-          clenching the jaw will all produce noise that can overpower signals
-          originating in the brain. This can make it very difficult to read the
-          EEG. To accurately sense the activity of the brain, movement must be
-          kept to a minimum.
+			{I18n.t('noiseDescription')}
         </PopUp>
 
         <PopUp
           onClose={() => this.setState({ popUp3Visible: false })}
           visible={this.state.popUp3Visible}
-          title="EEG cannot read minds"
+          title={I18n.t('cannotReadMindsTitle')}
         >
-          The EEG signal is generated when tens of thousands of brain cells fire
-          in synchrony. Although thinking about a cat produces some change in
-          brain activity, it is too small to affect the large-scale, rhythmic
-          firing of the brain that EEG detects.
+			{I18n.t('cannotReadMindsDescription')}
         </PopUp>
 
         <PopUp
           onClose={() => this.setState({ popUp4Visible: false })}
           visible={this.state.popUp4Visible}
-          title="Closed eye rhythms"
+          title={I18n.t('eyeRythymsTitle')}
         >
-          When the eyes are closed, there is often a large increase in rhythmic
-          brain activity in the range of 8-13 cycles per second (Hz). These
-          alpha waves were one of the first discoveries that Hans Berger made
-          with EEG. The ability to detect alpha waves when the eyes are closed
-          varies greatly from person to person, however. Don't feel bad if you
-          can't see them!
+			{I18n.t('eyeRythymsDescription')}
         </PopUp>
 
         <PopUp
@@ -190,9 +147,9 @@ class SlideOne extends Component {
           visible={
             this.props.connectionStatus === config.connectionStatus.DISCONNECTED
           }
-          title="Muse Disconnected"
+          title={I18n.t('museDisconnectedTitle')}
         >
-          Please reconnect to continue the tutorial
+			{I18n.t('museDisconnectedDescription')}
         </PopUp>
       </View>
     );

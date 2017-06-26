@@ -1881,6 +1881,10 @@ http-signature@~1.1.0:
     jsprim "^1.2.2"
     sshpk "^1.7.0"
 
+"i18n-js@github:fnando/i18n-js#v3.0.0":
+  version "0.0.0"
+  resolved "https://codeload.github.com/fnando/i18n-js/tar.gz/b8fb918c827a2d3bbe187372e47bbe1a7a6c4c19"
+
 iconv-lite@0.4.11:
   version "0.4.11"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.11.tgz#2ecb42fd294744922209a2e7c404dac8793d8ade"
@@ -3263,6 +3267,12 @@ react-dom@^15.4.1:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
     prop-types "~15.5.7"
+
+react-native-i18n@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-i18n/-/react-native-i18n-2.0.1.tgz#42ba919e9137ef3f2fd6974f081794034f71840e"
+  dependencies:
+    i18n-js "github:fnando/i18n-js#v3.0.0"
 
 react-native-responsive@^1.0.1:
   version "1.0.1"

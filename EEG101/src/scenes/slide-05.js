@@ -13,6 +13,7 @@ import { MediaQueryStyleSheet } from "react-native-responsive";
 import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
+import I18n from '../i18n/i18n';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
@@ -70,7 +71,7 @@ class SlideFive extends Component {
           />
         </View>
 
-        <Text style={styles.currentTitle}>EPOCHING</Text>
+        <Text style={styles.currentTitle}>{I18n.t('epochingSlideTitle')}</Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
@@ -78,16 +79,11 @@ class SlideFive extends Component {
         >
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>Chunking the signal</Text>
+            <Text style={styles.header}>{I18n.t('chunkingSignal')}</Text>
             <Text style={styles.body}>
-              Next, the EEG is divided into small segments or
-              {" "}
-              <PopUpLink onPress={() => this.setState({ popUpVisible: true })}>
-                'epochs.'
-              </PopUpLink>
-
+			  {I18n.t('EEGDividedSegments')}<PopUpLink onPress={() => this.setState({ popUpVisible: true })}>{I18n.t('epochsLink')}</PopUpLink>.
             </Text>
-            <LinkButton path="/slideSix"> NEXT </LinkButton>
+            <LinkButton path="/slideSix">{I18n.t('nextLink')}</LinkButton>
           </View>
 
         </ViewPagerAndroid>
@@ -95,14 +91,20 @@ class SlideFive extends Component {
         <PopUp
           onClose={() => this.setState({ popUpVisible: false })}
           visible={this.state.popUpVisible}
-          title="Epochs"
+          title={I18n.t('epochsTitle')}
         >
-          The brain is constantly changing and the EEG changes with it. Dividing
-          the EEG into epochs allows each moment in time to be analyzed
-          individually. Analyzing how the properties of these epochs vary allows
-          us to quantify how the brain changes over time.
+			{I18n.t('epochsDescription')}
         </PopUp>
 
+		<PopUp
+          onClose={()=>this.props.history.push('/connectorOne')}
+          visible={
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
+          }
+          title={I18n.t('museDisconnectedTitle')}
+        >
+			{I18n.t('museDisconnectedDescription')}
+        </PopUp>
       </View>
     );
   }

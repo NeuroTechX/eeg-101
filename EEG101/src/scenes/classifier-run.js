@@ -7,6 +7,7 @@ import Classifier from "../interface/Classifier.js";
 import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
+import I18n from '../i18n/i18n';
 
 function mapStateToProps(state) {
   return {
@@ -52,18 +53,18 @@ class ClassifierRun extends Component {
           <Text style={styles.classText}>{this.state.class}</Text>
         </View>
 
-        <Text style={styles.currentTitle}>CLASSIFIER</Text>
+        <Text style={styles.currentTitle}>{I18n.t('classifierTitle')}</Text>
 
         <ViewPagerAndroid
           style={styles.viewPager}
           initialPage={0}
         >
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>Trying to understand your brain...</Text>
+            <Text style={styles.header}>{I18n.t('tryingToUnderstand')}</Text>
             <Text style={styles.body}>
-              As this classifier it runs, it will return which sample dataset your real-time brain activity most closely resembles
+			  {I18n.t('classifierReturnsDataset')}
             </Text>
-            <LinkButton path="/classifier"> RE-TRAIN </LinkButton>
+            <LinkButton path="/classifier">{I18n.t('retrainLink')}</LinkButton>
           </View>
 
         </ViewPagerAndroid>

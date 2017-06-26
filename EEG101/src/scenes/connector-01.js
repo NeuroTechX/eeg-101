@@ -4,6 +4,7 @@ import { Link } from "react-router-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import LinkButton from "../components/WhiteLinkButton";
+import I18n from '../i18n/i18n';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
@@ -21,17 +22,12 @@ class ConnectorOne extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.titleBox}>
-          <Text style={styles.title}>Step 1</Text>
-          <Text style={styles.instructions}>
-            Make sure your Muse is powered on
-          </Text>
-          <Text style={styles.body}>
-            If you are using a first generation Muse you may need to pair your
-            device in bluetooth settings
-          </Text>
+          <Text style={styles.title}>{I18n.t('step1Title')}</Text>
+          <Text style={styles.instructions}>{I18n.t('musePowerOnWarning')}</Text>
+          <Text style={styles.body}>{I18n.t('museFirstGenWarning')}</Text>
         </View>
         <View style={styles.buttonContainer}>
-          <LinkButton path="/connectorTwo"> OK, IT'S ON </LinkButton>
+          <LinkButton path="/connectorTwo">{I18n.t('connector2Link')}</LinkButton>
         </View>
       </View>
     );

@@ -13,6 +13,7 @@ import LinkButton from '../components/LinkButton';
 import PopUp from '../components/PopUp';
 import PopUpLink from '../components/PopUpLink';
 import ElectrodeSelector from '../components/ElectrodeSelector';
+import I18n from '../i18n/i18n';
 
 //Interfaces. For elements that bridge to native
 import GraphView from '../interface/GraphView';
@@ -45,50 +46,56 @@ class SlideThree extends Component {
           <GraphView style={{flex:1}} channelOfInterest={this.state.channelOfInterest}/>
         </View>
 
-        <Text style={styles.currentTitle}>HARDWARE</Text>
+        <Text style={styles.currentTitle}>{I18n.t('hardwareSlideTitle')}</Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
           initialPage={0}>
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>How does an EEG device work?</Text>
-            <Text style={styles.body}>The electrical activity of the brain is sensed by <PopUpLink onPress={() => this.setState({popUp1Visible: true})}>electrodes</PopUpLink> placed on the scalp.</Text>
+            <Text style={styles.header}>{I18n.t('howDoesEEGDeviceWork')}</Text>
+            <Text style={styles.body}>{I18n.t('electricalActivitySensed')}<PopUpLink onPress={() => this.setState({popUp1Visible: true})}>{I18n.t('electrodesLink')}</PopUpLink>{I18n.t('placedOnScalp')}</Text>
           </View>
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>This device has 4 electrodes</Text>
+            <Text style={styles.header}>{I18n.t('deviceHas4Electrodes')}</Text>
             <View style={{flexDirection: 'row'}}>
-              <Text style={[styles.body,{flex:.5, marginRight: 10,}]}>Touch the head diagram to view the signal at each electrode. Scientists have <PopUpLink onPress={() => this.setState({popUp2Visible: true})}>names</PopUpLink> for each of these electrodes.</Text>
+              <Text style={[styles.body,{flex:.5, marginRight: 10,}]}>{I18n.t('touchTheHeadDiagram')}<PopUpLink onPress={() => this.setState({popUp2Visible: true})}>{I18n.t('namesLink')}</PopUpLink>{I18n.t('forEachElectrode')}</Text>
               <ElectrodeSelector channelOfInterest={(channel) => this.setState({channelOfInterest: channel})}/>
             </View>
           </View>
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>What do electrodes measure?</Text>
-            <Text style={styles.body}>Each electrode detects voltage fluctuations that are compared to a <PopUpLink onPress={() => this.setState({popUp3Visible: true})}>reference electrode</PopUpLink> and then amplified around 1,000,000 times.</Text>
+            <Text style={styles.header}>{I18n.t('whatElectrodesMeasure')}</Text>
+            <Text style={styles.body}>{I18n.t('voltageFluctuations')}<PopUpLink onPress={() => this.setState({popUp3Visible: true})}>{I18n.t('referenceElectrodeLink')}</PopUpLink>{I18n.t('amplified1Mil')}</Text>
             <LinkButton path='/slideFour'> NEXT </LinkButton>
           </View>
         </ViewPagerAndroid>
 
         <PopUp onClose={() => this.setState({popUp1Visible: false})} visible={this.state.popUp1Visible}
-        title='Electrodes'>
-          An electrode is a conductor through which electricity flows. The device you are wearing (Muse) uses dry electrodes that don't require conductive gel and can be placed directly on the skin.
+        title={I18n.t('electrodesTitle')}>
+			{I18n.t('electrodesDescription')}
         </PopUp>
 
         <PopUp onClose={() => this.setState({popUp2Visible: false})} visible={this.state.popUp2Visible}
-        title='Electrode naming conventions' image={require('../assets/electrodelocations.png')}>
-        EEG electrodes are typically identified by a combination of a letter and a number. The letter indicates the part of the head where the electrode is located (F for frontal, C for central, etc.). The number indicates distance from the midline of the head with odd numbers on the right and even numbers on the left.
+        title={I18n.t('electrodeNamingTitle')} image={require('../assets/electrodelocations.png')}>
+			{I18n.t('electrodeNamingDescription')}
         </PopUp>
 
         <PopUp onClose={() => this.setState({popUp3Visible: false})} visible={this.state.popUp3Visible}
-        title='Referencing' image={require('../assets/reference.png')}>
-        Each electrode's signal reflects the difference in electrical potential between that electrode and the reference. Thus, the placement of the reference electrode is very important. With Muse, the reference is located on the front of the forehead.
+        title={I18n.t('referencingTitle')} image={require('../assets/reference.png')}>
+			{I18n.t('referencingDescription')}
         </PopUp>
 
-        <PopUp onClose={()=>this.props.history.push('/connectorOne')} visible={this.props.connectionStatus === config.connectionStatus.DISCONNECTED} title='Muse Disconnected'>
-        Please reconnect to continue the tutorial</PopUp>
-
+        <PopUp
+          onClose={()=>this.props.history.push('/connectorOne')}
+          visible={
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
+          }
+          title={I18n.t('museDisconnectedTitle')}
+        >
+			{I18n.t('museDisconnectedDescription')}
+        </PopUp>
       </View>
     );
   }

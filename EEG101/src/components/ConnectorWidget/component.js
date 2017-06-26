@@ -9,9 +9,10 @@ import {
   StyleSheet,
   PermissionsAndroid
 } from 'react-native';
-import config from '../../redux/config'
+import config from '../../redux/config';
 import Connector from '../../interface/Connector';
-import WhiteButton from '../WhiteButton'
+import WhiteButton from '../WhiteButton';
+import I18n from '../../i18n/i18n';
 
 export default class ConnectorWidget extends Component {
   constructor(props) {
@@ -29,8 +30,8 @@ export default class ConnectorWidget extends Component {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
         {
-          'title': 'EEG 101 needs your permission',
-          'message': 'This app requires coarse location permission in order to discover and connect to the 2016 Muse'
+          'title': I18n.t('needsPermission'),
+          'message': I18n.t('requiresLocation')
         }
       );
       if (granted) {
@@ -75,24 +76,24 @@ export default class ConnectorWidget extends Component {
     // switch could also further functionality to handle multiple connection conditions
     switch(this.props.connectionStatus) {
       case config.connectionStatus.CONNECTED:
-        connectionString = 'Connected';
+        connectionString = I18n.t('statusConnected');
         dynamicTextStyle = styles.connected;
         break;
       case config.connectionStatus.NO_MUSES:
         dynamicTextStyle = styles.noMuses;
         return(
           <View style={styles.container}>
-            <Text style={dynamicTextStyle}>No Muses were detected.</Text>
-            <Text style={styles.body}>If you don't own a Muse, don't worry! We are working on an offline mode that should be avaible in early 2017!</Text>
-            <WhiteButton onPress={()=>this.props.getAndConnectToDevice()}>SEARCH AGAIN</WhiteButton>
+            <Text style={dynamicTextStyle}>{I18n.t('statusNoMusesTitle')}</Text>
+            <Text style={styles.body}>{I18n.t('statusNoMusesDescription')}</Text>
+            <WhiteButton onPress={()=>this.props.getAndConnectToDevice()}>{I18n.t('searchAgain')}</WhiteButton>
           </View>
         );
       case config.connectionStatus.CONNECTING:
-        connectionString = 'Connecting...'
+        connectionString = I18n.t('statusConnecting')
         dynamicTextStyle = styles.connecting;
         break;
       case config.connectionStatus.DISCONNECTED:
-        connectionString = 'Searching for Muses...'
+        connectionString = I18n.t('statusDisconnected')
         dynamicTextStyle = styles.disconnected;
     }
 

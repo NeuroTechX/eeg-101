@@ -6,6 +6,7 @@ import { MediaQueryStyleSheet } from "react-native-responsive";
 import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
+import I18n from '../i18n/i18n';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
@@ -53,7 +54,7 @@ class SlideTwo extends Component {
           />
         </View>
 
-        <Text style={styles.currentTitle}>PHYSIOLOGY</Text>
+        <Text style={styles.currentTitle}>{I18n.t('physiologySlideTitle')}</Text>
 
         <ViewPagerAndroid // Allows us to swipe between child views
           style={styles.viewPager}
@@ -65,100 +66,66 @@ class SlideTwo extends Component {
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>
-              Where does the EEG signal come from?
+				{I18n.t('EEGComeFrom')}
             </Text>
             <Text style={styles.body}>
-              The EEG measures the electrical activity that occurs when
-              {" "}<PopUpLink
-                onPress={() => this.setState({ popUp1Visible: true })}
-              >
-                neurons
-              </PopUpLink>
-              {" "}receive and transmit information.
+				{I18n.t('EEGMeasures')}<PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>{I18n.t('neuronsLink')}</PopUpLink>{I18n.t('receiveAndTransmit')}
             </Text>
           </View>
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>
-              Organized neural activity produces electric fields
+				{I18n.t('organizedNeural')}
             </Text>
             <Text style={styles.body}>
-              When billions of neurons
-              {" "}<PopUpLink
-                onPress={() => this.setState({ popUp2Visible: true })}
-              >
-                work together
-              </PopUpLink>
-              {" "}to produce thoughts, feelings, and behaviours, their
-              electricity can be detected by electrodes on the scalp.
+				{I18n.t('whenBillionsOfNeurons')}<PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>{I18n.t('workTogetherLink')}</PopUpLink>{I18n.t('produceThoughts')}
             </Text>
           </View>
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>
-              EEG detects the "state" of the brain
+				{I18n.t('EEGDetects')}
             </Text>
             <Text style={styles.body}>
-              This organized electrical activity varies between different brain
-              states, such as
-              {" "}<PopUpLink
-                onPress={() => this.setState({ popUp3Visible: true })}
-              >
-                sleep and wakefulness.
-              </PopUpLink>
+				{I18n.t('organizedElectricalActivity')}<PopUpLink onPress={() => this.setState({ popUp3Visible: true })}>{I18n.t('sleepWakefulnessLink')}</PopUpLink>
             </Text>
-            <LinkButton path="/slideThree"> NEXT </LinkButton>
+            <LinkButton path="/slideThree">{I18n.t('nextLink')}</LinkButton>
           </View>
         </ViewPagerAndroid>
 
         <PopUp
           onClose={() => this.setState({ popUp1Visible: false })}
           visible={this.state.popUp1Visible}
-          title="Neural basis of EEG"
+          title={I18n.t('neuralBasisEEGTitle')}
         >
-          When synapses are activated on a neuron's dendrites, a small electric
-          field (dipole) is created along the body of the neuron due to the
-          difference in charge between those dendrites and the axon. This
-          electric field only lasts for a few milliseconds.
+			{I18n.t('neuralBasisEEGDescription1')}
         </PopUp>
 
         <PopUp
           onClose={() => this.setState({ popUp2Visible: false })}
           visible={this.state.popUp2Visible}
-          title="Neural basis of EEG"
+          title={I18n.t('neuralBasisEEGTitle')}
         >
-          The electric fields produced by single neurons are vanishingly small.
-          However, when large numbers of cortical neurons fire rhythmically,
-          their activity can produce electric fields that are large enough to
-          cross the surface of the skull. This process is influenced by many
-          factors, including depth, orientation, and subtype of neurons, and is
-          a topic of ongoing research.
+			{I18n.t('neuralBasisEEGDescription2')}
         </PopUp>
 
         <PopUp
           onClose={() => this.setState({ popUp3Visible: false })}
           visible={this.state.popUp3Visible}
-          title="Brain states"
+          title={I18n.t('brainStatesTitle')}
         >
-          During sleep our brains produce very different kinds of rhythmic
-          electrical activity. When awake, brain rhythms tend to be
-          rapidly-changing and irregular, while slowly-changing, organized
-          rhythms become more dominant as we fall asleep and pass through the
-          multiple sleep stages. {"\n"}Certain emotions and cognitive processes
-          have also been linked with characteristic patterns of rhythmic
-          activity that can be identified with EEG.
+			{I18n.t('brainStatesDescription')}
         </PopUp>
 
         <PopUp
-          onClose={() => this.props.history.push("/connectorOne")}
+          onClose={()=>this.props.history.push('/connectorOne')}
           visible={
             this.props.connectionStatus === config.connectionStatus.DISCONNECTED
           }
-          title="Muse Disconnected"
+          title={I18n.t('museDisconnectedTitle')}
         >
-          Please reconnect to continue the tutorial
+			{I18n.t('museDisconnectedDescription')}
         </PopUp>
-
       </View>
     );
   }

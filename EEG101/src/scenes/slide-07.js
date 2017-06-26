@@ -6,6 +6,7 @@ import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
 import { MediaQueryStyleSheet } from "react-native-responsive";
+import I18n from '../i18n/i18n';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
@@ -48,7 +49,7 @@ class SlideSeven extends Component {
           />
         </View>
 
-        <Text style={styles.currentTitle}>FEATURE EXTRACTION</Text>
+        <Text style={styles.currentTitle}>{I18n.t('featureDetectionSlideTitle')}</Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
@@ -56,31 +57,18 @@ class SlideSeven extends Component {
         >
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>Breaking down the EEG</Text>
+            <Text style={styles.header}>{I18n.t('breakingDownEEG')}</Text>
             <Text style={styles.body}>
-              Once noise is removed, the EEG can be broken down into many
-              simpler periodic signals or
-              {" "}<PopUpLink
-                onPress={() => this.setState({ popUp1Visible: true })}
-              >
-                waves.
-              </PopUpLink>
+			  {I18n.t('onceNoiseRemoved')}<PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>{I18n.t('wavesLink')}</PopUpLink>.
             </Text>
-
           </View>
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>How is the EEG broken down?</Text>
+            <Text style={styles.header}>{I18n.t('howEEGBrokenDown')}</Text>
             <Text style={styles.body}>
-              Complex signals can be broken down into simpler signals with a
-              mathematical function known as the
-              {" "}<PopUpLink
-                onPress={() => this.setState({ popUp2Visible: true })}
-              >
-                Fourier Transform.
-              </PopUpLink>
-            </Text>
-            <LinkButton path="/slideEight"> NEXT </LinkButton>
+			  {I18n.t('complexSignalsBrokenDown')}<PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>{I18n.t('fourierTransformLink')}</PopUpLink>.
+			</Text>
+            <LinkButton path="/slideEight">{I18n.t('nextLink')}</LinkButton>
           </View>
 
         </ViewPagerAndroid>
@@ -88,25 +76,28 @@ class SlideSeven extends Component {
         <PopUp
           onClose={() => this.setState({ popUp1Visible: false })}
           visible={this.state.popUp1Visible}
-          title="Waves"
+          title={I18n.t('wavesTitle')}
         >
-          Each wave is characterised by a certain frequency (number of cycles
-          per second, Hertz (Hz)). A high frequency wave has many cycles per
-          second, whereas a low frequency wave has fewer cycles per second.
-          Waves of different frequencies are associated with different patterns
-          of neural firing.
+	      {I18n.t('wavesDescription')}
         </PopUp>
 
         <PopUp
           onClose={() => this.setState({ popUp2Visible: false })}
           visible={this.state.popUp2Visible}
-          title="Fourier transform"
+          title={I18n.t('fourierTransformTitle')}
         >
-          The Fourier Transform decomposes a complex signal into a collection of
-          simple sine waves. Often, we use an algorithm specifically called the
-          Fast Fourier Transform (FFT) to perform this decomposition in EEG.
+		  {I18n.t('fourierTransformDescription')}
         </PopUp>
 
+		<PopUp
+          onClose={()=>this.props.history.push('/connectorOne')}
+          visible={
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
+          }
+          title={I18n.t('museDisconnectedTitle')}
+        >
+			{I18n.t('museDisconnectedDescription')}
+        </PopUp>
       </View>
     );
   }

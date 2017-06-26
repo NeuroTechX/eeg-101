@@ -10,6 +10,7 @@ import { MediaQueryStyleSheet } from "react-native-responsive";
 import GraphView from "../interface/GraphView";
 import FilterGraphView from "../interface/FilterGraphView";
 import config from "../redux/config";
+import I18n from '../i18n/i18n';
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
@@ -36,17 +37,17 @@ class SlideFour extends Component {
 
         <View style={styles.halfGraphContainer}>
           <GraphView style={{ flex: 1 }} />
-          <Text style={styles.halfGraphLabelText}>Raw</Text>
+          <Text style={styles.halfGraphLabelText}>{I18n.t('raw')}</Text>
         </View>
         <View style={styles.halfGraphContainer}>
           <FilterGraphView
             style={{ flex: 1 }}
             filterType={config.filterType.BANDPASS}
           />
-          <Text style={styles.halfGraphLabelText}>Band-Pass Filter</Text>
+          <Text style={styles.halfGraphLabelText}>{I18n.t('bandPassFilter')}</Text>
         </View>
 
-        <Text style={styles.currentTitle}>FILTERING</Text>
+        <Text style={styles.currentTitle}>{I18n.t('filteringSlideTitle')}</Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
@@ -55,17 +56,12 @@ class SlideFour extends Component {
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>
-              How do we get meaningful data from the EEG?
+				{I18n.t('meaningfulData')}
             </Text>
             <Text style={styles.body}>
-              First, the EEG must be
-              {" "}
-              <PopUpLink onPress={() => this.setState({ popUpVisible: true })}>
-                filtered
-              </PopUpLink>
-              {" "}to reduce signals that don't come from the brain.
+				{I18n.t('firstEEGMust')}<PopUpLink onPress={() => this.setState({ popUpVisible: true })}>{I18n.t('filteredLink')}</PopUpLink>{I18n.t('toReduceSignals')}
             </Text>
-            <LinkButton path="/slideFive"> NEXT </LinkButton>
+            <LinkButton path="/slideFive">{I18n.t('nextLink')}</LinkButton>
           </View>
 
         </ViewPagerAndroid>
@@ -73,21 +69,20 @@ class SlideFour extends Component {
         <PopUp
           onClose={() => this.setState({ popUpVisible: false })}
           visible={this.state.popUpVisible}
-          title="Filters"
+          title={I18n.t('filtersTitle')}
         >
-          Filters remove frequencies that sit outside the spectrum of signals
-          produced by the brain, getting rid of some of the noise produced by
-          muscles or environmental electrical activity. Filters are normally
-          either high-pass (removing low frequencies), low-pass (removing high
-          frequencies) or band-pass (allowing only a specific band of
-          frequencies through). Here, we have implemented a band-pass filter
-          that removes frequencies outside the range of those typically produced
-          by the brain.
+			{I18n.t('filtersDescription')}
         </PopUp>
 
-        <PopUp onClose={()=>this.props.history.push('/connectorOne')} visible={this.props.connectionStatus === config.connectionStatus.DISCONNECTED} title='Muse Disconnected'>
-        Please reconnect to continue the tutorial</PopUp>
-
+        <PopUp
+          onClose={()=>this.props.history.push('/connectorOne')}
+          visible={
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
+          }
+          title={I18n.t('museDisconnectedTitle')}
+        >
+			{I18n.t('museDisconnectedDescription')}
+        </PopUp>
       </View>
     );
   }
