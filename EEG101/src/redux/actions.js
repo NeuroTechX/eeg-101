@@ -5,6 +5,7 @@ import Connector from '../interface/Connector';
 import {
   SET_CONNECTION_STATUS,
   SET_GRAPHVIEW_DIMENSIONS,
+  SET_BCI_ACTION,
 } from './constants';
 import config from './config';
 
@@ -13,6 +14,7 @@ export const setConnectionStatus = (payload) => ({payload, type: SET_CONNECTION_
 
 export const setGraphViewDimensions = (payload) => ({payload, type: SET_GRAPHVIEW_DIMENSIONS});
 
+export const setBCIAction = (payload) => ({payload, type: SET_BCI_ACTION});
 
 export function getAndConnectToDevice() {
   return (dispatch) =>  {
@@ -28,5 +30,3 @@ export function getAndConnectToDevice() {
     });
   }
 }
-
-

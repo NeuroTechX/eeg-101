@@ -1,5 +1,5 @@
 // PopUp.js
-// A popup modal containing extra info. 
+// A popup modal containing extra info.
 // Can accept a title prop that will be display as header text at top of the popup text
 // Image source passed as image prop will be displayed in black region at the top of the popup
 // onClose is called when the Close button is clicked. Must be an arrow function that changes an isVisible prop in the parent component to false
@@ -18,7 +18,7 @@ import Button from '../components/Button';
 import I18n from '../i18n/i18n';
 
 export default class PopUp extends Component {
-  
+
   render() {
     let imageStyle = (this.props.image != null) ? styles.activeImage: styles.disabledImage
     return(
@@ -35,7 +35,7 @@ export default class PopUp extends Component {
             <Text style={styles.modalTitle}>{this.props.title}</Text>
             <Text style={styles.modalText}>{this.props.children}</Text>
             <Button onPress={this.props.onClose}>{I18n.t('closeButton')}</Button>
-          </View>   
+          </View>
         </View>
       </Modal>
     );
@@ -126,4 +126,3 @@ const styles = MediaQueryStyleSheet.create(
       }
     }
   });
-

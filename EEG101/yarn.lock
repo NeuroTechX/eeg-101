@@ -3293,6 +3293,10 @@ react-native-svg@^5.1.8:
     color "^0.11.1"
     lodash "^4.16.6"
 
+react-native-torch@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-torch/-/react-native-torch-1.0.0.tgz#cf00d93ee83a250a2df5a3ba2be4e3193eaa1c55"
+
 react-native@0.44.2:
   version "0.44.2"
   resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.44.2.tgz#c8dfb747b88e6276a991980c57c50b860a98cf0e"

@@ -2,81 +2,62 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
-import config from "../redux/config";
 import LinkButton from "../components/LinkButton";
-import SandboxButton from "../components/SandboxButton.js";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
 
-class BCITwo extends Component {
+function mapStateToProps(state) {
+  return {
+    dimensions: state.graphViewDimensions
+  };
+}
+
+class BCIOne extends Component {
   constructor(props) {
     super(props);
 
     // Initialize States
     this.state = {
-      popUp1Visible: false,
-      action: "",
-      enableScroll: false,
-      slidePosition: 0
+      popUpVisible: false
     };
-  }
-
-  handleScroll() {
-    if (this.state.slidePosition === 0 && this.state.action === "") {
-      return;
-    }
-    return (
-      <Image
-        source={require("../assets/swipeiconwhite.png")}
-        resizeMode="contain"
-        style={styles.swipeImage}
-      />
-    );
   }
 
   render() {
     return (
       <View style={styles.container}>
 
-        <Text style={styles.currentTitle}>TRAINING A BCI</Text>
+        <View style={styles.graphContainer}>
+          <Image
+            source={require("../assets/bci_diagram.png")}
+            style={styles.image}
+            resizeMode={"contain"}
+          />
+        </View>
+        <Text style={styles.currentTitle}>BRAIN-COMPUTER INTERFACES</Text>
 
-        <ViewPagerAndroid
-          style={styles.viewPager}
-          initialPage={0}
-          scrollEnabled={this.state.enableScroll}
-          // Receives a native callback event e that is used to set slidePosition state
-          onPageSelected={e =>
-            this.setState({ slidePosition: e.nativeEvent.position })}
-        >
+        <ViewPagerAndroid style={styles.viewPager} initialPage={0}>
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>
-              Let's train a machine learning algorithm with your EEG
+              What is a Brain-Computer Interface?
             </Text>
             <Text style={styles.body}>
-              First, what do you want this BCI to do?
+              A BCI is a communication channel that allows the brain to interact
+              with an external device such as a computer
             </Text>
-            <View style={styles.decisionContainer}>
-              <SandboxButton
-                onPress={this.setState({ action: this.config.VIBRATE })}
-                active={this.state.action == this.config.bciAction.VIBRATE}
-              >
-                Vibrate
-              </SandboxButton>
-              <SandboxButton
-                onPress={this.setState({ action: this.config.bciAction.LIGHT })}
-                active={this.state.action == this.config.bciAction.LIGHT}
-              >
-                Light
-              </SandboxButton>
-            </View>
-            <View style={{ marginBottom: 20 }}>
-              {this.handleScroll()}
-            </View>
           </View>
 
           <View style={styles.pageStyle}>
-
+            <Text style={styles.header}>
+              How can we use EEG to make a BCI?
+            </Text>
+            <Text style={styles.body}>
+              We can teach a simple program to execute a command when your brain waves match a pattern. This program is called a {" "}
+              <PopUpLink onPress={() => this.setState({ popUpVisible: true })}>
+                machine learning algorithm
+              </PopUpLink>
+            </Text>
+            <LinkButton path="/bciTwo"> NEXT </LinkButton>
           </View>
 
         </ViewPagerAndroid>
@@ -84,16 +65,22 @@ class BCITwo extends Component {
         <PopUp
           onClose={() => this.setState({ popUpVisible: false })}
           visible={this.state.popUpVisible}
-          image={require("../assets/hansberger.jpg")}
-          title="Pop up title"
+          title="Machine Learning"
         >
-          Some more advanced lesson text that goes more into depth.
+          A machine learning algorithm is a computer program that learns by
+          looking at examples. For instance, machine learning algorithms can
+          learn to recognize objects in a picture by looking at thousands of
+          pictures of different objects. In an EEG BCI, this type of algorithm
+          looks at many instances of someone’s brain activity and finds an
+          optimal way to recognize what the user is doing.
         </PopUp>
 
       </View>
     );
   }
 }
+
+export default connect(mapStateToProps)(BCIOne);
 
 const styles = MediaQueryStyleSheet.create(
   // Base styles
@@ -125,10 +112,10 @@ const styles = MediaQueryStyleSheet.create(
       alignItems: "stretch"
     },
 
-    decisionContainer: {
+    image: {
       flex: 1,
-      flexDirection: "row",
-      justifyContent: "center"
+      width: null,
+      height: null
     },
 
     header: {
@@ -174,4 +161,3 @@ const styles = MediaQueryStyleSheet.create(
     }
   }
 );
-export default connect(SceneTemplate);

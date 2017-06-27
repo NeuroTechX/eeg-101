@@ -10,6 +10,7 @@ import {
 import Animation from "lottie-react-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
+import config from "../redux/config.js";
 import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";

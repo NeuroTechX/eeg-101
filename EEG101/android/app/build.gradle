@@ -139,6 +139,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-torch')
     compile project(':lottie-react-native')
     compile project(':react-native-svg')
 	compile project(':react-native-i18n')

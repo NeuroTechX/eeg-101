@@ -1,4 +1,4 @@
-export default {  
+export default {
 	//global
 	nextLink:  ' NEXT ',
 	museDisconnectedTitle:  'Muse Disconnected',
@@ -205,6 +205,10 @@ export default {
 	statusNoMusesDescription:  'If you don\'t own a Muse, don\'t worry! We are working on an offline mode that should be avaible in early 2017!',
 	searchAgain:  ' SEARCH AGAIN ',
 	statusConnecting:  'Connecting...',
-	statusDisconnected:  'Searching for Muses...'
+	statusDisconnected:  'Searching for Muses',
+	//bci
+	//step1Title:  'Step 1',
+	//step2Title:  'Step 2',
+	//step3Title:  'Step 3',
+	step4Title:  'Step 4',
 };
-

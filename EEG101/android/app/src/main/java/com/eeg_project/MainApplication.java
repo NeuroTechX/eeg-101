@@ -6,6 +6,7 @@ import android.util.Log;
 import com.choosemuse.libmuse.Muse;
 import com.facebook.react.BuildConfig;
 import com.facebook.react.ReactApplication;
+import com.cubicphuse.RCTTorch.RCTTorchPackage;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -34,6 +35,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RCTTorchPackage(),
           new LottiePackage(),
           new SvgPackage(),
           new EEGPackage(),

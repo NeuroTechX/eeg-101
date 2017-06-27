@@ -4,13 +4,15 @@
 import config from './config';
 import {
   SET_CONNECTION_STATUS,
-  SET_GRAPHVIEW_DIMENSIONS
+  SET_GRAPHVIEW_DIMENSIONS,
+  SET_BCI_ACTION
 } from './constants';
 
 const initialState = {
   connectionStatus: config.connectionStatus.DISCONNECTED,
   availableMuses: false,
-  graphViewDimensions: {x: 0, y: 0, width: 300, height: 250}
+  graphViewDimensions: {x: 0, y: 0, width: 300, height: 250},
+  bciAction: "",
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -27,6 +29,13 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         graphViewDimensions: action.payload
+      };
+
+    case SET_BCI_ACTION:
+
+      return {
+        ...state,
+        bciAction: action.payload
       };
 
     // ...other actions
