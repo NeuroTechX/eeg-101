@@ -66,9 +66,9 @@ class SlideNine extends Component {
           <View style={styles.pageStyle}>
             <Text style={styles.header}>{I18n.t('harnessingBrainWaves')}</Text>
             <Text style={styles.body}>
-			  {I18n.t('noticePowerChanges')}<PopUpLink onPress={() => this.setState({popUp2Visible: true})}>{I18n.t('BCILink')}</PopUpLink>.
+			  {I18n.t('noticePowerChanges')}{I18n.t('BCILink')}.
 			</Text>
-            <LinkButton path='/sandbox'>{I18n.t('nextLink')}</LinkButton>
+            <LinkButton path='/bciOne'>{I18n.t('nextLink')}</LinkButton>
           </View>
 
         </ViewPagerAndroid>
@@ -78,7 +78,7 @@ class SlideNine extends Component {
           <ListItemBlock title = {I18n.t('thetaTitle')}>{I18n.t('thetaDescription')}</ListItemBlock>
           <ListItemBlock title = {I18n.t('alphaTitle')}>{I18n.t('alphaDescription')}</ListItemBlock>
           <ListItemBlock title = {I18n.t('betaTitle')}>{I18n.t('betaDescription')}</ListItemBlock>
-          <ListItemBlock title = {I18n.t('gammeTitle')}>{I18n.t('gammaDescription')}</ListItemBlock>
+          <ListItemBlock title = {I18n.t('gammaTitle')}>{I18n.t('gammaDescription')}</ListItemBlock>
         </PopUpList>
 
         <PopUp onClose={() => this.setState({popUp2Visible: false})} visible={this.state.popUp2Visible}

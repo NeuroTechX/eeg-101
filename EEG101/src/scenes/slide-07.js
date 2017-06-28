@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
 import Animation from "lottie-react-native";
 import { connect } from "react-redux";
+import config from "../redux/config.js";
 import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
@@ -66,7 +67,7 @@ class SlideSeven extends Component {
           <View style={styles.pageStyle}>
             <Text style={styles.header}>{I18n.t('howEEGBrokenDown')}</Text>
             <Text style={styles.body}>
-			  {I18n.t('complexSignalsBrokenDown')}<PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>{I18n.t('fourierTransformLink')}</PopUpLink>.
+			  {I18n.t('complexSignalsBrokenDown')}<PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>{I18n.t('fourierTransformLink')}</PopUpLink>
 			</Text>
             <LinkButton path="/slideEight">{I18n.t('nextLink')}</LinkButton>
           </View>

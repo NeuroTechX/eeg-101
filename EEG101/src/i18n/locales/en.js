@@ -17,6 +17,7 @@ export default {
 	trainButton:  'Train',
 	runButton:  'Run',
 	resetButton:  'Reset',
+
 	//classifier-run.js:  '',
 	tryingToUnderstand:  'Trying to understand your brain...',
 	classifierReturnsDataset:  'As this classifier runs, it will return the sample data set your real-time brain activity most closely resembles.',
@@ -41,9 +42,9 @@ export default {
 	//slide-01.js
 	introductionSlideTitle:  'INTRODUCTION',
 	brainElectricity:  'Your brain produces electricity. ',
-	EEGLink:  'The EEG',
+	EEGLink:  'EEG',
 	deviceCanDetect:  ' device that you are wearing, we can detect the electrical activity of your brain.',
-	usingThe:  'Using the',
+	usingThe:  'Using the ',
 	tryBlinkingEyes:  'Try blinking your eyes...',
 	doesSignalChange:  'Does the signal change?',
 	eyeMovementCreates:  'Eye movements create ',
@@ -101,9 +102,9 @@ export default {
 	electrodesTitle:  'Electrodes',
 	electrodesDescription:  'An electrode is a conductor through which electricity flows. The device you are wearing (Muse) uses dry electrodes that don\'t require conductive gel and can be placed directly on the skin.',
 	electrodeNamingTitle:  'Electrode naming conventions',
-	electrodeNamingDescription:  'EEG electrodes are typically identified by a combination of a letter and a number. The letter indicates the part of the head where the electrode is located (F for frontal, C for central, etc.). The number indicates distance from the midline of the head with odd numbers on the right and even numbers on the left.',
+	electrodeNamingDescription:  'EEG electrodes are typically identified by a combination of a letter and a number. The letter indicates the part of the head where the electrode is located (F for frontal, C for central, etc.). The number indicates distance from the midline of the head with even numbers on the right hemisphere and odd numbers on the left.',
 	referencingTitle:  'Referencing',
-	referencingDescription:  'Each electrode\'s signal reflects the difference in electrical potential between that electrode and the reference. Thus, the placement of the reference electrode is very important. With Muse, the reference is located on the front of the forehead.',
+	referencingDescription:  'Each electrode\'s signal reflects the difference in electrical potential between that electrode and a seperate reference electrode. Thus, data gathered from EEG devices with different reference electrode placement can vary considerably. With Muse, the reference is located on the front of the forehead.',
 
 	//slide-04.js
 	filteringSlideTitle:  'FILTERING',
@@ -152,7 +153,7 @@ export default {
 	whenWeApplyFourier:  'When we apply the Fourier Transform to the EEG, we obtain a measure of signal strength at given frequencies, represented in units of ',
 	powerLink:  'power',
 	powerTitle:  'Power',
-	powerDescription:  '  In this graph, the X axis represents frequency and the Y axis represents power (microvolts squared, in decibels (dB)). Power represents how strong a certain frequency is in a complex signal. When power is high for only a few frequencies, it means that the signal is primarily composed of those few elements. If all frequencies have similar power, the signal will look random and be difficult to interpret.',
+	powerDescription:  'In this graph, the X axis represents frequency and the Y axis represents power (microvolts squared, in decibels (dB)). Power represents how strong a certain frequency is in a complex signal. When power is high for only a few frequencies, it means that the signal is primarily composed of those few elements. If all frequencies have similar power, the signal will look random and be difficult to interpret.',
 
 	//slide-09.js
 	brainWavesSlideTitle:  'BRAIN WAVES',
@@ -163,7 +164,7 @@ export default {
 	brainWavesLink:  'brain waves',
 	harnessingBrainWaves:  'Harnessing Brain Waves',
 	noticePowerChanges:  'Notice how the power in a given frequency band changes over time. It is possible to harness these changes to create a simple ',
-	BCILink:  'Brain-Computer Interface (BCI)',
+	BCILink:  'brain-computer interface (BCI)',
 	deltaTitle:  'Delta δ (0-4 Hz)',
 	deltaDescription:  'Delta waves are the slowest (i.e. lowest frequency) brain waves. Delta waves dominate during deep sleep and tend to be high in amplitude because they represent the synchronized firing of large populations of neurons.',
 	thetaTitle:  'Theta θ (4-8 Hz)',
@@ -173,9 +174,9 @@ export default {
 	betaTitle:  'Beta β (13-30 Hz)',
 	betaDescription:  'Beta waves are prevalent when the brain is awake and active. They have been associated with alertness, concentration, and the active firing of neurons hard at work.',
 	gammaTitle:  'Gamma γ (30-100 Hz)',
-	gammeDescription:  'Gamma waves are the fastest form of neural oscillation. They are difficult to detect and analyze with ordinary EEG but are a topic of much ongoing research. They have been tentatively associated with attention, working memory, and even consciousness.',
-	BCITitle:  'Brain Computer Interfaces',
-	BCIDescription:  'A Brain-Computer Interface is a direct communication channel between the brain and an external device. For example, one can feed information about brain state based on EEG frequency bands to a computer; that computer then analyzes the EEG data and decides what the user intent was. The computer can use that command to control an external device such as a wheelchair or a display.',
+	gammaDescription:  'Gamma waves are the fastest form of neural oscillation. They are difficult to detect and analyze with ordinary EEG but are a topic of much ongoing research. They have been tentatively associated with attention, working memory, and even consciousness.',
+	BCITitle:  'Brain-computer interfaces',
+	BCIDescription:  'A brain-computer interface is a direct communication channel between the brain and an external device. For example, one can feed information about brain state based on EEG frequency bands to a computer; that computer then analyzes the EEG data and decides what the user intent was. The computer can use that command to control an external device such as a wheelchair or a display.',
 
 	//slide-end.js
 	thanksForCompleting:  'Thanks for completing \n EEG 101',

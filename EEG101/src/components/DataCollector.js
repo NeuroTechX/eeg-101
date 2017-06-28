@@ -48,37 +48,39 @@ export default class DataCollector extends Component {
     if (this.state.isCollecting) {
       return (
         <View style={styles.dataClassContainer}>
-          <ActivityIndicator color={"#ffffff"} size={"large"} />
+          <ActivityIndicator color={"#94DAFA"} size={"large"} />
         </View>
       );
     } else if (this.state.samples >= 1 && this.state.samples < 10) {
       return (
         <View style={styles.dataClassContainer}>
-          <Button onPress={() => this.collectData()}>
-            Collect
-          </Button>
           <Text style={styles.body}>
             Oops! You only collected {this.state.samples} epochs of data. There
             may have been too much noise.
           </Text>
+          <Button onPress={() => this.collectData()}>
+            COLLECT MORE
+          </Button>
+
         </View>
       );
     } else if (this.state.samples >= 10) {
       return (
         <View style={styles.dataClassContainer}>
-          <Button onPress={() => this.collectData()}>
-            Collect
-          </Button>
           <Text style={styles.body}>
-            Awesome! You collected {this.state.samples} epochs of clean data
+            Awesome! You've collected {this.state.samples} epochs of clean data
           </Text>
+          <Button onPress={() => this.collectData()}>
+            COLLECT MORE
+          </Button>
+
         </View>
       );
     }
     return (
       <View style={styles.dataClassContainer}>
         <Button onPress={() => this.collectData()}>
-          Collect
+          COLLECT
         </Button>
       </View>
     );
@@ -87,14 +89,16 @@ export default class DataCollector extends Component {
 
 const styles = StyleSheet.create({
   // Base styles
-  dataContainer: {
-    flex: 1,
-    backgroundColor: "#6CCBEF",
+  dataClassContainer: {
+    height: 150,
+    alignItems: 'stretch',
+    justifyContent: 'space-around',
   },
 
   body: {
+    textAlign: 'center',
     fontFamily: "Roboto-Light",
-    fontSize: 15,
-    color: "#ffffff",
-  },
+    fontSize: 18,
+    color: "#484848",
+    },
 });

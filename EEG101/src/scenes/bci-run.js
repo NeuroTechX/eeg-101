@@ -34,7 +34,7 @@ class ClassifierRun extends Component {
     // Initialize States
     this.state = {
       popUp1Visible: false,
-      class: 2
+      class: 'OFF',
     };
   }
 
@@ -44,16 +44,17 @@ class ClassifierRun extends Component {
       this.predictSubscription = lightListener.addListener(
         "PREDICT_RESULT",
         message => {
-          this.setState({ class: message });
           if (message == 1) {
             Torch.switchState(true);
+            this.setState({ class: 'ON' });
           } else {
             Torch.switchState(false);
+            this.setState({ class: 'OFF' });
           }
         }
       );
       this.noiseSubscription = lightListener.addListener("NOISE", message => {
-        this.setState({ class: "noise " + Object.keys(message) })
+        this.setState({ class: "noise "})
         Torch.switchState(false);
       }
       );
@@ -62,11 +63,12 @@ class ClassifierRun extends Component {
       this.predictSubscription = vibrationListener.addListener(
         "PREDICT_RESULT",
         message => {
-          this.setState({ class: message });
           if (message == 1) {
             Vibration.vibrate([0,1000], true)
+            this.setState({ class: 'ON' });
           } else {
             Vibration.cancel()
+            this.setState({ class: 'OFF' });
           }
         }
       );
@@ -103,7 +105,7 @@ class ClassifierRun extends Component {
             <Text style={styles.body}>
               {I18n.t("classifierReturnsDataset")}
             </Text>
-            <LinkButton path="/bciTwo" replace={true}>{I18n.t("retrainLink")}</LinkButton>
+            <LinkButton path="/end">END EEG 101</LinkButton>
           </View>
 
         </ViewPagerAndroid>

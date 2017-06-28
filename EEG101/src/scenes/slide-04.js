@@ -59,7 +59,7 @@ class SlideFour extends Component {
 				{I18n.t('meaningfulData')}
             </Text>
             <Text style={styles.body}>
-				{I18n.t('firstEEGMust')}<PopUpLink onPress={() => this.setState({ popUpVisible: true })}>{I18n.t('filteredLink')}</PopUpLink>{I18n.t('toReduceSignals')}
+				{I18n.t('firstEEGMust')}<PopUpLink onPress={() => this.setState({ popUpVisible: true })}>{I18n.t('filteredLink')}</PopUpLink> {I18n.t('toReduceSignals')}
             </Text>
             <LinkButton path="/slideFive">{I18n.t('nextLink')}</LinkButton>
           </View>

@@ -21,16 +21,10 @@ class ConnectorTwo extends Component {
   }
 
   renderButton() {
-    return <LinkButton path="/connectorThree"> GET STARTED </LinkButton>
-  }
-
-  /*
-  renderButton() {
     return this.props.connectionStatus === config.connectionStatus.CONNECTED
       ? <LinkButton path="/connectorThree">{I18n.t('getStartedLink')}</LinkButton>
       : <WhiteButton onPress={() => null} disabled={true}>{I18n.t('getStartedLink')}</WhiteButton>;
   }
-  */
 
   render() {
     return (

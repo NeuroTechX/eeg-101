@@ -15,7 +15,7 @@ import Button from './Button';
 import I18n from '../i18n/i18n';
 
 export default class PopUpList extends Component{
-  
+
   render() {
     return(
       <Modal
@@ -25,9 +25,10 @@ export default class PopUpList extends Component{
           visible={this.props.visible}>
         <View style={styles.modalBackground}>
           <ScrollView contentContainerStyle={styles.modalInnerContainer}>
+            <Text style={styles.modalTitle}>{this.props.title}</Text>
             {this.props.children}
             <Button onPress={this.props.onClose}>{I18n.t('closeButton')}</Button>
-          </ScrollView>   
+          </ScrollView>
         </View>
       </Modal>
     );
@@ -43,6 +44,13 @@ const styles = MediaQueryStyleSheet.create(
       alignItems: 'stretch',
       padding: 20,
       backgroundColor: 'rgba(12, 89, 128, 0.8)',
+    },
+
+    modalTitle: {
+      fontFamily: 'Roboto-Bold',
+      color: '#484848',
+      fontSize: 20,
+      margin: 5,
     },
 
     modalInnerContainer: {

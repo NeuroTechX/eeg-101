@@ -6,12 +6,11 @@ import config from "../redux/config";
 import { bindActionCreators } from "redux";
 import { setBCIAction } from "../redux/actions";
 import Classifier from "../interface/Classifier.js";
-import I18n from '../i18n/i18n';
+import I18n from "../i18n/i18n";
 import DataCollector from "../components/DataCollector.js";
 import ClassifierInfoDisplayer from "../components/ClassifierInfoDisplayer.js";
 import LinkButton from "../components/LinkButton";
-import SandboxButton from "../components/SandboxButton.js";
-import Button from "../components/Button.js";
+import DecisionButton from "../components/DecisionButton.js";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
 
@@ -49,19 +48,18 @@ class BCITwo extends Component {
     if (this.state.enableScroll === true) {
       return (
         <Image
-          source={require("../assets/swipeiconwhite.png")}
+          source={require("../assets/swipeicon.png")}
           resizeMode="contain"
           style={styles.swipeImage}
         />
       );
-    } else
-      return;
+    } else return;
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.currentTitle}>BUILDING A BRAIN-COMPUTER INTERFACE</Text>
+        <Text style={styles.currentTitle}>BUILDING A BCI</Text>
         <ViewPagerAndroid
           style={styles.viewPager}
           initialPage={0}
@@ -69,7 +67,7 @@ class BCITwo extends Component {
           // Receives a native callback event e that is used to set slidePosition state
           onPageSelected={e => {
             this.setState({ slidePosition: e.nativeEvent.position });
-            if (e.nativeEvent.position > this.state.maxSlidePosition) {
+            if (e.nativeEvent.position > this.state.maxSlidePosition && this.state.maxSlidePosition < 2) {
               this.setState({
                 maxSlidePosition: e.nativeEvent.position,
                 enableScroll: false
@@ -79,16 +77,19 @@ class BCITwo extends Component {
         >
           <View style={styles.pageStyle}>
             <View style={styles.textWrapper}>
-              <Text style={styles.title}>{I18n.t('step1Title')}</Text>
+              <Text style={styles.title}>{I18n.t("step1Title")}</Text>
             </View>
             <View style={styles.contentContainer}>
               <View style={styles.textWrapper}>
                 <Text style={styles.body}>
+                  This BCI will allow you to execute a command on your phone by
+                  switching between two 'brain states'
+                  {"\n"}{"\n"}
                   First, what do you want this BCI to do?
                 </Text>
               </View>
               <View style={styles.decisionContainer}>
-                <SandboxButton
+                <DecisionButton
                   onPress={() => {
                     this.setState({
                       enableScroll: true
@@ -98,8 +99,8 @@ class BCITwo extends Component {
                   active={this.props.bciAction == config.bciAction.VIBRATE}
                 >
                   Vibrate
-                </SandboxButton>
-                <SandboxButton
+                </DecisionButton>
+                <DecisionButton
                   onPress={() => {
                     this.setState({
                       enableScroll: true
@@ -109,7 +110,7 @@ class BCITwo extends Component {
                   active={this.props.bciAction == config.bciAction.LIGHT}
                 >
                   Light
-                </SandboxButton>
+                </DecisionButton>
               </View>
             </View>
             <View style={{ flex: 1 }}>
@@ -119,42 +120,18 @@ class BCITwo extends Component {
 
           <View style={styles.pageStyle}>
             <View style={styles.textWrapper}>
-              <Text style={styles.title}>{I18n.t('step2Title')}</Text>
+              <Text style={styles.title}>{I18n.t("step2Title")}</Text>
             </View>
             <View style={styles.contentContainer}>
               <View style={styles.textWrapper}>
                 <Text style={styles.body}>
-                  Let’s teach the algorithm the brain state you’ll use to turn
-                  the {this.props.bciAction} ON. You can try whatever you want,
-                  but
-                  we recommend
-                  closing your eyes and relaxing. When you are ready, click to
-                  start recording 20 seconds of data.
-                </Text>
-              </View>
-              <DataCollector
-                class={1}
-                onComplete={() => this.setState({ enableScroll: true })}
-              />
-            </View>
-            <View style={{ flex: 1 }}>
-              {this.handleScroll()}
-            </View>
-          </View>
-
-          <View style={styles.pageStyle}>
-            <View style={styles.textWrapper}>
-              <Text style={styles.title}>{I18n.t('step3Title')}</Text>
-            </View>
-            <View style={styles.contentContainer}>
-              <View style={styles.textWrapper}>
-                <Text style={styles.body}>
-                  Next, let’s teach the algorithm which brain state you’ll use
-                  to
-                  turn the {this.props.bciAction} OFF. You can try whatever you
+                  Let's teach the algorithm which brain state you’ll use to keep
+                  the {this.props.bciAction} OFF.
+                  {"\n"}{"\n"}
+                  You can try whatever you
                   want, but we
                   recommend opening your eyes and concentrating. When you are
-                  ready, click to record another 20s of data.
+                  ready, click to record 20 seconds of data.
                 </Text>
               </View>
               <DataCollector
@@ -169,18 +146,47 @@ class BCITwo extends Component {
 
           <View style={styles.pageStyle}>
             <View style={styles.textWrapper}>
-              <Text style={styles.title}>{I18n.t('step4Title')}</Text>
+              <Text style={styles.title}>{I18n.t("step2Title")}</Text>
             </View>
             <View style={styles.contentContainer}>
               <View style={styles.textWrapper}>
                 <Text style={styles.body}>
-                  A{" "}
+                  Now, let’s teach the algorithm the brain state you’ll use to
+                  turn
+                  the {this.props.bciAction} ON.
+                  {"\n"}{"\n"}
+                  Once again, you can try whatever you want. We recommend
+                  closing your eyes and relaxing. Click the button below to
+                  start recording another 20 seconds of data.
+                </Text>
+              </View>
+              <DataCollector
+                class={1}
+                onComplete={() => this.setState({ enableScroll: true })}
+              />
+            </View>
+            <View style={{ flex: 1 }}>
+              {this.handleScroll()}
+            </View>
+          </View>
+
+          <View style={styles.pageStyle}>
+            <View style={styles.textWrapper}>
+              <Text style={styles.title}>{I18n.t("step4Title")}</Text>
+            </View>
+            <View style={styles.contentContainer}>
+              <View style={styles.textWrapper}>
+                <Text style={styles.body}>
+                  The data you've collected is simply the powers of the
+                  different brain waves (δ, θ, α, β) in your EEG across many epochs
+                  {"\n"}{"\n"}
+                  Next, train the{" "}
                   <PopUpLink
                     onPress={() => this.setState({ popUpVisible: true })}
                   >
                     classifier
                   </PopUpLink>{" "}
-                  will now learn to distinguish between your brain states
+                  to distinguish between your brain states
                 </Text>
               </View>
               <ClassifierInfoDisplayer
@@ -194,13 +200,18 @@ class BCITwo extends Component {
           </View>
 
           <View style={styles.pageStyle}>
+            <View style={styles.textWrapper}>
+              <Text style={styles.title}>Run it!</Text>
+            </View>
             <View style={styles.contentContainer}>
               <View style={styles.textWrapper}>
                 <Text style={styles.body}>
-                  Now let's run this BCI!
+                  Your classifier's score represents how well it is able to distinguish between the two brain states based on the data you collected. Closer to 1 is better
+                  {"\n"}{"\n"}
+                  If you are happy with your classifier's score and want to run it in real-time, click below. Otherwise, you can swipe back and collect more data
                 </Text>
+                </View>
                 <LinkButton path="/bciRun"> RUN IT </LinkButton>
-              </View>
             </View>
           </View>
 
@@ -209,6 +220,7 @@ class BCITwo extends Component {
         <PopUp
           onClose={() => this.setState({ popUpVisible: false })}
           image={require("../assets/gnb.png")}
+          fullSizeImage={true}
           visible={this.state.popUpVisible}
           title="Classifier"
         >
@@ -216,7 +228,7 @@ class BCITwo extends Component {
           distinguish between two or more groups by looking at relevant features
           of these groups. The classifier that we are training here uses the
           Gaussian Naive Bayes technique to estimate the probability that a data
-          point belongs to two distinct normal distributions
+          point belongs to two distinct normal distributions.
 
           Image from Raizada and Lee, 2013
         </PopUp>
@@ -234,30 +246,27 @@ const styles = MediaQueryStyleSheet.create(
       marginTop: 10,
       fontSize: 13,
       fontFamily: "Roboto-Medium",
-      color: "#ffffff"
+      color: "#484848"
     },
 
     body: {
       fontFamily: "Roboto-Light",
-      fontSize: 15,
-      marginLeft: 40,
-      marginRight: 40,
-      color: "#ffffff",
+      fontSize: 18,
+      color: "#484848",
       textAlign: "center"
     },
 
     container: {
       flex: 1,
       justifyContent: "space-around",
-      alignItems: "stretch",
-      backgroundColor: "#6CCBEF"
+      alignItems: "stretch"
     },
 
     title: {
       textAlign: "center",
       margin: 15,
       lineHeight: 50,
-      color: "#ffffff",
+      color: "#484848",
       fontFamily: "Roboto-Black",
       fontSize: 48
     },
@@ -270,7 +279,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     contentContainer: {
-      flex: 7,
+      flex: 8,
       justifyContent: "center",
       alignItems: "stretch"
     },
@@ -286,11 +295,11 @@ const styles = MediaQueryStyleSheet.create(
       fontSize: 18,
       margin: 20,
       color: "#ffffff",
-      alignSelf: "flex-start",
+      alignSelf: "flex-start"
     },
 
     textWrapper: {
-      flex: 1,
+      flex: 2,
       justifyContent: "center"
     },
 

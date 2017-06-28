@@ -44,7 +44,7 @@ export default class ClassifierInfoDisplayer extends Component {
               });
             }}
           >
-            Fit Classifier
+            TRAIN CLASSIFIER
           </Button>
         </View>
       );
@@ -57,9 +57,7 @@ export default class ClassifierInfoDisplayer extends Component {
     } else {
       return (
         <View style={styles.classifierContainer}>
-          <Text style={styles.body}>Score: {this.state.score}</Text>
-          <Text style={styles.body}>Class Priors: {this.state.priors}</Text>
-          <Text style={styles.body}>Feature Ranking: {this.state.featureRanking}</Text>
+          <Text style={styles.body}>Score: <Text style={{fontWeight: 'bold'}}>{this.state.score}</Text></Text>
           <Button
             onPress={() => {
               this.setState({ isFitting: true });
@@ -70,7 +68,7 @@ export default class ClassifierInfoDisplayer extends Component {
               });
             }}
           >
-            Re-Fit
+            RE-TRAIN
           </Button>
         </View>
       );
@@ -80,8 +78,15 @@ export default class ClassifierInfoDisplayer extends Component {
 
   const styles = StyleSheet.create({
     classifierContainer: {
-      flex: 3,
-      justifyContent: "center",
-      alignItems: "center"
+      height: 150,
+      alignItems: 'stretch',
+      justifyContent: 'space-around',
     },
+
+    body: {
+      textAlign: 'center',
+      fontFamily: "Roboto-Light",
+      fontSize: 18,
+      color: "#484848",
+      },
   })

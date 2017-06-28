@@ -76,7 +76,7 @@ class End extends Component {
           <View style={styles.page}>
             <View style={[styles.listBox, {marginTop: 75}]}>
               <Text style={styles.header}>{I18n.t('theTeam')}</Text>
-              <Text style={styles.body}>{I18n.t('teamMember1')}</Text>
+              <Text style={styles.body}>Hubert Banville - Visionary</Text>
               <Text style={styles.body}>Dano Morrison - Developer</Text>
               <Text style={styles.body}>Geordan King - Producer</Text>
               <Text style={styles.body}>Michael Vu - Author</Text>

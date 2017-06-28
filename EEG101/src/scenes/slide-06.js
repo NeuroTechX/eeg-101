@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
+import config from "../redux/config.js";
 import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
@@ -59,7 +60,7 @@ class SlideSix extends Component {
         >
 		  {I18n.t('artifactDetectionDescription')}
         </PopUp>
-		
+
 		<PopUp
           onClose={()=>this.props.history.push('/connectorOne')}
           visible={

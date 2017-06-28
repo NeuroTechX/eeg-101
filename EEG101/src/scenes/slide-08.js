@@ -1,27 +1,21 @@
-import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ViewPagerAndroid,
-  Image
-} from 'react-native';
-import { connect } from 'react-redux';
-import { MediaQueryStyleSheet }  from 'react-native-responsive';
-import config from '../redux/config';
-import LinkButton from '../components/LinkButton';
-import PopUp from '../components/PopUp';
-import PopUpLink from '../components/PopUpLink';
-import I18n from '../i18n/i18n';
+import React, { Component } from "react";
+import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
+import { connect } from "react-redux";
+import { MediaQueryStyleSheet } from "react-native-responsive";
+import config from "../redux/config";
+import LinkButton from "../components/LinkButton";
+import PopUp from "../components/PopUp";
+import PopUpLink from "../components/PopUpLink";
+import I18n from "../i18n/i18n";
 
 //Interfaces. For elements that bridge to native
-import PSDGraphView from '../interface/PSDGraphView';
+import PSDGraphView from "../interface/PSDGraphView";
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
-function  mapStateToProps(state) {
+function mapStateToProps(state) {
   return {
     dimensions: state.graphViewDimensions,
-    connectionStatus: state.connectionStatus,
+    connectionStatus: state.connectionStatus
   };
 }
 
@@ -31,8 +25,8 @@ class SlideEight extends Component {
 
     // Initialize States
     this.state = {
-      popUp1Visible: false,
-    }
+      popUp1Visible: false
+    };
   }
 
   render() {
@@ -41,38 +35,42 @@ class SlideEight extends Component {
 
         <PSDGraphView dimensions={this.props.dimensions} />
 
-        <Text style={styles.currentTitle}>{I18n.t('PSDSlideTitle')}</Text>
+        <Text style={styles.currentTitle}>{I18n.t("PSDSlideTitle")}</Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
-          initialPage={0}>
-
+          initialPage={0}
+        >
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>{I18n.t('powerSpectralDesnity')}</Text>
+            <Text style={styles.header}>{I18n.t("powerSpectralDensity")}</Text>
             <Text style={styles.body}>
-			  {I18n.t('whenWeApplyFourier')}<PopUpLink onPress={() => this.setState({popUp1Visible: true})}>{I18n.t('powerLink')}</PopUpLink>.
-			</Text>
-            <LinkButton path='/slideNine'>{I18n.t('nextLink')}</LinkButton>
+              {I18n.t("whenWeApplyFourier")}
+              <PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>
+                {I18n.t("powerLink")}
+              </PopUpLink>.
+            </Text>
+            <LinkButton path="/slideNine">{I18n.t("nextLink")}</LinkButton>
           </View>
 
         </ViewPagerAndroid>
 
-        <PopUp onClose={() => this.setState({popUp1Visible: false})} 
-		  visible={this.state.popUp1Visible}
-          title={I18n.t('powerTitle')}
-		>
-	      {I18n.t('powerDescription')}
+        <PopUp
+          onClose={() => this.setState({ popUp1Visible: false })}
+          visible={this.state.popUp1Visible}
+          title={I18n.t("powerTitle")}
+        >
+          {I18n.t("powerDescription")}
         </PopUp>
 
         <PopUp
-          onClose={()=>this.props.history.push('/connectorOne')}
+          onClose={() => this.props.history.push("/connectorOne")}
           visible={
             this.props.connectionStatus === config.connectionStatus.DISCONNECTED
           }
-          title={I18n.t('museDisconnectedTitle')}
+          title={I18n.t("museDisconnectedTitle")}
         >
-			{I18n.t('museDisconnectedDescription')}
+          {I18n.t("museDisconnectedDescription")}
         </PopUp>
       </View>
     );
@@ -86,70 +84,68 @@ const styles = MediaQueryStyleSheet.create(
       marginLeft: 20,
       marginTop: 10,
       fontSize: 13,
-      fontFamily: 'Roboto-Medium',
-      color: '#6CCBEF',
+      fontFamily: "Roboto-Medium",
+      color: "#6CCBEF"
     },
 
     body: {
-      fontFamily: 'Roboto-Light',
-      color: '#484848',
-      fontSize: 17,
+      fontFamily: "Roboto-Light",
+      color: "#484848",
+      fontSize: 17
     },
 
     container: {
-
       flex: 1,
-      justifyContent: 'space-around',
-      alignItems: 'stretch',
+      justifyContent: "space-around",
+      alignItems: "stretch"
     },
 
     graphContainer: {
-      backgroundColor: 'white',
+      backgroundColor: "white",
       flex: 4,
-      justifyContent: 'center',
-      alignItems: 'stretch',
+      justifyContent: "center",
+      alignItems: "stretch"
     },
 
     header: {
-      fontFamily: 'Roboto-Bold',
-      color: '#484848',
-      fontSize: 20,
+      fontFamily: "Roboto-Bold",
+      color: "#484848",
+      fontSize: 20
     },
 
     viewPager: {
-      flex: 4,
+      flex: 4
     },
 
     pageStyle: {
       padding: 20,
-      alignItems: 'stretch',
-      justifyContent: 'space-around',
+      alignItems: "stretch",
+      justifyContent: "space-around"
     },
 
     image: {
       flex: 1,
       width: null,
-      height: null,
-    },
+      height: null
+    }
   },
   // Responsive styles
   {
     "@media (min-device-height: 700)": {
-
       viewPager: {
-        flex: 3,
+        flex: 3
       },
 
       header: {
-        fontSize: 30,
+        fontSize: 30
       },
 
       currentTitle: {
-        fontSize: 20,
+        fontSize: 20
       },
 
       body: {
-        fontSize: 25,
+        fontSize: 25
       }
     }
   }

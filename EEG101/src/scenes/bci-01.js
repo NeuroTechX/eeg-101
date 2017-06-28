@@ -2,8 +2,11 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
+import I18n from "../i18n/i18n";
 import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
+import PopUpList from "../components/PopUpList.js";
+import ListItemBlock from "../components/ListItemBlock.js";
 import PopUpLink from "../components/PopUpLink";
 
 function mapStateToProps(state) {
@@ -18,7 +21,8 @@ class BCIOne extends Component {
 
     // Initialize States
     this.state = {
-      popUpVisible: false
+      popUp1Visible: false,
+      popUp2Visible: false
     };
   }
 
@@ -42,7 +46,10 @@ class BCIOne extends Component {
               What is a Brain-Computer Interface?
             </Text>
             <Text style={styles.body}>
-              A BCI is a communication channel that allows the brain to interact
+              A BCI is a communication channel that allows the brain to{" "}
+              <PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>
+                interact
+              </PopUpLink>{" "}
               with an external device such as a computer
             </Text>
           </View>
@@ -52,19 +59,45 @@ class BCIOne extends Component {
               How can we use EEG to make a BCI?
             </Text>
             <Text style={styles.body}>
-              We can teach a simple program to execute a command when your brain waves match a pattern. This program is called a {" "}
-              <PopUpLink onPress={() => this.setState({ popUpVisible: true })}>
-                machine learning algorithm
+              We can teach a computer to execute a command when it recognizes a certain pattern of brain activity. This process is called {" "}
+              <PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>
+                machine learning
               </PopUpLink>
             </Text>
-            <LinkButton path="/bciTwo"> NEXT </LinkButton>
+            <LinkButton path="/bciTwo"> LET'S BUILD A BCI </LinkButton>
           </View>
 
         </ViewPagerAndroid>
 
+        <PopUpList
+          title='Types of BCI interaction'
+          onClose={() => this.setState({ popUp1Visible: false })}
+          visible={this.state.popUp1Visible}
+        >
+          <ListItemBlock title='Active'>
+            Active BCI involves the user generating brain signals actively in
+            order to control a computer. For example, using imagined movement of
+            either the right or left hand to steer an avatar right or left. The
+            function of active BCIs are to replace conventional interfaces such
+            as keys on a keyboard.
+          </ListItemBlock>
+          <ListItemBlock title='Reactive'>
+            Reactive BCIs use the brain's natural response to stimuli in order
+            to gauge the user's intent. Although they don't require direct and
+            conscious control, reactive BCIs must be built around specific
+            stimuli that evolve known brain responses when perceived.
+          </ListItemBlock>
+          <ListItemBlock title='Passive'>
+            Passive BCIs monitor the user's mental states without any effort
+            their part. For example, passive BCIs might monitor attention,
+            relaxation, or emotional state and use that information to adjust
+            elements of a game.
+          </ListItemBlock>
+        </PopUpList>
+
         <PopUp
-          onClose={() => this.setState({ popUpVisible: false })}
-          visible={this.state.popUpVisible}
+          onClose={() => this.setState({ popUp2Visible: false })}
+          visible={this.state.popUp2Visible}
           title="Machine Learning"
         >
           A machine learning algorithm is a computer program that learns by

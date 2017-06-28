@@ -85,7 +85,6 @@ const styles = MediaQueryStyleSheet.create(
     activeImage: {
       alignSelf: 'center',
       height: 150,
-      width: 150,
       margin: 10,
 
     },

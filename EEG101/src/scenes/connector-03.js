@@ -73,7 +73,7 @@ class ConnectorThree extends Component {
                 fontSize: 15
               }}
             >
-              CLASSIFIER TEST
+              BCI
             </Text>
           </View>
         </Link>
