@@ -7,15 +7,18 @@ import {
   Image,
   NativeEventEmitter,
   NativeModules,
-  Vibration
+  Vibration,
+  TouchableOpacity
 } from "react-native";
 import { connect } from "react-redux";
 import config from "../redux/config";
 import { MediaQueryStyleSheet } from "react-native-responsive";
+import { Link } from "react-router-native";
 import Torch from "react-native-torch";
 import Classifier from "../interface/Classifier.js";
 import Button from "../components/Button.js";
 import LinkButton from "../components/LinkButton";
+import PlayPauseButton from "../components/PlayPauseButton.js";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
 import I18n from "../i18n/i18n";
@@ -34,7 +37,8 @@ class ClassifierRun extends Component {
     // Initialize States
     this.state = {
       popUp1Visible: false,
-      class: 'OFF',
+      class: "OFF",
+      isRunning: false
     };
   }
 
@@ -46,46 +50,47 @@ class ClassifierRun extends Component {
         message => {
           if (message == 1) {
             Torch.switchState(true);
-            this.setState({ class: 'ON' });
+            this.setState({ class: "ON" });
           } else {
             Torch.switchState(false);
-            this.setState({ class: 'OFF' });
+            this.setState({ class: "OFF" });
           }
         }
       );
       this.noiseSubscription = lightListener.addListener("NOISE", message => {
-        this.setState({ class: "noise "})
+        this.setState({ class: "noise " });
         Torch.switchState(false);
-      }
-      );
+      });
     } else {
-      const vibrationListener = new NativeEventEmitter(NativeModules.Classifier);
+      const vibrationListener = new NativeEventEmitter(
+        NativeModules.Classifier
+      );
       this.predictSubscription = vibrationListener.addListener(
         "PREDICT_RESULT",
         message => {
           if (message == 1) {
-            Vibration.vibrate([0,1000], true)
-            this.setState({ class: 'ON' });
+            Vibration.vibrate([0, 1000], true);
+            this.setState({ class: "ON" });
           } else {
-            Vibration.cancel()
-            this.setState({ class: 'OFF' });
+            Vibration.cancel();
+            this.setState({ class: "OFF" });
           }
         }
       );
-      this.noiseSubscription = vibrationListener.addListener("NOISE", message => {
-        this.setState({ class: "noise " + Object.keys(message) })
-        Vibration.cancel()
-      }
+      this.noiseSubscription = vibrationListener.addListener(
+        "NOISE",
+        message => {
+          this.setState({ class: "noise " + Object.keys(message) });
+          Vibration.cancel();
+        }
       );
     }
-    Classifier.runClassification();
   }
 
   componentWillUnmount() {
     this.predictSubscription.remove();
     this.noiseSubscription.remove();
     Classifier.stopCollecting();
-    Classifier.reset();
     Torch.switchState(false);
     Vibration.cancel();
   }
@@ -97,14 +102,43 @@ class ClassifierRun extends Component {
           <Text style={styles.classText}>{this.state.class}</Text>
         </View>
 
-        <Text style={styles.currentTitle}>{I18n.t("classifierTitle")}</Text>
+        <Text style={styles.currentTitle}>Trying to understand your brain...</Text>
 
         <ViewPagerAndroid style={styles.viewPager} initialPage={0}>
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>{I18n.t("tryingToUnderstand")}</Text>
-            <Text style={styles.body}>
-              {I18n.t("classifierReturnsDataset")}
-            </Text>
+
+            <PlayPauseButton
+              onPress={() => {
+                if (this.state.isRunning) {
+                  Classifier.stopCollecting();
+                } else {
+                  Classifier.runClassification();
+                }
+                this.setState({ isRunning: !this.state.isRunning });
+              }}
+              isRunning={this.state.isRunning}
+            />
+            <Link to={"/bciEdit"} component={TouchableOpacity}>
+              <View
+                style={{
+                  borderColor: "#484848",
+                  borderWidth: 1,
+                  alignSelf: "center",
+                  margin: 5,
+                  padding: 5
+                }}
+              >
+                <Text
+                  style={{
+                    color: "#484848",
+                    fontFamily: "Roboto-Bold",
+                    fontSize: 15
+                  }}
+                >
+                  EDIT BCI
+                </Text>
+              </View>
+            </Link>
             <LinkButton path="/end">END EEG 101</LinkButton>
           </View>
 

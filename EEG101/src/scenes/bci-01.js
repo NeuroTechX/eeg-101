@@ -59,7 +59,8 @@ class BCIOne extends Component {
               How can we use EEG to make a BCI?
             </Text>
             <Text style={styles.body}>
-              We can teach a computer to execute a command when it recognizes a certain pattern of brain activity. This process is called {" "}
+              We can teach a computer to execute a command when it recognizes a
+              certain pattern of brain activity. This process is called {" "}
               <PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>
                 machine learning
               </PopUpLink>
@@ -70,24 +71,26 @@ class BCIOne extends Component {
         </ViewPagerAndroid>
 
         <PopUpList
-          title='Types of BCI interaction'
+          title="Types of BCI interaction"
           onClose={() => this.setState({ popUp1Visible: false })}
           visible={this.state.popUp1Visible}
         >
-          <ListItemBlock title='Active'>
+          <ListItemBlock title="Active">
             Active BCI involves the user generating brain signals actively in
             order to control a computer. For example, using imagined movement of
             either the right or left hand to steer an avatar right or left. The
             function of active BCIs are to replace conventional interfaces such
             as keys on a keyboard.
           </ListItemBlock>
-          <ListItemBlock title='Reactive'>
+          <ListItemBlock title="Reactive">
             Reactive BCIs use the brain's natural response to stimuli in order
-            to gauge the user's intent. Although they don't require direct and
-            conscious control, reactive BCIs must be built around specific
+            to gauge the user's intent. For example, detecting visually evoked
+            responses to flashes of light on a keyboard to allow a user to spell
+            by focusing their eyes on specific words. Although they don't
+            require direct and conscious control, reactive BCIs must be built around specific
             stimuli that evolve known brain responses when perceived.
           </ListItemBlock>
-          <ListItemBlock title='Passive'>
+          <ListItemBlock title="Passive">
             Passive BCIs monitor the user's mental states without any effort
             their part. For example, passive BCIs might monitor attention,
             relaxation, or emotional state and use that information to adjust

@@ -123,18 +123,8 @@ class BCITwo extends Component {
               <Text style={styles.title}>{I18n.t("step2Title")}</Text>
             </View>
             <View style={styles.contentContainer}>
-              <View style={styles.textWrapper}>
-                <Text style={styles.body}>
-                  Let's teach the algorithm which brain state you’ll use to keep
-                  the {this.props.bciAction} OFF.
-                  {"\n"}{"\n"}
-                  You can try whatever you
-                  want, but we
-                  recommend opening your eyes and concentrating. When you are
-                  ready, click to record 20 seconds of data.
-                </Text>
-              </View>
               <DataCollector
+                bciAction={this.props.bciAction}
                 class={2}
                 onComplete={() => this.setState({ enableScroll: true })}
               />
@@ -146,20 +136,9 @@ class BCITwo extends Component {
 
           <View style={styles.pageStyle}>
             <View style={styles.textWrapper}>
-              <Text style={styles.title}>{I18n.t("step2Title")}</Text>
+              <Text style={styles.title}>{I18n.t("step3Title")}</Text>
             </View>
             <View style={styles.contentContainer}>
-              <View style={styles.textWrapper}>
-                <Text style={styles.body}>
-                  Now, let’s teach the algorithm the brain state you’ll use to
-                  turn
-                  the {this.props.bciAction} ON.
-                  {"\n"}{"\n"}
-                  Once again, you can try whatever you want. We recommend
-                  closing your eyes and relaxing. Click the button below to
-                  start recording another 20 seconds of data.
-                </Text>
-              </View>
               <DataCollector
                 class={1}
                 onComplete={() => this.setState({ enableScroll: true })}
@@ -175,64 +154,33 @@ class BCITwo extends Component {
               <Text style={styles.title}>{I18n.t("step4Title")}</Text>
             </View>
             <View style={styles.contentContainer}>
-              <View style={styles.textWrapper}>
-                <Text style={styles.body}>
-                  The data you've collected is simply the powers of the
-                  different brain waves (δ, θ, α, β) in your EEG across many epochs
-                  {"\n"}{"\n"}
-                  Next, train the{" "}
-                  <PopUpLink
-                    onPress={() => this.setState({ popUpVisible: true })}
-                  >
-                    classifier
-                  </PopUpLink>{" "}
-                  to distinguish between your brain states
-                </Text>
-              </View>
               <ClassifierInfoDisplayer
                 folds={6}
                 onComplete={() => this.setState({ enableScroll: true })}
               />
-            </View>
-            <View style={{ flex: 1 }}>
-              {this.handleScroll()}
+                <TouchableOpacity
+                  style={{
+                    borderColor: "#484848",
+                    borderWidth: 1,
+                    alignSelf: "center",
+                    margin: 5,
+                    padding: 5
+                  }}
+                  onPress={this.props.history.push('/bciTwo')}
+                >
+                  <Text
+                    style={{
+                      color: "#484848",
+                      fontFamily: "Roboto-Bold",
+                      fontSize: 15
+                    }}
+                  >
+                    START OVER
+                  </Text>
+                </TouchableOpacity>
             </View>
           </View>
-
-          <View style={styles.pageStyle}>
-            <View style={styles.textWrapper}>
-              <Text style={styles.title}>Run it!</Text>
-            </View>
-            <View style={styles.contentContainer}>
-              <View style={styles.textWrapper}>
-                <Text style={styles.body}>
-                  Your classifier's score represents how well it is able to distinguish between the two brain states based on the data you collected. Closer to 1 is better
-                  {"\n"}{"\n"}
-                  If you are happy with your classifier's score and want to run it in real-time, click below. Otherwise, you can swipe back and collect more data
-                </Text>
-                </View>
-                <LinkButton path="/bciRun"> RUN IT </LinkButton>
-            </View>
-          </View>
-
         </ViewPagerAndroid>
-
-        <PopUp
-          onClose={() => this.setState({ popUpVisible: false })}
-          image={require("../assets/gnb.png")}
-          fullSizeImage={true}
-          visible={this.state.popUpVisible}
-          title="Classifier"
-        >
-          A classifier is a type of machine learning algorithm that learns to
-          distinguish between two or more groups by looking at relevant features
-          of these groups. The classifier that we are training here uses the
-          Gaussian Naive Bayes technique to estimate the probability that a data
-          point belongs to two distinct normal distributions.
-
-          Image from Raizada and Lee, 2013
-        </PopUp>
-
       </View>
     );
   }

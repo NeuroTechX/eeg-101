@@ -110,6 +110,11 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     }
 
     @ReactMethod
+    public void getNumSamples() {
+
+    }
+
+    @ReactMethod
     public void stopCollecting() {
         // Stop ongoing any ongoing data collection processes
         // Unregister datalistener

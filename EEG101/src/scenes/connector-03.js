@@ -73,7 +73,7 @@ class ConnectorThree extends Component {
                 fontSize: 15
               }}
             >
-              BCI
+              BRAIN=COMPUTER INTERFACE
             </Text>
           </View>
         </Link>
