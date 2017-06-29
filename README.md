@@ -45,7 +45,6 @@ If you'd like to use EEG 101 as a base for your own React Native app, take a loo
 2. Install [yarn](https://github.com/yarnpkg/yarn)
 3. Clone this repo `git clone https://github.com/NeuroTechX/eeg-101.git`
 4. run `yarn install` in the EEG101 folder
-3. Import android folder as a new project in Android Studio (may need to install particular Build Tools versions)
 5. Connect an Android device with USB debug mode enabled. There can be issues running this app on a virtual device and we recommend real hardware.
 6. Run `react-native start` to start React packager
 7. In new terminal, run `adb reverse tcp:8081 tcp:8081` to ensure debug server is connected to your device and then `react-native run-android` to install EEG 101
@@ -67,8 +66,7 @@ If you'd like to use EEG 101 as a base for your own React Native app, take a loo
 4. Could not get BatchedBridge
 
 - Solution: Run `adb reverse tcp:8081 tcp:8081` again and reload
- 
- 5. Error retrieving parent for item: No resource found that matches the given name 'android:TextAppearance.Material.Widget.Button.Borderless.Colored'
- 
- - Solution: Make sure [compileSdkVersion and appcompat match](http://stackoverflow.com/questions/32075498/error-retrieving-parent-for-item-no-resource-found-that-matches-the-given-name) in in app build.gradle
 
+ 5. Error retrieving parent for item: No resource found that matches the given name 'android:TextAppearance.Material.Widget.Button.Borderless.Colored'
+
+ - Solution: Make sure [compileSdkVersion and appcompat match](http://stackoverflow.com/questions/32075498/error-retrieving-parent-for-item-no-resource-found-that-matches-the-given-name) in in app build.gradle
