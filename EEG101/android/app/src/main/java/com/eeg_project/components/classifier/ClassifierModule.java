@@ -179,7 +179,9 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         // Reset entire classifier, including clearing all variables and ongoing processes
         Log.w(TAG, "reset");
         stopCollecting();
-        dataThread.quit();
+        if(dataThread != null) {
+            dataThread.quit();
+        }
         trainingData = new LinkedList<>();
         labels = new LinkedList<>();
         classifier = new GaussianNaiveBayesClassifier();

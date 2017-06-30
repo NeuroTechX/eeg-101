@@ -38,11 +38,15 @@ class ClassifierRun extends Component {
     this.state = {
       popUp1Visible: false,
       class: "OFF",
-      isRunning: false
+      isRunning: false,
+      score: "",
     };
   }
 
   componentDidMount() {
+    Classifier.fitWithScore(6).then(promise => {
+      this.setState(promise);
+    });
     if (this.props.bciAction === config.bciAction.LIGHT) {
       const lightListener = new NativeEventEmitter(NativeModules.Classifier);
       this.predictSubscription = lightListener.addListener(
@@ -101,9 +105,6 @@ class ClassifierRun extends Component {
         <View style={styles.graphContainer}>
           <Text style={styles.classText}>{this.state.class}</Text>
         </View>
-
-        <Text style={styles.currentTitle}>Trying to understand your brain...</Text>
-
         <ViewPagerAndroid style={styles.viewPager} initialPage={0}>
           <View style={styles.pageStyle}>
 
@@ -118,27 +119,31 @@ class ClassifierRun extends Component {
               }}
               isRunning={this.state.isRunning}
             />
-            <Link to={"/bciEdit"} component={TouchableOpacity}>
-              <View
+            <Text style={styles.body}>Accuracy:
+              <Text style={{ fontWeight: "bold" }}>{this.state.score}</Text>
+            </Text>
+            <TouchableOpacity
+              style={{
+                borderColor: "#484848",
+                borderWidth: 1,
+                alignSelf: "center",
+                margin: 5,
+                padding: 5
+              }}
+              onPress={()=>{Classifier.reset()
+                this.props.history.push('/bciTwo')
+              }}
+            >
+              <Text
                 style={{
-                  borderColor: "#484848",
-                  borderWidth: 1,
-                  alignSelf: "center",
-                  margin: 5,
-                  padding: 5
+                  color: "#484848",
+                  fontFamily: "Roboto-Bold",
+                  fontSize: 15
                 }}
               >
-                <Text
-                  style={{
-                    color: "#484848",
-                    fontFamily: "Roboto-Bold",
-                    fontSize: 15
-                  }}
-                >
-                  EDIT BCI
-                </Text>
-              </View>
-            </Link>
+                RE-TRAIN BCI
+              </Text>
+            </TouchableOpacity>
             <LinkButton path="/end">END EEG 101</LinkButton>
           </View>
 
@@ -172,7 +177,8 @@ const styles = MediaQueryStyleSheet.create(
     body: {
       fontFamily: "Roboto-Light",
       color: "#484848",
-      fontSize: 19
+      fontSize: 19,
+      textAlign: 'center',
     },
 
     container: {

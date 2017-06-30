@@ -68,7 +68,7 @@ export default class DataCollector extends Component {
             that blinks and movement are kept to a minumum.
           </Text>
           <Button onPress={() => this.collectData()}>
-            COLLECT MORE
+            COLLECT
           </Button>
         </View>
       );
@@ -84,11 +84,10 @@ export default class DataCollector extends Component {
               Once again, you can try whatever you want. We recommend
               closing your eyes and relaxing. Click the button below to
               start recording another 30 seconds of data.
-            </Text><View style={{flexDirection: 'row'}}>
+            </Text>
             <Button onPress={() => this.collectData()}>
-              COLLECT 'ON' DATA
+              COLLECT
             </Button>
-          </View>
           </View>
         );
       } else if (this.state.samples >= 15) {
@@ -103,7 +102,7 @@ export default class DataCollector extends Component {
               data to make this BCI as accurate as possible!
             </Text>
             <Button onPress={() => this.collectData()}>
-              COLLECT 'ON' DATA
+              COLLECT
             </Button>
           </View>
         );
@@ -122,7 +121,7 @@ export default class DataCollector extends Component {
               ready, click to record 30 seconds of data.
             </Text>
             <Button onPress={() => this.collectData()}>
-              COLLECT 'OFF' DATA
+              COLLECT
             </Button>
           </View>
         );
@@ -136,7 +135,7 @@ export default class DataCollector extends Component {
               For this BCI, each epoch is one second long. Those with too much noise are discarded.
             </Text>
             <Button onPress={() => this.collectData()}>
-              COLLECT 'OFF' DATA
+              COLLECT
             </Button>
           </View>
         );

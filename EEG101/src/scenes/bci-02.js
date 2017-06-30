@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
+import { StyleSheet, Text, View, ViewPagerAndroid, Image, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import config from "../redux/config";
@@ -63,7 +63,7 @@ class BCITwo extends Component {
         <ViewPagerAndroid
           style={styles.viewPager}
           initialPage={0}
-          scrollEnabled={this.state.enableScroll}
+          enableScroll={this.state.enableScroll}
           // Receives a native callback event e that is used to set slidePosition state
           onPageSelected={e => {
             this.setState({ slidePosition: e.nativeEvent.position });
@@ -78,6 +78,7 @@ class BCITwo extends Component {
           <View style={styles.pageStyle}>
             <View style={styles.textWrapper}>
               <Text style={styles.title}>{I18n.t("step1Title")}</Text>
+              <Text style={styles.subTitle}>Choose a command</Text>
             </View>
             <View style={styles.contentContainer}>
               <View style={styles.textWrapper}>
@@ -121,6 +122,8 @@ class BCITwo extends Component {
           <View style={styles.pageStyle}>
             <View style={styles.textWrapper}>
               <Text style={styles.title}>{I18n.t("step2Title")}</Text>
+              <Text style={styles.subTitle}>Collect "OFF" data</Text>
+
             </View>
             <View style={styles.contentContainer}>
               <DataCollector
@@ -137,6 +140,8 @@ class BCITwo extends Component {
           <View style={styles.pageStyle}>
             <View style={styles.textWrapper}>
               <Text style={styles.title}>{I18n.t("step3Title")}</Text>
+              <Text style={styles.subTitle}>Collect "ON" data</Text>
+
             </View>
             <View style={styles.contentContainer}>
               <DataCollector
@@ -152,32 +157,36 @@ class BCITwo extends Component {
           <View style={styles.pageStyle}>
             <View style={styles.textWrapper}>
               <Text style={styles.title}>{I18n.t("step4Title")}</Text>
+              <Text style={styles.subTitle}>Train the classifier</Text>
+
             </View>
             <View style={styles.contentContainer}>
               <ClassifierInfoDisplayer
                 folds={6}
                 onComplete={() => this.setState({ enableScroll: true })}
               />
-                <TouchableOpacity
+              <TouchableOpacity
+                style={{
+                  borderColor: "#484848",
+                  borderWidth: 1,
+                  alignSelf: "center",
+                  margin: 5,
+                  padding: 5
+                }}
+                onPress={()=>{Classifier.reset()
+                  this.props.history.push('/bci')
+                }}
+              >
+                <Text
                   style={{
-                    borderColor: "#484848",
-                    borderWidth: 1,
-                    alignSelf: "center",
-                    margin: 5,
-                    padding: 5
+                    color: "#484848",
+                    fontFamily: "Roboto-Bold",
+                    fontSize: 15
                   }}
-                  onPress={this.props.history.push('/bciTwo')}
                 >
-                  <Text
-                    style={{
-                      color: "#484848",
-                      fontFamily: "Roboto-Bold",
-                      fontSize: 15
-                    }}
-                  >
-                    START OVER
-                  </Text>
-                </TouchableOpacity>
+                  RE-TRAIN BCI
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </ViewPagerAndroid>
@@ -219,6 +228,12 @@ const styles = MediaQueryStyleSheet.create(
       fontSize: 48
     },
 
+    subTitle: {
+      fontSize: 16,
+      fontFamily: "Roboto-Medium",
+      color: "#484848"
+    },
+
     graphContainer: {
       backgroundColor: "#72c2f1",
       flex: 4,
@@ -248,7 +263,8 @@ const styles = MediaQueryStyleSheet.create(
 
     textWrapper: {
       flex: 2,
-      justifyContent: "center"
+      justifyContent: "center",
+      alignItems: 'center',
     },
 
     dataClassContainer: {

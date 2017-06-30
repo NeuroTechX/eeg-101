@@ -105,27 +105,6 @@ export default class ClassifierInfoDisplayer extends Component {
             If you are happy with your classifier's score you can run your BCI in
             real-time! Otherwise, you can start over with new data
           </Text>
-          <Link to={"/bciEdit"} component={TouchableOpacity}>
-            <View
-              style={{
-                borderColor: "#484848",
-                borderWidth: 1,
-                alignSelf: "center",
-                margin: 5,
-                padding: 5
-              }}
-            >
-              <Text
-                style={{
-                  color: "#484848",
-                  fontFamily: "Roboto-Bold",
-                  fontSize: 15
-                }}
-              >
-                ADD MORE DATA
-              </Text>
-            </View>
-          </Link>
           <LinkButton path="/bciRun"> RUN IT! </LinkButton>
           <PopUp
             onClose={() => this.setState({ popUp2Visible: false })}
