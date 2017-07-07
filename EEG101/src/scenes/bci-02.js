@@ -145,6 +145,7 @@ class BCITwo extends Component {
             </View>
             <View style={styles.contentContainer}>
               <DataCollector
+                bciAction={this.props.bciAction}
                 class={1}
                 onComplete={() => this.setState({ enableScroll: true })}
               />

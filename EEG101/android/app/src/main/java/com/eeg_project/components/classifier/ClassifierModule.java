@@ -81,6 +81,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     public String getName() {
         return "Classifier";
     }
+
     // Called to emit events to event listeners in JS
     private void sendEvent(String eventName, int result) {
         getReactApplicationContext()

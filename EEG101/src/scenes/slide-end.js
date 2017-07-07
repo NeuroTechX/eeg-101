@@ -34,7 +34,6 @@ class End extends Component {
               <Text style={styles.header}>{I18n.t('whatsNext')}</Text>
                 <Text style={styles.body}>{I18n.t('liveArtifactRemoval')}</Text>
                 <Text style={styles.body}>{I18n.t('offlineMode')}</Text>
-                <Text style={styles.body}>{I18n.t('interactiveBCI')}</Text>
             </View>
 
             <View style={{marginBottom: 20}}>
@@ -74,7 +73,7 @@ class End extends Component {
           </View>
 
           <View style={styles.page}>
-            <View style={[styles.listBox, {marginTop: 75}]}>
+            <View style={[styles.listBox, {marginTop: 50}]}>
               <Text style={styles.header}>{I18n.t('theTeam')}</Text>
               <Text style={styles.body}>Hubert Banville - Visionary</Text>
               <Text style={styles.body}>Dano Morrison - Developer</Text>

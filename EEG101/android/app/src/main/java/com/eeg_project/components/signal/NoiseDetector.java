@@ -81,7 +81,6 @@ public class NoiseDetector {
         }
 
         return decisions;
-
     }
 
     private double mean(double[] x) {

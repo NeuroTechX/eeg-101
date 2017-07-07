@@ -11,6 +11,7 @@ import com.choosemuse.libmuse.MuseConnectionPacket;
 import com.choosemuse.libmuse.MuseListener;
 import com.choosemuse.libmuse.MuseManagerAndroid;
 import com.eeg_project.MainApplication;
+import com.eeg_project.components.signal.NoiseDetector;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -138,6 +139,10 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
         // TODO: consider putting this on another thread or in a service
         connectionListener = new ConnectionListener();
         appState.connectedMuse.registerConnectionListener(connectionListener);
+
+        // Create a persistent NoiseDetector class that can be used for SignalQualityIndicator
+        NoiseDetector noiseDetector = new NoiseDetector(600, getReactApplicationContext());
+
     }
 
     // ------------------------------------------------------------------------------

@@ -5,36 +5,38 @@
 // onClose is called when the Close button is clicked. Must be an arrow function that changes an isVisible prop in the parent component to false
 // visible must be a boolean state in the parent component
 
-import React, { Component } from 'react';
-import {
-  Text,
-  View,
-  Modal,
-  StyleSheet,
-  Image,
-} from 'react-native';
-import { MediaQueryStyleSheet} from 'react-native-responsive';
-import Button from '../components/Button';
-import I18n from '../i18n/i18n';
+import React, { Component } from "react";
+import { Text, View, Modal, StyleSheet, Image } from "react-native";
+import { MediaQueryStyleSheet } from "react-native-responsive";
+import Button from "../components/Button";
+import I18n from "../i18n/i18n";
 
 export default class PopUp extends Component {
-
   render() {
-    let imageStyle = (this.props.image != null) ? styles.activeImage: styles.disabledImage
-    return(
+    let imageStyle = this.props.image != null
+      ? styles.activeImage
+      : styles.disabledImage;
+    return (
       <Modal
-          animationType={"fade"}
-          transparent={true}
-          onRequestClose={this.props.onClose}
-          visible={this.props.visible}>
+        animationType={"fade"}
+        transparent={true}
+        onRequestClose={this.props.onClose}
+        visible={this.props.visible}
+      >
         <View style={styles.modalBackground}>
-          <View style={{backgroundColor: '#1B1B1B'}}>
-            <Image source={this.props.image} style={imageStyle} resizeMode='contain'/>
+          <View style={{ backgroundColor: "#1B1B1B" }}>
+            <Image
+              source={this.props.image}
+              style={imageStyle}
+              resizeMode="contain"
+            />
           </View>
           <View style={styles.modalInnerContainer}>
             <Text style={styles.modalTitle}>{this.props.title}</Text>
             <Text style={styles.modalText}>{this.props.children}</Text>
-            <Button onPress={this.props.onClose}>{I18n.t('closeButton')}</Button>
+            <Button onPress={this.props.onClose}>
+              {I18n.t("closeButton")}
+            </Button>
           </View>
         </View>
       </Modal>
@@ -47,81 +49,79 @@ const styles = MediaQueryStyleSheet.create(
   {
     modalBackground: {
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'stretch',
+      justifyContent: "center",
+      alignItems: "stretch",
       padding: 20,
-      backgroundColor: 'rgba(12, 89, 128, 0.8)',
+      backgroundColor: "rgba(12, 89, 128, 0.8)"
     },
 
     modalText: {
-      fontFamily: 'Roboto-Light',
-      color: '#484848',
+      fontFamily: "Roboto-Light",
+      color: "#484848",
       fontSize: 15,
-      margin: 5,
+      margin: 5
     },
 
     modalTitle: {
-      fontFamily: 'Roboto-Bold',
-      color: '#484848',
+      fontFamily: "Roboto-Bold",
+      color: "#484848",
       fontSize: 20,
-      margin: 5,
+      margin: 5
     },
 
     modalInnerContainer: {
-
-      alignItems: 'stretch',
-      backgroundColor: 'white',
-      padding: 20,
+      alignItems: "stretch",
+      backgroundColor: "white",
+      padding: 20
     },
 
     modal: {
-      flex: .25,
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'white',
+      flex: 0.25,
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: "white"
     },
 
     activeImage: {
-      alignSelf: 'center',
+      alignSelf: "center",
       height: 150,
-      margin: 10,
-
+      margin: 10
     },
 
     disabledImage: {
       height: 0,
-      width: 0,
-    },
+      width: 0
+    }
   },
   // Responsive styles
   {
     "@media (min-device-height: 700)": {
-
       modalBackground: {
-        backgroundColor: 'rgba(12, 89, 128, 0.25)',
-        justifyContent: 'flex-end',
-        paddingBottom: 50,
+        backgroundColor: "rgba(12, 89, 128, 0.25)",
+        justifyContent: "flex-end",
+        paddingBottom: 50
       },
 
       activeImage: {
         height: 300,
-        width: 300,
+        width: 300
       },
 
       modalTitle: {
-        fontSize: 30,
+        fontSize: 30
       },
 
       modalText: {
-        fontSize: 18,
-      },
+        fontSize: 18
+      }
     },
     "@media (min-device-height: 1000)": {
       modalBackground: {
         paddingBottom: 100,
         paddingLeft: 120,
-        paddingRight: 120,
+        paddingRight: 120
       }
     }
-  });
+  }
+);
