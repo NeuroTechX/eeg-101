@@ -27,7 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     public boolean getUseDeveloperSupport() {
       // Have to hard code this as true because of Gradle issue. May be able to be resolved with upgrade to Android Plugin 3.0
-      return false;
+      return true;
     }
 
     // All packages for native libraries must be added to the array returned by this method
