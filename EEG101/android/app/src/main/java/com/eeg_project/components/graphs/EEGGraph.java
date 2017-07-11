@@ -26,6 +26,9 @@ import com.eeg_project.MainApplication;
 import com.eeg_project.components.EEGFileWriter;
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
+import com.facebook.react.bridge.Dynamic;
+
+import java.util.LinkedList;
 
 
 /*
@@ -51,6 +54,8 @@ public class EEGGraph extends FrameLayout {
     public static final int PLOT_LENGTH = 256  * 4;
     private static final String PLOT_TITLE = "Raw_EEG";
     public DynamicSeries dataSeries;
+    public DynamicSeries dataSeries2;
+    public LinkedList dataSeriesList;
     private LineAndPointFormatter lineFormatter;
     public  DataListener dataListener;
     public  CircularBuffer eegBuffer = new CircularBuffer(220, 4);
@@ -79,7 +84,7 @@ public class EEGGraph extends FrameLayout {
     // Bridge functions
     public void setChannelOfInterest(int channel) {
         channelOfInterest = channel;
-        dataSeries.clear();
+        dataSeriesList.add(new DynamicSeries("chan"));
 
         // Uncomment to make plot change color based on selected electrode
         /*
@@ -128,7 +133,8 @@ public class EEGGraph extends FrameLayout {
 
         // get datasets (Y will be dataSeries, x will be implicitly generated):
         //dataSource = new EEGDataSource(appState.connectedMuse.isLowEnergy());
-        dataSeries = new DynamicSeries("EEG dataSource");
+        dataSeries = new DynamicSeries("chan1 dataSource");
+        dataSeries2 = new DynamicSeries("chan2 dataSource");
 
         // Set X and Y domain
         eegPlot.setRangeBoundaries(600, 1000, BoundaryMode.FIXED);
@@ -145,6 +151,8 @@ public class EEGGraph extends FrameLayout {
 
         // add series to plot
         eegPlot.addSeries(dataSeries,
+                lineFormatter);
+        eegPlot.addSeries(dataSeries2,
                 lineFormatter);
 
         // Format plot layout
@@ -272,6 +280,7 @@ public class EEGGraph extends FrameLayout {
         int numEEGPoints = eegBuffer.getPts();
         if (dataSeries.size() >= PLOT_LENGTH) {
             dataSeries.remove(numEEGPoints);
+
         }
 
         // For adding all data points (Full sampling)
@@ -281,5 +290,28 @@ public class EEGGraph extends FrameLayout {
         eegBuffer.resetPts();
 
         eegPlot.redraw();
+    }
+
+    public int[] getOffsets(int numChannels) {
+        int[] offsets = new int[4];
+        if (numChannels == 1){
+            offsets[0] = 0;
+        } else if (numChannels == 2 ) {
+            offsets[0] = 100;
+            offsets[1] = -100;
+            // range/4, -range/4
+        } else if (numChannels == 3 ) {
+            offsets[0] = 133;
+            offsets[1] = 0;
+            offsets[2] = -133;
+            // range/3, 0, -range/3
+        } else if (numChannels == 4 ) {
+            offsets[0] = 150;
+            offsets[1] = 50;
+            offsets[2] = -50;
+            offsets[3] = -150;
+            // 3*range/8, range/, -range/8, -2*range/8
+        }
+        return offsets;
     }
 }

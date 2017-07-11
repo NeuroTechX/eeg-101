@@ -89,6 +89,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
                 .emit(eventName, result);
     }
 
+
     // ---------------------------------------------------------
     // Bridged methods
 
@@ -111,8 +112,24 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     }
 
     @ReactMethod
-    public void getNumSamples() {
+    public void getNumSamples(Promise promise) {
+        WritableMap samples = Arguments.createMap();
+        int numClass1Samples = 0;
+        int numClass2Samples = 0;
+        if (labels.size() >= 1) {
 
+
+            for (Integer i : labels) {
+                if (i == 1) {
+                    numClass1Samples++;
+                } else if (i == 2) {
+                    numClass2Samples++;
+                }
+            }
+        }
+        samples.putInt("class1Samples", numClass1Samples);
+        samples.putInt("class2Samples", numClass2Samples);
+        promise.resolve(samples);
     }
 
     @ReactMethod
