@@ -26,7 +26,6 @@ public class MainApplication extends Application implements ReactApplication {
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
     public boolean getUseDeveloperSupport() {
-      // Have to hard code this as true because of Gradle issue. May be able to be resolved with upgrade to Android Plugin 3.0
       return com.eeg_project.BuildConfig.DEBUG;
     }
 
