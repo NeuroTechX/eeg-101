@@ -18,7 +18,6 @@ import I18n from '../i18n/i18n';
 //Interfaces. For elements that bridge to native
 import GraphView from '../interface/GraphView';
 
-// Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function  mapStateToProps(state) {
     return {
       connectionStatus: state.connectionStatus,

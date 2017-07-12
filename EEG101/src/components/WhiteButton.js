@@ -17,7 +17,7 @@ export default class WhiteButton extends Component{
 	render() {
     const dynamicStyle = (this.props.disabled) ? styles.disabled: styles.active;
 		return(
-		<TouchableOpacity onPress={this.props.onPress} disabled={this.props.disabled}> 
+		<TouchableOpacity onPress={this.props.onPress} disabled={this.props.disabled}>
 			<View style={dynamicStyle}>
           		<Text style={{color: '#6CCBEF', fontFamily: 'Roboto-Bold', fontSize: 15}}>{this.props.children}</Text>
         	</View>
@@ -36,6 +36,7 @@ active: {
   margin: 5,
   padding: 5,
   alignItems: 'center',
+  elevation: 2,
   },
 
 disabled: {
@@ -45,8 +46,6 @@ disabled: {
   margin: 5,
   padding: 5,
   alignItems: 'center',
+  elevation: 2,
   }
 });
-
-
-

@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 
+
 public class MainApplication extends Application implements ReactApplication {
 
   // Global singleton Muse

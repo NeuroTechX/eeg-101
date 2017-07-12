@@ -5,14 +5,16 @@ import config from './config';
 import {
   SET_CONNECTION_STATUS,
   SET_GRAPHVIEW_DIMENSIONS,
-  SET_BCI_ACTION
-} from './constants';
+  SET_BCI_ACTION,
+  TOGGLE_MENU,
+} from './actionTypes';
 
 const initialState = {
   connectionStatus: config.connectionStatus.DISCONNECTED,
   availableMuses: false,
   graphViewDimensions: {x: 0, y: 0, width: 300, height: 250},
   bciAction: "",
+  isMenuOpen: false,
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -36,6 +38,14 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         bciAction: action.payload
+      };
+
+    case TOGGLE_MENU:
+      console.log(state.isMenuOpen);
+
+      return {
+        ... state,
+        isMenuOpen: !state.isMenuOpen
       };
 
     // ...other actions

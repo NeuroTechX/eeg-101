@@ -75,7 +75,7 @@ const styles = MediaQueryStyleSheet.create(
       lineHeight: 50,
       color: "#ffffff",
       fontFamily: "Roboto-Black",
-      fontSize: 48
+      fontSize: 48,
     },
 
     titleBox: {

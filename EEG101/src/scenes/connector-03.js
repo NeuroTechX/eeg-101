@@ -56,7 +56,7 @@ class ConnectorThree extends Component {
           </View>
         </Link>
 
-        <Link to={"/bciOne"} component={TouchableOpacity}>
+        <Link to={"/bciTrain"} component={TouchableOpacity}>
           <View
             style={{
               borderColor: "white",

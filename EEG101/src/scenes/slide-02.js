@@ -8,7 +8,6 @@ import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
 import I18n from '../i18n/i18n';
 
-// Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
   return {
     connectionStatus: state.connectionStatus

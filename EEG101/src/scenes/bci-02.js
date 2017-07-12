@@ -196,6 +196,8 @@ class BCITwo extends Component {
   }
 }
 
+export default connect(mapStateToProps, mapDispatchToProps)(BCITwo);
+
 const styles = MediaQueryStyleSheet.create(
   // Base styles
   {
@@ -289,6 +291,7 @@ const styles = MediaQueryStyleSheet.create(
       height: 40
     }
   },
+
   // Responsive styles
   {
     "@media (min-device-height: 700)": {
@@ -310,4 +313,3 @@ const styles = MediaQueryStyleSheet.create(
     }
   }
 );
-export default connect(mapStateToProps, mapDispatchToProps)(BCITwo);

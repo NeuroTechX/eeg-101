@@ -20,7 +20,7 @@ export default class Button extends Component{
 	render() {
     const dynamicStyle = (this.props.disabled) ? styles.disabled: styles.active;
 		return(
-		<TouchableOpacity onPress={this.props.onPress} disabled={this.props.disabled}> 
+		<TouchableOpacity onPress={this.props.onPress} disabled={this.props.disabled}>
 			<View style={dynamicStyle}>
           		<Text style={{color: 'white', fontFamily: 'Roboto-Bold', fontSize: 15}}>{this.props.children}</Text>
         	</View>
@@ -39,6 +39,7 @@ const styles = MediaQueryStyleSheet.create(
     margin: 5,
     padding: 5,
     alignItems: 'center',
+    elevation: 2,
     },
 
   disabled: {
@@ -48,6 +49,7 @@ const styles = MediaQueryStyleSheet.create(
     margin: 5,
     padding: 5,
     alignItems: 'center',
+    elevation: 2,
     }
   },
   // Responsive styles
@@ -63,6 +65,3 @@ const styles = MediaQueryStyleSheet.create(
       },
     }
   });
-
-
-

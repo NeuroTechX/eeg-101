@@ -34,11 +34,7 @@ export default class ConnectorWidget extends Component {
           'message': I18n.t('requiresLocation')
         }
       );
-      if (granted) {
-        console.log("Coarse Location granted")
-      } else {
-        console.log("Coarse Location denied")
-      }
+
       // Whether permission is granted or not, connection proceeds in case user is using first gen device
       this.startConnector();
     } catch (err) {
@@ -48,7 +44,7 @@ export default class ConnectorWidget extends Component {
 
   // Calls getAndConnectoToDevice in native ConnectorModule after creating promise listeners
   startConnector() {
-    // This listner will update connection status if no Muses are found in getMuses call
+    // This listener will update connection status if no Muses are found in getMuses call
     const noMuseListener = DeviceEventEmitter.addListener('NO_MUSES', (event) => {
       this.props.setConnectionStatus(config.connectionStatus.NO_MUSES);
     });
@@ -115,14 +111,6 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     marginRight: 50,
  	},
-  active: {
-    justifyContent: 'center',
-    backgroundColor: '#ffffff',
-    height: 50,
-    margin: 5,
-    padding: 5,
-    alignItems: 'center',
-  },
 
   buttonContainer: {
     flex: 1,
@@ -137,6 +125,7 @@ const styles = StyleSheet.create({
     margin: 40,
     padding: 5,
     backgroundColor: '#ffffff',
+    borderRadius: 50,
   },
 
   body: {
@@ -175,9 +164,3 @@ const styles = StyleSheet.create({
 
 
 });
-
-
-
-
-
-

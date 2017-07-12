@@ -6,7 +6,8 @@ import {
   SET_CONNECTION_STATUS,
   SET_GRAPHVIEW_DIMENSIONS,
   SET_BCI_ACTION,
-} from './constants';
+  TOGGLE_MENU,
+} from './actionTypes.js';
 import config from './config';
 
 // setConnectionStatus and setAvailableMuses pass a payload to the reducer. Both Fns have a type (defined in constants.js) that allows them to be handled properly
@@ -15,6 +16,8 @@ export const setConnectionStatus = (payload) => ({payload, type: SET_CONNECTION_
 export const setGraphViewDimensions = (payload) => ({payload, type: SET_GRAPHVIEW_DIMENSIONS});
 
 export const setBCIAction = (payload) => ({payload, type: SET_BCI_ACTION});
+
+export const toggleMenu = (payload) => ({payload, type: TOGGLE_MENU});
 
 export function getAndConnectToDevice() {
   return (dispatch) =>  {
