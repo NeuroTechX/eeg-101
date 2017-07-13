@@ -95,7 +95,7 @@ export default class ClassifierInfoDisplayer extends Component {
               <PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>
                 Accuracy:
               </PopUpLink>{" "}
-              <Text style={{ fontWeight: "bold" }}>{this.state.score}</Text>
+              <Text style={{ fontWeight: "bold" }}>{Math.round(this.state.score * 1000) / 1000}</Text>
             </Text>
           </View>
           <View style={{ flex: 2 }}>
@@ -109,13 +109,15 @@ export default class ClassifierInfoDisplayer extends Component {
               in real-time! Otherwise, you can start over with new data
             </Text>
           </View>
-          <View style={{ flexDirection: "row", justifyContent: 'space-around' }}>
-            <View style={{flex: 1}}>
-            <LinkButton path="/bciRun"> RUN IT! </LinkButton>
-          </View>
-          <View style={{flex: 1}}>
-            <LinkButton path="/>bciTrain">RE-TRAIN</LinkButton>
-          </View>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-around" }}
+          >
+            <View style={{ flex: 1 }}>
+              <LinkButton path="/bciRun"> RUN IT! </LinkButton>
+            </View>
+            <View style={{ flex: 1 }}>
+              <LinkButton path="/bciTrain">RE-TRAIN</LinkButton>
+            </View>
           </View>
           <PopUp
             onClose={() => this.setState({ popUp2Visible: false })}

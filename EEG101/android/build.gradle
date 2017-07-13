@@ -18,17 +18,6 @@ buildscript {
 
 // Added per elcorders' suggestion in https://github.com/facebook/react-native/issues/4968
 
-allprojects {
-    configurations.all {
-        resolutionStrategy {
-            eachDependency { DependencyResolveDetails details ->
-                if (details.requested.group == 'com.facebook.react' && details.requested.name == 'react-native') {
-                    details.useVersion "0.44.2" // Your real React Native version here
-                }
-            }
-        }
-    }
-}
 
 allprojects {
     repositories {

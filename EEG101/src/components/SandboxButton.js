@@ -20,7 +20,7 @@ export default class SandboxButton extends Component{
   render() {
     const dynamicButtonStyle = (this.props.active) ? styles.activeButton: styles.inactiveButton;
     return(
-      <TouchableOpacity onPress={this.props.onPress}>
+      <TouchableOpacity onPress={this.props.onPress} disabled={this.props.disabled}>
         <View style={dynamicButtonStyle}>
           <Text style={styles.text}>{this.props.children}</Text>
         </View>

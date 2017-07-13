@@ -131,7 +131,7 @@ class ClassifierRun extends Component {
                 padding: 5
               }}
               onPress={()=>{Classifier.reset()
-                this.props.history.push('/bciTwo')
+                this.props.history.push('/bciTrain')
               }}
             >
               <Text
@@ -182,6 +182,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     container: {
+      backgroundColor: '#ffffff',
       flex: 1,
       justifyContent: "space-around",
       alignItems: "stretch"
