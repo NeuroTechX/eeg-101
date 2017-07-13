@@ -71,8 +71,9 @@ const styles = MediaQueryStyleSheet.create(
 
     modalInnerContainer: {
       alignItems: "stretch",
-      backgroundColor: "white",
-      padding: 20
+      backgroundColor: "#ffffff",
+      padding: 20,
+      elevation: 5,
     },
 
     modal: {
@@ -80,7 +81,7 @@ const styles = MediaQueryStyleSheet.create(
       flexDirection: "column",
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: "white"
+      elevation: 5,
     },
 
     activeImage: {

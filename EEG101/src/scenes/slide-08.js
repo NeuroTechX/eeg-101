@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import config from "../redux/config";
+import { bindActionCreators } from "redux";
+import { setGraphViewDimensions } from "../redux/actions";
 import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
@@ -17,6 +19,15 @@ function mapStateToProps(state) {
     dimensions: state.graphViewDimensions,
     connectionStatus: state.connectionStatus
   };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      setGraphViewDimensions
+    },
+    dispatch
+  );
 }
 
 class SlideEight extends Component {
@@ -95,6 +106,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     container: {
+      backgroundColor: "#ffffff",
       flex: 1,
       justifyContent: "space-around",
       alignItems: "stretch"
@@ -151,4 +163,4 @@ const styles = MediaQueryStyleSheet.create(
   }
 );
 
-export default connect(mapStateToProps)(SlideEight);
+export default connect(mapStateToProps, mapDispatchToProps)(SlideEight);

@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     margin: 5,
     padding: 5,
     alignItems: 'center',
+    elevation: 2,
     },
 
   disabled: {

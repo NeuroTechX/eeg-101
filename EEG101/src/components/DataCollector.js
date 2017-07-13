@@ -94,7 +94,7 @@ export default class DataCollector extends Component {
         return (
           <View style={styles.dataClassContainer}>
             <Text style={styles.body}>
-              Awesome! You've collected <Text style={{fontWeight: 'bold'}}>{this.state.samples}</Text> epochs of clean
+              Awesome! You've collected <Text style={{fontWeight: 'bold'}}>{this.state.samples}</Text> total epochs of clean
               data.
               {"\n"}{"\n"}
               The accuracy of machine learning is often dependent on the number
@@ -129,7 +129,7 @@ export default class DataCollector extends Component {
         return (
           <View style={styles.dataClassContainer}>
             <Text style={styles.body}>
-              Awesome! You've collected <Text style={{fontWeight: 'bold'}}>{this.state.samples}</Text> epochs of clean
+              Awesome! You've collected <Text style={{fontWeight: 'bold'}}>{this.state.samples}</Text> total epochs of clean
               data.
               {"\n"}{"\n"}
               For this BCI, each epoch is one second long. Those with too much noise are discarded.

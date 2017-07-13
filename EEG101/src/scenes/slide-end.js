@@ -73,7 +73,7 @@ class End extends Component {
           </View>
 
           <View style={styles.page}>
-            <View style={[styles.listBox, {marginTop: 50}]}>
+            <View style={styles.listBox}>
               <Text style={styles.header}>{I18n.t('theTeam')}</Text>
               <Text style={styles.body}>Hubert Banville - Visionary</Text>
               <Text style={styles.body}>Dano Morrison - Developer</Text>
@@ -86,7 +86,7 @@ class End extends Component {
             </View>
 
             <View style={styles.buttonBox}>
-              <LinkButton path='/connectorThree'>{I18n.t('nextLink')}</LinkButton>
+              <LinkButton path='/connectorThree'>{I18n.t('restartButton')}</LinkButton>
             </View>
           </View>
         </ViewPagerAndroid>

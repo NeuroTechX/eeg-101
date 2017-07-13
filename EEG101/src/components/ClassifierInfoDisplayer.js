@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import Classifier from "../interface/Classifier.js";
 import Button from "../components/Button.js";
+import SandboxButton from "../components/SandboxButton.js";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import { Link } from "react-router-native";
 import PopUpLink from "./PopUpLink.js";
@@ -46,10 +47,11 @@ export default class ClassifierInfoDisplayer extends Component {
               classifier
             </PopUpLink>{" "}
             on your data to distinguish between your brain states.
-            {"\n"}{"\n"}
-            The data you've collected is simply the powers of the
-            different brain waves (δ, θ, α, β) for each electrode in each epoch
-            you collected
+            {"\n"}
+            {"\n"}
+            The data you've collected is simply the powers of the different
+            brain waves (δ, θ, α, β) for each electrode in each epoch you
+            collected
           </Text>
           <Button
             onPress={() => {
@@ -72,12 +74,9 @@ export default class ClassifierInfoDisplayer extends Component {
           >
             A classifier is a type of machine learning algorithm that learns to
             distinguish between two or more groups by looking at relevant
-            features
-            of these groups. The classifier that we are training here uses the
-            Gaussian Naive Bayes technique to estimate the probability that a
-            data
-            point belongs to two distinct normal distributions.
-
+            features of these groups. The classifier that we are training here
+            uses the Gaussian Naive Bayes technique to estimate the probability
+            that a data point belongs to two distinct normal distributions.
             Image from Raizada and Lee, 2013
           </PopUp>
         </View>
@@ -91,31 +90,43 @@ export default class ClassifierInfoDisplayer extends Component {
     } else {
       return (
         <View style={styles.classifierContainer}>
-          <Text style={styles.body}>
-            <PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>
-              Accuracy:
-            </PopUpLink>{" "}
-            <Text style={{ fontWeight: "bold" }}>{this.state.score}</Text>
-          </Text>
-          <Text style={styles.body}>
-            This score represents how well the classifier is able to
-            distinguish between the two brain states based on the data you
-            collected.
-            {"\n"}{"\n"}
-            If you are happy with your classifier's score you can run your BCI in
-            real-time! Otherwise, you can start over with new data
-          </Text>
-          <LinkButton path="/bciRun"> RUN IT! </LinkButton>
+          <View style={{ flex: 0.5 }}>
+            <Text style={styles.body}>
+              <PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>
+                Accuracy:
+              </PopUpLink>{" "}
+              <Text style={{ fontWeight: "bold" }}>{this.state.score}</Text>
+            </Text>
+          </View>
+          <View style={{ flex: 2 }}>
+            <Text style={styles.body}>
+              This score represents how well the classifier is able to
+              distinguish between the two brain states based on the data you
+              collected.
+              {"\n"}
+              {"\n"}
+              If you are happy with your classifier's score you can run your BCI
+              in real-time! Otherwise, you can start over with new data
+            </Text>
+          </View>
+          <View style={{ flexDirection: "row", justifyContent: 'space-around' }}>
+            <View style={{flex: 1}}>
+            <LinkButton path="/bciRun"> RUN IT! </LinkButton>
+          </View>
+          <View style={{flex: 1}}>
+            <LinkButton path="/>bciTrain">RE-TRAIN</LinkButton>
+          </View>
+          </View>
           <PopUp
             onClose={() => this.setState({ popUp2Visible: false })}
             visible={this.state.popUp2Visible}
             title={"Cross-validation accuracy"}
           >
             Cross-validation is a technique to evaluate the accuracy of
-            predictive algorithms by breaking up an original set of example
-            data into a training set and a test set. The algorithm is trained on
-            this training set and scored on how well it predicts the values of
-            the test set. In k-fold cross-validation, which this BCI uses, this
+            predictive algorithms by breaking up an original set of example data
+            into a training set and a test set. The algorithm is trained on this
+            training set and scored on how well it predicts the values of the
+            test set. In k-fold cross-validation, which this BCI uses, this
             process is repeated a number of times with different randomly
             selected subsamples of data each time.
           </PopUp>

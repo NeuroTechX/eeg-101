@@ -1,7 +1,5 @@
 // ListItemBlock.js
-// Child component for an upcoming ListView component.
-// Not currently used in the app.
-
+// Child component for  ListView component.
 
 import React, { Component } from 'react';
 import { MediaQueryStyleSheet} from 'react-native-responsive';
@@ -47,6 +45,7 @@ const styles = MediaQueryStyleSheet.create(
       margin: 10,
       marginVertical: 5,
       overflow: 'hidden',
+      elevation: 2,
     },
     titleContainer: {
       borderBottomWidth: 0.5,

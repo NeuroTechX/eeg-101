@@ -6,9 +6,10 @@ import { Link } from "react-router-native";
 import { Image, Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import { connect } from "react-redux";
+import { withRouter } from 'react-router';
 import config from "../redux/config";
 import { bindActionCreators } from "redux";
-import { toggleMenu } from "../redux/actions";
+import { openMenu } from "../redux/actions";
 
 function mapStateToProps(state) {
   return {
@@ -21,7 +22,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      toggleMenu
+      openMenu
     },
     dispatch
   );
@@ -35,19 +36,20 @@ class NavBar extends Component {
   render() {
     return (
       <View style={styles.navContainer}>
-        <TouchableOpacity onPress={this.props.toggleMenu}>
+        <TouchableOpacity onPress={this.props.openMenu}>
           <Image
             style={styles.burger}
             source={require("../assets/burger.png")}
             resizeMode={"contain"}
           />
+
         </TouchableOpacity>
       </View>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NavBar);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(NavBar));
 
 const styles = MediaQueryStyleSheet.create(
   // Base styles

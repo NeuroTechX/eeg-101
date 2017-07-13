@@ -86,7 +86,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     titleBox: {
-      flex: 4,
+      flex: 3,
       alignItems: "center",
       justifyContent: "center"
     }

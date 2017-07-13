@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
 import Animation from "lottie-react-native";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { setGraphViewDimensions } from "../redux/actions";
 import config from "../redux/config.js";
 import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
@@ -14,6 +16,15 @@ function mapStateToProps(state) {
   return {
     dimensions: state.graphViewDimensions
   };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      setGraphViewDimensions
+    },
+    dispatch
+  );
 }
 
 class SlideSeven extends Component {
@@ -122,7 +133,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     container: {
-
+      backgroundColor: "#ffffff",
       flex: 1,
       justifyContent: "space-around",
       alignItems: "stretch"
@@ -179,4 +190,4 @@ const styles = MediaQueryStyleSheet.create(
   }
 );
 
-export default connect(mapStateToProps)(SlideSeven);
+export default connect(mapStateToProps, mapDispatchToProps)(SlideSeven);

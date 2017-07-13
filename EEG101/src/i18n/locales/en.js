@@ -126,13 +126,13 @@ export default {
 	epochsDescription:  'The brain is constantly changing and the EEG changes with it. Dividing the EEG into epochs allows each moment in time to be analyzed individually. Analyzing how the properties of these epochs vary allows us to quantify how the brain changes over time.',
 
 	//slide-06.js
-	artifactRemovalSlideTitle:  'ARTIFACT REMOVAL',
+	artefactRemovalSlideTitle:  'ARTEFACT REMOVAL',
 	removingNoise:  'Removing noise',
 	afterEEGDividedEpochs:  'After the EEG has been divided into epochs, those that contain a ',
 	significantLink:  'significant',
 	amountNoiseIgnored:  ' amount of noise can be ignored.',
-	artifactDetectionTitle:  'Artefact detection',
-	artifactDetectionDescription:  'One simple way to define a "significant amount of noise" is to compare how variable an epoch is in comparison to its neighbours. If the signal moves around in one epoch a lot more than in its neighbours, it is probably because there was an eyeblink or some other source of noise. Get rid of it!',
+	artefactDetectionTitle:  'Artefact detection',
+	artefactDetectionDescription:  'One simple way to define a "significant amount of noise" is to compare how variable an epoch is in comparison to its neighbours. If the signal moves around in one epoch a lot more than in its neighbours, it is probably because there was an eyeblink or some other source of noise. Get rid of it!',
 
 	//slide-07.js
 	featureDetectionSlideTitle:  'FEATURE EXTRACTION',
@@ -182,7 +182,7 @@ export default {
 	thanksForCompleting:  'Thanks for completing \n EEG 101',
 	hopeYouEnjoyed:  'We hope you enjoyed learning about the basics of EEG. Soon, this tutorial will cover more advanced topics, such as how to create a simple brain-machine interface!',
 	whatsNext:  'What\'s Next?',
-	liveArtifactRemoval:  '1. Live Artifact Removal',
+	liveArtefactRemoval:  '1. Live Artefact Removal',
 	offlineMode:  '2. Offline Mode',
 	interactiveBCI:  '3. Interactive Brain Computer Interface!',
 	projectOpenSource:  'This project is Open Source',
@@ -197,8 +197,14 @@ export default {
 	teamMemberBrian:  'Brian Stern - Software Architect',
 	teamMemberSteve:  'Steve Harjula - Visual Design',
 	teamMemberMiles:  'Miles McCraw - Animator',
+	restartButton: 'RESTART TUTORIAL',
 
-	//component.js
+	// DeviceStatusWdiget
+	widgetConnected: 'Muse connected',
+	widgetDisconnected: 'No connected device',
+	widgetConnecting: 'Connecting...',
+
+	//ConnectorModule/component.js
 	needsPermission:  'EEG 101 needs your permission',
 	requiresLocation:  'This app requires coarse location permission in order to discover and connect to the 2016 Muse.',
 	statusConnected:  'Connected',

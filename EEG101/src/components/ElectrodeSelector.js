@@ -25,26 +25,26 @@ export default class ElectrodeSelector extends Component {
 		switch(electrode){
 			case 1:
 				this.setState({image: require('../assets/electrodediagram1.png')});
-				this.props.channelOfInterest(1); 
+				this.props.channelOfInterest(1);
 				break;
 			case 2:
 				this.setState({image: require('../assets/electrodediagram2.png')});
-				this.props.channelOfInterest(2); 
+				this.props.channelOfInterest(2);
 				break;
 			case 3:
 				this.setState({image: require('../assets/electrodediagram3.png')});
-				this.props.channelOfInterest(3); 
+				this.props.channelOfInterest(3);
 				break;
 			case 4:
 				this.setState({image: require('../assets/electrodediagram4.png')});
-				this.props.channelOfInterest(4); 
+				this.props.channelOfInterest(4);
 				break;
 		}
 	}
 
 	render() {
 		return (
-			<Image source={this.state.image} 
+			<Image source={this.state.image}
 			style={styles.container}>
 				<View style={styles.horizontalContainer}>
 					<TouchableOpacity style={{flex:1}} onPress={() => {this.touch(2)}}/>
@@ -54,7 +54,7 @@ export default class ElectrodeSelector extends Component {
 					<TouchableOpacity style={{flex:1}} onPress={() => {this.touch(1)}}/>
 					<TouchableOpacity style={{flex:1}} onPress={() => {this.touch(4)}}/>
 				</View>
-			</Image> 
+			</Image>
 		);
 	}
 }

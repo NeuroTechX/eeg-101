@@ -36,7 +36,7 @@ class SlideSix extends Component {
           />
         </View>
 
-        <Text style={styles.currentTitle}>{I18n.t('artifactRemovalSlideTitle')}</Text>
+        <Text style={styles.currentTitle}>{I18n.t('artefactRemovalSlideTitle')}</Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
@@ -93,7 +93,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     container: {
-
+      backgroundColor: "#ffffff",
       flex: 1,
       justifyContent: "space-around",
       alignItems: "stretch"

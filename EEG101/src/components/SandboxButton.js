@@ -19,11 +19,10 @@ export default class SandboxButton extends Component{
 
   render() {
     const dynamicButtonStyle = (this.props.active) ? styles.activeButton: styles.inactiveButton;
-    const dynamicTextStyle = (this.props.active) ? styles.activeText: styles.inactiveText;
     return(
       <TouchableOpacity onPress={this.props.onPress}>
         <View style={dynamicButtonStyle}>
-          <Text style={dynamicTextStyle}>{this.props.children}</Text>
+          <Text style={styles.text}>{this.props.children}</Text>
         </View>
       </TouchableOpacity>
     )
@@ -36,36 +35,33 @@ const styles = MediaQueryStyleSheet.create(
     // Base styles
     activeButton: {
       justifyContent: 'center',
-      backgroundColor: '#97D2FC',
+      backgroundColor: '#94DAFA',
       borderColor: '#484848',
-      borderWidth: 1,
+
       height: 30,
       margin: 5,
       padding: 5,
       alignItems: 'stretch',
+      elevation: 3,
     },
 
     inactiveButton: {
       justifyContent: 'center',
-      borderWidth: 1,
+      backgroundColor: '#ffffff',
       borderColor: 'gray',
       height: 30,
       margin: 5,
       padding: 5,
       alignItems: 'stretch',
+      elevation: 3,
     },
 
-    activeText:{
+    text:{
       color: '#484848',
       fontFamily: 'Roboto-Regular',
       fontSize: 15
     },
 
-    inactiveText:{
-      color: 'gray',
-      fontFamily: 'Roboto-Regular',
-      fontSize: 15
-    },
   },
   // Responsive styles
   {
@@ -86,6 +82,3 @@ const styles = MediaQueryStyleSheet.create(
       },
     }
   });
-
-
-

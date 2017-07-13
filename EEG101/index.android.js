@@ -9,7 +9,8 @@ import {
 } from "react-router-native";
 import { Provider, connect } from "react-redux";
 import { createStore, applyMiddleware, bindActionCreators } from "redux";
-import { toggleMenu } from "./src/redux/actions";
+import { withRouter } from 'react-router';
+import { closeMenu } from "./src/redux/actions";
 import Drawer from "react-native-drawer";
 import thunk from "redux-thunk";
 import config from "./src/redux/config";
@@ -41,28 +42,23 @@ import BCITrain from "./src/scenes/bci-train.js";
 // reducer is a function
 import reducer from "./src/redux/reducer";
 
-// Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
   return {
     open: state.isMenuOpen
   };
 }
 
-// Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      onClose: toggleMenu
+      onClose: closeMenu
     },
     dispatch
   );
 }
 
-// Connect Router to Redux
-const RouterWithRedux = connect(mapStateToProps)(NativeRouter);
-
 // Connect SideMenu to Redux
-const DrawerWithRedux = connect(mapStateToProps, mapDispatchToProps)(Drawer);
+const DrawerWithRedux = withRouter(connect(mapStateToProps, mapDispatchToProps)(Drawer));
 
 // Create store
 const store = createStore(reducer, applyMiddleware(thunk));
@@ -87,19 +83,19 @@ class EEG_Project extends Component {
     // previous slide info is currently harcoded in as the 'previous' prop
     return (
       <Provider store={store}>
-        <RouterWithRedux>
+        <NativeRouter>
           <AndroidBackButton>
             <View style={{ flex: 1 }}>
               <StatusBar backgroundColor='#2c85b9'/>
-              <DrawerWithRedux ref={(ref) => this.drawer = ref}
+              <DrawerWithRedux
                 content={
-                  <SideMenu
+                  <SideMenu drawer={this.ref}
                   />
                 }
                 type='overlay'
                 tapToClose={true}
                 openDrawerOffset={0.2} // 20% gap on the right side of drawer
-                panCloseMask={0.2}
+                panCloseMask={.2}
                 closedDrawerOffset={-3}
                 captureGestures='open'
                 styles={{
@@ -133,7 +129,7 @@ class EEG_Project extends Component {
             </DrawerWithRedux>
             </View>
           </AndroidBackButton>
-        </RouterWithRedux>
+        </NativeRouter>
       </Provider>
     );
   }

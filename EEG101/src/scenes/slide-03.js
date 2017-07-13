@@ -124,7 +124,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     container: {
-
+      backgroundColor: "#ffffff",
       flex: 1,
       justifyContent: 'space-around',
       alignItems: 'stretch',

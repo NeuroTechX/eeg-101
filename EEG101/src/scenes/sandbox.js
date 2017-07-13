@@ -57,18 +57,22 @@ class Sandbox extends Component {
       case config.graphType.FILTER:
         switch (this.state.filterType) {
           case config.filterType.LOWPASS:
-            text = "< 35hz";
+            text = "< 35hz low-pass";
             break;
           case config.filterType.HIGHPASS:
-            text = "> 2hz";
+            text = "> 2hz high-pass";
             break;
           case config.filterType.BANDPASS:
-            text = "2-35hz";
+            text = "2-35hz band-pass";
             break;
         }
         return (
+          <View style={styles.filterContainer}>
+            <Text style={styles.filterText}>
+              {text}
+            </Text>
           <View style={styles.filterButtonContainer}>
-            <Text style={styles.filterText}>{text}</Text>
+
             <SandboxButton
               onPress={() =>
                 this.setState({
@@ -77,7 +81,7 @@ class Sandbox extends Component {
                 })}
               active={this.state.filterType === config.filterType.LOWPASS}
             >
-              Low-pass
+              LOW
             </SandboxButton>
             <SandboxButton
               onPress={() =>
@@ -87,7 +91,7 @@ class Sandbox extends Component {
                 })}
               active={this.state.filterType === config.filterType.HIGHPASS}
             >
-              High-pass
+              HIGH
             </SandboxButton>
             <SandboxButton
               onPress={() =>
@@ -97,9 +101,10 @@ class Sandbox extends Component {
                 })}
               active={this.state.filterType === config.filterType.BANDPASS}
             >
-              Band-pass
+              BAND
             </SandboxButton>
           </View>
+        </View>
         );
 
       case config.graphType.WAVES:
@@ -141,6 +146,7 @@ class Sandbox extends Component {
         <Text style={styles.currentTitle}>SANDBOX</Text>
 
         <View style={styles.pageContainer}>
+          <View style={styles.rowContainer}>
           <View style={styles.infoContainer}>
             <View style={styles.buttonContainer}>
               <SandboxButton
@@ -151,7 +157,7 @@ class Sandbox extends Component {
                   })}
                 active={this.state.graphType === config.graphType.EEG}
               >
-                Raw
+                RAW
               </SandboxButton>
               <SandboxButton
                 onPress={() =>
@@ -161,7 +167,7 @@ class Sandbox extends Component {
                   })}
                 active={this.state.graphType === config.graphType.FILTER}
               >
-                Filtered
+                FILTERED
               </SandboxButton>
               <SandboxButton
                 onPress={() =>
@@ -185,17 +191,16 @@ class Sandbox extends Component {
               {this.renderInfoView()}
             </View>
 
-            <ElectrodeSelector
-              style={{ alignSelf: "center" }}
-              channelOfInterest={channel =>
-                this.setState({ channelOfInterest: channel })}
-            />
 
           </View>
+          <ElectrodeSelector
+            style={{ alignSelf: "center" }}
+            channelOfInterest={channel =>
+              this.setState({ channelOfInterest: channel })}
+          />
+        </View>
 
-          <LinkButton path="/end">
-            END
-          </LinkButton>
+          <LinkButton path="/end">END</LinkButton>
         </View>
         <PopUp
           onClose={() => this.props.history.push("/connectorOne")}
@@ -217,6 +222,7 @@ const styles = MediaQueryStyleSheet.create(
   // Base styles
   {
     container: {
+      backgroundColor: "#ffffff",
       flex: 1,
       justifyContent: "space-around",
       alignItems: "stretch"
@@ -240,6 +246,7 @@ const styles = MediaQueryStyleSheet.create(
     buttonContainer: {
       paddingTop: 10,
       flex: 1,
+      flexDirection: 'row',
       alignItems: "flex-start",
       justifyContent: "space-between"
     },
@@ -251,9 +258,15 @@ const styles = MediaQueryStyleSheet.create(
       fontSize: 17
     },
 
+    filterContainer: {
+      flex: 1,
+      alignItems: 'center',
+    },
+
     filterButtonContainer: {
       flex: 1,
-      alignItems: "center",
+      alignItems: 'center',
+      flexDirection: 'row',
       justifyContent: "space-between"
     },
 
@@ -271,9 +284,16 @@ const styles = MediaQueryStyleSheet.create(
       paddingBottom: 15
     },
 
-    infoContainer: {
+    rowContainer: {
       flex: 1,
       flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between"
+    },
+
+    infoContainer: {
+      flex: 1,
+      flexDirection: "column",
       alignItems: "center",
       justifyContent: "space-between"
     },

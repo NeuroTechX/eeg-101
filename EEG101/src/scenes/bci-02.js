@@ -59,11 +59,10 @@ class BCITwo extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.currentTitle}>BUILDING A BCI</Text>
         <ViewPagerAndroid
           style={styles.viewPager}
           initialPage={0}
-          enableScroll={this.state.enableScroll}
+          scrollEnabled={this.state.enableScroll}
           // Receives a native callback event e that is used to set slidePosition state
           onPageSelected={e => {
             this.setState({ slidePosition: e.nativeEvent.position });
@@ -99,7 +98,7 @@ class BCITwo extends Component {
                   }}
                   active={this.props.bciAction == config.bciAction.VIBRATE}
                 >
-                  Vibrate
+                  <Image style={{width: 60, height: 60}} source={require('../assets/vibrate.png')} resizeMode='contain'/>
                 </DecisionButton>
                 <DecisionButton
                   onPress={() => {
@@ -110,7 +109,8 @@ class BCITwo extends Component {
                   }}
                   active={this.props.bciAction == config.bciAction.LIGHT}
                 >
-                  Light
+                  <Image style={{width: 60, height: 60}} source={require('../assets/light.png')} resizeMode='contain'/>
+
                 </DecisionButton>
               </View>
             </View>
@@ -165,29 +165,7 @@ class BCITwo extends Component {
               <ClassifierInfoDisplayer
                 folds={6}
                 onComplete={() => this.setState({ enableScroll: true })}
-              />
-              <TouchableOpacity
-                style={{
-                  borderColor: "#484848",
-                  borderWidth: 1,
-                  alignSelf: "center",
-                  margin: 5,
-                  padding: 5
-                }}
-                onPress={()=>{Classifier.reset()
-                  this.props.history.push('/bci')
-                }}
-              >
-                <Text
-                  style={{
-                    color: "#484848",
-                    fontFamily: "Roboto-Bold",
-                    fontSize: 15
-                  }}
-                >
-                  RE-TRAIN BCI
-                </Text>
-              </TouchableOpacity>
+              />              
             </View>
           </View>
         </ViewPagerAndroid>
@@ -217,6 +195,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     container: {
+      backgroundColor: "#ffffff",
       flex: 1,
       justifyContent: "space-around",
       alignItems: "stretch"

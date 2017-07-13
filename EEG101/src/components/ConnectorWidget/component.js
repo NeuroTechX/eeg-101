@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
  		flex: 2.5,
  		flexDirection: 'column',
  		justifyContent: 'space-around',
-    alignItems: 'stretch',
+    alignItems: 'center',
     marginLeft: 50,
     marginRight: 50,
  	},

@@ -6,7 +6,8 @@ import {
   SET_CONNECTION_STATUS,
   SET_GRAPHVIEW_DIMENSIONS,
   SET_BCI_ACTION,
-  TOGGLE_MENU,
+  OPEN_MENU,
+  CLOSE_MENU,
 } from './actionTypes.js';
 import config from './config';
 
@@ -17,7 +18,9 @@ export const setGraphViewDimensions = (payload) => ({payload, type: SET_GRAPHVIE
 
 export const setBCIAction = (payload) => ({payload, type: SET_BCI_ACTION});
 
-export const toggleMenu = (payload) => ({payload, type: TOGGLE_MENU});
+export const openMenu = (payload) => ({payload, type: OPEN_MENU});
+
+export const closeMenu = (payload) => ({payload, type: CLOSE_MENU});
 
 export function getAndConnectToDevice() {
   return (dispatch) =>  {
