@@ -141,10 +141,10 @@ class ClassifierRun extends Component {
                   fontSize: 15
                 }}
               >
-                RE-TRAIN BCI
+                {I18n.t('retrainBci')}
               </Text>
             </TouchableOpacity>
-            <LinkButton path="/end">END EEG 101</LinkButton>
+            <LinkButton path="/end">{I18n.t('endEeg101')}</LinkButton>
           </View>
 
         </ViewPagerAndroid>

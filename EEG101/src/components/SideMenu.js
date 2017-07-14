@@ -18,6 +18,7 @@ import { bindActionCreators } from "redux";
 import config from "../redux/config.js";
 import DeviceStatusWidget from "../components/DeviceStatusWidget.js";
 import MenuSection from "../components/MenuSection.js";
+import I18n from "../i18n/i18n";
 
 function mapStateToProps(state) {
   return {
@@ -52,11 +53,11 @@ class SideMenu extends Component {
         <DeviceStatusWidget connectionStatus={this.props.connectionStatus} />
 
         <MenuSection
-          title="Tools"
+          title={I18n.t('toolsTitle')}
           items={[
             {
               //icon: "face",
-              value: "EEG Sandbox",
+              value: {I18n.t('eegSandbox')},
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -65,7 +66,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: "Brain-computer interface",
+              value: {I18n.t('bciValue')},
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -75,11 +76,11 @@ class SideMenu extends Component {
           ]}
         />
         <MenuSection
-          title="Tutorial"
+          title={I18n.t('tutorialTitle')}
           items={[
             {
               //icon: "face",
-              value: "Introduction",
+              value: {I18n.t('introductionValue')},
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -88,7 +89,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: "Physiology",
+              value: {I18n.t('physiologyValue')},
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -97,7 +98,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: "Hardware",
+              value: {I18n.t('hardwareValue')},
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -106,7 +107,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: "Filtering",
+              value: {I18n.t('filteringValue')},
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -115,7 +116,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: "Epoching",
+              value: {I18n.t('epochingValue')},
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -124,7 +125,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: "Artefact Removal",
+              value: {I18n.t('artefactValue')},
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -133,7 +134,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: "Feature Extraction",
+              value: {I18n.t('featureValue')},
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -142,7 +143,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: "Power Spectral Density",
+              value: {I18n.t('psdValue')},
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -151,7 +152,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: "Brain Waves",
+              value: {I18n.t('brainWavesValue')},
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -160,7 +161,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: "Brain Computer Interfaces",
+              value: {I18n.t('brainComputerInterfaceValue')},
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -169,7 +170,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: "How to Build a BCI",
+              value: {I18n.t('howBuildBciValue')},
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -178,7 +179,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: "Information & Acknowledgements",
+              value: {I18n.t('infoValue')},
               active: this.props.location.pathname === "/end",
               onPress: () => this.navTo("/end")
             }
