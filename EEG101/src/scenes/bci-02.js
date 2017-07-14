@@ -76,17 +76,12 @@ class BCITwo extends Component {
         >
           <View style={styles.pageStyle}>
             <View style={styles.textWrapper}>
-              <Text style={styles.title}>{I18n.t("step1Title")}</Text>
-              <Text style={styles.subTitle}>Choose a command</Text>
+              <Text style={styles.title}>{I18n.t('step1Title')}</Text>
+              <Text style={styles.subTitle}>{I18n.t('chooseCommand')}</Text>
             </View>
             <View style={styles.contentContainer}>
               <View style={styles.textWrapper}>
-                <Text style={styles.body}>
-                  This BCI will allow you to execute a command on your phone by
-                  switching between two 'brain states'
-                  {"\n"}{"\n"}
-                  First, what do you want this BCI to do?
-                </Text>
+                <Text style={styles.body}>{I18n.t('bciCommands')}</Text>
               </View>
               <View style={styles.decisionContainer}>
                 <DecisionButton
@@ -121,8 +116,8 @@ class BCITwo extends Component {
 
           <View style={styles.pageStyle}>
             <View style={styles.textWrapper}>
-              <Text style={styles.title}>{I18n.t("step2Title")}</Text>
-              <Text style={styles.subTitle}>Collect "OFF" data</Text>
+              <Text style={styles.title}>{I18n.t('step2Title')}</Text>
+              <Text style={styles.subTitle}>{I18n.t('offData')}</Text>
 
             </View>
             <View style={styles.contentContainer}>
@@ -139,8 +134,8 @@ class BCITwo extends Component {
 
           <View style={styles.pageStyle}>
             <View style={styles.textWrapper}>
-              <Text style={styles.title}>{I18n.t("step3Title")}</Text>
-              <Text style={styles.subTitle}>Collect "ON" data</Text>
+              <Text style={styles.title}>{I18n.t('step3Title')}</Text>
+              <Text style={styles.subTitle}>{I18n.t('onData')}</Text>
 
             </View>
             <View style={styles.contentContainer}>
@@ -157,8 +152,8 @@ class BCITwo extends Component {
 
           <View style={styles.pageStyle}>
             <View style={styles.textWrapper}>
-              <Text style={styles.title}>{I18n.t("step4Title")}</Text>
-              <Text style={styles.subTitle}>Train the classifier</Text>
+              <Text style={styles.title}>{I18n.t('step4Title')}</Text>
+              <Text style={styles.subTitle}>{I18n.t('trainClassifier')}</Text>
 
             </View>
             <View style={styles.contentContainer}>

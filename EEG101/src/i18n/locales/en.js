@@ -18,7 +18,7 @@ export default {
 	runButton:  'Run',
 	resetButton:  'Reset',
 
-	//classifier-run.js:  '',
+	//classifier-run.js:
 	tryingToUnderstand:  'Trying to understand your brain...',
 	classifierReturnsDataset:  'As this classifier runs, it will return the sample data set your real-time brain activity most closely resembles.',
 	retrainLink:  ' RE-TRAIN ',
@@ -213,9 +213,108 @@ export default {
 	searchAgain:  ' SEARCH AGAIN ',
 	statusConnecting:  'Connecting...',
 	statusDisconnected:  'Searching for Muses',
-	//bci
-	//step1Title:  'Step 1',
-	//step2Title:  'Step 2',
-	//step3Title:  'Step 3',
-	step4Title:  'Step 4',
+
+	// bci-01.js
+	bciTitle:  'BRAIN-COMPUTER INTERFACES',
+	whatIsBci:  'What is a Brain-Computer Interface?',
+	bciDefinition1:  'A BCI is a communication channel that allows the brain to ',
+	bciDefinition2:  'interact',
+	bciDefinition3:  'with an external device such as a computer',
+	makeUseBci:  'How can we use EEG to make a BCI?',
+	recognizePatternBrain:  'We can teach a computer to execute a command when it recognizes a certain pattern of brain activity. This process is called '
+	machineLearning:  'machine learning',
+	buildBci:  'LET\'S BUILD A BCI',
+	bciInteractionTitle:  'Types of BCI interaction',
+	activeBci:  'Active BCI involves the user generating brain signals actively in order to control a computer. For example, using imagined movement of either the right or left hand to steer an avatar right or left. The function of active BCIs are to replace conventional interfaces such as keys on a keyboard.',
+	reactiveBci:  'Reactive BCIs use the brain\'s natural response to stimuli in order to gauge the user\'s intent. For example, detecting visually evoked responses to flashes of light on a keyboard to allow a user to spell by focusing their eyes on specific words. Although they don\'t require direct and conscious control, reactive BCIs must be built around specific stimuli that evolve known brain responses when perceived.',
+	passiveBci:  'Passive BCIs monitor the user\'s mental states without any effort their part. For example, passive BCIs might monitor attention, relaxation, or emotional state and use that information to adjust elements of a game.',
+	machineLearningTitle:  'Machine Learning',
+	machineLearningDefinition:  'A machine learning algorithm is a computer program that learns by looking at examples. For instance, machine learning algorithms can learn to recognize objects in a picture by looking at thousands of pictures of different objects. In an EEG BCI, this type of algorithm looks at many instances of someone’s brain activity and finds an optimal way to recognize what the user is doing.',
+
+	// bci-02.js
+	step1Title:  'Step 1',
+	chooseCommand: 'Choose a command',
+	bciCommands: 'This BCI will allow you to execute a command on your phone by switching between two \'brain states\' \n\n First, what do you want this BCI to do?',
+	step2Title:  'Step 2',
+	offData: 'Collect "OFF" data',
+	step3Title:  'Step 3',
+	onData:  'Collect "ON" data',
+	trainClassifier: 'Train the classifier',
+
+	// bci-run.js
+	retrainBci: 'RE-TRAIN BCI',
+	endEeg101: 'END EEG 101',
+
+	// bci-train.js
+	trainSamples: 'samples',
+	trainStop: 'STOP',
+	trainCollect: 'COLLECT',
+	trainOn: 'ON',
+	trainOff: 'OFF',
+	trainFitClassifier: 'FIT CLASSIFIER',
+	trainAccuracy: 'Accuracy',
+	trainReFit: 'RE-FIT',
+	trainRunIt: ' RUN IT! ',
+	trainReset: 'RESET',
+
+	// ClassifierInfoDisplayer.js
+	nextTrain: 'Next, train the ',
+	classifierName: 'classifier',
+	collectedData: 'on your data to distinguish between your brain states. \n\n The data you\'ve collected is simply the powers of the different brain waves (δ, θ, α, β) for each electrode in each epoch you collected',
+	trainClassifierButton: 'TRAIN CLASSIFIER',
+	classifierTitle2: 'Classifier',
+	classifierPopUp: 'A classifier is a type of machine learning algorithm that learns to distinguish between two or more groups by looking at relevant features of these groups. The classifier that we are training here uses the Gaussian Naive Bayes technique to estimate the probability that a data point belongs to two distinct normal distributions. Image from Raizada and Lee, 2013',
+	classifierAccuracy: 'Accuracy:',
+	classifierScore: 'This score represents how well the classifier is able to distinguish between the two brain states based on the data you collected. \n\n If you are happy with your classifier\'s score you can run your BCI in real-time! Otherwise, you can start over with new data',
+	classifierReTrain: 'RE-TRAIN',
+	crossValidationAcc: 'Cross-validation accuracy',
+	crossValidationDefinition: 'Cross-validation is a technique to evaluate the accuracy of predictive algorithms by breaking up an original set of example data into a training set and a test set. The algorithm is trained on this training set and scored on how well it predicts the values of the test set. In k-fold cross-validation, which this BCI uses, this process is repeated a number of times with different randomly selected subsamples of data each time.',
+
+	// DataCollection.js
+	collecting:  'Collecting...',
+	oopsYouOnly: 'Oops! You only collected ',
+	epochsOfData: 'epochs of data.\n\n Remember, it is important to discard epochs that contain too much noise in order to detect signals from the brain. Try again, ensuring that your headband is fitted correctly and that blinks and movement are kept to a minumum.',
+	letsTeach: 'Now, let’s teach the algorithm the brain state you’ll use to turn the',
+	closeYourEyes: 'ON.\n\n Once again, you can try whatever you want. We recommend closing your eyes and relaxing. Click the button below to start recording another 30 seconds of data.',
+	youveCollected: 'Awesome! You\'ve collected',
+	totalCleanData: 'total epochs of clean data.\n\n The accuracy of machine learning is often dependent on the number of examples given to the algorithm. Consider collecting even more data to make this BCI as accurate as possible!',
+	letsTeach2: 'Let\'s teach the algorithm which brain state you’ll use to keep the',
+	eyesOpen: 'OFF.\n\n You can try whatever you want, but we recommend keeping your eyes open and concentrating. When you are ready, click to record 30 seconds of data.',
+	totalCleanData2: 'total epochs of clean data.\n\n For this BCI, each epoch is one second long. Those with too much noise are discarded.',
+
+    // SideMenu.js
+    eegSandbox: 'EEG Sandbox',
+    toolsTitle: 'Tools',
+    bciValue: 'Brain-computer interface',
+    tutorialTitle: 'Tutorial',
+    introductionValue: 'Introduction',
+    physiologyValue: 'Physiology',
+    hardwareValue: 'Hardware',
+    filteringValue: 'Filtering',
+    epochingValue: 'Epoching',
+    artefactValue: 'Artefact Removal',
+    featureValue: 'Feature Extraction',
+    psdValue: 'Power Spectral Density',
+    brainWavesValue: 'Brain Waves',
+    brainComputerInterfaceValue: 'Brain-Computer Interfaces',
+    howBuildBciValue: 'How to Build a BCI',
+    infoValue: 'Information & Acknowledgements',
+
+    // config.js
+    configConnected: 'CONNECTED',
+    configConnecting: 'CONNECTING',
+    configDisconnected: 'DISCONNECTED',
+    configNoMuses: 'NO_MUSES',
+    configEeg: 'EEG',
+    configFilter: 'FILTER',
+    configPsd: 'PSD',
+    configWaves: 'WAVES',
+    configArtefact: 'ARTEFACT',
+    configLowpass: 'LOWPASS',
+    configHighpass: 'HIGHPASS',
+    configBandstop: 'BANDSTOP',
+    configBandpass: 'BANDPASS',
+    configLight: 'the light',
+    configVibrate:  'vibration',
+
 };

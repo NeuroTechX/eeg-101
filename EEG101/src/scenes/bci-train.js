@@ -22,6 +22,8 @@ import Button from "../components/Button.js";
 import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
+import I18n from "../i18n/i18n";
+
 
 function mapStateToProps(state) {
   return {
@@ -66,17 +68,16 @@ class BCITrain extends Component {
       return (
         <View style={styles.dataClassContainer}>
           <View style={styles.cardTextContainer}>
-            <Text style={styles.classTitle}>OFF</Text>
+            <Text style={styles.classTitle}>{I18n.t('trainOff')}</Text>
             <Text style={styles.body}>
-              {this.state.class1Samples} samples
-            </Text>
+              {this.state.class1Samples} {I18n.t('trainSamples')} </Text>
           </View>
           <ActivityIndicator color={"#6CCBEF"} size={"large"} />
           <SandboxButton
             onPress={() => Classifier.stopCollecting()}
             active={true}
           >
-            STOP
+            {I18n.t('trainStop')}
           </SandboxButton>
         </View>
       );
@@ -84,9 +85,9 @@ class BCITrain extends Component {
       return (
         <View style={styles.dataClassContainer}>
           <View style={styles.cardTextContainer}>
-            <Text style={styles.classTitle}>OFF</Text>
+            <Text style={styles.classTitle}>{I18n.t('trainOff')}</Text>
             <Text style={styles.body}>
-              {this.state.class1Samples} samples
+              {this.state.class1Samples} {I18n.t('trainSamples')}
             </Text>
           </View>
           <SandboxButton
@@ -99,7 +100,7 @@ class BCITrain extends Component {
             active={!this.state.isCollecting2}
             disabled={this.state.isCollecting2}
           >
-            COLLECT
+            {I18n.t('trainCollect')}
           </SandboxButton>
         </View>
       );
@@ -111,9 +112,9 @@ class BCITrain extends Component {
       return (
         <View style={styles.dataClassContainer}>
           <View style={styles.cardTextContainer}>
-            <Text style={styles.classTitle}>ON</Text>
+            <Text style={styles.classTitle}>{I18n.t('trainOn')}</Text>
             <Text style={styles.body}>
-              {this.state.class2Samples} samples
+              {this.state.class2Samples} {I18n.t('trainSamples')}
             </Text>
           </View>
           <ActivityIndicator color={"#6CCBEF"} size={"large"} />
@@ -121,7 +122,7 @@ class BCITrain extends Component {
             onPress={() => Classifier.stopCollecting()}
             active={true}
           >
-            STOP
+            {I18n.t('trainStop')}
           </SandboxButton>
         </View>
       );
@@ -129,9 +130,9 @@ class BCITrain extends Component {
       return (
         <View style={styles.dataClassContainer}>
           <View style={styles.cardTextContainer}>
-            <Text style={styles.classTitle}>ON</Text>
+            <Text style={styles.classTitle}>{I18n.t('trainOn')}</Text>
             <Text style={styles.body}>
-              {this.state.class2Samples} samples
+              {this.state.class2Samples} {I18n.t('trainSamples')}
             </Text>
           </View>
           <SandboxButton
@@ -144,7 +145,7 @@ class BCITrain extends Component {
             active={!this.state.isCollecting1}
             disabled={this.state.isCollecting1}
           >
-            COLLECT
+            {I18n.t('trainCollect')}
           </SandboxButton>
         </View>
       );
@@ -170,7 +171,7 @@ class BCITrain extends Component {
               this.state.class2Samples < 1 || this.state.class1Samples < 1
             }
           >
-            FIT CLASSIFIER
+            {I18n.t('trainFitClassifier')}
           </SandboxButton>
         </View>
       );
@@ -186,7 +187,7 @@ class BCITrain extends Component {
           <View style={styles.classifierDataContainer}>
             <View style={styles.classifierTextContainer}>
               <Text style={styles.body}>
-                Accuracy: {Math.round(this.state.score * 1000) / 1000}
+                {I18n.t('trainAccuracy')}: {Math.round(this.state.score * 1000) / 1000}
               </Text>
               <SandboxButton
                 onPress={() => {
@@ -202,7 +203,7 @@ class BCITrain extends Component {
                   !this.state.isCollecting1
                 }
               >
-                RE-FIT
+                {I18n.t('trainReFit')}
               </SandboxButton>
             </View>
             <View style={styles.classifierGraphContainer}>
@@ -262,7 +263,7 @@ class BCITrain extends Component {
         <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
           <View style={{ flex: 1 }}>
             <LinkButton path="/bciRun" disabled={this.state.score === ""}>
-              {" "}RUN IT!{" "}
+              {I18n.t('trainRunIt')}
             </LinkButton>
           </View>
           <View style={{ flex: 1 }}>
@@ -286,7 +287,7 @@ class BCITrain extends Component {
                 });
               }}
             >
-              RESET
+              {I18n.t('trainReset')}
             </Button>
           </View>
         </View>

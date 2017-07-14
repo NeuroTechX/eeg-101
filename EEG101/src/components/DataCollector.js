@@ -16,6 +16,7 @@ import {
 import Classifier from "../interface/Classifier.js";
 import Button from "../components/Button.js";
 import { MediaQueryStyleSheet } from "react-native-responsive";
+import I18n from "../i18n/i18n";
 
 export default class DataCollector extends Component {
   constructor(props) {
@@ -52,7 +53,7 @@ export default class DataCollector extends Component {
     if (this.state.isCollecting) {
       return (
         <View style={styles.dataClassContainer}>
-          <Text style={styles.body}>Collecting...</Text>
+          <Text style={styles.body}>{I18n.t('collecting')}</Text>
           <ActivityIndicator color={"#94DAFA"} size={"large"} />
         </View>
       );
@@ -60,15 +61,11 @@ export default class DataCollector extends Component {
       return (
         <View style={styles.dataClassContainer}>
           <Text style={styles.body}>
-            Oops! You only collected <Text style={{fontWeight: 'bold'}}>{this.state.samples}</Text> epochs of data.
-            {"\n"}{"\n"}
-            Remember, it is important to discard epochs that contain too
-            much noise in order to detect signals from the brain.
-            Try again, ensuring that your headband is fitted correctly and
-            that blinks and movement are kept to a minumum.
+            {I18n.t('oopsYouOnly')} <Text style={{fontWeight: 'bold'}}>{this.state.samples}</Text> 
+            {I18n.t('epochsOfData')}
           </Text>
           <Button onPress={() => this.collectData()}>
-            COLLECT
+            {I18n.t('trainCollect')}
           </Button>
         </View>
       );
@@ -77,16 +74,10 @@ export default class DataCollector extends Component {
         return (
           <View style={styles.dataClassContainer}>
             <Text style={styles.body}>
-              Now, let’s teach the algorithm the brain state you’ll use to
-              turn
-              the {this.props.bciAction} ON.
-              {"\n"}{"\n"}
-              Once again, you can try whatever you want. We recommend
-              closing your eyes and relaxing. Click the button below to
-              start recording another 30 seconds of data.
+              {I18n.t('trainCollect')} {this.props.bciAction} {I18n.t('closeYourEyes')} 
             </Text>
             <Button onPress={() => this.collectData()}>
-              COLLECT
+              {I18n.t('trainCollect')} 
             </Button>
           </View>
         );
@@ -94,15 +85,11 @@ export default class DataCollector extends Component {
         return (
           <View style={styles.dataClassContainer}>
             <Text style={styles.body}>
-              Awesome! You've collected <Text style={{fontWeight: 'bold'}}>{this.state.samples}</Text> total epochs of clean
-              data.
-              {"\n"}{"\n"}
-              The accuracy of machine learning is often dependent on the number
-              of examples given to the algorithm. Consider collecting even more
-              data to make this BCI as accurate as possible!
+              {I18n.t('youveCollected')}  <Text style={{fontWeight: 'bold'}}>{this.state.samples}</Text>
+              {I18n.t('totalCleanData')} 
             </Text>
             <Button onPress={() => this.collectData()}>
-              COLLECT
+              {I18n.t('trainCollect')} 
             </Button>
           </View>
         );
@@ -112,16 +99,10 @@ export default class DataCollector extends Component {
         return (
           <View style={styles.dataClassContainer}>
             <Text style={styles.body}>
-              Let's teach the algorithm which brain state you’ll use to keep
-              the {this.props.bciAction} OFF.
-              {"\n"}{"\n"}
-              You can try whatever you
-              want, but we
-              recommend keeping your eyes open and concentrating. When you are
-              ready, click to record 30 seconds of data.
+              {I18n.t('letsTeach2')} {this.props.bciAction} {I18n.t('eyesOpen')}
             </Text>
             <Button onPress={() => this.collectData()}>
-              COLLECT
+              {I18n.t('trainCollect')} 
             </Button>
           </View>
         );
@@ -129,13 +110,10 @@ export default class DataCollector extends Component {
         return (
           <View style={styles.dataClassContainer}>
             <Text style={styles.body}>
-              Awesome! You've collected <Text style={{fontWeight: 'bold'}}>{this.state.samples}</Text> total epochs of clean
-              data.
-              {"\n"}{"\n"}
-              For this BCI, each epoch is one second long. Those with too much noise are discarded.
+              {I18n.t('youveCollected')}  <Text style={{fontWeight: 'bold'}}>{this.state.samples}</Text> {I18n.t('totalCleanData2')} 
             </Text>
             <Button onPress={() => this.collectData()}>
-              COLLECT
+              {I18n.t('trainCollect')} 
             </Button>
           </View>
         );
@@ -144,7 +122,7 @@ export default class DataCollector extends Component {
     return (
       <View style={styles.dataClassContainer}>
         <Button onPress={() => this.collectData()}>
-          COLLECT
+          {I18n.t('trainCollect')} 
         </Button>
       </View>
     );
