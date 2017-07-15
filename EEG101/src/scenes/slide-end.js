@@ -32,7 +32,7 @@ class End extends Component {
 
             <View style={styles.listBox}>
               <Text style={styles.header}>{I18n.t('whatsNext')}</Text>
-                <Text style={styles.body}>{I18n.t('liveArtifactRemoval')}</Text>
+                <Text style={styles.body}>{I18n.t('liveArtefactRemoval')}</Text>
                 <Text style={styles.body}>{I18n.t('offlineMode')}</Text>
             </View>
 

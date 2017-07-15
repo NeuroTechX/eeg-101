@@ -57,7 +57,7 @@ class SideMenu extends Component {
           items={[
             {
               //icon: "face",
-              value: {I18n.t('eegSandbox')},
+              value: I18n.t('eegSandbox'),
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -66,7 +66,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: {I18n.t('bciValue')},
+              value: I18n.t('bciValue'),
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -80,7 +80,7 @@ class SideMenu extends Component {
           items={[
             {
               //icon: "face",
-              value: {I18n.t('introductionValue')},
+              value: I18n.t('introductionValue'),
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -89,7 +89,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: {I18n.t('physiologyValue')},
+              value: I18n.t('physiologyValue'),
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -98,7 +98,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: {I18n.t('hardwareValue')},
+              value: I18n.t('hardwareValue'),
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -107,7 +107,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: {I18n.t('filteringValue')},
+              value: I18n.t('filteringValue'),
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -116,7 +116,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: {I18n.t('epochingValue')},
+              value: I18n.t('epochingValue'),
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -125,7 +125,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: {I18n.t('artefactValue')},
+              value: I18n.t('artefactValue'),
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -134,7 +134,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: {I18n.t('featureValue')},
+              value: I18n.t('featureValue'),
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -143,7 +143,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: {I18n.t('psdValue')},
+              value: I18n.t('psdValue'),
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -152,7 +152,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: {I18n.t('brainWavesValue')},
+              value: I18n.t('brainWavesValue'),
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -161,7 +161,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: {I18n.t('brainComputerInterfaceValue')},
+              value: I18n.t('brainComputerInterfaceValue'),
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -170,7 +170,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: {I18n.t('howBuildBciValue')},
+              value: I18n.t('howBuildBciValue'),
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -179,7 +179,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: {I18n.t('infoValue')},
+              value: I18n.t('infoValue'),
               active: this.props.location.pathname === "/end",
               onPress: () => this.navTo("/end")
             }

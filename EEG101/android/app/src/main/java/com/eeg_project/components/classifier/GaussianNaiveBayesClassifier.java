@@ -3,6 +3,9 @@ package com.eeg_project.components.classifier;
 import android.provider.CalendarContract;
 import android.util.Log;
 
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.WritableArray;
+
 import java.util.Arrays;
 import java.lang.Math;
 import java.util.*;
@@ -399,6 +402,22 @@ public class GaussianNaiveBayesClassifier {
 		for (int i = 0; i < this.nbFeats; i++){
 			featInd[i] = argmax(coeffs);
 			coeffs[featInd[i]] = -1;
+		}
+		return featInd;
+
+	}
+
+	public WritableArray rankWritableFeats() {
+		// List the feature indices by decreasing discriminative power.
+		//
+		// Returns:
+		//  list of indices
+
+		WritableArray featInd = Arguments.createArray();
+		double[] coeffs = computeFeatDiscrimPower();
+		for (int i = 0; i < this.nbFeats; i++){
+			featInd.pushInt(argmax(coeffs));
+			coeffs[featInd.getInt(i)] = -1;
 		}
 		return featInd;
 

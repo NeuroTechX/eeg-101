@@ -221,7 +221,7 @@ export default {
 	bciDefinition2:  'interact',
 	bciDefinition3:  'with an external device such as a computer',
 	makeUseBci:  'How can we use EEG to make a BCI?',
-	recognizePatternBrain:  'We can teach a computer to execute a command when it recognizes a certain pattern of brain activity. This process is called '
+	recognizePatternBrain:  'We can teach a computer to execute a command when it recognizes a certain pattern of brain activity. This process is called ',
 	machineLearning:  'machine learning',
 	buildBci:  'LET\'S BUILD A BCI',
 	bciInteractionTitle:  'Types of BCI interaction',
@@ -301,19 +301,6 @@ export default {
     infoValue: 'Information & Acknowledgements',
 
     // config.js
-    configConnected: 'CONNECTED',
-    configConnecting: 'CONNECTING',
-    configDisconnected: 'DISCONNECTED',
-    configNoMuses: 'NO_MUSES',
-    configEeg: 'EEG',
-    configFilter: 'FILTER',
-    configPsd: 'PSD',
-    configWaves: 'WAVES',
-    configArtefact: 'ARTEFACT',
-    configLowpass: 'LOWPASS',
-    configHighpass: 'HIGHPASS',
-    configBandstop: 'BANDSTOP',
-    configBandpass: 'BANDPASS',
     configLight: 'the light',
     configVibrate:  'vibration',
 
