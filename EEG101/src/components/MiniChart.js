@@ -62,13 +62,12 @@ export default class MiniChart extends Component {
             width={this.props.width}
             height={this.props.height - 50}
             padding={{ bottom: 30, top: 10, right: 10, left: 30 }}
+            domainPadding={{y:[0,10]}}
             style={{ labels: { fontSize: 10 } }}
           >
             <VictoryAxis
               style={{
-                axis: {
-                  stroke: "none"
-                },
+              
                 tickLabels: { fontSize: 10 }
               }}
               tickValues={[0, 1, 2, 3]}
@@ -78,7 +77,7 @@ export default class MiniChart extends Component {
               dependentAxis={true}
               tickValues={[1, 15]}
               tickFormat={["16th", "1st"]}
-              style={{ tickLabels: { fontSize: 9 } }}
+              style={{  tickLabels: { fontSize: 9 } }}
             />
             <VictoryLine
               data={this.getFeatureRanks(1, this.props.data)}

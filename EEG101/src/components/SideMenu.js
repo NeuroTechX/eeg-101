@@ -38,7 +38,7 @@ function mapDispatchToProps(dispatch) {
 class SideMenu extends Component {
   constructor(props) {
     super(props);
-    props.history.listen( location => {console.log('location changed')
+    props.history.listen( location => {
     props.closeMenu()
   })
   }
@@ -185,6 +185,7 @@ class SideMenu extends Component {
             }
           ]}
         />
+        <View style={{height:30}}/>
       </ScrollView>
     );
   }

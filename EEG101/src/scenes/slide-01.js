@@ -52,7 +52,6 @@ class SlideOne extends Component {
           onLayout={event => {
             // Captures the width and height of the graphContainer to determine overlay positioning properties in PSDGraph
             let { x, y, width, height } = event.nativeEvent.layout;
-            console.log(x, y, width, height);
             this.props.setGraphViewDimensions({
               x: x,
               y: y,

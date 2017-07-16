@@ -22,6 +22,8 @@ import PlayPauseButton from "../components/PlayPauseButton.js";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
 import I18n from "../i18n/i18n";
+import BCIHistoryChart from "../components/BCIHistoryChart.js";
+import NoiseIndicator from "../components/NoiseIndicator.js";
 
 function mapStateToProps(state) {
   return {
@@ -37,55 +39,72 @@ class ClassifierRun extends Component {
     // Initialize States
     this.state = {
       popUp1Visible: false,
-      class: "OFF",
+      data: [1,1,1,1,1,1,1,1,1,1,1],
+      noise: [],
       isRunning: false,
-      score: "",
     };
+  }
+
+  updateData(data, message) {
+    if (data.length >= 10) {
+      data.shift();
+    }
+    data.push(message);
+    return data;
   }
 
   componentDidMount() {
     Classifier.fitWithScore(6).then(promise => {
       this.setState(promise);
     });
+
+    // Light action
     if (this.props.bciAction === config.bciAction.LIGHT) {
       const lightListener = new NativeEventEmitter(NativeModules.Classifier);
       this.predictSubscription = lightListener.addListener(
         "PREDICT_RESULT",
         message => {
-          if (message == 1) {
+          if (message == 2) {
             Torch.switchState(true);
-            this.setState({ class: "ON" });
           } else {
             Torch.switchState(false);
-            this.setState({ class: "OFF" });
           }
+          this.setState({
+            data: this.updateData(this.state.data, message),
+            noise: []
+          });
         }
       );
       this.noiseSubscription = lightListener.addListener("NOISE", message => {
-        this.setState({ class: "noise " });
+        this.setState({ noise: Object.keys(message) });
         Torch.switchState(false);
       });
     } else {
       const vibrationListener = new NativeEventEmitter(
         NativeModules.Classifier
       );
+
+      // Vibration action
       this.predictSubscription = vibrationListener.addListener(
         "PREDICT_RESULT",
         message => {
-          if (message == 1) {
+          if (message == 2) {
             Vibration.vibrate([0, 1000], true);
-            this.setState({ class: "ON" });
           } else {
             Vibration.cancel();
-            this.setState({ class: "OFF" });
           }
+          this.setState({
+            data: this.updateData(this.state.data, message),
+            noise: []
+          });
         }
       );
       this.noiseSubscription = vibrationListener.addListener(
         "NOISE",
         message => {
-          this.setState({ class: "noise " + Object.keys(message) });
+          this.setState({ noise: Object.keys(message) });
           Vibration.cancel();
+
         }
       );
     }
@@ -103,11 +122,12 @@ class ClassifierRun extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.graphContainer}>
-          <Text style={styles.classText}>{this.state.class}</Text>
+          <BCIHistoryChart data={this.state.data} width={this.props.dimensions.width} height={this.props.dimensions.height} />
+          <NoiseIndicator noise={this.state.noise} width={this.props.dimensions.width} height={this.props.dimensions.height} />
         </View>
+        <Text style={styles.currentTitle}>{I18n.t('bciRunSlideTitle')}</Text>
         <ViewPagerAndroid style={styles.viewPager} initialPage={0}>
           <View style={styles.pageStyle}>
-
             <PlayPauseButton
               onPress={() => {
                 if (this.state.isRunning) {
@@ -116,39 +136,25 @@ class ClassifierRun extends Component {
                   Classifier.runClassification();
                 }
                 this.setState({ isRunning: !this.state.isRunning });
+                Torch.switchState(false);
+                Vibration.cancel();
               }}
               isRunning={this.state.isRunning}
             />
-            <Text style={styles.body}>Accuracy:
-              <Text style={{ fontWeight: "bold" }}>{this.state.score}</Text>
-            </Text>
-            <TouchableOpacity
-              style={{
-                borderColor: "#484848",
-                borderWidth: 1,
-                alignSelf: "center",
-                margin: 5,
-                padding: 5
-              }}
-              onPress={()=>{Classifier.reset()
-                this.props.history.push('/bciTrain')
-              }}
-            >
-              <Text
-                style={{
-                  color: "#484848",
-                  fontFamily: "Roboto-Bold",
-                  fontSize: 15
-                }}
-              >
-                {I18n.t('retrainBci')}
-              </Text>
-            </TouchableOpacity>
-            <LinkButton path="/end">{I18n.t('endEeg101')}</LinkButton>
+            <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+              <View style={{ flex: 1 }}>
+                <LinkButton path="/end">
+                  {I18n.t("endEeg101")}
+                </LinkButton>
+              </View>
+              <View style={{ flex: 1 }}>
+                <LinkButton path="/bciTrain">
+                  {I18n.t("retrainBci")}
+                </LinkButton>
+              </View>
+            </View>
           </View>
-
         </ViewPagerAndroid>
-
       </View>
     );
   }
@@ -178,11 +184,11 @@ const styles = MediaQueryStyleSheet.create(
       fontFamily: "Roboto-Light",
       color: "#484848",
       fontSize: 19,
-      textAlign: 'center',
+      textAlign: "center"
     },
 
     container: {
-      backgroundColor: '#ffffff',
+      backgroundColor: "#ffffff",
       flex: 1,
       justifyContent: "space-around",
       alignItems: "stretch"
@@ -191,8 +197,6 @@ const styles = MediaQueryStyleSheet.create(
     graphContainer: {
       backgroundColor: "#72c2f1",
       flex: 4,
-      justifyContent: "center",
-      alignItems: "stretch"
     },
 
     header: {

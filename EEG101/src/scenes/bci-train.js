@@ -275,7 +275,7 @@ class BCITrain extends Component {
         </View>
         <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
           <View style={{ flex: 1 }}>
-            <LinkButton path="/bciRun" disabled={this.state.score === ""}>
+            <LinkButton path="/bciRun" disabled={this.state.score === "" || this.state.bciAction == ""}>
               {I18n.t("trainRunIt")}
             </LinkButton>
           </View>

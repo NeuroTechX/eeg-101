@@ -5,21 +5,12 @@ import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import LinkButton from "../components/WhiteLinkButton";
 import I18n from "../i18n/i18n";
-import MiniChart from "../components/MiniChart.js";
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to this scene's ley
 function mapStateToProps(state) {
   return {
     connectionStatus: state.connectionStatus
   };
-}
-
-function shuffle(a) {
-    for (let i = a.length; i; i--) {
-        let j = Math.floor(Math.random() * i);
-        [a[i - 1], a[j]] = [a[j], a[i - 1]];
-    }
-    return a
 }
 
 class Landing extends Component {
@@ -67,7 +58,7 @@ const styles = MediaQueryStyleSheet.create(
     container: {
       flex: 1,
       justifyContent: "center",
-      alignItems: "center",
+      alignItems: "stretch",
       width: null,
       height: null,
       backgroundColor: "rgba(0,0,0,0)"

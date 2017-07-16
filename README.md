@@ -24,7 +24,6 @@ https://www.youtube.com/watch?v=GunGP1yrqM8&feature=youtu.be
 
 ## Currently In Development
 - Dynamic artefact removal
-- General-purpose brain state classifier (Naive Bayes)
 - Advanced lesson content ([Riemannian Potato](http://alexandre.barachant.org/papers/conferences/potato/))
 
 ## How it works
