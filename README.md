@@ -23,7 +23,8 @@ Find [EEG 101](https://play.google.com/store/apps/details?id=com.eeg_project&hl=
 https://www.youtube.com/watch?v=GunGP1yrqM8&feature=youtu.be
 
 ## Currently In Development
-- Dynamic artefact removal
+- Offline mode
+- iOS version
 - Advanced lesson content ([Riemannian Potato](http://alexandre.barachant.org/papers/conferences/potato/))
 
 ## How it works
