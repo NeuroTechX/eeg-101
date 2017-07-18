@@ -27,12 +27,16 @@ for language in languages:
     
     # create locale file
     locale_file = open(language + '.js', 'w' , newline='\n')
-    locale_file.write('export default { \n')
+    locale_file.write('export default {\n')
     
     for key, label in zip(keys, language_labels):
-        if key == label:
+        if key.startswith('//'):
+            # key is a comment 
             locale_file.write('\t' + key + '\n')
+        elif not key:
+            # keys is empty
+            locale_file.write('\n')
         else:
             locale_file.write('\t' + key + ':  ' + "'" + label + "'" + ',\n')    
-
-    locale_file.write('}')
+  
+    locale_file.write('};')
