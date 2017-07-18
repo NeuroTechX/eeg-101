@@ -177,7 +177,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         classifierMap.putString("means", Arrays.deepToString(classifier.getMeans()));
         classifierMap.putString("variances", Arrays.deepToString(classifier.getVariances()));
         classifierMap.putString("discrimPower", Arrays.toString(classifier.computeFeatDiscrimPower()));
-        classifierMap.putString("featureRanking", Arrays.toString(classifier.rankFeats()));
+        classifierMap.putArray("featureRanking", classifier.rankWritableFeats());
         promise.resolve(classifierMap);
     }
 

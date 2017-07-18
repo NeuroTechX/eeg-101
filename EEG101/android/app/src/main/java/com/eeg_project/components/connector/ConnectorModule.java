@@ -143,6 +143,8 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
         // Create a persistent NoiseDetector class that can be used for SignalQualityIndicator
         NoiseDetector noiseDetector = new NoiseDetector(600, getReactApplicationContext());
 
+        stopConnector();
+
     }
 
     // ------------------------------------------------------------------------------

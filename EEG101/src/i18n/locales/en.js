@@ -180,11 +180,11 @@ export default {
 
 	//slide-end.js
 	thanksForCompleting:  'Thanks for completing \n EEG 101',
-	hopeYouEnjoyed:  'We hope you enjoyed learning about the basics of EEG. Soon, this tutorial will cover more advanced topics, such as how to create a simple brain-machine interface!',
-	whatsNext:  'What\'s Next?',
-	liveArtefactRemoval:  '1. Live Artefact Removal',
-	offlineMode:  '2. Offline Mode',
-	interactiveBCI:  '3. Interactive Brain Computer Interface!',
+	hopeYouEnjoyed:  'We have tried hard to provide a simple introduction to neuroscience, signal processing, and brain-computer interfaces. Of course, there is a lot more to learn!',
+	furtherLearning: 'Recommended Resources',
+	bciResource:  'Awesome List of BCI-related Resources',
+ 	signalProcessingResource:  'Signals and Systems MIT Course',
+	machineLearningResource: 'Machine Learning is Fun!',
 	projectOpenSource:  'This project is Open Source',
 	resultOfCollaboration:  'EEG101 is the result of a collaboration between NeuroTechX, the international neurotechnology network, and the developers at KBDGroup. Its source code is open for anyone to use or contribute to.',
 	interestedInApp:  'Interested in how an EEG app is built? Want to contribute to this project? Check out the repo on Github and our community on Slack.',
@@ -209,7 +209,7 @@ export default {
 	requiresLocation:  'This app requires coarse location permission in order to discover and connect to the 2016 Muse.',
 	statusConnected:  'Connected',
 	statusNoMusesTitle:  'No Muses were detected.',
-	statusNoMusesDescription:  'If you don\'t own a Muse, don\'t worry! We are working on an offline mode that should be avaible in early 2017!',
+	statusNoMusesDescription:  'If you don\'t own a Muse, we\'re terribly sorry! We would love to have an offline mode, but having trouble finding the time',
 	searchAgain:  ' SEARCH AGAIN ',
 	statusConnecting:  'Connecting...',
 	statusDisconnected:  'Searching for Muses',
@@ -221,7 +221,7 @@ export default {
 	bciDefinition2:  'interact',
 	bciDefinition3:  'with an external device such as a computer',
 	makeUseBci:  'How can we use EEG to make a BCI?',
-	recognizePatternBrain:  'We can teach a computer to execute a command when it recognizes a certain pattern of brain activity. This process is called '
+	recognizePatternBrain:  'We can teach a computer to execute a command when it recognizes a certain pattern of brain activity. This process is called ',
 	machineLearning:  'machine learning',
 	buildBci:  'LET\'S BUILD A BCI',
 	bciInteractionTitle:  'Types of BCI interaction',
@@ -238,12 +238,14 @@ export default {
 	step2Title:  'Step 2',
 	offData: 'Collect "OFF" data',
 	step3Title:  'Step 3',
+	step4Title:  'Step 4',
 	onData:  'Collect "ON" data',
 	trainClassifier: 'Train the classifier',
 
 	// bci-run.js
 	retrainBci: 'RE-TRAIN BCI',
 	endEeg101: 'END EEG 101',
+	bciRunSlideTitle: 'USING YOUR MIND TO CONTROL THIS PHONE...',
 
 	// bci-train.js
 	trainSamples: 'samples',
@@ -301,19 +303,6 @@ export default {
     infoValue: 'Information & Acknowledgements',
 
     // config.js
-    configConnected: 'CONNECTED',
-    configConnecting: 'CONNECTING',
-    configDisconnected: 'DISCONNECTED',
-    configNoMuses: 'NO_MUSES',
-    configEeg: 'EEG',
-    configFilter: 'FILTER',
-    configPsd: 'PSD',
-    configWaves: 'WAVES',
-    configArtefact: 'ARTEFACT',
-    configLowpass: 'LOWPASS',
-    configHighpass: 'HIGHPASS',
-    configBandstop: 'BANDSTOP',
-    configBandpass: 'BANDPASS',
     configLight: 'the light',
     configVibrate:  'vibration',
 

@@ -14,20 +14,18 @@ import { bindActionCreators } from "redux";
 import { setBCIAction } from "../redux/actions";
 import config from "../redux/config.js";
 import { MediaQueryStyleSheet } from "react-native-responsive";
-import { VictoryBar } from "victory-native";
 import Classifier from "../interface/Classifier.js";
 import DecisionButton from "../components/DecisionButton.js";
 import SandboxButton from "../components/SandboxButton.js";
 import Button from "../components/Button.js";
 import LinkButton from "../components/LinkButton";
-import PopUp from "../components/PopUp";
-import PopUpLink from "../components/PopUpLink";
+import MiniChart from "../components/MiniChart.js";
 import I18n from "../i18n/i18n";
-
 
 function mapStateToProps(state) {
   return {
-    bciAction: state.bciAction
+    bciAction: state.bciAction,
+    dimensions: state.graphViewDimensions
   };
 }
 
@@ -68,16 +66,19 @@ class BCITrain extends Component {
       return (
         <View style={styles.dataClassContainer}>
           <View style={styles.cardTextContainer}>
-            <Text style={styles.classTitle}>{I18n.t('trainOff')}</Text>
+            <Text style={styles.classTitle}>
+              {I18n.t("trainOff")}
+            </Text>
             <Text style={styles.body}>
-              {this.state.class1Samples} {I18n.t('trainSamples')} </Text>
+              {this.state.class1Samples} {I18n.t("trainSamples")}{" "}
+            </Text>
           </View>
           <ActivityIndicator color={"#6CCBEF"} size={"large"} />
           <SandboxButton
             onPress={() => Classifier.stopCollecting()}
             active={true}
           >
-            {I18n.t('trainStop')}
+            {I18n.t("trainStop")}
           </SandboxButton>
         </View>
       );
@@ -85,9 +86,11 @@ class BCITrain extends Component {
       return (
         <View style={styles.dataClassContainer}>
           <View style={styles.cardTextContainer}>
-            <Text style={styles.classTitle}>{I18n.t('trainOff')}</Text>
+            <Text style={styles.classTitle}>
+              {I18n.t("trainOff")}
+            </Text>
             <Text style={styles.body}>
-              {this.state.class1Samples} {I18n.t('trainSamples')}
+              {this.state.class1Samples} {I18n.t("trainSamples")}
             </Text>
           </View>
           <SandboxButton
@@ -100,7 +103,7 @@ class BCITrain extends Component {
             active={!this.state.isCollecting2}
             disabled={this.state.isCollecting2}
           >
-            {I18n.t('trainCollect')}
+            {I18n.t("trainCollect")}
           </SandboxButton>
         </View>
       );
@@ -112,9 +115,11 @@ class BCITrain extends Component {
       return (
         <View style={styles.dataClassContainer}>
           <View style={styles.cardTextContainer}>
-            <Text style={styles.classTitle}>{I18n.t('trainOn')}</Text>
+            <Text style={styles.classTitle}>
+              {I18n.t("trainOn")}
+            </Text>
             <Text style={styles.body}>
-              {this.state.class2Samples} {I18n.t('trainSamples')}
+              {this.state.class2Samples} {I18n.t("trainSamples")}
             </Text>
           </View>
           <ActivityIndicator color={"#6CCBEF"} size={"large"} />
@@ -122,7 +127,7 @@ class BCITrain extends Component {
             onPress={() => Classifier.stopCollecting()}
             active={true}
           >
-            {I18n.t('trainStop')}
+            {I18n.t("trainStop")}
           </SandboxButton>
         </View>
       );
@@ -130,9 +135,11 @@ class BCITrain extends Component {
       return (
         <View style={styles.dataClassContainer}>
           <View style={styles.cardTextContainer}>
-            <Text style={styles.classTitle}>{I18n.t('trainOn')}</Text>
+            <Text style={styles.classTitle}>
+              {I18n.t("trainOn")}
+            </Text>
             <Text style={styles.body}>
-              {this.state.class2Samples} {I18n.t('trainSamples')}
+              {this.state.class2Samples} {I18n.t("trainSamples")}
             </Text>
           </View>
           <SandboxButton
@@ -145,7 +152,7 @@ class BCITrain extends Component {
             active={!this.state.isCollecting1}
             disabled={this.state.isCollecting1}
           >
-            {I18n.t('trainCollect')}
+            {I18n.t("trainCollect")}
           </SandboxButton>
         </View>
       );
@@ -156,6 +163,7 @@ class BCITrain extends Component {
     if (this.state.score == "") {
       return (
         <View style={styles.classifierContainer}>
+          <Text style={styles.sectionTitle}>Classifier</Text>
           <SandboxButton
             onPress={() => {
               this.setState({ isFitting: true });
@@ -171,23 +179,26 @@ class BCITrain extends Component {
               this.state.class2Samples < 1 || this.state.class1Samples < 1
             }
           >
-            {I18n.t('trainFitClassifier')}
+            {I18n.t("trainFitClassifier")}
           </SandboxButton>
         </View>
       );
     } else if (this.state.isFitting) {
       return (
         <View style={styles.classifierContainer}>
+          <Text style={styles.sectionTitle}>Classifier</Text>
           <ActivityIndicator color={"#6CCBEF"} size={"large"} />
         </View>
       );
     } else {
       return (
         <View style={styles.classifierContainer}>
+          <Text style={styles.sectionTitle}>Classifier</Text>
           <View style={styles.classifierDataContainer}>
             <View style={styles.classifierTextContainer}>
               <Text style={styles.body}>
-                {I18n.t('trainAccuracy')}: {Math.round(this.state.score * 1000) / 1000}
+                {I18n.t("trainAccuracy")}:{" "}
+                {Math.round(this.state.score * 1000) / 1000}
               </Text>
               <SandboxButton
                 onPress={() => {
@@ -203,12 +214,15 @@ class BCITrain extends Component {
                   !this.state.isCollecting1
                 }
               >
-                {I18n.t('trainReFit')}
+                {I18n.t("trainReFit")}
               </SandboxButton>
             </View>
             <View style={styles.classifierGraphContainer}>
-              <VictoryBar height={60} width={230}/>
-              <VictoryBar height={60} width={230}/>
+              <MiniChart
+                height={this.props.dimensions.height / 1.25}
+                width={this.props.dimensions.width / 1.5}
+                data={this.state.featureRanking}
+              />
             </View>
           </View>
         </View>
@@ -221,7 +235,7 @@ class BCITrain extends Component {
       <View style={styles.container}>
         <View style={styles.contentContainer}>
           <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
+            style={{ flexDirection: "row", justifyContent: "space-between", height: 30, }}
           >
             <Text style={styles.sectionTitle}>Training Data</Text>
             <View style={styles.decisionContainer}>
@@ -257,13 +271,12 @@ class BCITrain extends Component {
 
         <View style={styles.hr} />
         <View style={styles.contentContainer}>
-          <Text style={styles.sectionTitle}>Classifier</Text>
           {this.renderClassifierContainer()}
         </View>
         <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
           <View style={{ flex: 1 }}>
-            <LinkButton path="/bciRun" disabled={this.state.score === ""}>
-              {I18n.t('trainRunIt')}
+            <LinkButton path="/bciRun" disabled={this.state.score === "" || this.state.bciAction == ""}>
+              {I18n.t("trainRunIt")}
             </LinkButton>
           </View>
           <View style={{ flex: 1 }}>
@@ -287,7 +300,7 @@ class BCITrain extends Component {
                 });
               }}
             >
-              {I18n.t('trainReset')}
+              {I18n.t("trainReset")}
             </Button>
           </View>
         </View>
@@ -352,7 +365,10 @@ const styles = MediaQueryStyleSheet.create(
       fontFamily: "Roboto-Black",
       color: "#484848",
       lineHeight: 30,
-      fontSize: 22
+      fontSize: 22,
+      position: "absolute",
+      top:0,
+      left:0,
     },
 
     classTitle: {
@@ -385,7 +401,10 @@ const styles = MediaQueryStyleSheet.create(
     decisionContainer: {
       flexDirection: "row",
       width: 80,
-      justifyContent: "space-between"
+      justifyContent: "space-between",
+      position: 'absolute',
+      top:0,
+      right:0,
     },
 
     classifierContainer: {
@@ -403,7 +422,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     classifierGraphContainer: {
-      flex: 1,
+      flex: 2,
       justifyContent: "space-between",
       alignItems: "center"
     },
@@ -413,7 +432,7 @@ const styles = MediaQueryStyleSheet.create(
       paddingTop: 20,
       paddingBottom: 20,
       alignItems: "center",
-      justifyContent: "space-around"
+      justifyContent: "center"
     }
   },
   // Responsive styles

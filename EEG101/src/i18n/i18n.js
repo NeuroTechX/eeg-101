@@ -9,6 +9,5 @@ I18n.translations = {
   en,
 };
 
-console.log(I18n.locales)
 
 export default I18n;

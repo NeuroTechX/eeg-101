@@ -136,7 +136,6 @@ class BCITwo extends Component {
             <View style={styles.textWrapper}>
               <Text style={styles.title}>{I18n.t('step3Title')}</Text>
               <Text style={styles.subTitle}>{I18n.t('onData')}</Text>
-
             </View>
             <View style={styles.contentContainer}>
               <DataCollector
@@ -160,7 +159,7 @@ class BCITwo extends Component {
               <ClassifierInfoDisplayer
                 folds={6}
                 onComplete={() => this.setState({ enableScroll: true })}
-              />              
+              />
             </View>
           </View>
         </ViewPagerAndroid>

@@ -34,50 +34,6 @@ class ConnectorThree extends Component {
           <Text style={styles.body}>{I18n.t('fitInstructions')}</Text>
         </View>
 
-        <Link to={"/sandbox"} replace={true} component={TouchableOpacity}>
-          <View
-            style={{
-              borderColor: "white",
-              borderWidth: 1,
-              alignSelf: "center",
-              margin: 5,
-              padding: 5
-            }}
-          >
-            <Text
-              style={{
-                color: "white",
-                fontFamily: "Roboto-Bold",
-                fontSize: 15
-              }}
-            >
-              SANDBOX MODE
-            </Text>
-          </View>
-        </Link>
-
-        <Link to={"/bciTrain"} component={TouchableOpacity}>
-          <View
-            style={{
-              borderColor: "white",
-              borderWidth: 1,
-              alignSelf: "center",
-              margin: 5,
-              padding: 5
-            }}
-          >
-            <Text
-              style={{
-                color: "white",
-                fontFamily: "Roboto-Bold",
-                fontSize: 15
-              }}
-            >
-              BRAIN-COMPUTER INTERFACE
-            </Text>
-          </View>
-        </Link>
-
         <TouchableOpacity onPress={() => Actions.Sandbox()} />
 
         <View style={styles.buttonContainer}>

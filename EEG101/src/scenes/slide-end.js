@@ -31,9 +31,16 @@ class End extends Component {
             </View>
 
             <View style={styles.listBox}>
-              <Text style={styles.header}>{I18n.t('whatsNext')}</Text>
-                <Text style={styles.body}>{I18n.t('liveArtifactRemoval')}</Text>
-                <Text style={styles.body}>{I18n.t('offlineMode')}</Text>
+              <Text style={styles.header}>{I18n.t('furtherLearning')}</Text>
+              <TouchableOpacity onPress={() => {Linking.openURL('https://github.com/NeuroTechX/awesome-bci')}}>
+                <Text style={styles.link}>{I18n.t('bciResource')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => {Linking.openURL('https://ocw.mit.edu/resources/res-6-007-signals-and-systems-spring-2011/index.htm')}}>
+                <Text style={styles.link}>{I18n.t('signalProcessingResource')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => {Linking.openURL('https://medium.com/@ageitgey/machine-learning-is-fun-80ea3ec3c471')}}>
+                <Text style={styles.link}>{I18n.t('machineLearningResource')}</Text>
+              </TouchableOpacity>
             </View>
 
             <View style={{marginBottom: 20}}>
@@ -76,7 +83,10 @@ class End extends Component {
             <View style={styles.listBox}>
               <Text style={styles.header}>{I18n.t('theTeam')}</Text>
               <Text style={styles.body}>Hubert Banville - Visionary</Text>
-              <Text style={styles.body}>Dano Morrison - Developer</Text>
+              <TouchableOpacity onPress={() => {Linking.openURL('http://neurosponge.com')}}>
+                <Text style={styles.link}>Dano Morrison - Developer</Text>
+              </TouchableOpacity>
+
               <Text style={styles.body}>Geordan King - Producer</Text>
               <Text style={styles.body}>Michael Vu - Author</Text>
               <Text style={styles.body}>Joanna Jang - Author</Text>
@@ -106,6 +116,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     container: {
+
       flex: 1,
       justifyContent: 'space-around',
       alignItems: 'stretch',
@@ -122,6 +133,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     textBox: {
+
       margin: 20,
       justifyContent: 'space-around',
       alignItems: 'center',
@@ -160,8 +172,13 @@ const styles = MediaQueryStyleSheet.create(
       fontSize: 30,
       },
 
+      link: {
+        color: '#ffffff',
+        fontFamily: 'Roboto-Medium',
+        textDecorationLine: 'underline',
+      },
+
     titleBox: {
-      marginTop: 40,
       flex: 4,
       alignItems: 'center',
       justifyContent: 'center',
