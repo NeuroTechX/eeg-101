@@ -60,7 +60,7 @@ class SlideOne extends Component {
             });
           }}
         >
-          <GraphView offlineData="blinks" style={{ flex: 1 }}/>
+          <GraphView style={{ flex: 1 }}/>
         </View>
 
         <Text style={styles.currentTitle}>{I18n.t('introductionSlideTitle')}</Text>
