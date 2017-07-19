@@ -39,14 +39,12 @@ export default function reducer(state = initialState, action = {}) {
       };
 
     case OPEN_MENU:
-    console.log(state.isMenuOpen)
       return {
         ...state,
         isMenuOpen: true
       };
 
     case CLOSE_MENU:
-    console.log(state.isMenuOpen)
       return {
         ...state,
         isMenuOpen: false

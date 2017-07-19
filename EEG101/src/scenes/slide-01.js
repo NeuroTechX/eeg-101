@@ -60,7 +60,7 @@ class SlideOne extends Component {
             });
           }}
         >
-          <GraphView style={{ flex: 1 }}/>
+          <GraphView offlineData="blinks" style={{ flex: 1 }}/>
         </View>
 
         <Text style={styles.currentTitle}>{I18n.t('introductionSlideTitle')}</Text>
@@ -144,7 +144,7 @@ class SlideOne extends Component {
         <PopUp
           onClose={()=>this.props.history.push('/connectorOne')}
           visible={
-            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
+            false
           }
           title={I18n.t('museDisconnectedTitle')}
         >

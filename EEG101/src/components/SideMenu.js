@@ -81,9 +81,6 @@ class SideMenu extends Component {
             {
               //icon: "face",
               value: I18n.t('introductionValue'),
-              disabled:
-                this.props.connectionStatus !==
-                config.connectionStatus.CONNECTED,
               active: this.props.location.pathname === "/slideOne",
               onPress: () => this.navTo("/slideOne")
             },
