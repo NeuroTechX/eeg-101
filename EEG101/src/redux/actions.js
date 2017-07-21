@@ -1,13 +1,13 @@
 // actions.js
-// Where we store functions that interact with the Redux store.
-
+// Functions that interact with the Redux store.
+import { DeviceEventEmitter } from 'react-native';
 import Connector from '../interface/Connector';
 import {
   SET_CONNECTION_STATUS,
   SET_GRAPHVIEW_DIMENSIONS,
   SET_BCI_ACTION,
-  OPEN_MENU,
-  CLOSE_MENU,
+  SET_OFFLINE_MODE,
+  SET_MENU,
 } from './actionTypes.js';
 import config from './config';
 
@@ -16,13 +16,14 @@ export const setConnectionStatus = (payload) => ({payload, type: SET_CONNECTION_
 
 export const setGraphViewDimensions = (payload) => ({payload, type: SET_GRAPHVIEW_DIMENSIONS});
 
+export const setOfflineMode = (payload) => ({payload, type: SET_OFFLINE_MODE});
+
 export const setBCIAction = (payload) => ({payload, type: SET_BCI_ACTION});
 
-export const openMenu = (payload) => ({payload, type: OPEN_MENU});
-
-export const closeMenu = (payload) => ({payload, type: CLOSE_MENU});
+export const setMenu = (payload) => ({payload, type: SET_MENU});
 
 export function getAndConnectToDevice() {
+
   return (dispatch) =>  {
     return Connector.getAndConnectToDevice()
     .then((isConnected) => {

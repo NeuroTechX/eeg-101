@@ -17,14 +17,15 @@ import PSDGraphView from "../interface/PSDGraphView";
 function mapStateToProps(state) {
   return {
     dimensions: state.graphViewDimensions,
-    connectionStatus: state.connectionStatus
+    connectionStatus: state.connectionStatus,
+    isOfflineMode: state.isOfflineMode
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      setGraphViewDimensions
+      setGraphViewDimensions,
     },
     dispatch
   );
@@ -40,30 +41,42 @@ class SlideEight extends Component {
     };
   }
 
+  offlineDataSource() {
+    if (this.props.isOfflineMode) {
+      return "clean";
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
+        <PSDGraphView
+          offlineData={this.offlineDataSource()}
+          dimensions={this.props.dimensions}
+        />
 
-        <PSDGraphView dimensions={this.props.dimensions} />
-
-        <Text style={styles.currentTitle}>{I18n.t("PSDSlideTitle")}</Text>
+        <Text style={styles.currentTitle}>
+          {I18n.t("PSDSlideTitle")}
+        </Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
           initialPage={0}
         >
-
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>{I18n.t("powerSpectralDensity")}</Text>
+            <Text style={styles.header}>
+              {I18n.t("powerSpectralDensity")}
+            </Text>
             <Text style={styles.body}>
               {I18n.t("whenWeApplyFourier")}
               <PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>
                 {I18n.t("powerLink")}
               </PopUpLink>.
             </Text>
-            <LinkButton path="/slideNine">{I18n.t("nextLink")}</LinkButton>
+            <LinkButton path="/slideNine">
+              {I18n.t("nextLink")}
+            </LinkButton>
           </View>
-
         </ViewPagerAndroid>
 
         <PopUp

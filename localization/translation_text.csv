@@ -11,19 +11,6 @@ welcomeEEG101,Welcome to EEG 101,Welcome to EEG 101 FR,Welcome to EEG 101 ES
 tutorialDescription,"At the end of this tutorial, you will have learned how EEG devices can be used to measure the electrical activity of the brain.","At the end of this tutorial, you will have learned how EEG devices can be used to measure the electrical activity of the brain. FR","At the end of this tutorial, you will have learned how EEG devices can be used to measure the electrical activity of the brain. ES"
 getStartedLink, GET STARTED , GET STARTED  FR, GET STARTED  ES
 ,,,
-//classifier.js,//classifier.js,//classifier.js,//classifier.js
-classifierTitle,CLASSIFIER,CLASSIFIER FR,CLASSIFIER ES
-collectButton,Collect,Collect FR,Collect ES
-stopButton,Stop,Stop FR,Stop ES
-trainButton,Train,Train FR,Train ES
-runButton,Run,Run FR,Run ES
-resetButton,Reset,Reset FR,Reset ES
-,,,
-//classifier-run.js,//classifier-run.js,//classifier-run.js,//classifier-run.js
-tryingToUnderstand,Trying to understand your brain...,Trying to understand your brain... FR,Trying to understand your brain... ES
-classifierReturnsDataset,"As this classifier runs, it will return the sample data set your real-time brain activity most closely resembles.","As this classifier runs, it will return the sample data set your real-time brain activity most closely resembles. FR","As this classifier runs, it will return the sample data set your real-time brain activity most closely resembles. ES"
-retrainLink, RE-TRAIN , RE-TRAIN  FR, RE-TRAIN  ES
-,,,
 //connector-01.js,//connector-01.js,//connector-01.js,//connector-01.js
 step1Title,Step 1,Step 1 FR,Step 1 ES
 musePowerOnWarning,Make sure your Muse is powered on.,Make sure your Muse is powered on. FR,Make sure your Muse is powered on. ES
@@ -181,11 +168,11 @@ BCIDescription,"A brain-computer interface is a direct communication channel bet
 ,,,
 //slide-end.js,//slide-end.js,//slide-end.js,//slide-end.js
 thanksForCompleting,Thanks for completing \n EEG 101,Thanks for completing \n EEG 101 FR,Thanks for completing \n EEG 101 ES
-hopeYouEnjoyed,"We hope you enjoyed learning about the basics of EEG. Soon, this tutorial will cover more advanced topics, such as how to create a simple brain-machine interface!","We hope you enjoyed learning about the basics of EEG. Soon, this tutorial will cover more advanced topics, such as how to create a simple brain-machine interface! FR","We hope you enjoyed learning about the basics of EEG. Soon, this tutorial will cover more advanced topics, such as how to create a simple brain-machine interface! ES"
-whatsNext,What\'s Next?,What\'s Next? FR,What\'s Next? ES
-liveArtefactRemoval,1. Live Artefact Removal,1. Live Artefact Removal FR,1. Live Artefact Removal ES
-offlineMode,2. Offline Mode,2. Offline Mode FR,2. Offline Mode ES
-interactiveBCI,3. Interactive Brain Computer Interface!,3. Interactive Brain Computer Interface! FR,3. Interactive Brain Computer Interface! ES
+hopeYouEnjoyed,"We have tried hard to provide a simple introduction to neuroscience, signal processing, and brain-computer interfaces. Of course, there is a lot more to learn!","We hope you enjoyed learning about the basics of EEG. Soon, this tutorial will cover more advanced topics, such as how to create a simple brain-machine interface! FR","We hope you enjoyed learning about the basics of EEG. Soon, this tutorial will cover more advanced topics, such as how to create a simple brain-machine interface! ES"
+furtherLearning,Resources for Further Learning,What\'s Next? FR,What\'s Next? ES
+bciResource,Awesome List of BCI-related Resources,1. Live Artefact Removal FR,1. Live Artefact Removal ES
+signalProcessingResource,Signals and Systems MIT Course,2. Offline Mode FR,2. Offline Mode ES
+machineLearningResource,Machine Learning is Fun!,3. Interactive Brain Computer Interface! FR,3. Interactive Brain Computer Interface! ES
 projectOpenSource,This project is Open Source,This project is Open Source FR,This project is Open Source ES
 resultOfCollaboration,"EEG101 is the result of a collaboration between NeuroTechX, the international neurotechnology network, and the developers at KBDGroup. Its source code is open for anyone to use or contribute to.","EEG101 is the result of a collaboration between NeuroTechX, the international neurotechnology network, and the developers at KBDGroup. Its source code is open for anyone to use or contribute to. FR","EEG101 is the result of a collaboration between NeuroTechX, the international neurotechnology network, and the developers at KBDGroup. Its source code is open for anyone to use or contribute to. ES"
 interestedInApp,Interested in how an EEG app is built? Want to contribute to this project? Check out the repo on Github and our community on Slack.,Interested in how an EEG app is built? Want to contribute to this project? Check out the repo on Github and our community on Slack. FR,Interested in how an EEG app is built? Want to contribute to this project? Check out the repo on Github and our community on Slack. ES
@@ -210,7 +197,7 @@ needsPermission,EEG 101 needs your permission,EEG 101 needs your permission FR,E
 requiresLocation,This app requires coarse location permission in order to discover and connect to the 2016 Muse.,This app requires coarse location permission in order to discover and connect to the 2016 Muse. FR,This app requires coarse location permission in order to discover and connect to the 2016 Muse. ES
 statusConnected,Connected,Connected FR,Connected ES
 statusNoMusesTitle,No Muses were detected.,No Muses were detected. FR,No Muses were detected. ES
-statusNoMusesDescription,"If you don\'t own a Muse, don\'t worry! We are working on an offline mode that should be avaible in early 2017!","If you don\'t own a Muse, don\'t worry! We are working on an offline mode that should be avaible in early 2017! FR","If you don\'t own a Muse, don\'t worry! We are working on an offline mode that should be avaible in early 2017! ES"
+statusNoMusesDescription,"If you don\'t own a Muse, we\'re terribly sorry! We are working on an offline mode that should be available soon","If you don\'t own a Muse, don\'t worry! We are working on an offline mode that should be avaible in early 2017! FR","If you don\'t own a Muse, don\'t worry! We are working on an offline mode that should be avaible in early 2017! ES"
 searchAgain, SEARCH AGAIN , SEARCH AGAIN  FR, SEARCH AGAIN  ES
 statusConnecting,Connecting...,Connecting... FR,Connecting... ES
 statusDisconnected,Searching for Muses,Searching for Muses FR,Searching for Muses ES
@@ -240,11 +227,13 @@ step2Title,Step 2,Step 2 FR,Step 2 ES
 offData,"Collect ""OFF"" data","Collect ""OFF"" data FR","Collect ""OFF"" data ES"
 step3Title,Step 3,Step 3 FR,Step 3 ES
 onData,"Collect ""ON"" data","Collect ""ON"" data FR","Collect ""ON"" data ES"
+step4Title,Step 4,Step 4 FR,Step 4 ES
 trainClassifier,Train the classifier,Train the classifier FR,Train the classifier ES
 ,,,
 // bci-run.js,// bci-run.js,// bci-run.js,// bci-run.js
 retrainBci,RE-TRAIN BCI,RE-TRAIN BCI FR,RE-TRAIN BCI ES
 endEeg101,END EEG 101,END EEG 101 FR,END EEG 101 ES
+bciRunSlideTitle,USING YOUR MIND TO CONTROL THIS PHONE...,USING YOUR MIND TO CONTROL THIS PHONE...FR,USING YOUR MIND TO CONTROL THIS PHONE...ES
 ,,,
 // bci-train.js,// bci-train.js,// bci-train.js,// bci-train.js
 trainSamples,samples,samples FR,samples ES
@@ -284,8 +273,8 @@ eyesOpen,"OFF.\n\n You can try whatever you want, but we recommend keeping your 
 totalCleanData2,"total epochs of clean data.\n\n For this BCI, each epoch is one second long. Those with too much noise are discarded.","total epochs of clean data.\n\n For this BCI, each epoch is one second long. Those with too much noise are discarded. FR","total epochs of clean data.\n\n For this BCI, each epoch is one second long. Those with too much noise are discarded. ES"
 ,,,
 // SideMenu.js,// SideMenu.js,// SideMenu.js,// SideMenu.js
-eegSandbox,EEG Sandbox,EEG Sandbox FR,EEG Sandbox ES
-toolsTitle,Tools,Tools FR,Tools ES
+toolsTitle,Tools,EEG Sandbox FR,EEG Sandbox ES
+eegSandbox,EEG Sandbox,Tools FR,Tools ES
 bciValue,Brain-computer interface,Brain-computer interface FR,Brain-computer interface ES
 tutorialTitle,Tutorial,Tutorial FR,Tutorial ES
 introductionValue,Introduction,Introduction FR,Introduction ES

@@ -19,7 +19,7 @@ export default class DeviceStatusWidget extends Component {
   }
 
   renderConnectorLink(){
-    if(this.props.connectionStatus === config.connectionStatus.DISCONNECTED){
+    if(this.props.connectionStatus === config.connectionStatus.DISCONNECTED || this.props.connectionStatus === config.connectionStatus.NOT_YET_CONNECTED || config.connectionStatus.NO_MUSES){
       return(
         <WhiteLinkButton path='/connectorOne' replace={false}>CONNECT</WhiteLinkButton>
       )
@@ -34,6 +34,7 @@ export default class DeviceStatusWidget extends Component {
         break;
 
       case config.connectionStatus.NO_MUSES:
+      case config.connectionStatus.NOT_YET_CONNECTED:
       case config.connectionStatus.DISCONNECTED:
         connectionString = I18n.t("widgetDisconnected");
         dynamicTextStyle = styles.disconnected;
@@ -43,13 +44,16 @@ export default class DeviceStatusWidget extends Component {
         connectionString = I18n.t("widgetConnecting");
         dynamicTextStyle = styles.connecting;
         break;
-
     }
+    if(this.props.isOfflineMode){
+      connectionString = 'Offline Mode (beta)'
+      imageSource = require('../assets/nomuseiconwhite.png')
+    } else { imageSource = require('../assets/museiconwhite.png') }
 
     return (
       <View style={styles.widgetContainer}>
       <View style={styles.textContainer}>
-        <Image style={styles.image} source={require('../assets/museiconwhite.png')} resizeMode='contain'/>
+        <Image style={styles.image} source={imageSource} resizeMode='contain'/>
         <Text style={dynamicTextStyle}>
           {connectionString}
         </Text>

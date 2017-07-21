@@ -1,4 +1,4 @@
-package com.eeg_project.components;
+package com.eeg_project.components.csv;
 
 import android.content.Context;
 import android.content.Intent;

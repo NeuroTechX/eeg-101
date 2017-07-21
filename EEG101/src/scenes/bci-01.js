@@ -11,7 +11,8 @@ import PopUpLink from "../components/PopUpLink";
 
 function mapStateToProps(state) {
   return {
-    dimensions: state.graphViewDimensions
+    dimensions: state.graphViewDimensions,
+    isOfflineMode: state.isOfflineMode
   };
 }
 
@@ -59,7 +60,7 @@ class BCIOne extends Component {
                 {I18n.t('machineLearning')}
               </PopUpLink>
             </Text>
-            <LinkButton path="/bciTwo"> {I18n.t('buildBci')} </LinkButton>
+            <LinkButton path={this.props.isOfflineMode ? "/end" : "/bciTwo"}> {I18n.t('buildBci')} </LinkButton>
           </View>
 
         </ViewPagerAndroid>

@@ -12,6 +12,7 @@ import {
 import config from "../../redux/config";
 import Connector from "../../interface/Connector";
 import WhiteButton from "../WhiteButton";
+import SandboxButton from "../SandboxButton.js";
 import I18n from "../../i18n/i18n";
 
 export default class ConnectorWidget extends Component {
@@ -34,9 +35,6 @@ export default class ConnectorWidget extends Component {
           message: I18n.t("requiresLocation")
         }
       );
-
-      // Whether permission is granted or not, connection proceeds in case user is using first gen device
-      this.startConnector();
     } catch (err) {
       console.warn(err);
     }
@@ -44,34 +42,40 @@ export default class ConnectorWidget extends Component {
 
   // Calls getAndConnectoToDevice in native ConnectorModule after creating promise listeners
   startConnector() {
-    if (this.props.connectionStatus === config.connectionStatus.DISCONNECTED) {
+    if (
+      this.props.connectionStatus === config.connectionStatus.NOT_YET_CONNECTED
+    ) {
       // This listener will update connection status if no Muses are found in getMuses call
-      const noMuseListener = DeviceEventEmitter.addListener(
-        "NO_MUSES",
-        event => {
-          this.props.setConnectionStatus(config.connectionStatus.NO_MUSES);
-        }
-      );
+      DeviceEventEmitter.addListener("NO_MUSES", event => {
+
+        this.props.setConnectionStatus(config.connectionStatus.NO_MUSES);
+      });
 
       // This listener will detect when the connector module enters the temporary 'connecting...' state
-      const connectionListener = DeviceEventEmitter.addListener(
-        "CONNECT_ATTEMPT",
-        event => {
-          this.props.setConnectionStatus(config.connectionStatus.CONNECTING);
-        }
-      );
+      DeviceEventEmitter.addListener("CONNECT_ATTEMPT", event => {
+        this.props.setConnectionStatus(config.connectionStatus.CONNECTING);
+      });
 
-      this.setState({ listeners: [noMuseListener, connectionListener] });
-      this.props.getAndConnectToDevice();
+      // This creates a persistent listener that will update connectionStatus when connection events are broadcast in Java
+      DeviceEventEmitter.addListener("DISCONNECTED", event => {
+        this.props.setConnectionStatus(config.connectionStatus.DISCONNECTED);
+      });
+
+      DeviceEventEmitter.addListener("CONNECTED", event => {
+        this.props.setConnectionStatus(config.connectionStatus.CONNECTED);
+      });
+    }
+
+    if(this.props.connectionStatus != config.connectionStatus.CONNECTED){
+      this.props.getAndConnectToDevice()
     }
   }
 
   // request location permissions and call getAndConnectToDevice and register event listeners when component loads
   componentDidMount() {
     this.requestLocationPermission();
+    this.startConnector();
   }
-
-  componentWillUnmount() {}
 
   render() {
     // switch could also further functionality to handle multiple connection conditions
@@ -87,9 +91,14 @@ export default class ConnectorWidget extends Component {
             <Text style={dynamicTextStyle}>
               {I18n.t("statusNoMusesTitle")}
             </Text>
-            <Text style={styles.body}>
-              {I18n.t("statusNoMusesDescription")}
-            </Text>
+            <SandboxButton
+              onPress={() =>
+                this.props.setOfflineMode(!this.props.isOfflineMode)}
+              active={this.props.isOfflineMode}
+            >
+              Enable Offline Mode (beta)
+            </SandboxButton>
+
             <WhiteButton onPress={() => this.props.getAndConnectToDevice()}>
               {I18n.t("searchAgain")}
             </WhiteButton>
@@ -99,6 +108,7 @@ export default class ConnectorWidget extends Component {
         connectionString = I18n.t("statusConnecting");
         dynamicTextStyle = styles.connecting;
         break;
+      case config.connectionStatus.NOT_YET_CONNECTED:
       case config.connectionStatus.DISCONNECTED:
         connectionString = I18n.t("statusDisconnected");
         dynamicTextStyle = styles.disconnected;

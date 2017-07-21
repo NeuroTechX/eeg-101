@@ -2,6 +2,7 @@ package com.eeg_project.components.graphs;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.androidplot.Plot;
@@ -21,12 +22,16 @@ import com.choosemuse.libmuse.MuseDataListener;
 import com.choosemuse.libmuse.MuseDataPacket;
 import com.choosemuse.libmuse.MuseDataPacketType;
 import com.eeg_project.MainApplication;
-import com.eeg_project.components.EEGFileWriter;
+import com.eeg_project.components.csv.EEGFileReader;
+import com.eeg_project.components.csv.EEGFileWriter;
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.FFT;
 import com.eeg_project.components.signal.PSDBuffer;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.util.List;
 
 /*
 View that plots a dynamic power spectral density (PSD) curve
@@ -52,10 +57,12 @@ public class PSDGraph extends FrameLayout {
     private PSDSeries dataSeries;
     public PlotUpdater plotUpdater;
     public MuseDataListener dataListener;
-    Thread dataThread;
-    Thread renderingThread;
+    private Thread dataThread;
+    private Thread renderingThread;
     public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
-
+    private OfflinePSDDataListener offlineDataListener;
+    private Thread offlineDataThread;
+    private int samplingRate;
 
     // Reference to global application state used for connected Muse
     MainApplication appState;
@@ -63,7 +70,7 @@ public class PSDGraph extends FrameLayout {
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
     public int channelOfInterest = 1;
-
+    private String offlineData = "";
 
 
     // ------------------------------------------------------------------------
@@ -73,9 +80,11 @@ public class PSDGraph extends FrameLayout {
         super(context);
         appState = ((MainApplication) context.getApplicationContext());
         initView(context);
-        startDataListener();
-        startDataThread();
-        startRenderingThread();
+        if(appState.connectedMuse != null) {
+            if (!appState.connectedMuse.isLowEnergy()) {
+                samplingRate = 220;
+            }
+        } else { samplingRate = 256; }
     }
 
     // -----------------------------------------------------------------------
@@ -99,6 +108,10 @@ public class PSDGraph extends FrameLayout {
         }
     }
 
+    public void setOfflineData(String data) {
+        this.offlineData = data;
+    }
+
     // -----------------------------------------------------------------------
     // Lifecycle methods (initView and onVisibilityChanged)
 
@@ -113,7 +126,7 @@ public class PSDGraph extends FrameLayout {
         plotUpdater = new PlotUpdater(psdPlot);
 
         // Create dataSource
-        dataSource = new PSDDataSource(appState.connectedMuse.isLowEnergy());
+        dataSource = new PSDDataSource(samplingRate);
 
         // Create dataSeries that will be drawn on plot (Y will be obtained from dataSource, x will be implicitly generated):
         dataSeries = new PSDSeries(dataSource, "PSD Plot");
@@ -167,9 +180,13 @@ public class PSDGraph extends FrameLayout {
     // Thread management functions
 
     public void startDataListener() {
-        dataListener = new DataListener();
-        // Register a listener to receive dataSource packets from Muse. Second argument defines which type(s) of dataSource will be transmitted to listener
-        appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
+        if(offlineData.length() >= 1) {
+            startOfflineData(offlineData);
+        } else {
+            dataListener = new DataListener();
+            // Register a listener to receive dataSource packets from Muse. Second argument defines which type(s) of dataSource will be transmitted to listener
+            appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
+        }
     }
 
     // Start thread that will  update the dataSource whenever a Muse dataSource packet is receive series
@@ -185,13 +202,23 @@ public class PSDGraph extends FrameLayout {
         renderingThread.start();
     }
 
+    public void startOfflineData(String offlineData) {
+        offlineDataListener = new OfflinePSDDataListener(offlineData);
+        offlineDataThread = new Thread(offlineDataListener);
+        offlineDataThread.start();
+    }
+
     // Stop all threads
     public void stopThreads(){
         plotUpdater.stopThread();
         dataSource.stopThread();
 
-        if (dataListener != null) {
-            appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
+        if (dataListener != null || offlineDataListener != null) {
+            if(offlineData.length() > 1) {
+                offlineDataListener.stopThread();
+            } else {
+                appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
+            }
         }
     }
 
@@ -230,6 +257,49 @@ public class PSDGraph extends FrameLayout {
             // Put something here about marking noise maybe
         }
     }
+
+    // Listener that loops over pre-recorded data read from csv
+    // Only used in Offline Mode
+    // Updates eegbuffer at approx. the same frequency as the real DataListener
+    private final class OfflinePSDDataListener implements Runnable {
+
+        List<double[]> data;
+        private boolean keepRunning = true;
+        private int index = 0;
+
+        OfflinePSDDataListener(String offlineData) {
+            try {
+                InputStream inputStream = getResources().getAssets().open(offlineData + ".csv");
+                EEGFileReader fileReader = new EEGFileReader(inputStream);
+                data = fileReader.read();
+            } catch (IOException e) { Log.w("PSDGraph", "File not found error"); }
+        }
+
+        @Override
+        public void run() {
+            try {
+                while (keepRunning) {
+
+                    eegBuffer.update(data.get(index));
+                    index++;
+
+
+                    if(index >= data.size()) {
+                        index = 0;
+                    }
+
+                    Thread.sleep(5);
+                }
+            } catch(InterruptedException e){
+                Log.w("PSDGraph", "interrupted exception");
+            }
+        }
+
+        public void stopThread() {
+            keepRunning = false;
+        }
+    }
+
 
     // --------------------------------------------------------------
     // Runnables
@@ -276,13 +346,13 @@ public class PSDGraph extends FrameLayout {
         private double[] logpower;
         private double[] smoothLogPower;
 
-        public PSDDataSource(Boolean isLowEnergy) {
-            if (isLowEnergy) {
-                samplingFrequency = 256;
-                stepSize = 26;
-            } else {
-                samplingFrequency = 220;
+        public PSDDataSource(int freq) {
+            this.samplingFrequency = freq;
+
+            if(samplingFrequency == 220) {
                 stepSize = 22;
+            } else {
+                stepSize = 26;
             }
 
             // Initialize FFT transform

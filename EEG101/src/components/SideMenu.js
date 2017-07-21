@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-import { closeMenu } from "../redux/actions";
+import { setMenu } from "../redux/actions";
 import { bindActionCreators } from "redux";
 import config from "../redux/config.js";
 import DeviceStatusWidget from "../components/DeviceStatusWidget.js";
@@ -22,14 +22,15 @@ import I18n from "../i18n/i18n";
 
 function mapStateToProps(state) {
   return {
-    connectionStatus: state.connectionStatus
+    connectionStatus: state.connectionStatus,
+    isOfflineMode: state.isOfflineMode
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      closeMenu
+      setMenu
     },
     dispatch
   );
@@ -38,26 +39,24 @@ function mapDispatchToProps(dispatch) {
 class SideMenu extends Component {
   constructor(props) {
     super(props);
-    props.history.listen( location => {
-    props.closeMenu()
-  })
+    props.history.listen(() => props.setMenu(false));
   }
 
-  navTo(path){
-    this.props.history.push(path)
+  navTo(path) {
+    this.props.history.push(path);
   }
 
   render() {
     return (
       <ScrollView style={styles.menuContainer}>
-        <DeviceStatusWidget connectionStatus={this.props.connectionStatus} />
+        <DeviceStatusWidget connectionStatus={this.props.connectionStatus} isOfflineMode={this.props.isOfflineMode}/>
 
         <MenuSection
-          title={I18n.t('toolsTitle')}
+          title={I18n.t("toolsTitle")}
           items={[
             {
               //icon: "face",
-              value: I18n.t('eegSandbox'),
+              value: I18n.t("eegSandbox"),
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -66,7 +65,7 @@ class SideMenu extends Component {
             },
             {
               //icon: "face",
-              value: I18n.t('bciValue'),
+              value: I18n.t("bciValue"),
               disabled:
                 this.props.connectionStatus !==
                 config.connectionStatus.CONNECTED,
@@ -76,122 +75,113 @@ class SideMenu extends Component {
           ]}
         />
         <MenuSection
-          title={I18n.t('tutorialTitle')}
+          title={I18n.t("tutorialTitle")}
           items={[
             {
               //icon: "face",
-              value: I18n.t('introductionValue'),
-              disabled:
-                this.props.connectionStatus !==
-                config.connectionStatus.CONNECTED,
+              value: I18n.t("introductionValue"),
+              disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+              config.connectionStatus.CONNECTED,
               active: this.props.location.pathname === "/slideOne",
               onPress: () => this.navTo("/slideOne")
             },
             {
               //icon: "face",
-              value: I18n.t('physiologyValue'),
-              disabled:
-                this.props.connectionStatus !==
-                config.connectionStatus.CONNECTED,
+              value: I18n.t("physiologyValue"),
+              disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+              config.connectionStatus.CONNECTED,
               active: this.props.location.pathname === "/slideTwo",
               onPress: () => this.navTo("/slideTwo")
             },
             {
               //icon: "face",
-              value: I18n.t('hardwareValue'),
-              disabled:
-                this.props.connectionStatus !==
-                config.connectionStatus.CONNECTED,
+              value: I18n.t("hardwareValue"),
+              disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+              config.connectionStatus.CONNECTED,
               active: this.props.location.pathname === "/slideThree",
               onPress: () => this.navTo("/slideThree")
             },
             {
               //icon: "face",
-              value: I18n.t('filteringValue'),
-              disabled:
-                this.props.connectionStatus !==
-                config.connectionStatus.CONNECTED,
+              value: I18n.t("filteringValue"),
+              disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+              config.connectionStatus.CONNECTED,
               active: this.props.location.pathname === "/slideFour",
               onPress: () => this.navTo("/slideFour")
             },
             {
               //icon: "face",
-              value: I18n.t('epochingValue'),
-              disabled:
-                this.props.connectionStatus !==
-                config.connectionStatus.CONNECTED,
+              value: I18n.t("epochingValue"),
+              disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+              config.connectionStatus.CONNECTED,
               active: this.props.location.pathname === "/slideFive",
               onPress: () => this.navTo("/slideFive")
             },
             {
               //icon: "face",
-              value: I18n.t('artefactValue'),
-              disabled:
-                this.props.connectionStatus !==
-                config.connectionStatus.CONNECTED,
+              value: I18n.t("artefactValue"),
+              disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+              config.connectionStatus.CONNECTED,
               active: this.props.location.pathname === "/slideSix",
               onPress: () => this.navTo("/slideSix")
             },
             {
               //icon: "face",
-              value: I18n.t('featureValue'),
-              disabled:
-                this.props.connectionStatus !==
-                config.connectionStatus.CONNECTED,
+              value: I18n.t("featureValue"),
+              disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+              config.connectionStatus.CONNECTED,
               active: this.props.location.pathname === "/slideSeven",
               onPress: () => this.navTo("/slideSeven")
             },
             {
               //icon: "face",
-              value: I18n.t('psdValue'),
-              disabled:
-                this.props.connectionStatus !==
-                config.connectionStatus.CONNECTED,
+              value: I18n.t("psdValue"),
+              disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+              config.connectionStatus.CONNECTED,
               active: this.props.location.pathname === "/slideEight",
               onPress: () => this.navTo("/slideEight")
             },
             {
               //icon: "face",
-              value: I18n.t('brainWavesValue'),
-              disabled:
-                this.props.connectionStatus !==
-                config.connectionStatus.CONNECTED,
+              value: I18n.t("brainWavesValue"),
+              disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+              config.connectionStatus.CONNECTED,
               active: this.props.location.pathname === "/slideNine",
               onPress: () => this.navTo("/slideNine")
             },
             {
               //icon: "face",
-              value: I18n.t('brainComputerInterfaceValue'),
-              disabled:
-                this.props.connectionStatus !==
-                config.connectionStatus.CONNECTED,
+              value: I18n.t("brainComputerInterfaceValue"),
+              disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+              config.connectionStatus.CONNECTED,
               active: this.props.location.pathname === "/bciOne",
               onPress: () => this.navTo("/bciOne")
             },
             {
               //icon: "face",
-              value: I18n.t('howBuildBciValue'),
-              disabled:
-                this.props.connectionStatus !==
-                config.connectionStatus.CONNECTED,
+              value: I18n.t("howBuildBciValue"),
+              disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+              config.connectionStatus.CONNECTED,
               active: this.props.location.pathname === "/bciTwo",
               onPress: () => this.navTo("/bciTwo")
             },
             {
               //icon: "face",
-              value: I18n.t('infoValue'),
+              value: I18n.t("infoValue"),
               active: this.props.location.pathname === "/end",
               onPress: () => this.navTo("/end")
             }
           ]}
         />
-        <View style={{height:30}}/>
+        <View style={{ height: 30 }} />
       </ScrollView>
     );
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SideMenu));
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(SideMenu)
+);
 
 const styles = StyleSheet.create({
   menuContainer: {

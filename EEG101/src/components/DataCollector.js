@@ -53,7 +53,9 @@ export default class DataCollector extends Component {
     if (this.state.isCollecting) {
       return (
         <View style={styles.dataClassContainer}>
-          <Text style={styles.body}>{I18n.t('collecting')}</Text>
+          <Text style={styles.body}>
+            {I18n.t("collecting")}
+          </Text>
           <ActivityIndicator color={"#94DAFA"} size={"large"} />
         </View>
       );
@@ -61,11 +63,14 @@ export default class DataCollector extends Component {
       return (
         <View style={styles.dataClassContainer}>
           <Text style={styles.body}>
-            {I18n.t('oopsYouOnly')} <Text style={{fontWeight: 'bold'}}>{this.state.samples}</Text>
-            {I18n.t('epochsOfData')}
+            {I18n.t("oopsYouOnly")}{" "}
+            <Text style={{ fontWeight: "bold" }}>
+              {this.state.samples}
+            </Text>{" "}
+            {I18n.t("epochsOfData")}
           </Text>
           <Button onPress={() => this.collectData()}>
-            {I18n.t('trainCollect')}
+            {I18n.t("trainCollect")}
           </Button>
         </View>
       );
@@ -74,10 +79,11 @@ export default class DataCollector extends Component {
         return (
           <View style={styles.dataClassContainer}>
             <Text style={styles.body}>
-              {I18n.t('letsTeach')} {this.props.bciAction} {I18n.t('closeYourEyes')}
+              {I18n.t("letsTeach")} {this.props.bciAction}{" "}
+              {I18n.t("closeYourEyes")}
             </Text>
             <Button onPress={() => this.collectData()}>
-              {I18n.t('trainCollect')}
+              {I18n.t("trainCollect")}
             </Button>
           </View>
         );
@@ -85,10 +91,14 @@ export default class DataCollector extends Component {
         return (
           <View style={styles.dataClassContainer}>
             <Text style={styles.body}>
-              {I18n.t('youveCollected')} <Text style={{fontWeight: 'bold'}}>{this.state.samples}</Text> {I18n.t('totalCleanData')}
+              {I18n.t("youveCollected")}{" "}
+              <Text style={{ fontWeight: "bold" }}>
+                {this.state.samples}
+              </Text>{" "}
+              {I18n.t("totalCleanData")}
             </Text>
             <Button onPress={() => this.collectData()}>
-              {I18n.t('trainCollect')}
+              {I18n.t("trainCollect")}
             </Button>
           </View>
         );
@@ -98,10 +108,10 @@ export default class DataCollector extends Component {
         return (
           <View style={styles.dataClassContainer}>
             <Text style={styles.body}>
-              {I18n.t('letsTeach2')} {this.props.bciAction} {I18n.t('eyesOpen')}
+              {I18n.t("letsTeach2")} {this.props.bciAction} {I18n.t("eyesOpen")}
             </Text>
             <Button onPress={() => this.collectData()}>
-              {I18n.t('trainCollect')}
+              {I18n.t("trainCollect")}
             </Button>
           </View>
         );
@@ -109,10 +119,14 @@ export default class DataCollector extends Component {
         return (
           <View style={styles.dataClassContainer}>
             <Text style={styles.body}>
-              {I18n.t('youveCollected')} <Text style={{fontWeight: 'bold'}}>{this.state.samples}</Text> {I18n.t('totalCleanData2')}
+              {I18n.t("youveCollected")}{" "}
+              <Text style={{ fontWeight: "bold" }}>
+                {this.state.samples}
+              </Text>{" "}
+              {I18n.t("totalCleanData2")}
             </Text>
             <Button onPress={() => this.collectData()}>
-              {I18n.t('trainCollect')}
+              {I18n.t("trainCollect")}
             </Button>
           </View>
         );
@@ -121,7 +135,7 @@ export default class DataCollector extends Component {
     return (
       <View style={styles.dataClassContainer}>
         <Button onPress={() => this.collectData()}>
-          {I18n.t('trainCollect')}
+          {I18n.t("trainCollect")}
         </Button>
       </View>
     );

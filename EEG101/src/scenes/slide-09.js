@@ -1,29 +1,24 @@
-import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ViewPagerAndroid,
-  Image
-} from 'react-native';
-import { connect } from 'react-redux';
-import { MediaQueryStyleSheet }  from 'react-native-responsive';
-import LinkButton from '../components/LinkButton';
-import config from '../redux/config';
-import PopUp from '../components/PopUp';
-import PopUpList from '../components/PopUpList';
-import ListItemBlock from '../components/ListItemBlock';
-import PopUpLink from '../components/PopUpLink';
-import I18n from '../i18n/i18n';
+import React, { Component } from "react";
+import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
+import { connect } from "react-redux";
+import { MediaQueryStyleSheet } from "react-native-responsive";
+import LinkButton from "../components/LinkButton";
+import config from "../redux/config";
+import PopUp from "../components/PopUp";
+import PopUpList from "../components/PopUpList";
+import ListItemBlock from "../components/ListItemBlock";
+import PopUpLink from "../components/PopUpLink";
+import I18n from "../i18n/i18n";
 
 //Interfaces. For elements that bridge to native
-import WaveGraphView from '../interface/WaveGraphView';
+import WaveGraphView from "../interface/WaveGraphView";
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
-function  mapStateToProps(state) {
+function mapStateToProps(state) {
   return {
     dimensions: state.graphViewDimensions,
     connectionStatus: state.connectionStatus,
+    isOfflineMode: state.isOfflineMode
   };
 }
 
@@ -35,66 +30,104 @@ class SlideNine extends Component {
     this.state = {
       channelOfInterest: 1,
       popUp1Visible: false,
-      popUp2Visible: false,
+      popUp2Visible: false
+    };
+  }
+
+  offlineDataSource() {
+    if (this.props.isOfflineMode) {
+      return "relax";
     }
   }
 
   render() {
     return (
       <View style={styles.container}>
+        <WaveGraphView
+          offlineData={this.offlineDataSource()}
+          dimensions={this.props.dimensions}
+        />
 
-        <WaveGraphView dimensions={this.props.dimensions} />
-
-        <Text style={styles.currentTitle}>{I18n.t('brainWavesSlideTitle')}</Text>
+        <Text style={styles.currentTitle}>
+          {I18n.t("brainWavesSlideTitle")}
+        </Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
-          initialPage={0}>
-
+          initialPage={0}
+        >
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>{I18n.t('whatDoFrequenciesRepresent')}</Text>
-            <Text style={styles.body}>{I18n.t('PSDDividedBands')}</Text>
-          </View>
-
-          <View style={styles.pageStyle}>
-            <Text style={styles.header}>{I18n.t('brainWaves')}</Text>
+            <Text style={styles.header}>
+              {I18n.t("whatDoFrequenciesRepresent")}
+            </Text>
             <Text style={styles.body}>
-			  {I18n.t('freqCorrelatedBrain')}<PopUpLink onPress={() => this.setState({popUp1Visible: true})}>{I18n.t('brainWavesLink')}</PopUpLink>.
-			</Text>
+              {I18n.t("PSDDividedBands")}
+            </Text>
           </View>
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>{I18n.t('harnessingBrainWaves')}</Text>
+            <Text style={styles.header}>
+              {I18n.t("brainWaves")}
+            </Text>
             <Text style={styles.body}>
-			  {I18n.t('noticePowerChanges')}{I18n.t('BCILink')}.
-			</Text>
-            <LinkButton path='/bciOne'>{I18n.t('nextLink')}</LinkButton>
+              {I18n.t("freqCorrelatedBrain")}
+              <PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>
+                {I18n.t("brainWavesLink")}
+              </PopUpLink>.
+            </Text>
           </View>
 
+          <View style={styles.pageStyle}>
+            <Text style={styles.header}>
+              {I18n.t("harnessingBrainWaves")}
+            </Text>
+            <Text style={styles.body}>
+              {I18n.t("noticePowerChanges")}
+              {I18n.t("BCILink")}.
+            </Text>
+            <LinkButton path="/bciOne">
+              {I18n.t("nextLink")}
+            </LinkButton>
+          </View>
         </ViewPagerAndroid>
 
-        <PopUpList onClose={() => this.setState({popUp1Visible: false})} visible={this.state.popUp1Visible}>
-          <ListItemBlock title = {I18n.t('deltaTitle')}>{I18n.t('deltaDescription')}</ListItemBlock>
-          <ListItemBlock title = {I18n.t('thetaTitle')}>{I18n.t('thetaDescription')}</ListItemBlock>
-          <ListItemBlock title = {I18n.t('alphaTitle')}>{I18n.t('alphaDescription')}</ListItemBlock>
-          <ListItemBlock title = {I18n.t('betaTitle')}>{I18n.t('betaDescription')}</ListItemBlock>
-          <ListItemBlock title = {I18n.t('gammaTitle')}>{I18n.t('gammaDescription')}</ListItemBlock>
+        <PopUpList
+          onClose={() => this.setState({ popUp1Visible: false })}
+          visible={this.state.popUp1Visible}
+        >
+          <ListItemBlock title={I18n.t("deltaTitle")}>
+            {I18n.t("deltaDescription")}
+          </ListItemBlock>
+          <ListItemBlock title={I18n.t("thetaTitle")}>
+            {I18n.t("thetaDescription")}
+          </ListItemBlock>
+          <ListItemBlock title={I18n.t("alphaTitle")}>
+            {I18n.t("alphaDescription")}
+          </ListItemBlock>
+          <ListItemBlock title={I18n.t("betaTitle")}>
+            {I18n.t("betaDescription")}
+          </ListItemBlock>
+          <ListItemBlock title={I18n.t("gammaTitle")}>
+            {I18n.t("gammaDescription")}
+          </ListItemBlock>
         </PopUpList>
 
-        <PopUp onClose={() => this.setState({popUp2Visible: false})} visible={this.state.popUp2Visible}
-		  title={I18n.t('BCITitle')}
-		>
-		  {I18n.t('BCIDescription')}
+        <PopUp
+          onClose={() => this.setState({ popUp2Visible: false })}
+          visible={this.state.popUp2Visible}
+          title={I18n.t("BCITitle")}
+        >
+          {I18n.t("BCIDescription")}
         </PopUp>
 
-		<PopUp
-          onClose={()=>this.props.history.push('/connectorOne')}
+        <PopUp
+          onClose={() => this.props.history.push("/connectorOne")}
           visible={
             this.props.connectionStatus === config.connectionStatus.DISCONNECTED
           }
-          title={I18n.t('museDisconnectedTitle')}
+          title={I18n.t("museDisconnectedTitle")}
         >
-			{I18n.t('museDisconnectedDescription')}
+          {I18n.t("museDisconnectedDescription")}
         </PopUp>
       </View>
     );
@@ -108,70 +141,69 @@ const styles = MediaQueryStyleSheet.create(
       marginLeft: 20,
       marginTop: 10,
       fontSize: 13,
-      fontFamily: 'Roboto-Medium',
-      color: '#6CCBEF',
+      fontFamily: "Roboto-Medium",
+      color: "#6CCBEF"
     },
 
     body: {
-      fontFamily: 'Roboto-Light',
-      color: '#484848',
-      fontSize: 19,
+      fontFamily: "Roboto-Light",
+      color: "#484848",
+      fontSize: 19
     },
 
     container: {
       backgroundColor: "#ffffff",
       flex: 1,
-      justifyContent: 'space-around',
-      alignItems: 'stretch',
+      justifyContent: "space-around",
+      alignItems: "stretch"
     },
 
     graphContainer: {
-      backgroundColor: 'white',
+      backgroundColor: "white",
       flex: 4,
-      justifyContent: 'center',
-      alignItems: 'stretch',
+      justifyContent: "center",
+      alignItems: "stretch"
     },
 
     header: {
-      fontFamily: 'Roboto-Bold',
-      color: '#484848',
-      fontSize: 20,
+      fontFamily: "Roboto-Bold",
+      color: "#484848",
+      fontSize: 20
     },
 
     viewPager: {
-      flex: 4,
+      flex: 4
     },
 
     pageStyle: {
       padding: 20,
-      alignItems: 'stretch',
-      justifyContent: 'space-around',
+      alignItems: "stretch",
+      justifyContent: "space-around"
     },
 
     image: {
       flex: 1,
       width: null,
-      height: null,
-    },
+      height: null
+    }
   },
   // Responsive styles
   {
     "@media (min-device-height: 700)": {
-
       viewPager: {
-        flex: 3,
+        flex: 3
       },
 
       header: {
-        fontSize: 30,
+        fontSize: 30
       },
 
       currentTitle: {
-        fontSize: 20,
+        fontSize: 20
       },
 
       body: {
-        fontSize: 25,
+        fontSize: 25
       }
     }
   }
