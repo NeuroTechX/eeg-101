@@ -56,9 +56,9 @@ class SlideSix extends Component {
         <PopUp
           onClose={() => this.setState({ popUpVisible: false })}
           visible={this.state.popUpVisible}
-          title={I18n.t('artifactDetectionTitle')}
+          title={I18n.t('artefactDetectionTitle')}
         >
-		  {I18n.t('artifactDetectionDescription')}
+		  {I18n.t('artefactDetectionDescription')}
         </PopUp>
 
 		<PopUp

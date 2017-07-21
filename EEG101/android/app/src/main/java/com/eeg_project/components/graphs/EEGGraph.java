@@ -3,6 +3,7 @@ package com.eeg_project.components.graphs;
 import android.content.Context;
 import android.graphics.Color;
 
+import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.androidplot.ui.HorizontalPositioning;
@@ -23,12 +24,14 @@ import com.choosemuse.libmuse.MuseDataListener;
 import com.choosemuse.libmuse.MuseDataPacket;
 import com.choosemuse.libmuse.MuseDataPacketType;
 import com.eeg_project.MainApplication;
-import com.eeg_project.components.EEGFileWriter;
+import com.eeg_project.components.csv.EEGFileReader;
+import com.eeg_project.components.csv.EEGFileWriter;
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
-import com.facebook.react.bridge.Dynamic;
 
-import java.util.LinkedList;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 
 /*
@@ -56,17 +59,22 @@ public class EEGGraph extends FrameLayout {
     public DynamicSeries dataSeries;
     private LineAndPointFormatter lineFormatter;
     public  DataListener dataListener;
+    public OfflineDataListener offlineDataListener;
     public  CircularBuffer eegBuffer = new CircularBuffer(220, 4);
     public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
-    public boolean isRecording;
+
+
+    private Thread dataThread;
 
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
     public int channelOfInterest = 1;
-
+    public String offlineData = "";
+    public boolean isRecording;
 
     // grab reference to global Muse
     MainApplication appState;
+
 
     // ------------------------------------------------------------------------
     // Constructors
@@ -74,7 +82,6 @@ public class EEGGraph extends FrameLayout {
         super(context);
         appState = ((MainApplication)context.getApplicationContext());
         initView(context);
-        startDataListener();
     }
 
 
@@ -119,6 +126,10 @@ public class EEGGraph extends FrameLayout {
         }
     }
 
+    public void setOfflineData(String data) {
+        this.offlineData = data;
+    }
+
     // -----------------------------------------------------------------------
     // Lifecycle methods (initView and onVisibilityChanged)
 
@@ -131,7 +142,7 @@ public class EEGGraph extends FrameLayout {
 
         // get datasets (Y will be dataSeries, x will be implicitly generated):
         //dataSource = new EEGDataSource(appState.connectedMuse.isLowEnergy());
-        dataSeries = new DynamicSeries("chan1 dataSource");
+        dataSeries = new DynamicSeries("dataSeries");
 
         // Set X and Y domain
         eegPlot.setRangeBoundaries(600, 1000, BoundaryMode.FIXED);
@@ -197,14 +208,29 @@ public class EEGGraph extends FrameLayout {
 
 
     public void startDataListener(){
-        dataListener = new DataListener();
-        appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
+        if(offlineData.length() >= 1) {
+            startOfflineData(offlineData);
+        } else {
+
+            dataListener = new DataListener();
+            appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
+        }
     }
 
     public void stopDataListener(){
-        if (dataListener != null) {
-            appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
+        if (dataListener != null || offlineDataListener != null) {
+            if(offlineData.length() > 1) {
+                offlineDataListener.stopThread();
+            } else {
+                appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
+            }
         }
+    }
+
+    public void startOfflineData(String offlineData) {
+        offlineDataListener = new OfflineDataListener(offlineData);
+        dataThread = new Thread(offlineDataListener);
+        dataThread.start();
     }
 
     // --------------------------------------------------------------
@@ -212,7 +238,8 @@ public class EEGGraph extends FrameLayout {
 
     // Listener that receives incoming dataSource from the Muse.
     // Will call receiveMuseDataPacket as dataSource comes in around 220hz (256hz for Muse 2016)
-    // Updates eegBuffer with latest values for all 4 electrodes
+    // Updates eegBuffer with latest values for all 4 electrodes and calls updatePlot() every 15
+    // samples to trigger addition to the DataSeries and redrawing of the plot
     private final class DataListener extends MuseDataListener {
         public double[] newData;
 
@@ -265,6 +292,55 @@ public class EEGGraph extends FrameLayout {
         @Override
         public void receiveMuseArtifactPacket(final MuseArtifactPacket p, final Muse muse) {
             // Does nothing for now
+        }
+    }
+
+    // Listener that loops over pre-recorded data read from csv
+    // Only used in Offline Mode
+    // Updates eegbuffer at approx. the same frequency as the real DataListener
+    private final class OfflineDataListener implements Runnable {
+
+        List<double[]> data;
+        private boolean keepRunning = true;
+        private int counter = 0;
+        private int index = 0;
+
+        OfflineDataListener(String offlineData) {
+            try {
+                InputStream inputStream = getResources().getAssets().open(offlineData + ".csv");
+                EEGFileReader fileReader = new EEGFileReader(inputStream);
+                data = fileReader.read();
+            } catch (IOException e) { Log.w("EEGGraph", "File not found error"); }
+        }
+
+        @Override
+        public void run() {
+            try {
+                while (keepRunning) {
+
+                    eegBuffer.update(data.get(index));
+                    index++;
+                    counter++;
+
+                    if (counter >= 15) {
+                        updatePlot();
+                        counter = 0;
+                    }
+
+                    if(index >= data.size()) {
+                        index = 0;
+                    }
+
+
+                    Thread.sleep(5);
+                }
+            } catch(InterruptedException e){
+                Log.w("EEGGraph", "interrupted exception");
+            }
+        }
+
+        public void stopThread() {
+            keepRunning = false;
         }
     }
 

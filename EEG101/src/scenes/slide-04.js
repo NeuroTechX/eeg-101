@@ -10,13 +10,14 @@ import { MediaQueryStyleSheet } from "react-native-responsive";
 import GraphView from "../interface/GraphView";
 import FilterGraphView from "../interface/FilterGraphView";
 import config from "../redux/config";
-import I18n from '../i18n/i18n';
+import I18n from "../i18n/i18n";
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
   return {
     connectionStatus: state.connectionStatus,
-    dimensions: state.graphviewDimensions
+    dimensions: state.graphviewDimensions,
+    isOfflineMode: state.isOfflineMode
   };
 }
 
@@ -31,57 +32,73 @@ class SlideFour extends Component {
     };
   }
 
+  offlineDataSource() {
+    if(this.props.isOfflineMode){
+      return "blinks";
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
-
         <View style={styles.halfGraphContainer}>
-          <GraphView style={{ flex: 1 }} />
-          <Text style={styles.halfGraphLabelText}>{I18n.t('raw')}</Text>
+          <GraphView offlineData={this.offlineDataSource()} style={{ flex: 1 }} />
+          <Text style={styles.halfGraphLabelText}>
+            {I18n.t("raw")}
+          </Text>
         </View>
         <View style={styles.halfGraphContainer}>
           <FilterGraphView
+            offlineData={this.offlineDataSource()}
             style={{ flex: 1 }}
             filterType={config.filterType.BANDPASS}
           />
-          <Text style={styles.halfGraphLabelText}>{I18n.t('bandPassFilter')}</Text>
+          <Text style={styles.halfGraphLabelText}>
+            {I18n.t("bandPassFilter")}
+          </Text>
         </View>
 
-        <Text style={styles.currentTitle}>{I18n.t('filteringSlideTitle')}</Text>
+        <Text style={styles.currentTitle}>
+          {I18n.t("filteringSlideTitle")}
+        </Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
           initialPage={0}
         >
-
           <View style={styles.pageStyle}>
             <Text style={styles.header}>
-				{I18n.t('meaningfulData')}
+              {I18n.t("meaningfulData")}
             </Text>
             <Text style={styles.body}>
-				{I18n.t('firstEEGMust')}<PopUpLink onPress={() => this.setState({ popUpVisible: true })}>{I18n.t('filteredLink')}</PopUpLink> {I18n.t('toReduceSignals')}
+              {I18n.t("firstEEGMust")}
+              <PopUpLink onPress={() => this.setState({ popUpVisible: true })}>
+                {I18n.t("filteredLink")}
+              </PopUpLink>{" "}
+              {I18n.t("toReduceSignals")}
             </Text>
-            <LinkButton path="/slideFive">{I18n.t('nextLink')}</LinkButton>
+            <LinkButton path="/slideFive">
+              {I18n.t("nextLink")}
+            </LinkButton>
           </View>
-
         </ViewPagerAndroid>
 
         <PopUp
           onClose={() => this.setState({ popUpVisible: false })}
           visible={this.state.popUpVisible}
-          title={I18n.t('filtersTitle')}
+          title={I18n.t("filtersTitle")}
         >
-			{I18n.t('filtersDescription')}
+          {I18n.t("filtersDescription")}
         </PopUp>
 
         <PopUp
-          onClose={()=>this.props.history.push('/connectorOne')}
+          onClose={() => this.props.history.push("/connectorOne")}
           visible={
             this.props.connectionStatus === config.connectionStatus.DISCONNECTED
           }
-          title={I18n.t('museDisconnectedTitle')}
+          title={I18n.t("museDisconnectedTitle")}
         >
-			{I18n.t('museDisconnectedDescription')}
+          {I18n.t("museDisconnectedDescription")}
         </PopUp>
       </View>
     );

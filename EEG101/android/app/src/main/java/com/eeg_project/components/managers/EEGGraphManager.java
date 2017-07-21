@@ -55,6 +55,13 @@ public class EEGGraphManager extends SimpleViewManager<EEGGraph> {
         }
     }
 
+    // Bridge function for offline Prop. Calls setOfflineMode in EEGGraph
+    @ReactProp(name = "offlineData")
+    public void setOfflineData(EEGGraph graph, @Nullable String offlineData) {
+
+        graph.setOfflineData(offlineData);
+    }
+
     // Bridge function for receiving 'start threads' and 'stop threads' commands from the
     // dispatchViewManagerCommand() method in JS. Currently, only used in stopping threads when
     // switching between graphs in the SandboxGraph component
@@ -83,6 +90,8 @@ public class EEGGraphManager extends SimpleViewManager<EEGGraph> {
     @Override
     protected void onAfterUpdateTransaction(EEGGraph view) {
         super.onAfterUpdateTransaction(view);
+        eegGraph.stopDataListener();
+        eegGraph.startDataListener();
     }
 
 }

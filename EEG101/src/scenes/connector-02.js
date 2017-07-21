@@ -6,12 +6,13 @@ import config from "../redux/config";
 import LinkButton from "../components/WhiteLinkButton";
 import WhiteButton from "../components/WhiteButton";
 import ConnectorWidget from "../components/ConnectorWidget";
-import I18n from '../i18n/i18n';
+import I18n from "../i18n/i18n";
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
   return {
-    connectionStatus: state.connectionStatus
+    connectionStatus: state.connectionStatus,
+    isOfflineMode: state.isOfflineMode
   };
 }
 
@@ -21,17 +22,35 @@ class ConnectorTwo extends Component {
   }
 
   renderButton() {
-    return this.props.connectionStatus === config.connectionStatus.CONNECTED
-      ? <LinkButton path="/connectorThree">{I18n.t('getStartedLink')}</LinkButton>
-      : <WhiteButton onPress={() => null} disabled={true}>{I18n.t('getStartedLink')}</WhiteButton>;
+    if (
+      this.props.connectionStatus === config.connectionStatus.CONNECTED
+    ) {
+      return (
+        <LinkButton path="/connectorThree">
+          {I18n.t("getStartedLink")}
+        </LinkButton>
+      );
+    } else if (this.props.isOfflineMode) {
+      return (<LinkButton path="/slideOne">
+        {I18n.t("getStartedLink")}
+      </LinkButton>)
+    } else return (
+        <WhiteButton onPress={() => null} disabled={true}>
+          {I18n.t("getStartedLink")}
+        </WhiteButton>
+      );
   }
 
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.titleBox}>
-          <Text style={styles.title}>{I18n.t('step2Title')}</Text>
-          <Text style={styles.instructions}>{I18n.t('waitMusePair')}</Text>
+          <Text style={styles.title}>
+            {I18n.t("step2Title")}
+          </Text>
+          <Text style={styles.instructions}>
+            {I18n.t("waitMusePair")}
+          </Text>
         </View>
         <ConnectorWidget />
         <View style={styles.buttonContainer}>

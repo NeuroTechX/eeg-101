@@ -5,12 +5,24 @@ import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import LinkButton from "../components/WhiteLinkButton";
 import I18n from "../i18n/i18n";
+import { bindActionCreators } from "redux";
+import { setGraphViewDimensions } from "../redux/actions";
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to this scene's ley
 function mapStateToProps(state) {
   return {
     connectionStatus: state.connectionStatus
   };
+}
+
+// Binds actions to component's props
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      setGraphViewDimensions
+    },
+    dispatch
+  );
 }
 
 class Landing extends Component {
@@ -25,7 +37,19 @@ class Landing extends Component {
         style={styles.container}
         resizeMode="stretch"
       >
-        <View style={styles.titleBox}>
+        <View
+          onLayout={event => {
+            // Captures the width and height of the graphContainer to determine overlay positioning properties in PSDGraph
+            let { x, y, width, height } = event.nativeEvent.layout;
+            this.props.setGraphViewDimensions({
+              x: x,
+              y: y,
+              width: width,
+              height: height * .75
+            });
+          }}
+          style={styles.titleBox}
+        >
           <Text style={styles.title}>
             {I18n.t("welcomeEEG101")}
           </Text>
@@ -42,7 +66,7 @@ class Landing extends Component {
     );
   }
 }
-export default connect(mapStateToProps)(Landing);
+export default connect(mapStateToProps, mapDispatchToProps)(Landing);
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -56,6 +80,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     container: {
+
       flex: 1,
       justifyContent: "center",
       alignItems: "stretch",

@@ -10,6 +10,7 @@ const iface = {
         channelOfInterest: PropTypes.number,
         filterType: PropTypes.string,
         isRecording: PropTypes.bool,
+        offlineData: PropTypes.string,
     ...View.propTypes // include the default view properties
   },
 };

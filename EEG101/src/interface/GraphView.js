@@ -6,10 +6,11 @@ import { requireNativeComponent, View } from 'react-native';
 
 const iface = {
   name: 'GraphView',
-  propTypes: { 
+  propTypes: {
         channelOfInterest: PropTypes.number,
         graphType: PropTypes.string,
         isRecording: PropTypes.bool,
+        offlineData: PropTypes.string,
     ...View.propTypes // include the default view properties
   },
 };

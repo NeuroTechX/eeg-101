@@ -55,6 +55,12 @@ public class PSDGraphManager extends SimpleViewManager<PSDGraph> {
         }
     }
 
+    // Bridge function for offline Prop. Calls setOfflineMode in EEGGraph
+    @ReactProp(name = "offlineData")
+    public void setOfflineData(PSDGraph graph, @Nullable String offlineData) {
+        graph.setOfflineData(offlineData);
+    }
+
     // Bridge function for receiving 'start threads' and 'stop threads' commands from the
     // dispatchViewManagerCommand() method in JS. Currently, only used in stopping threads when
     // switching between graphs in the SandboxGraph component    @Override
@@ -75,6 +81,17 @@ public class PSDGraphManager extends SimpleViewManager<PSDGraph> {
                         commandID,
                         getClass().getSimpleName()));
         }
+    }
+
+    // Callback that will be triggered after all properties are updated in current update transaction
+    //* (all @ReactProp handlers for properties updated in current transaction have been called)
+    @Override
+    protected void onAfterUpdateTransaction(PSDGraph view) {
+        super.onAfterUpdateTransaction(view);
+        psdGraph.stopThreads();
+        psdGraph.startDataListener();
+        psdGraph.startDataThread();
+        psdGraph.startRenderingThread();
     }
 }
 

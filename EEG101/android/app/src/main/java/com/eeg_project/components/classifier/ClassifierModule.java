@@ -189,13 +189,12 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         dataListener = new ClassifierDataListener(eegBuffer);
         appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
 
-        Log.w(TAG, "run");
     }
 
     @ReactMethod
     public void reset() {
         // Reset entire classifier, including clearing all variables and ongoing processes
-        Log.w(TAG, "reset");
+
         stopCollecting();
         if(dataThread != null) {
             dataThread.quit();

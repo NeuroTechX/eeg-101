@@ -6,13 +6,15 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import {
   getAndConnectToDevice,
-  setConnectionStatus
+  setConnectionStatus,
+  setOfflineMode
 } from "../../redux/actions";
 
 // Import properties stored in Redux
 function mapStateToProps(state) {
   return {
-    connectionStatus: state.connectionStatus
+    connectionStatus: state.connectionStatus,
+    isOfflineMode: state.isOfflineMode
   };
 }
 
@@ -21,7 +23,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       getAndConnectToDevice,
-      setConnectionStatus
+      setConnectionStatus,
+      setOfflineMode,
     },
     dispatch
   );
