@@ -16,7 +16,8 @@ import GraphView from "../interface/GraphView";
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
   return {
-    connectionStatus: state.connectionStatus
+    connectionStatus: state.connectionStatus,
+    isOfflineMode: state.isOfflineMode,
   };
 }
 
@@ -39,11 +40,35 @@ class SlideOne extends Component {
       popUp1Visible: false,
       popUp2Visible: false,
       popUp3Visible: false,
-      popUp4Visible: false
+      popUp4Visible: false,
+      slidePosition: 0
     };
   }
 
+  offlineDataSource(slidePosition) {
+    console.log(slidePosition);
+    if(this.props.isOfflineMode){
+      switch (slidePosition) {
+        case 0:
+          return "clean";
+          break;
+        case 1:
+          return "blinks"
+          break;
+        case 2:
+          return "cat";
+          break;
+      }
+    }
+  }
+
   render() {
+    const offlineDataSource =  slidePosition => {
+      if(this.props.isOfflineMode){
+        return "blinks"
+      }
+    }
+
     return (
       <View style={styles.container}>
 
@@ -59,8 +84,10 @@ class SlideOne extends Component {
               height: height
             });
           }}
+          onPageSelected={e =>
+            this.setState({ slidePosition: e.nativeEvent.position })}
         >
-          <GraphView style={{ flex: 1 }}/>
+          <GraphView offlineData={offlineDataSource(this.state.slidePosition)} style={{ flex: 1 }}/>
         </View>
 
         <Text style={styles.currentTitle}>{I18n.t('introductionSlideTitle')}</Text>
@@ -144,7 +171,7 @@ class SlideOne extends Component {
         <PopUp
           onClose={()=>this.props.history.push('/connectorOne')}
           visible={
-            false
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
           }
           title={I18n.t('museDisconnectedTitle')}
         >

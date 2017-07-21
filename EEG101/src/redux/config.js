@@ -3,13 +3,12 @@
 import I18n from "../i18n/i18n";
 
 export default {
-  navbarHeight: 64,
-  statusbarHeight: 20,
   connectionStatus: {
     CONNECTED: 'CONNECTED',
     CONNECTING: 'CONNECTING',
     DISCONNECTED: 'DISCONNECTED',
     NO_MUSES: 'NO_MUSES',
+    NOT_YET_CONNECTED: 'NOT_YET_CONNECTED',
   },
   graphType: {
     EEG: 'EEG',

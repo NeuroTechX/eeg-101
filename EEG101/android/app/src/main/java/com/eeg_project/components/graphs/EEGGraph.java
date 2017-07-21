@@ -62,17 +62,19 @@ public class EEGGraph extends FrameLayout {
     public OfflineDataListener offlineDataListener;
     public  CircularBuffer eegBuffer = new CircularBuffer(220, 4);
     public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
-    public boolean isRecording;
-    public String offlineData = "";
+
+
+    private Thread dataThread;
 
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
     public int channelOfInterest = 1;
-
+    public String offlineData = "";
+    public boolean isRecording;
 
     // grab reference to global Muse
     MainApplication appState;
-    private Thread dataThread;
+
 
     // ------------------------------------------------------------------------
     // Constructors
@@ -125,7 +127,6 @@ public class EEGGraph extends FrameLayout {
     }
 
     public void setOfflineData(String data) {
-        Log.w("EEGGraph", "setOfflineData called with " + data);
         this.offlineData = data;
     }
 
@@ -207,11 +208,10 @@ public class EEGGraph extends FrameLayout {
 
 
     public void startDataListener(){
-        Log.w("EEGGraph", "startDataListener called, offlineData = " + offlineData);
         if(offlineData.length() >= 1) {
             startOfflineData(offlineData);
         } else {
-            Log.w("EEGGraph", "Else reached, offlineData length is " + offlineData.length());
+
             dataListener = new DataListener();
             appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         }
@@ -238,7 +238,8 @@ public class EEGGraph extends FrameLayout {
 
     // Listener that receives incoming dataSource from the Muse.
     // Will call receiveMuseDataPacket as dataSource comes in around 220hz (256hz for Muse 2016)
-    // Updates eegBuffer with latest values for all 4 electrodes
+    // Updates eegBuffer with latest values for all 4 electrodes and calls updatePlot() every 15
+    // samples to trigger addition to the DataSeries and redrawing of the plot
     private final class DataListener extends MuseDataListener {
         public double[] newData;
 
@@ -294,6 +295,9 @@ public class EEGGraph extends FrameLayout {
         }
     }
 
+    // Listener that loops over pre-recorded data read from csv
+    // Only used in Offline Mode
+    // Updates eegbuffer at approx. the same frequency as the real DataListener
     private final class OfflineDataListener implements Runnable {
 
         List<double[]> data;
@@ -303,7 +307,7 @@ public class EEGGraph extends FrameLayout {
 
         OfflineDataListener(String offlineData) {
             try {
-                InputStream inputStream = getResources().getAssets().open("testdata.csv");
+                InputStream inputStream = getResources().getAssets().open(offlineData + ".csv");
                 EEGFileReader fileReader = new EEGFileReader(inputStream);
                 data = fileReader.read();
             } catch (IOException e) { Log.w("EEGGraph", "File not found error"); }

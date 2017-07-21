@@ -3,6 +3,7 @@ package com.eeg_project.components.graphs;
 import android.content.Context;
 import android.graphics.Color;
 
+import android.util.Log;
 import android.widget.FrameLayout;
 
 
@@ -24,9 +25,14 @@ import com.choosemuse.libmuse.MuseDataListener;
 import com.choosemuse.libmuse.MuseDataPacket;
 import com.choosemuse.libmuse.MuseDataPacketType;
 import com.eeg_project.MainApplication;
+import com.eeg_project.components.csv.EEGFileReader;
 import com.eeg_project.components.csv.EEGFileWriter;
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.Filter;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 
 /*
@@ -52,9 +58,10 @@ public class FilterGraph extends FrameLayout {
     private int PLOT_HIGH_BOUND = 1000;
     private LineAndPointFormatter lineFormatter;
     public DynamicSeries dataSeries;
-    private filterDataListener dataListener;
+    private FilterDataListener dataListener;
     public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
-    public boolean isRecording;
+    private OfflineFilterDataListener offlineDataListener;
+    private Thread dataThread;
 
     // Reference to global application state used for connected Muse
     MainApplication appState;
@@ -71,6 +78,9 @@ public class FilterGraph extends FrameLayout {
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
     public int channelOfInterest = 1;
+    private String offlineData = "";
+    public boolean isRecording;
+
 
 
     // ------------------------------------------------------------------------
@@ -81,6 +91,7 @@ public class FilterGraph extends FrameLayout {
         appState = ((MainApplication)context.getApplicationContext());
         initView(context);
         // Data listener is started in setFilterType method
+
     }
 
     // -----------------------------------------------------------------------
@@ -92,13 +103,16 @@ public class FilterGraph extends FrameLayout {
     }
 
     public void setFilterType(String filterType) {
-        stopDataListener();
         dataSeries.clear();
-
-        if(appState.connectedMuse.isLowEnergy()) { samplingRate = 256; }
-        else { samplingRate = 220; }
+        this.samplingRate = 256;
+        if(appState.connectedMuse != null) {
+            if (!appState.connectedMuse.isLowEnergy()) {
+                this.samplingRate = 220;
+            }
+        }
 
         switch(filterType) {
+
             case "LOWPASS":
                 PLOT_LOW_BOUND = 600;
                 PLOT_HIGH_BOUND = 1000;
@@ -122,10 +136,7 @@ public class FilterGraph extends FrameLayout {
                 activeFilter = new Filter(samplingRate, "highpass", 2, 1, 0);
                 filtState = new double[4][activeFilter.getNB()];
                 break;
-
         }
-
-        startDataListener();
     }
 
     public void startRecording() {
@@ -139,6 +150,10 @@ public class FilterGraph extends FrameLayout {
         if (fileWriter.isRecording()) {
             fileWriter.writeFile(PLOT_TITLE);
         }
+    }
+
+    public void setOfflineData(String data) {
+        this.offlineData = data;
     }
 
     // -----------------------------------------------------------------------
@@ -214,80 +229,146 @@ public class FilterGraph extends FrameLayout {
 
 
     public void startDataListener(){
-        dataListener = new filterDataListener();
-        appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
+        if(offlineData.length() >= 1) {
+            startOfflineData(offlineData);
+        } else {
+
+            dataListener = new FilterDataListener();
+            appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
+        }
     }
 
     public void stopDataListener(){
-        if (dataListener != null) {
-            appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
+        if (dataListener != null || offlineDataListener != null) {
+            if(offlineData.length() > 1) {
+                offlineDataListener.stopThread();
+            } else {
+                appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
+            }
         }
+    }
+
+    public void startOfflineData(String offlineData) {
+        offlineDataListener = new OfflineFilterDataListener(offlineData);
+        dataThread = new Thread(offlineDataListener);
+        dataThread.start();
     }
 
     // --------------------------------------------------------------
     // Listeners
 
-        // --------------------------------------------------------------
-        // Listeners
+    // Listener that receives incoming dataSource from the Muse.
+    // Will call receiveMuseDataPacket as dataSource comes in around 220hz (256hz for Muse 2016)
+    // Updates eegBuffer with latest values for all 4 electrodes
 
-        // Listener that receives incoming dataSource from the Muse.
-        // Will call receiveMuseDataPacket as dataSource comes in around 220hz (256hz for Muse 2016)
-        // Updates eegBuffer with latest values for all 4 electrodes
-        private final class filterDataListener extends MuseDataListener {
-            public double[] newData;
+    private final class FilterDataListener extends MuseDataListener {
+        public double[] newData;
 
-            // Filter variables
-            public boolean filterOn = false;
-            public Filter bandstopFilter;
-            public double[][] bandstopFiltState;
-            private int frameCounter = 0;
+        // Filter variables
+        public boolean isMuse2016 = false;
+        public Filter bandstopFilter;
+        public double[][] bandstopFiltState;
+        private int frameCounter = 0;
 
-            // if connected Muse is a 2016 BLE version, init a bandstop filter to remove 60hz noise
-            filterDataListener() {
-                if (appState.connectedMuse.isLowEnergy()) {
-                    filterOn = true;
-                    bandstopFilter = new Filter(256, "bandstop", 5, 55, 65);
-                    bandstopFiltState = new double[4][bandstopFilter.getNB()];
-                }
-                newData = new double[4];
+        // if connected Muse is a 2016 BLE version, init a bandstop filter to remove 60hz noise
+        FilterDataListener() {
+            if (appState.connectedMuse.isLowEnergy()) {
+                isMuse2016 = true;
+                bandstopFilter = new Filter(256, "bandstop", 5, 55, 65);
+                bandstopFiltState = new double[4][bandstopFilter.getNB()];
+            }
+            newData = new double[4];
+        }
+
+        // Updates eegBuffer with new data from all 4 channels. Bandstop filter for 2016 Muse
+        @Override
+        public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
+            getEegChannelValues(newData, p);
+
+            // Need to apply a bandpass (notch) filter at 60hz if Muse is 2016 model
+            // bandpass filter is built into 2014 Muses
+            if (isMuse2016) {
+                bandstopFiltState = bandstopFilter.transform(newData, bandstopFiltState);
+                newData = bandstopFilter.extractFilteredSamples(bandstopFiltState);
             }
 
-            // Updates eegBuffer with new data from all 4 channels. Bandstop filter for 2016 Muse
-            @Override
-            public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
-                getEegChannelValues(newData, p);
+            filtState = activeFilter.transform(newData, filtState);
+            eegBuffer.update(activeFilter.extractFilteredSamples(filtState));
 
-                if (filterOn) {
-                    bandstopFiltState = bandstopFilter.transform(newData, bandstopFiltState);
-                    newData = bandstopFilter.extractFilteredSamples(bandstopFiltState);
-                }
-
-                filtState = activeFilter.transform(newData, filtState);
-                eegBuffer.update(activeFilter.extractFilteredSamples(filtState));
-
-                frameCounter++;
-                if (frameCounter % 15 == 0) {
-                    updatePlot();
-                }
-
-                if (isRecording) {
-                    fileWriter.addDataToFile(newData);
-                }
+            frameCounter++;
+            if (frameCounter % 15 == 0) {
+                updatePlot();
             }
 
-            // Updates newData array based on incoming EEG channel values
-            private void getEegChannelValues(double[] newData, MuseDataPacket p) {
-                newData[0] = p.getEegChannelValue(Eeg.EEG1);
-                newData[1] = p.getEegChannelValue(Eeg.EEG2);
-                newData[2] = p.getEegChannelValue(Eeg.EEG3);
-                newData[3] = p.getEegChannelValue(Eeg.EEG4);
-            }
-
-            @Override
-            public void receiveMuseArtifactPacket(final MuseArtifactPacket p, final Muse muse) {
-                // Does nothing for now
+            if (isRecording) {
+                fileWriter.addDataToFile(newData);
             }
         }
+
+        // Updates newData array based on incoming EEG channel values
+        private void getEegChannelValues(double[] newData, MuseDataPacket p) {
+            newData[0] = p.getEegChannelValue(Eeg.EEG1);
+            newData[1] = p.getEegChannelValue(Eeg.EEG2);
+            newData[2] = p.getEegChannelValue(Eeg.EEG3);
+            newData[3] = p.getEegChannelValue(Eeg.EEG4);
+        }
+
+        @Override
+        public void receiveMuseArtifactPacket(final MuseArtifactPacket p, final Muse muse) {
+            // Does nothing for now
+        }
+    }
+
+    // Listener that loops over pre-recorded data read from csv
+    // Only used in Offline Mode
+    // Updates eegbuffer at approx. the same frequency as the real DataListener
+    private final class OfflineFilterDataListener implements Runnable {
+
+        List<double[]> data;
+        private boolean keepRunning = true;
+        private int counter = 0;
+        private int index = 0;
+
+        OfflineFilterDataListener(String offlineData) {
+            try {
+                InputStream inputStream = getResources().getAssets().open(offlineData + ".csv");
+                EEGFileReader fileReader = new EEGFileReader(inputStream);
+                data = fileReader.read();
+            } catch (IOException e) { Log.w("EEGGraph", "File not found error"); }
+        }
+
+        @Override
+        public void run() {
+            try {
+                while (keepRunning) {
+
+                    filtState = activeFilter.transform(data.get(index), filtState);
+                    eegBuffer.update(activeFilter.extractFilteredSamples(filtState));
+
+                    index++;
+                    counter++;
+
+                    if (counter >= 15) {
+                        updatePlot();
+                        counter = 0;
+                    }
+
+                    if(index >= data.size()) {
+                        index = 0;
+                    }
+
+
+                    Thread.sleep(5);
+                }
+            } catch(InterruptedException e){
+                Log.w("FilterGraph", "interrupted exception");
+            }
+        }
+
+        public void stopThread() {
+            keepRunning = false;
+        }
+    }
 
     // ---------------------------------------------------------
     // Plot update functions

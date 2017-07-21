@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, AppRegistry, DeviceEventEmitter, StatusBar } from "react-native";
+import { View, AppRegistry, StatusBar } from "react-native";
 import {
   NativeRouter,
   AndroidBackButton,
@@ -10,7 +10,7 @@ import {
 import { Provider, connect } from "react-redux";
 import { createStore, applyMiddleware, bindActionCreators } from "redux";
 import { withRouter } from 'react-router';
-import { closeMenu } from "./src/redux/actions";
+import { setMenu } from "./src/redux/actions";
 import Drawer from "react-native-drawer";
 import thunk from "redux-thunk";
 import config from "./src/redux/config";
@@ -51,7 +51,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      onClose: closeMenu
+      onClose: ()=>setMenu(false)
     },
     dispatch
   );
@@ -64,16 +64,6 @@ const DrawerWithRedux = withRouter(connect(mapStateToProps, mapDispatchToProps)(
 const store = createStore(reducer, applyMiddleware(thunk));
 
 class EEG_Project extends Component {
-  componentDidMount() {
-    // This creates a persistent listener that will update connectionStatus when connection events are broadcast in Java
-    DeviceEventEmitter.addListener("DISCONNECTED", event => {
-      store.dispatch(setConnectionStatus(config.connectionStatus.DISCONNECTED));
-    });
-
-    DeviceEventEmitter.addListener("CONNECTED", event => {
-      store.dispatch(setConnectionStatus(config.connectionStatus.CONNECTED));
-    });
-  }
 
   render() {
     // Provider component wraps everything in Redux and gives access to the store
@@ -96,7 +86,7 @@ class EEG_Project extends Component {
                 tapToClose={true}
                 openDrawerOffset={0.2} // 20% gap on the right side of drawer
                 panCloseMask={.2}
-                closedDrawerOffset={-3}
+                closedDrawerOffset={-5}
                 captureGestures='open'
                 styles={{
                   drawer: {elevation: 3},

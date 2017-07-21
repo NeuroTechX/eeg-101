@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import { withRouter } from 'react-router';
 import config from "../redux/config";
 import { bindActionCreators } from "redux";
-import { openMenu } from "../redux/actions";
+import { setMenu } from "../redux/actions";
 
 function mapStateToProps(state) {
   return {
@@ -22,7 +22,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      openMenu
+      setMenu
     },
     dispatch
   );
@@ -36,7 +36,7 @@ class NavBar extends Component {
   render() {
     return (
       <View style={styles.navContainer}>
-        <TouchableOpacity onPress={this.props.openMenu}>
+        <TouchableOpacity onPress={()=>this.props.setMenu(true)}>
           <Image
             style={styles.burger}
             source={require("../assets/burger.png")}

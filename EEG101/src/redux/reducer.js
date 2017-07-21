@@ -1,21 +1,23 @@
 // reducer.js
-// Our Redux reducer. Handles the routing actions produced by react-native-router-flux as well as Muse connection actions
+// Our Redux reducer. Handles important global data such as Muse connection status
 
 import config from "./config";
 import {
   SET_CONNECTION_STATUS,
   SET_GRAPHVIEW_DIMENSIONS,
   SET_BCI_ACTION,
-  OPEN_MENU,
-  CLOSE_MENU
+  SET_OFFLINE_MODE,
+  SET_MENU,
+
 } from "./actionTypes";
 
 const initialState = {
-  connectionStatus: config.connectionStatus.DISCONNECTED,
+  connectionStatus: config.connectionStatus.NOT_YET_CONNECTED,
   availableMuses: false,
   graphViewDimensions: { x: 0, y: 0, width: 300, height: 250 },
   bciAction: "",
-  isMenuOpen: false
+  isMenuOpen: false,
+  isOfflineMode: false
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -23,7 +25,8 @@ export default function reducer(state = initialState, action = {}) {
     case SET_CONNECTION_STATUS:
       return {
         ...state,
-        connectionStatus: action.payload
+        connectionStatus: action.payload,
+        isOfflineMode: false
       };
 
     case SET_GRAPHVIEW_DIMENSIONS:
@@ -38,17 +41,17 @@ export default function reducer(state = initialState, action = {}) {
         bciAction: action.payload
       };
 
-    case OPEN_MENU:
+    case SET_OFFLINE_MODE:
       return {
         ...state,
-        isMenuOpen: true
-      };
+        isOfflineMode: action.payload,
+      }
 
-    case CLOSE_MENU:
+    case SET_MENU:
       return {
         ...state,
-        isMenuOpen: false
-      };
+        isMenuOpen: action.payload
+      }
 
     // ...other actions
 
