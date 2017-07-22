@@ -3,6 +3,7 @@ package com.eeg_project.components.connector;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.choosemuse.libmuse.ConnectionState;
 import com.choosemuse.libmuse.Muse;
@@ -41,6 +42,7 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
     // ----------------------------------------------------------
     // Variables
     private final String TAG = "Connector";
+    private int NUM_CONNECTION_ATTEMPTS = 4;
     private MuseManagerAndroid manager;
     private ConnectionListener connectionListener;
     private int museIndex = 0;
@@ -83,9 +85,11 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
         connectionPromise = promise;
         isPromiseUnfulfilled = true;
 
-        if (manager == null) {
-            startMuseManager();
-        }
+        startMuseManager();
+
+        connectionListener = new ConnectionListener();
+
+        availableMuses = manager.getMuses();
 
         // Connection and Muse search attempts are queued to a HandlerThread to handle synchrony
         connectThread = new HandlerThread("connectThread");
@@ -95,56 +99,50 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
         // Queue one Muse search attempt
         connectHandler.post(searchRunnable);
 
-        // Start connection attempts
-        connectToMuse();
+
         }
+
+    @ReactMethod
+    public void disconnectDevice() {
+        if (appState.connectedMuse != null) {
+            appState.connectedMuse.disconnect(true);
+            appState.connectedMuse.unregisterAllListeners();
+        }
+    }
 
     //--------------------------------------------------------------
     // Internal methods
 
     // Starts the LibMuse MuseManagerAndroid class and creates a Muse Listener
     public void startMuseManager() {
+        Log.w("Connector","StartMuseManager");
         // MuseManagerAndroid must be created and given context before any LibMuse calls can be made
         manager = MuseManagerAndroid.getInstance();
         manager.setContext(this.getReactApplicationContext());
-        // Listeners are attached to a weak reference to the current activity to avoid memory leaks
-
         manager.setMuseListener(new MuseL());
         manager.startListening();
     }
 
+
     // Stops an ongoing getAndConnectToDevice function if no Muses are found
     public void noMusesDetected() {
+        Log.w("Connector","noMusesDetected");
         sendEvent(getReactApplicationContext(), "NO_MUSES", Arguments.createMap());
         stopConnector();
         connectionPromise.resolve(false);
     }
 
-    // Posts a connectRunnable to connectHandler
-    public void connectToMuse() {
-        // Post is delayed to allow previous runAsynchrounously calls to complete
-        connectHandler.postDelayed(connectRunnable, 100);
-    }
 
     // Resolves getAndConnectToDevice promise and registers persistent connection listener
     public void museConnected() {
+
         connectionPromise.resolve(true);
         appState.connectedMuse = muse;
         stopConnector();
 
-        // Connected Muses are stored in the MainApplication context so they can be accessed from anywhere in the app.
-        appState = ((MainApplication)this.getCurrentActivity().getApplication());
-
-        // Register connectionListener that will persist to handle disconnects
-        // TODO: consider putting this on another thread or in a service
-        connectionListener = new ConnectionListener();
-        appState.connectedMuse.registerConnectionListener(connectionListener);
-
+        // TODO: Complete implementation of this noiseDetector
         // Create a persistent NoiseDetector class that can be used for SignalQualityIndicator
-        NoiseDetector noiseDetector = new NoiseDetector(600, getReactApplicationContext());
-
-        stopConnector();
-
+        // NoiseDetector noiseDetector = new NoiseDetector(600, getReactApplicationContext());
     }
 
     // ------------------------------------------------------------------------------
@@ -155,14 +153,16 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
         @Override
         public void run() {
             try {
-                sendEvent(getReactApplicationContext(), "DISCONNECTED", Arguments.createMap());
                 Thread.sleep(1500);
-                availableMuses = manager.getMuses();
+                Log.w("Connector", "Search Runnable Called, availablueMuses.size " + availableMuses.size());
 
-                if (availableMuses.isEmpty() || tryCount >= 4) {
+                if (availableMuses.isEmpty() || tryCount >= NUM_CONNECTION_ATTEMPTS) {
                     noMusesDetected();
+                } else {
+                    // Queue one Muse connection attempt
+                    connectHandler.post(connectRunnable);
                 }
-            } catch ( InterruptedException e) { }
+            } catch (InterruptedException e) {}
         }
     };
 
@@ -171,9 +171,9 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
         @Override
         public void run() {
             try {
+
                 sendEvent(getReactApplicationContext(), "CONNECT_ATTEMPT", Arguments.createMap());
                 muse = availableMuses.get(museIndex);
-                connectionListener = new ConnectionListener();
 
                 // Unregister all prior listeners and register our ConnectionListener to the
                 // Muse we are interested in. The ConnectionListener will allow us to detect
@@ -198,9 +198,10 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
     // Stops all threads, managers, handlers, and listeners created in this module
     // Bridged so that it can be called from JS when user changes scenes
     public void stopConnector() {
+        Log.w("Connector","StopConnector");
+
         tryCount = 0;
-        // It is important to call stopListening when the Activity is paused
-        // to avoid a resource leak from the LibMuse library.
+
         if (manager != null) {
             manager.stopListening();
             manager = null;
@@ -211,11 +212,6 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
         if (connectHandler != null) {
             connectHandler.removeCallbacks(connectRunnable);
             connectThread.quit();
-        }
-        // Unregister listeners from connectMuse
-        if (muse != null) {
-            muse.unregisterAllListeners();
-            muse = null;
         }
     }
 
@@ -236,6 +232,8 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
 
     // Notified whenever connection state of its registered Muse changes
     class ConnectionListener extends MuseConnectionListener  {
+        String CONNECTED = "CONNECTED";
+        String DISCONNECTED = "DISCONNECTED";
 
         ConnectionListener() {
         }
@@ -244,7 +242,8 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
         public void receiveMuseConnectionPacket(final MuseConnectionPacket p, final Muse muse) {
             final ConnectionState current = p.getCurrentConnectionState();
             if (current == ConnectionState.CONNECTED) {
-                sendEvent(getReactApplicationContext(), "CONNECTED", Arguments.createMap());
+                // TODO: Add Muse name and model to map to be sent to JS
+                sendEvent(getReactApplicationContext(), CONNECTED, Arguments.createMap());
                 if (isPromiseUnfulfilled){
                     museConnected();
                     return;
@@ -255,7 +254,7 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
             // unfulfilled promise (not in the midst of connection attempts), an event should be
             // dispatched to JS to prompt a return to the connection scene
             if (current == ConnectionState.DISCONNECTED) {
-                sendEvent(getReactApplicationContext(), "DISCONNECTED", Arguments.createMap());
+                sendEvent(getReactApplicationContext(), DISCONNECTED, Arguments.createMap());
 
                 // If disconnection is detected in midst of connection attempts (failure),
                 // unregister all listeners, increment the index and try again with the next Muse.
@@ -266,11 +265,11 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
                     museIndex++;
                     tryCount++;
                     if(museIndex < availableMuses.size()) {
-                        connectToMuse();
+                        connectHandler.post(connectRunnable);
+
                     } else {
                         museIndex = 0;
                         connectHandler.post(searchRunnable);
-                        connectToMuse();
                     }
                 }
             }
