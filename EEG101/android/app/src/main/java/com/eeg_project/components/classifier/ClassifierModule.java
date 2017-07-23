@@ -1,14 +1,18 @@
 package com.eeg_project.components.classifier;
 
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.util.Log;
 
+import com.choosemuse.libmuse.Eeg;
+import com.choosemuse.libmuse.Muse;
+import com.choosemuse.libmuse.MuseArtifactPacket;
+import com.choosemuse.libmuse.MuseDataListener;
+import com.choosemuse.libmuse.MuseDataPacket;
 import com.choosemuse.libmuse.MuseDataPacketType;
 import com.eeg_project.MainApplication;
 import com.eeg_project.components.signal.BandPowerExtractor;
 import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.FFT;
+import com.eeg_project.components.signal.Filter;
 import com.eeg_project.components.signal.NoiseDetector;
 import com.eeg_project.components.signal.PSDBuffer2D;
 import com.facebook.react.bridge.Arguments;
@@ -30,26 +34,27 @@ import java.util.LinkedList;
  * Posts data to dataRunnable in background HandlerThread to get PSD and extract band powers
  */
 
-public class ClassifierModule extends ReactContextBaseJavaModule implements BufferListener {
+public class ClassifierModule extends ReactContextBaseJavaModule {
 
 
     // ---------------------------------------------------------
     // Variables
     public static final int FFT_LENGTH = 256;
-    public static final int M = 4;
+    public static final int numChannels = 4;
     private final String TAG = "Classifier";
     private int dataClass;
     public CircularBuffer eegBuffer;
-    public int samplingFrequency;
+    public int samplingRate = 256;
     public ClassifierDataListener dataListener;
+    public ClassifierRunnable classifierRunnable = new ClassifierRunnable();
     public NoiseDetector noiseDetector = new NoiseDetector(600, getReactApplicationContext());
     private double[][] smoothLogPower;
-    private HandlerThread dataThread;
-    private Handler dataHandler;
+    private Thread dataThread;
     boolean isLowEnergy;
     private boolean isTraining;
     private boolean isPredicting;
     private Promise collectionPromise;
+    private int stepSize = 4;
 
     public GaussianNaiveBayesClassifier classifier = new GaussianNaiveBayesClassifier();
     public LinkedList<double[]> trainingData = new LinkedList<>();
@@ -64,6 +69,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     // Constructor
     public ClassifierModule(ReactApplicationContext reactContext) {
         super(reactContext);
+        Log.w("ClassifierModule", "constructor");
     }
 
     // ---------------------------------------------------------
@@ -88,20 +94,21 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
 
     @ReactMethod
     public void collectTrainingData(int dClass, Promise promise) {
-        if (isLowEnergy) {
-            samplingFrequency = FFT_LENGTH;
-        } else samplingFrequency = 220;
+        Log.w("ClassifierModule", "Collect Training Data called");
+        if(appState.connectedMuse != null) {
+            if (!appState.connectedMuse.isLowEnergy()) {
+                samplingRate = 220;
+            }
+        }
 
         this.collectionPromise = promise;
-
-        eegBuffer = new CircularBuffer(samplingFrequency, M);
-        eegBuffer.addListener(this);
-        this.dataClass = dClass;
-        startThread();
-        dataListener = new ClassifierDataListener(eegBuffer);
-        appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
-
         this.isTraining = true;
+        eegBuffer = new CircularBuffer(samplingRate, numChannels);
+        this.dataClass = dClass;
+        dataListener = new ClassifierDataListener();
+        appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
+        startThread();
+
     }
 
     @ReactMethod
@@ -129,6 +136,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     public void stopCollecting() {
         // Stop ongoing any ongoing data collection processes
         // Unregister datalistener
+        classifierRunnable.stopThread();
         appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
         isPredicting = false;
         isTraining = false;
@@ -176,12 +184,17 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
 
     @ReactMethod
     public void runClassification() {
-        isTraining = false;
+        Log.w("ClassifierModule", "runClassification called");
+        if(appState.connectedMuse != null) {
+            if (!appState.connectedMuse.isLowEnergy()) {
+                samplingRate = 220;
+            }
+        }
         isPredicting = true;
-
-        dataListener = new ClassifierDataListener(eegBuffer);
+        eegBuffer = new CircularBuffer(samplingRate, numChannels);
+        dataListener = new ClassifierDataListener();
         appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
-
+        startThread();
     }
 
     @ReactMethod
@@ -189,9 +202,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         // Reset entire classifier, including clearing all variables and ongoing processes
 
         stopCollecting();
-        if(dataThread != null) {
-            dataThread.quit();
-        }
+
         trainingData = new LinkedList<>();
         labels = new LinkedList<>();
         classifier = new GaussianNaiveBayesClassifier();
@@ -203,45 +214,56 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     public class ClassifierRunnable implements Runnable {
         public BandPowerExtractor bandExtractor;
 
-        private int samplingFrequency;
+
         private FFT fft;
-        private double[][] rawBuffer;
         private double[][] logpower;
         private double[][] smoothPSD;
         PSDBuffer2D psdBuffer;
         private double[] bandMeans;
+        private boolean keepRunning;
+        private double[][] latestSamples;
 
-        public ClassifierRunnable(double[][] buffer, int frequency) {
-            this.samplingFrequency = frequency;
-            this.rawBuffer = buffer;
-            fft = new FFT(samplingFrequency, FFT_LENGTH, samplingFrequency);
+        public ClassifierRunnable() {
+            fft = new FFT(samplingRate, FFT_LENGTH, samplingRate);
             int nbBins = fft.getFreqBins().length;
-            psdBuffer = new PSDBuffer2D(samplingFrequency, M, nbBins);
-            logpower = new double[M][nbBins];
-            smoothLogPower = new double[M][nbBins];
+            psdBuffer = new PSDBuffer2D(samplingRate, numChannels, nbBins);
+            logpower = new double[numChannels][nbBins];
+            smoothLogPower = new double[numChannels][nbBins];
             bandExtractor = new BandPowerExtractor(fft.getFreqBins());
         }
 
         @Override
         public void run() {
+            Log.w("ClassifierModule", "dataclass = " + dataClass);
             try {
-                if (noisePresent(rawBuffer)) {
-                    return;
+                keepRunning = true;
+                while (keepRunning) {
+                    if (eegBuffer.getPts() >= stepSize) {
+
+                        // Extract latest raw samples
+                        latestSamples = eegBuffer.extractTransposed(256);
+
+                        if (!noisePresent(latestSamples)) {
+                            smoothPSD = getPSD(latestSamples);
+                            bandMeans = bandExtractor.extract1D(smoothPSD);
+
+                            if (isPredicting) {
+                                sendEvent("PREDICT_RESULT", classifier.predict(bandMeans));
+                            } else if (isTraining) {
+                                trainingData.add(bandMeans);
+                                labels.add(dataClass);
+                            }
+                        }
+                        eegBuffer.resetPts();
+                    }
                 }
-             smoothPSD = getPSD(rawBuffer);
-             bandMeans = bandExtractor.extract1D(smoothPSD);
 
-             if(isPredicting){
-                 sendEvent("PREDICT_RESULT", classifier.predict(bandMeans));
-             } else if(isTraining) {
-                 trainingData.add(bandMeans);
-                 labels.add(dataClass);
-             }
 
-            } catch (Exception e) {
-                Log.w(TAG, e);
-                return;
-            }
+                    } catch(Exception e){
+                        Log.w(TAG, e);
+                        return;
+                    }
+
         }
 
         public boolean noisePresent(double[][] buffer) {
@@ -255,7 +277,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
 
         public double[][] getPSD(double[][] buffer) {
             // [nbch][nbsmp]
-            for (int i = 0; i < M; i++) {
+            for (int i = 0; i < numChannels; i++) {
                 double[] channelPower = fft.computeLogPSD(buffer[i]);
                 for (int j = 0; j < channelPower.length; j++){
                     logpower[i][j] = channelPower[j];
@@ -265,19 +287,20 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
             smoothLogPower = psdBuffer.mean();
             return smoothLogPower;
         }
+
+        public void stopThread() {
+            keepRunning = false;
+        }
     }
 
         // ---------------------------------------------------------
         // Methods
 
-        public void bufferFull(double[][] buffer) {
-            dataHandler.post(new ClassifierRunnable(buffer, samplingFrequency));
-        }
+
 
         public void startThread(){
-            dataThread = new HandlerThread("dataThread");
+            dataThread = new Thread(classifierRunnable);
             dataThread.start();
-            dataHandler = new Handler(dataThread.getLooper());
         }
 
         public double crossValidate(Integer k) {
@@ -344,7 +367,59 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
             return scoreSum/k;
         }
 
+    public class ClassifierDataListener extends MuseDataListener {
+
+        // ------------------------------------------
+        // Variables
+        double[] newData;
+        boolean filterOn;
+        public Filter bandstopFilter;
+        public double[][] bandstopFiltState;
+
+        // grab reference to global Muse
+        MainApplication appState;
+
+        // if connected Muse is a 2016 BLE version, init a bandstop filter to remove 60hz noise
+        ClassifierDataListener() {
+            if (appState.connectedMuse.isLowEnergy()) {
+                filterOn = true;
+                bandstopFilter = new Filter(256, "bandstop", 5, 55, 65);
+                bandstopFiltState = new double[4][bandstopFilter.getNB()];
+            }
+            newData = new double[4];
+        }
+
+        // Updates eegBuffer with new data from all 4 channels. Bandstop filter for 2016 Muse
+        @Override
+        public void receiveMuseDataPacket(final MuseDataPacket p, final Muse muse) {
+            getEegChannelValues(newData, p);
+
+            if (filterOn) {
+                bandstopFiltState = bandstopFilter.transform(newData, bandstopFiltState);
+                newData = bandstopFilter.extractFilteredSamples(bandstopFiltState);
+            }
+
+            eegBuffer.update(newData);
+        }
+
+        // Updates newData array based on incoming EEG channel values
+        private void getEegChannelValues(double[] newData, MuseDataPacket p) {
+            newData[0] = p.getEegChannelValue(Eeg.EEG1);
+            newData[1] = p.getEegChannelValue(Eeg.EEG2);
+            newData[2] = p.getEegChannelValue(Eeg.EEG3);
+            newData[3] = p.getEegChannelValue(Eeg.EEG4);
+        }
+
+        @Override
+        public void receiveMuseArtifactPacket(final MuseArtifactPacket p, final Muse muse) {
+            // Does nothing for now
+        }
     }
+
+
+}
+
+
 
 
 

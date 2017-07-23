@@ -62,7 +62,7 @@ public class PSDGraph extends FrameLayout {
     public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
     private OfflinePSDDataListener offlineDataListener;
     private Thread offlineDataThread;
-    private int samplingRate;
+    private int samplingRate = 256;
 
     // Reference to global application state used for connected Muse
     MainApplication appState;
@@ -82,9 +82,9 @@ public class PSDGraph extends FrameLayout {
         initView(context);
         if(appState.connectedMuse != null) {
             if (!appState.connectedMuse.isLowEnergy()) {
-                samplingRate = 220;
+                this.samplingRate = 220;
             }
-        } else { samplingRate = 256; }
+        }
     }
 
     // -----------------------------------------------------------------------

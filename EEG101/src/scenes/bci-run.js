@@ -39,14 +39,14 @@ class ClassifierRun extends Component {
     // Initialize States
     this.state = {
       popUp1Visible: false,
-      data: [1,1,1,1,1,1,1,1,1,1,1],
+      data: [1,1,1],
       noise: [],
       isRunning: false,
     };
   }
 
   updateData(data, message) {
-    if (data.length >= 10) {
+    if (data.length >= 30) {
       data.shift();
     }
     data.push(message);
@@ -54,9 +54,6 @@ class ClassifierRun extends Component {
   }
 
   componentDidMount() {
-    Classifier.fitWithScore(6).then(promise => {
-      this.setState(promise);
-    });
 
     // Light action
     if (this.props.bciAction === config.bciAction.LIGHT) {
@@ -79,12 +76,12 @@ class ClassifierRun extends Component {
         this.setState({ noise: Object.keys(message) });
         Torch.switchState(false);
       });
-    } else {
+    }
+    // Vibration action
+    else {
       const vibrationListener = new NativeEventEmitter(
         NativeModules.Classifier
       );
-
-      // Vibration action
       this.predictSubscription = vibrationListener.addListener(
         "PREDICT_RESULT",
         message => {
