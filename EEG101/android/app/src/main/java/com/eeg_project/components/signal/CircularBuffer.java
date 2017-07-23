@@ -17,6 +17,8 @@ public class CircularBuffer {
     private int nbCh;
     private int index;
     private int pts;
+
+    // Step size (num samples) before updating listeners with latest epoch
     private double[][] buffer;
     private ArrayList<BufferListener> listeners = new ArrayList<BufferListener>();
 

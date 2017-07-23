@@ -2,7 +2,6 @@ package com.eeg_project.components.classifier;
 
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.choosemuse.libmuse.MuseDataPacketType;
@@ -15,16 +14,11 @@ import com.eeg_project.components.signal.PSDBuffer2D;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
-import org.apache.commons.lang3.ArrayUtils;
-
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -35,7 +29,6 @@ import java.util.LinkedList;
  * Receives contents of CircularBuffer whenever it fills up in bufferFull
  * Posts data to dataRunnable in background HandlerThread to get PSD and extract band powers
  */
-
 
 public class ClassifierModule extends ReactContextBaseJavaModule implements BufferListener {
 
@@ -207,7 +200,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     // ------------------------------------------------------------------------------
     // Runnables
 
-    public class dataRunnable implements Runnable {
+    public class ClassifierRunnable implements Runnable {
         public BandPowerExtractor bandExtractor;
 
         private int samplingFrequency;
@@ -218,7 +211,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         PSDBuffer2D psdBuffer;
         private double[] bandMeans;
 
-        public dataRunnable(double[][] buffer, int frequency) {
+        public ClassifierRunnable(double[][] buffer, int frequency) {
             this.samplingFrequency = frequency;
             this.rawBuffer = buffer;
             fft = new FFT(samplingFrequency, FFT_LENGTH, samplingFrequency);
@@ -278,7 +271,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         // Methods
 
         public void bufferFull(double[][] buffer) {
-            dataHandler.post(new dataRunnable(buffer, samplingFrequency));
+            dataHandler.post(new ClassifierRunnable(buffer, samplingFrequency));
         }
 
         public void startThread(){
@@ -287,69 +280,69 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
             dataHandler = new Handler(dataThread.getLooper());
         }
 
-    public double crossValidate(Integer k) {
-        // runs k fold cross validation on training data List
+        public double crossValidate(Integer k) {
+            // runs k fold cross validation on training data List
 
-        if(trainingData.size() < 1) {
-            return 0;
-        }
+            if(trainingData.size() < 1) {
+                return 0;
+            }
 
-        double[] scores = new double[k];
-        double scoreSum = 0;
-        LinkedList<Integer> shuffledIndices = new LinkedList<Integer>();
+            double[] scores = new double[k];
+            double scoreSum = 0;
+            LinkedList<Integer> shuffledIndices = new LinkedList<Integer>();
 
-        // equivalent of shuffleIndices = np.arange(0,trainingData.size)
-        for(Integer i = 0; i < trainingData.size(); i++){
-            shuffledIndices.add(i);
-        }
-        Collections.shuffle(shuffledIndices);
+            // equivalent of shuffleIndices = np.arange(0,trainingData.size)
+            for(Integer i = 0; i < trainingData.size(); i++){
+                shuffledIndices.add(i);
+            }
+            Collections.shuffle(shuffledIndices);
 
-        int chunk = shuffledIndices.size() / k;
+            int chunk = shuffledIndices.size() / k;
 
-        for(int i = 0; i < k; i++){
+            for(int i = 0; i < k; i++){
 
 
-            LinkedList<Integer> testIndices = new LinkedList<Integer>();
-            LinkedList<Integer> trainIndices = new LinkedList<Integer>();
-            LinkedList<double[]> trainData = new LinkedList<double[]>();
-            LinkedList<double[]> testData = new LinkedList<double[]>();
-            LinkedList<Integer> trainLabels = new LinkedList<Integer>();
-            LinkedList<Integer> testLabels = new LinkedList<Integer>();
+                LinkedList<Integer> testIndices = new LinkedList<Integer>();
+                LinkedList<Integer> trainIndices = new LinkedList<Integer>();
+                LinkedList<double[]> trainData = new LinkedList<double[]>();
+                LinkedList<double[]> testData = new LinkedList<double[]>();
+                LinkedList<Integer> trainLabels = new LinkedList<Integer>();
+                LinkedList<Integer> testLabels = new LinkedList<Integer>();
 
-            // Get indices for test and train chunks
-            for(int j = 0; j < shuffledIndices.size(); j++){
-                if(j >= i * chunk && j < i * chunk + chunk){
-                    testIndices.add(shuffledIndices.get(j));
-                } else {
-                    trainIndices.add(shuffledIndices.get(j));
+                // Get indices for test and train chunks
+                for(int j = 0; j < shuffledIndices.size(); j++){
+                    if(j >= i * chunk && j < i * chunk + chunk){
+                        testIndices.add(shuffledIndices.get(j));
+                    } else {
+                        trainIndices.add(shuffledIndices.get(j));
+                    }
                 }
+
+                // Create training data and label lists from indices
+                for(Integer l : trainIndices){
+                    trainData.add(trainingData.get(l));
+                    trainLabels.add(labels.get(l));
+                }
+
+
+                // Create test data and label lists from indices
+                for(Integer l : testIndices){
+                    testData.add(trainingData.get(l));
+                    testLabels.add(labels.get(l));
+                }
+
+
+
+                classifier.fit(trainData, trainLabels);
+                scores[i] = classifier.score(testData, testLabels);
             }
 
-            // Create training data and label lists from indices
-            for(Integer l : trainIndices){
-                trainData.add(trainingData.get(l));
-                trainLabels.add(labels.get(l));
+            for(double s : scores){
+                scoreSum = scoreSum + s;
             }
 
-
-            // Create test data and label lists from indices
-            for(Integer l : testIndices){
-                testData.add(trainingData.get(l));
-                testLabels.add(labels.get(l));
-            }
-
-
-
-            classifier.fit(trainData, trainLabels);
-            scores[i] = classifier.score(testData, testLabels);
+            return scoreSum/k;
         }
-
-        for(double s : scores){
-            scoreSum = scoreSum + s;
-        }
-
-        return scoreSum/k;
-    }
 
     }
 

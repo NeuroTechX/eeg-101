@@ -337,6 +337,7 @@ public class PSDGraph extends FrameLayout {
     public final class PSDDataSource implements Runnable {
         private boolean keepRunning = true;
         double[] latestSamples;
+        // TODO: document why this is 26
         int stepSize = 26;
         public boolean isRecording;
         public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), "Power_Spectral_Density");
@@ -351,8 +352,6 @@ public class PSDGraph extends FrameLayout {
 
             if(samplingFrequency == 220) {
                 stepSize = 22;
-            } else {
-                stepSize = 26;
             }
 
             // Initialize FFT transform

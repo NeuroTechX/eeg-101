@@ -63,7 +63,7 @@ const DrawerWithRedux = withRouter(connect(mapStateToProps, mapDispatchToProps)(
 // Create store
 const store = createStore(reducer, applyMiddleware(thunk));
 
-class EEG_Project extends Component {
+class App extends Component {
 
   render() {
     // Provider component wraps everything in Redux and gives access to the store
@@ -126,4 +126,4 @@ class EEG_Project extends Component {
 }
 
 // Defines which component is the root for the whole project
-AppRegistry.registerComponent("EEG_Project", () => EEG_Project);
+AppRegistry.registerComponent("App", () => App);
