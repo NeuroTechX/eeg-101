@@ -8,6 +8,7 @@ import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
 import I18n from '../i18n/i18n';
+import * as colors from "../styles/colors";
 
 function mapStateToProps(state) {
   return {
@@ -82,21 +83,21 @@ const styles = MediaQueryStyleSheet.create(
       marginTop: 10,
       fontSize: 13,
       fontFamily: "Roboto-Medium",
-      color: "#6CCBEF"
+      color: colors.skyBlue
     },
 
     classText: {
       textAlign: "center",
       margin: 15,
       lineHeight: 50,
-      color: "#ffffff",
+      color: colors.white,
       fontFamily: "Roboto-Black",
       fontSize: 48,
     },
 
     body: {
       fontFamily: "Roboto-Light",
-      color: "#484848",
+      color: colors.black,
       fontSize: 19
     },
 
@@ -107,7 +108,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     graphContainer: {
-      backgroundColor: "#72c2f1",
+      backgroundColor: colors.skyBlue,
       flex: 4,
       justifyContent: "center",
       alignItems: "stretch"
@@ -115,7 +116,7 @@ const styles = MediaQueryStyleSheet.create(
 
     header: {
       fontFamily: "Roboto-Bold",
-      color: "#484848",
+      color: colors.black,
       fontSize: 20
     },
 

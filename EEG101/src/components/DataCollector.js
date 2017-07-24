@@ -17,6 +17,7 @@ import Classifier from "../interface/Classifier.js";
 import Button from "../components/Button.js";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import I18n from "../i18n/i18n";
+import * as colors from "../styles/colors";
 
 export default class DataCollector extends Component {
   constructor(props) {
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Roboto-Light",
     fontSize: 18,
-    color: "#484848",
+    color: colors.black,
     marginBottom: 30
   }
 });

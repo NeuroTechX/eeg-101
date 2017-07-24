@@ -7,6 +7,7 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
+import * as colors from "../styles/colors";
 
 export default class PlayPauseButton extends Component{
   constructor(props){

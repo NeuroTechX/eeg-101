@@ -8,12 +8,13 @@ import {
   View,
 } from 'react-native';
 import { MediaQueryStyleSheet} from 'react-native-responsive';
+import * as colors from "../styles/colors";
 
 export default class PopUpLink extends Component{
 
   render() {
     return(
-      <Text style={{color: '#6CCBEF',
+      <Text style={{color: colors.skyBlue,
         fontFamily: 'Roboto-Medium',
         textDecorationLine: 'underline',}}
        onPress={this.props.onPress}

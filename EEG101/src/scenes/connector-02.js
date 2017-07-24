@@ -7,6 +7,7 @@ import LinkButton from "../components/WhiteLinkButton";
 import WhiteButton from "../components/WhiteButton";
 import ConnectorWidget from "../components/ConnectorWidget";
 import I18n from "../i18n/i18n";
+import * as colors from "../styles/colors";
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
@@ -69,7 +70,7 @@ const styles = MediaQueryStyleSheet.create(
       fontFamily: "Roboto-Light",
       fontSize: 15,
       margin: 20,
-      color: "#ffffff",
+      color: colors.white,
       textAlign: "center"
     },
 
@@ -77,7 +78,7 @@ const styles = MediaQueryStyleSheet.create(
       fontFamily: "Roboto-Bold",
       fontSize: 18,
       margin: 20,
-      color: "#ffffff",
+      color: colors.white,
       textAlign: "center"
     },
 
@@ -87,7 +88,7 @@ const styles = MediaQueryStyleSheet.create(
       alignItems: "stretch",
       width: null,
       height: null,
-      backgroundColor: "#6CCBEF"
+      backgroundColor: colors.skyBlue
     },
 
     buttonContainer: {
@@ -105,7 +106,7 @@ const styles = MediaQueryStyleSheet.create(
       textAlign: "center",
       margin: 15,
       lineHeight: 50,
-      color: "#ffffff",
+      color: colors.white,
       fontFamily: "Roboto-Black",
       fontSize: 48
     },

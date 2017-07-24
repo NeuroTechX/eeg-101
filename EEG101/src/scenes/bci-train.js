@@ -21,6 +21,7 @@ import Button from "../components/Button.js";
 import LinkButton from "../components/LinkButton";
 import MiniChart from "../components/MiniChart.js";
 import I18n from "../i18n/i18n";
+import * as colors from "../styles/colors";
 
 function mapStateToProps(state) {
   return {
@@ -73,7 +74,7 @@ class BCITrain extends Component {
               {this.state.class1Samples} {I18n.t("trainSamples")}{" "}
             </Text>
           </View>
-          <ActivityIndicator color={"#6CCBEF"} size={"large"} />
+          <ActivityIndicator color={colors.skyBlue} size={"large"} />
           <SandboxButton
             onPress={() => Classifier.stopCollecting()}
             active={true}
@@ -122,7 +123,7 @@ class BCITrain extends Component {
               {this.state.class2Samples} {I18n.t("trainSamples")}
             </Text>
           </View>
-          <ActivityIndicator color={"#6CCBEF"} size={"large"} />
+          <ActivityIndicator color={colors.skyBlue} size={"large"} />
           <SandboxButton
             onPress={() => Classifier.stopCollecting()}
             active={true}
@@ -187,7 +188,7 @@ class BCITrain extends Component {
       return (
         <View style={styles.classifierContainer}>
           <Text style={styles.sectionTitle}>Classifier</Text>
-          <ActivityIndicator color={"#6CCBEF"} size={"large"} />
+          <ActivityIndicator color={colors.skyBlue} size={"large"} />
         </View>
       );
     } else {
@@ -319,19 +320,19 @@ const styles = MediaQueryStyleSheet.create(
       marginTop: 10,
       fontSize: 13,
       fontFamily: "Roboto-Medium",
-      color: "#484848"
+      color: colors.black
     },
 
     body: {
       fontFamily: "Roboto-Light",
       fontSize: 16,
-      color: "#484848",
+      color: colors.black,
       textAlign: "center"
     },
 
     container: {
       paddingBottom: 15,
-      backgroundColor: "#ffffff",
+      backgroundColor: colors.white,
       flex: 1,
       justifyContent: "space-around",
       alignItems: "stretch"
@@ -349,21 +350,21 @@ const styles = MediaQueryStyleSheet.create(
 
     hr: {
       borderBottomWidth: 1,
-      borderColor: "#D3D3D3"
+      borderColor: colors.faintGrey
     },
 
     title: {
       textAlign: "center",
       margin: 15,
       lineHeight: 50,
-      color: "#484848",
+      color: colors.black,
       fontFamily: "Roboto-Black",
       fontSize: 48
     },
 
     sectionTitle: {
       fontFamily: "Roboto-Black",
-      color: "#484848",
+      color: colors.black,
       lineHeight: 30,
       fontSize: 22,
       position: "absolute",
@@ -374,11 +375,11 @@ const styles = MediaQueryStyleSheet.create(
     classTitle: {
       fontSize: 20,
       fontFamily: "Roboto-Medium",
-      color: "#484848"
+      color: colors.black
     },
 
     graphContainer: {
-      backgroundColor: "#72c2f1",
+      backgroundColor: colors.skyBlue,
       flex: 4,
       justifyContent: "center",
       alignItems: "stretch"

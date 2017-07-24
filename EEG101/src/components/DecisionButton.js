@@ -1,6 +1,5 @@
-// SandboxButton.js
-// Dynamically-styled buttons for the SandBox Graph slide
-// Unfilled buttons when unselected, and filled with color when active
+// DecisionButton.js
+// Round, bordered buttons for choosing BCI action type
 
 import React, { Component } from 'react';
 import {
@@ -10,6 +9,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
+import * as colors from "../styles/colors";
 
 export default class SandboxButton extends Component{
   constructor(props){
@@ -22,7 +22,7 @@ export default class SandboxButton extends Component{
     const dynamicTextStyle = (this.props.active) ? styles.activeText: styles.inactiveText;
     return(
       <TouchableOpacity onPress={this.props.onPress}>
-        <View style={dynamicButtonStyle}>
+        <View style={[dynamicButtonStyle, {height: this.props.size, width: this.props.size}]}>
           {this.props.children}
         </View>
       </TouchableOpacity>
@@ -36,34 +36,22 @@ const styles = MediaQueryStyleSheet.create(
     // Base styles
     activeButton: {
       justifyContent: 'center',
-      backgroundColor: '#94DAFA',
+      backgroundColor: colors.faintBlue,
       borderWidth: 2,
-      borderColor: '#484848',
+      borderColor: colors.black,
       elevation: 5,
-      alignItems: 'stretch',
+      alignItems: 'center',
       borderRadius: 50,
     },
 
     inactiveButton: {
       justifyContent: 'center',
-      backgroundColor: '#ffffff',
+      backgroundColor: colors.white,
       borderWidth: 2,
-      borderColor: '#484848',
+      borderColor: colors.black,
       elevation: 5,
-      alignItems: 'stretch',
+      alignItems: 'center',
       borderRadius: 50,
-    },
-
-    activeText:{
-      color: '#484848',
-      fontFamily: 'Roboto-Regular',
-      fontSize: 24
-    },
-
-    inactiveText:{
-      color: 'gray',
-      fontFamily: 'Roboto-Regular',
-      fontSize: 24
     },
   },
   // Responsive styles

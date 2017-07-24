@@ -12,6 +12,7 @@ import SandboxButton from "../components/SandboxButton";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import SandboxGraph from "../components/SandboxGraph";
 import ElectrodeSelector from "../components/ElectrodeSelector";
+import * as colors from "../styles/colors";
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
@@ -222,7 +223,7 @@ const styles = MediaQueryStyleSheet.create(
   // Base styles
   {
     container: {
-      backgroundColor: "#ffffff",
+      backgroundColor: colors.white,
       flex: 1,
       justifyContent: "space-around",
       alignItems: "stretch"
@@ -240,7 +241,7 @@ const styles = MediaQueryStyleSheet.create(
       marginBottom: 10,
       fontSize: 13,
       fontFamily: "Roboto-Medium",
-      color: "#6CCBEF"
+      color: colors.skyBlue
     },
 
     buttonContainer: {
@@ -254,7 +255,7 @@ const styles = MediaQueryStyleSheet.create(
     body: {
       padding: 5,
       fontFamily: "Roboto-Light",
-      color: "#484848",
+      color: colors.black,
       fontSize: 17
     },
 
@@ -272,7 +273,7 @@ const styles = MediaQueryStyleSheet.create(
 
     filterText: {
       fontFamily: "Roboto-Light",
-      color: "#484848",
+      color: colors.black,
       fontSize: 14
     },
 

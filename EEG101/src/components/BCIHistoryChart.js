@@ -10,6 +10,7 @@ import {
   VictoryScatter,
   VictoryGroup
 } from "victory-native";
+import * as colors from "../styles/colors";
 
 export default class BCIHistoryChart extends Component {
   constructor(props) {
@@ -21,7 +22,7 @@ export default class BCIHistoryChart extends Component {
       <View
         style={{
           alignItems: "center",
-          backgroundColor: "#72c2f1",
+          backgroundColor: "colors.skyblue",
           height: this.props.height,
           width: this.props.width
         }}
@@ -52,14 +53,14 @@ export default class BCIHistoryChart extends Component {
                 stroke: "none"
               },
               tickLabels: {
-                fill: "#ffffff",
+                fill: colors.white,
                 fontWeight: "light"
               }
             }}
           />
           <VictoryLine
             data={this.props.data}
-            style={{ data: { stroke: "#ffffff" } }}
+            style={{ data: { stroke: colors.white } }}
           />
         </VictoryChart>
       </View>

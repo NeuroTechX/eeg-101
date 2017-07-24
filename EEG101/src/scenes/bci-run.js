@@ -24,6 +24,7 @@ import PopUpLink from "../components/PopUpLink";
 import I18n from "../i18n/i18n";
 import BCIHistoryChart from "../components/BCIHistoryChart.js";
 import NoiseIndicator from "../components/NoiseIndicator.js";
+import * as colors from "../styles/colors";
 
 function mapStateToProps(state) {
   return {
@@ -168,40 +169,40 @@ const styles = MediaQueryStyleSheet.create(
       marginTop: 10,
       fontSize: 13,
       fontFamily: "Roboto-Medium",
-      color: "#6CCBEF"
+      color: colors.skyBlue
     },
 
     classText: {
       textAlign: "center",
       margin: 15,
       lineHeight: 50,
-      color: "#ffffff",
+      color: colors.white,
       fontFamily: "Roboto-Black",
       fontSize: 48
     },
 
     body: {
       fontFamily: "Roboto-Light",
-      color: "#484848",
+      color: colors.black,
       fontSize: 19,
       textAlign: "center"
     },
 
     container: {
-      backgroundColor: "#ffffff",
+      backgroundColor: colors.white,
       flex: 1,
       justifyContent: "space-around",
       alignItems: "stretch"
     },
 
     graphContainer: {
-      backgroundColor: "#72c2f1",
+      backgroundColor: colors.skyBlue,
       flex: 4,
     },
 
     header: {
       fontFamily: "Roboto-Bold",
-      color: "#484848",
+      color: colors.black,
       fontSize: 20
     },
 

@@ -1,15 +1,15 @@
 package com.eeg_project;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.facebook.react.ReactActivity;
-import com.horcrux.svg.SvgPackage;
-import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
-import com.airbnb.android.react.lottie.LottiePackage;
+import com.facebook.react.bridge.ReactContext;
 
-//
 public class MainActivity extends ReactActivity {
+
+    MainApplication appState;
 
     /**
      * Returns the name of the main component registered from JavaScript.
@@ -17,7 +17,7 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "EEG_Project";
+        return "EEG101";
     }
 
     // Overriding onCreate to add KEEP_SCREEN_ON flag so that phone doesn't turn off screen
@@ -26,4 +26,5 @@ public class MainActivity extends ReactActivity {
         super.onCreate(savedInstanceState);
         this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
+
 }

@@ -9,6 +9,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import * as colors from "../styles/colors";
 
 class ListItemBlock extends Component {
   constructor(props) {
@@ -40,8 +41,8 @@ const styles = MediaQueryStyleSheet.create(
     container: {
       borderRadius: 3,
       borderWidth: 0.5,
-      borderColor: '#d6d7da',
-      backgroundColor: '#ffffff',
+      borderColor: colors.faintGrey,
+      backgroundColor: colors.white,
       margin: 10,
       marginVertical: 5,
       overflow: 'hidden',
@@ -51,20 +52,20 @@ const styles = MediaQueryStyleSheet.create(
       borderBottomWidth: 0.5,
       borderTopLeftRadius: 3,
       borderTopRightRadius: 2.5,
-      backgroundColor: '#cce9f8',
+      backgroundColor: colors.faintBlue,
       paddingHorizontal: 10,
       paddingVertical: 5,
     },
     titleText: {
       fontFamily: 'Roboto-Bold',
-      color: '#484848',
+      color: colors.black,
       fontSize: 20,
       margin: 5,
     },
 
     bodyText: {
       fontFamily: 'Roboto-Light',
-      color: '#484848',
+      color: colors.black,
       fontSize: 15,
       margin: 5,
     },

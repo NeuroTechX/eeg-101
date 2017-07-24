@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import config from "../redux/config";
 import I18n from "../i18n/i18n";
+import * as colors from "../styles/colors";
 
 import WhiteLinkButton from "../components/WhiteLinkButton.js";
 
@@ -88,18 +89,18 @@ const styles = StyleSheet.create({
   connected: {
     fontFamily: "Roboto-Light",
     fontSize: 20,
-    color: '#ffffff',
+    color: colors.white,
   },
 
   disconnected: {
     fontFamily: "Roboto-Light",
     fontSize: 20,
-    color: '#ffffff',
+    color: colors.white,
   },
 
   connecting: {
     fontFamily: "Roboto-Light",
     fontSize: 20,
-    color: '#42f4d9',
+    color: colors.turquoise,
   }
 });

@@ -13,6 +13,7 @@ import {
 import { MediaQueryStyleSheet} from 'react-native-responsive';
 import Button from './Button';
 import I18n from '../i18n/i18n';
+import * as colors from "../styles/colors";
 
 export default class PopUpList extends Component{
 
@@ -43,19 +44,19 @@ const styles = MediaQueryStyleSheet.create(
       justifyContent: 'center',
       alignItems: 'stretch',
       padding: 20,
-      backgroundColor: 'rgba(12, 89, 128, 0.8)',
+      backgroundColor: colors.modalBlue,
     },
 
     modalTitle: {
       fontFamily: 'Roboto-Bold',
-      color: '#484848',
+      color: colors.black,
       fontSize: 20,
       margin: 5,
     },
 
     modalInnerContainer: {
       alignItems: 'stretch',
-      backgroundColor: 'white',
+      backgroundColor: colors.white,
       padding: 20,
     },
 
@@ -71,13 +72,13 @@ const styles = MediaQueryStyleSheet.create(
     "@media (min-device-height: 700)": {
       modalBackground: {
         paddingTop: 100,
-        backgroundColor: 'rgba(12, 89, 128, 0.25)',
+        backgroundColor: colors.modalTransparent,
       },
     },
     "@media (min-device-height: 1000)": {
       modalBackground: {
         paddingTop: 200,
-        backgroundColor: 'rgba(12, 89, 128, 0.25)',
+        backgroundColor: colors.modalTransparent,
       },
     }
   });

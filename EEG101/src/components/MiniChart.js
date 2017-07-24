@@ -9,6 +9,7 @@ import {
   VictoryLegend,
   VictoryAxis
 } from "victory-native";
+import * as colors from "../styles/colors";
 
 export default class MiniChart extends Component {
   constructor(props) {
@@ -33,7 +34,7 @@ export default class MiniChart extends Component {
       <View
         style={{
           alignItems: "center",
-          backgroundColor: "#ffffff",
+          backgroundColor: colors.white,
           height: this.props.height,
           width: this.props.width,
         }}
@@ -67,7 +68,7 @@ export default class MiniChart extends Component {
           >
             <VictoryAxis
               style={{
-              
+
                 tickLabels: { fontSize: 10 }
               }}
               tickValues={[0, 1, 2, 3]}

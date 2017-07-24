@@ -17,6 +17,7 @@ import config from "./src/redux/config";
 import { setConnectionStatus } from "./src/redux/actions";
 import NavBar from "./src/components/NavBar";
 import SideMenu from "./src/components/SideMenu.js";
+import * as colors from "./src/styles/colors.js";
 
 // Scenes
 import Landing from "./src/scenes/begin-landing";
@@ -63,7 +64,7 @@ const DrawerWithRedux = withRouter(connect(mapStateToProps, mapDispatchToProps)(
 // Create store
 const store = createStore(reducer, applyMiddleware(thunk));
 
-class App extends Component {
+class EEG101 extends Component {
 
   render() {
     // Provider component wraps everything in Redux and gives access to the store
@@ -76,7 +77,7 @@ class App extends Component {
         <NativeRouter>
           <AndroidBackButton>
             <View style={{ flex: 1 }}>
-              <StatusBar backgroundColor='#2c85b9'/>
+              <StatusBar backgroundColor={colors.mariner}/>
               <DrawerWithRedux
                 content={
                   <SideMenu drawer={this.ref}
@@ -126,4 +127,4 @@ class App extends Component {
 }
 
 // Defines which component is the root for the whole project
-AppRegistry.registerComponent("App", () => App);
+AppRegistry.registerComponent("EEG101", () => EEG101);

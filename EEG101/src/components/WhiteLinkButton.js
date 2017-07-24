@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import * as colors from "../styles/colors";
 
 export default class WhiteButton extends Component{
   constructor(props){
@@ -37,20 +38,22 @@ const styles = StyleSheet.create({
 
 active: {
   justifyContent: 'center',
-  backgroundColor: '#ffffff',
+  backgroundColor: colors.white,
   height: 50,
   margin: 5,
   padding: 5,
   alignItems: 'center',
   elevation: 2,
+  borderRadius: 4,
   },
 
 disabled: {
   justifyContent: 'center',
-  backgroundColor: '#94DAFA',
+  backgroundColor: colors.skyBlue,
   height: 50,
   margin: 5,
   padding: 5,
   alignItems: 'center',
+  borderRadius: 4,
   }
 });

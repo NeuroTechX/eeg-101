@@ -10,6 +10,7 @@ import { withRouter } from 'react-router';
 import config from "../redux/config";
 import { bindActionCreators } from "redux";
 import { setMenu } from "../redux/actions";
+import * as colors from "../styles/colors";
 
 function mapStateToProps(state) {
   return {
@@ -60,7 +61,7 @@ const styles = MediaQueryStyleSheet.create(
       alignItems: "center",
       paddingLeft: 15,
       height: 45,
-      backgroundColor: "#3f93c4"
+      backgroundColor: colors.englishBlue
     },
 
     burger: {

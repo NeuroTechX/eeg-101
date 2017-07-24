@@ -14,6 +14,7 @@ import Connector from "../../interface/Connector";
 import WhiteButton from "../WhiteButton";
 import SandboxButton from "../SandboxButton.js";
 import I18n from "../../i18n/i18n";
+import * as colors from "../../styles/colors";
 
 export default class ConnectorWidget extends Component {
   constructor(props) {
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
     height: 50,
     margin: 40,
     padding: 5,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 50
   },
 
@@ -154,33 +155,33 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Light",
     fontSize: 15,
     marginBottom: 5,
-    color: "#ffffff",
+    color: colors.white,
     textAlign: "center"
   },
 
   connected: {
     fontFamily: "Roboto-Light",
     fontSize: 20,
-    color: "#0ef357"
+    color: colors.malachite
   },
 
   disconnected: {
     fontFamily: "Roboto-Light",
     fontSize: 20,
-    color: "#f3410e",
+    color: colors.pomegranate,
     textAlign: "center"
   },
 
   noMuses: {
     fontFamily: "Roboto-Light",
     fontSize: 20,
-    color: "#ffffff",
+    color: colors.white,
     textAlign: "center"
   },
 
   connecting: {
     fontFamily: "Roboto-Light",
     fontSize: 20,
-    color: "#42f4d9"
+    color: colors.turquoise
   }
 });

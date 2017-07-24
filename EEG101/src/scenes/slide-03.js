@@ -8,6 +8,7 @@ import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
 import ElectrodeSelector from "../components/ElectrodeSelector";
 import I18n from "../i18n/i18n";
+import * as colors from "../styles/colors";
 
 //Interfaces. For elements that bridge to native
 import GraphView from "../interface/GraphView";
@@ -157,7 +158,7 @@ const styles = MediaQueryStyleSheet.create(
 
     body: {
       fontFamily: "Roboto-Light",
-      color: "#484848",
+      color: colors.black,
       fontSize: 19
     },
 
@@ -166,11 +167,11 @@ const styles = MediaQueryStyleSheet.create(
       marginTop: 10,
       fontSize: 13,
       fontFamily: "Roboto-Medium",
-      color: "#6CCBEF"
+      color: colors.skyBlue
     },
 
     container: {
-      backgroundColor: "#ffffff",
+      backgroundColor: colors.white,
       flex: 1,
       justifyContent: "space-around",
       alignItems: "stretch"
@@ -184,7 +185,7 @@ const styles = MediaQueryStyleSheet.create(
 
     header: {
       fontFamily: "Roboto-Bold",
-      color: "#484848",
+      color: colors.black,
       fontSize: 20
     },
 

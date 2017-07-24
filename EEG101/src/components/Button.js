@@ -11,6 +11,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
+import * as colors from "../styles/colors";
 
 export default class Button extends Component{
   constructor(props){
@@ -34,22 +35,24 @@ const styles = MediaQueryStyleSheet.create(
   // Base styles
   active: {
     justifyContent: 'center',
-    backgroundColor: '#94DAFA',
+    backgroundColor: colors.skyBlue,
     height: 50,
     margin: 5,
     padding: 5,
     alignItems: 'center',
     elevation: 2,
+    borderRadius: 4,
     },
 
   disabled: {
     justifyContent: 'center',
-    backgroundColor: '#b6bfcb',
+    backgroundColor: colors.heather,
     height: 50,
     margin: 5,
     padding: 5,
     alignItems: 'center',
     elevation: 2,
+    borderRadius: 4,
     }
   },
   // Responsive styles

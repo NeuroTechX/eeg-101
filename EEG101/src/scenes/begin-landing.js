@@ -7,6 +7,7 @@ import LinkButton from "../components/WhiteLinkButton";
 import I18n from "../i18n/i18n";
 import { bindActionCreators } from "redux";
 import { setGraphViewDimensions } from "../redux/actions";
+import * as colors from "../styles/colors";
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to this scene's ley
 function mapStateToProps(state) {
@@ -75,7 +76,7 @@ const styles = MediaQueryStyleSheet.create(
       fontFamily: "Roboto-Light",
       fontSize: 15,
       margin: 20,
-      color: "#ffffff",
+      color: colors.white,
       textAlign: "center"
     },
 
@@ -104,7 +105,7 @@ const styles = MediaQueryStyleSheet.create(
       textAlign: "center",
       margin: 15,
       lineHeight: 50,
-      color: "#ffffff",
+      color: colors.white,
       fontFamily: "Roboto-Black",
       fontSize: 48
     },
