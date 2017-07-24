@@ -17,6 +17,7 @@ import config from "./src/redux/config";
 import { setConnectionStatus } from "./src/redux/actions";
 import NavBar from "./src/components/NavBar";
 import SideMenu from "./src/components/SideMenu.js";
+import Connector from "./src/interface/Connector.js";
 
 // Scenes
 import Landing from "./src/scenes/begin-landing";
@@ -64,6 +65,11 @@ const DrawerWithRedux = withRouter(connect(mapStateToProps, mapDispatchToProps)(
 const store = createStore(reducer, applyMiddleware(thunk));
 
 class EEG101 extends Component {
+
+  componentWillUnmount() {
+    Connector.disconnectDevice();
+    console.log('EEG 101 unmounted')
+  }
 
   render() {
     // Provider component wraps everything in Redux and gives access to the store

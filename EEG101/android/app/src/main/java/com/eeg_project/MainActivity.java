@@ -1,6 +1,7 @@
 package com.eeg_project;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.facebook.react.ReactActivity;
@@ -30,12 +31,4 @@ public class MainActivity extends ReactActivity {
         this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
-    @Override
-    protected void onDestroy() {
-        if(appState.connectedMuse != null) {
-            appState.connectedMuse.disconnect(true);
-        }
-        super.onDestroy();
-
-    }
 }
