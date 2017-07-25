@@ -12,7 +12,6 @@ import com.choosemuse.libmuse.MuseConnectionPacket;
 import com.choosemuse.libmuse.MuseListener;
 import com.choosemuse.libmuse.MuseManagerAndroid;
 import com.eeg_project.MainApplication;
-import com.eeg_project.components.signal.NoiseDetector;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -179,9 +178,28 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
     public void stopConnectorThread() {
         if (connectHandler != null) {
 
+<<<<<<< HEAD
+    // Searches for available Muses and puts app in NO_MUSE state if none are detected
+    private final Runnable searchRunnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                sendEvent(getReactApplicationContext(), "DISCONNECTED", Arguments.createMap());
+                Thread.sleep(1500);
+                Log.w("Connector", "Search Runnable Called, availablueMuses.size " + availableMuses.size());
+
+                if (availableMuses.isEmpty() || tryCount >= NUM_CONNECTION_ATTEMPTS) {
+                    noMusesDetected();
+                } else {
+                    // Queue one Muse connection attempt
+                    connectHandler.post(connectRunnable);
+                }
+            } catch (InterruptedException e) {}
+=======
             // Removes all runnables and things from the Handler
             connectHandler.removeCallbacksAndMessages(null);
             connectThread.quit();
+>>>>>>> dano-dev
         }
     }
 
@@ -213,6 +231,32 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
         }
     };
 
+<<<<<<< HEAD
+    // ---------------------------------------------------------
+    // Thread management functions
+
+    @ReactMethod
+    // Stops all threads, managers, handlers, and listeners created in this module
+    // Bridged so that it can be called from JS when user changes scenes
+    public void stopConnector() {
+        Log.w("Connector","StopConnector");
+
+        tryCount = 0;
+
+        if (manager != null) {
+            manager.stopListening();
+            manager = null;
+        }
+
+        isPromiseUnfulfilled = false;
+
+        if (connectHandler != null) {
+            connectHandler.removeCallbacks(connectRunnable, searchRunnable);
+            connectThread.quit();
+        }
+    }
+=======
+>>>>>>> dano-dev
 
     //--------------------------------------
     // Listeners

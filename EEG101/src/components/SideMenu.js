@@ -161,7 +161,7 @@ class SideMenu extends Component {
             {
               //icon: "face",
               value: I18n.t("howBuildBciValue"),
-              disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+              disabled: this.props.connectionStatus !==
               config.connectionStatus.CONNECTED,
               active: this.props.location.pathname === "/bciTwo",
               onPress: () => this.navTo("/bciTwo")

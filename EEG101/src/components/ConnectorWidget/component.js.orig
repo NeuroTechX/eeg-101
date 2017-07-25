@@ -20,6 +20,7 @@ import WhiteButton from "../WhiteButton";
 import Button from "../Button.js";
 import SandboxButton from "../SandboxButton.js";
 import I18n from "../../i18n/i18n";
+import * as colors from "../../styles/colors";
 
 class MusesPopUp extends Component {
   constructor(props) {
@@ -270,13 +271,14 @@ const styles = MediaQueryStyleSheet.create(
       justifyContent: "center"
     },
 
+<<<<<<< HEAD
   textContainer: {
     justifyContent: "center",
     alignItems: "center",
     height: 50,
     margin: 40,
     padding: 5,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.white,
     borderRadius: 50
   },
 
@@ -284,33 +286,157 @@ const styles = MediaQueryStyleSheet.create(
     fontFamily: "Roboto-Light",
     fontSize: 15,
     marginBottom: 5,
-    color: "#ffffff",
+    color: colors.white,
     textAlign: "center"
   },
 
   connected: {
     fontFamily: "Roboto-Light",
     fontSize: 20,
-    color: "#0ef357"
+    color: colors.malachite
   },
 
   disconnected: {
     fontFamily: "Roboto-Light",
     fontSize: 20,
-    color: "#f3410e",
+    color: colors.pomegranate,
     textAlign: "center"
   },
 
   noMuses: {
     fontFamily: "Roboto-Light",
     fontSize: 20,
-    color: "#ffffff",
+    color: colors.white,
     textAlign: "center"
   },
 
   connecting: {
     fontFamily: "Roboto-Light",
     fontSize: 20,
-    color: "#42f4d9"
+    color: colors.turquoise
+=======
+    textContainer: {
+      justifyContent: "center",
+      alignItems: "center",
+      height: 50,
+      margin: 40,
+      padding: 5,
+      backgroundColor: "#ffffff",
+      borderRadius: 50
+    },
+
+    body: {
+      fontFamily: "Roboto-Light",
+      fontSize: 15,
+      marginBottom: 5,
+      color: "#ffffff",
+      textAlign: "center"
+    },
+
+    connected: {
+      fontFamily: "Roboto-Light",
+      fontSize: 20,
+      color: "#0ef357"
+    },
+
+    disconnected: {
+      fontFamily: "Roboto-Light",
+      fontSize: 20,
+      color: "#f3410e",
+      textAlign: "center"
+    },
+
+    noMuses: {
+      fontFamily: "Roboto-Light",
+      fontSize: 20,
+      color: "#ffffff",
+      textAlign: "center"
+    },
+
+    connecting: {
+      fontFamily: "Roboto-Light",
+      fontSize: 20,
+      color: "#42f4d9"
+    },
+
+    modalBackground: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "stretch",
+      padding: 20,
+      backgroundColor: "rgba(12, 89, 128, 0.8)"
+    },
+
+    modalTitle: {
+      fontFamily: "Roboto-Bold",
+      color: "#484848",
+      fontSize: 20,
+      margin: 5
+    },
+
+    scrollViewContainer: {
+      marginTop: 20,
+      marginBottom: 20
+    },
+
+    modalInnerContainer: {
+      alignItems: "stretch",
+      backgroundColor: "white",
+      padding: 20
+    },
+
+    close: {
+      alignSelf: "center",
+      padding: 20,
+      fontSize: 22
+    },
+
+    item: {
+      flex: 1,
+      flexDirection: "row",
+      alignItems: "center",
+      height: 48,
+      paddingLeft: 16,
+      paddingRight: 16,
+      flexWrap: "wrap"
+    },
+
+    icon: {
+      position: "absolute",
+      top: 13
+    },
+
+    label: {
+      paddingRight: 10,
+      top: 2,
+      width: 35
+    },
+
+    value: {
+      flex: 1,
+      top: 2
+    },
+
+    itemText: {
+      color: "#484848",
+      fontFamily: "Roboto-Light",
+      fontSize: 19
+    }
+  },
+  // Responsive styles
+  {
+    "@media (min-device-height: 700)": {
+      modalBackground: {
+        paddingTop: 100,
+        backgroundColor: "rgba(12, 89, 128, 0.25)"
+      }
+    },
+    "@media (min-device-height: 1000)": {
+      modalBackground: {
+        paddingTop: 200,
+        backgroundColor: "rgba(12, 89, 128, 0.25)"
+      }
+    }
+>>>>>>> dano-dev
   }
 );

@@ -1,11 +1,14 @@
-export default { 
+export default {
 
 	//global
 	nextLink:  ' NEXT ',
 	museDisconnectedTitle:  'Muse Disconnected',
 	museDisconnectedDescription:  'Please reconnect to continue the tutorial.',
 	closeButton:  'CLOSE',
+<<<<<<< HEAD
+=======
 	connectButton: 'CONNECT',
+>>>>>>> dano-dev
 
 	//begin-landing.js
 	welcomeEEG101:  'Welcome to EEG 101',

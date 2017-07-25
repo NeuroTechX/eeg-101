@@ -97,11 +97,6 @@ const styles = MediaQueryStyleSheet.create(
       justifyContent: "center"
     },
 
-    logo: {
-      width: 50,
-      height: 50
-    },
-
     title: {
       textAlign: "center",
       margin: 15,

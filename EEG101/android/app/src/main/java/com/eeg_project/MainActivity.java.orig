@@ -1,20 +1,27 @@
 package com.eeg_project;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.bridge.ReactContext;
+<<<<<<< HEAD
+=======
 
 
 
+>>>>>>> dano-dev
 
 public class MainActivity extends ReactActivity {
+
+    MainApplication appState;
 
     /**
      * Returns the name of the main component registered from JavaScript.
      * This is used to schedule rendering of the component.
      */
+
     @Override
     protected String getMainComponentName() {
         return "EEG101";
@@ -26,4 +33,5 @@ public class MainActivity extends ReactActivity {
         super.onCreate(savedInstanceState);
         this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
+
 }

@@ -77,14 +77,6 @@ const styles = MediaQueryStyleSheet.create(
       elevation: 5,
     },
 
-    modal: {
-      flex: 0.25,
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      elevation: 5,
-    },
-
     activeImage: {
       alignSelf: "center",
       height: 150,

@@ -9,6 +9,7 @@ export default {
     DISCONNECTED: 'DISCONNECTED',
     NO_MUSES: 'NO_MUSES',
     NOT_YET_CONNECTED: 'NOT_YET_CONNECTED',
+    SEARCHING: 'SEARCHING',
   },
   graphType: {
     EEG: 'EEG',

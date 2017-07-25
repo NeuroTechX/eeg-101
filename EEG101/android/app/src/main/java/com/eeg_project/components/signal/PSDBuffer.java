@@ -29,7 +29,7 @@ public class PSDBuffer {
     // ------------------------------------------------------------------------
     // Methods
 
-    // Updates the 2D buffer array with the 1D newData array at the current index. When index reaches the maximum samplingFrequency it returns to 0.
+    // Updates the 2D buffer array with the 1D newData array at the current index. When index reaches the maximum samplingRate it returns to 0.
     public void update(double[] newData) {
 
             // loop through bins
