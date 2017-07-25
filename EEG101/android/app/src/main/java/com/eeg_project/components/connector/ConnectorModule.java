@@ -152,6 +152,7 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
         @Override
         public void run() {
             try {
+                sendEvent(getReactApplicationContext(), "DISCONNECTED", Arguments.createMap());
                 Thread.sleep(1500);
                 Log.w("Connector", "Search Runnable Called, availablueMuses.size " + availableMuses.size());
 
@@ -209,7 +210,7 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
         isPromiseUnfulfilled = false;
 
         if (connectHandler != null) {
-            connectHandler.removeCallbacks(connectRunnable);
+            connectHandler.removeCallbacks(connectRunnable, searchRunnable);
             connectThread.quit();
         }
     }

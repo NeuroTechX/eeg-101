@@ -20,7 +20,7 @@ export default class DeviceStatusWidget extends Component {
   }
 
   renderConnectorLink(){
-    if(this.props.connectionStatus === config.connectionStatus.DISCONNECTED || this.props.connectionStatus === config.connectionStatus.NOT_YET_CONNECTED || config.connectionStatus.NO_MUSES){
+    if(this.props.connectionStatus !== config.connectionStatus.CONNECTED){
       return(
         <WhiteLinkButton path='/connectorOne' replace={false}>CONNECT</WhiteLinkButton>
       )
