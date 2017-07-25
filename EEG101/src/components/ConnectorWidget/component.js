@@ -20,6 +20,7 @@ import WhiteButton from "../WhiteButton";
 import Button from "../Button.js";
 import SandboxButton from "../SandboxButton.js";
 import I18n from "../../i18n/i18n";
+import * as colors from "../../styles/colors";
 
 class MusesPopUp extends Component {
   constructor(props) {
@@ -92,8 +93,7 @@ class MusesPopUp extends Component {
                 </Button>
               </View>
               <View style={{ flex: 1 }}>
-                <Button onPress={() =>
-                  Connector.refreshMuseList()}>
+                <Button onPress={() => Connector.refreshMuseList()}>
                   REFRESH LIST
                 </Button>
               </View>
@@ -139,7 +139,7 @@ export default class ConnectorWidget extends Component {
       Connector.init();
 
       DeviceEventEmitter.addListener("CONNECTION_CHANGED", params => {
-        console.log('CONNECTION_CHANGED ' + JSON.stringify(params));
+        console.log("CONNECTION_CHANGED " + JSON.stringify(params));
         switch (params.connectionStatus) {
           case "CONNECTED":
             this.props.setConnectionStatus(config.connectionStatus.CONNECTED);
@@ -160,9 +160,9 @@ export default class ConnectorWidget extends Component {
     }
 
     DeviceEventEmitter.addListener("MUSE_LIST_CHANGED", params => {
-     console.log('MUSE_CHANGED ' + JSON.stringify(params));
-     this.props.setAvailableMuses(params);
-   });
+      console.log("MUSE_CHANGED " + JSON.stringify(params));
+      this.props.setAvailableMuses(params);
+    });
   }
 
   // request location permissions and call getAndConnectToDevice and register event listeners when component loads
@@ -173,9 +173,9 @@ export default class ConnectorWidget extends Component {
 
   componentWillUnmount() {
     DeviceEventEmitter.removeListener("MUSE_LIST_CHANGED", params => {
-     console.log('MUSE_CHANGED ' + JSON.stringify(params));
-     this.props.setAvailableMuses(params);
-   });
+      console.log("MUSE_CHANGED " + JSON.stringify(params));
+      this.props.setAvailableMuses(params);
+    });
   }
 
   getAndConnectToDevice() {
@@ -196,6 +196,7 @@ export default class ConnectorWidget extends Component {
       case config.connectionStatus.NOT_YET_CONNECTED:
       case config.connectionStatus.DISCONNECTED:
       case config.connectionStatus.NO_MUSES:
+      default:
         return (
           <View style={styles.container}>
             <Text style={styles.noMuses}>No connected Muse</Text>
@@ -215,7 +216,7 @@ export default class ConnectorWidget extends Component {
 
       case config.connectionStatus.SEARCHING:
         return (
-          <View style={styles.container}>
+          <View>
             <MusesPopUp
               onPress={index => this.setState({ selectedMuse: index })}
               selectedMuse={this.state.selectedMuse}
@@ -235,6 +236,15 @@ export default class ConnectorWidget extends Component {
           </View>
         );
 
+      case config.connectionStatus.CONNECTING:
+        return (
+          <View style={[styles.textContainer, { flexDirection: "row" }]}>
+            <Text style={styles.connecting}>Connecting...</Text>
+            <ActivityIndicator color={"#94DAFA"} size={"large"} />
+          </View>
+
+        );
+
       case config.connectionStatus.CONNECTED:
         return (
           <View style={styles.textContainer}>
@@ -242,13 +252,6 @@ export default class ConnectorWidget extends Component {
           </View>
         );
     }
-    return (
-      <View style={styles.textContainer}>
-        <Text style={dynamicTextStyle}>
-          {connectionString}
-        </Text>
-      </View>
-    );
   }
 }
 
@@ -270,47 +273,126 @@ const styles = MediaQueryStyleSheet.create(
       justifyContent: "center"
     },
 
-  textContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    height: 50,
-    margin: 40,
-    padding: 5,
-    backgroundColor: "#ffffff",
-    borderRadius: 50
-  },
+    textContainer: {
+      justifyContent: "center",
+      alignItems: "center",
+      height: 50,
+      margin: 40,
+      padding: 5,
+      backgroundColor: colors.white,
+      borderRadius: 50
+    },
 
-  body: {
-    fontFamily: "Roboto-Light",
-    fontSize: 15,
-    marginBottom: 5,
-    color: "#ffffff",
-    textAlign: "center"
-  },
+    body: {
+      fontFamily: "Roboto-Light",
+      fontSize: 15,
+      marginBottom: 5,
+      color: colors.white,
+      textAlign: "center"
+    },
 
-  connected: {
-    fontFamily: "Roboto-Light",
-    fontSize: 20,
-    color: "#0ef357"
-  },
+    connected: {
+      fontFamily: "Roboto-Light",
+      fontSize: 20,
+      color: colors.malachite
+    },
 
-  disconnected: {
-    fontFamily: "Roboto-Light",
-    fontSize: 20,
-    color: "#f3410e",
-    textAlign: "center"
-  },
+    disconnected: {
+      fontFamily: "Roboto-Light",
+      fontSize: 20,
+      color: colors.pomegranate,
+      textAlign: "center"
+    },
 
-  noMuses: {
-    fontFamily: "Roboto-Light",
-    fontSize: 20,
-    color: "#ffffff",
-    textAlign: "center"
-  },
+    noMuses: {
+      fontFamily: "Roboto-Light",
+      fontSize: 20,
+      color: colors.white,
+      textAlign: "center"
+    },
 
-  connecting: {
-    fontFamily: "Roboto-Light",
-    fontSize: 20,
-    color: "#42f4d9"
+    connecting: {
+      fontFamily: "Roboto-Light",
+      fontSize: 20,
+      color: colors.turquoise
+    },
+
+    modalBackground: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "stretch",
+      padding: 20,
+      backgroundColor: colors.modalBlue
+    },
+
+    modalTitle: {
+      fontFamily: "Roboto-Bold",
+      color: colors.black,
+      fontSize: 20,
+      margin: 5
+    },
+
+    scrollViewContainer: {
+      marginTop: 20,
+      marginBottom: 20
+    },
+
+    modalInnerContainer: {
+      alignItems: "stretch",
+      backgroundColor: "white",
+      padding: 20
+    },
+
+    close: {
+      alignSelf: "center",
+      padding: 20,
+      fontSize: 22
+    },
+
+    item: {
+      flex: 1,
+      flexDirection: "row",
+      alignItems: "center",
+      height: 48,
+      paddingLeft: 16,
+      paddingRight: 16,
+      flexWrap: "wrap"
+    },
+
+    icon: {
+      position: "absolute",
+      top: 13
+    },
+
+    label: {
+      paddingRight: 10,
+      top: 2,
+      width: 35
+    },
+
+    value: {
+      flex: 1,
+      top: 2
+    },
+
+    itemText: {
+      color: colors.black,
+      fontFamily: "Roboto-Light",
+      fontSize: 19
+    }
+  },
+  // Responsive styles
+  {
+    "@media (min-device-height: 700)": {
+      modalBackground: {
+        paddingTop: 100,
+        backgroundColor: colors.modalTransparent
+      }
+    },
+    "@media (min-device-height: 1000)": {
+      modalBackground: {
+        paddingTop: 200,
+      }
+    }
   }
 );
