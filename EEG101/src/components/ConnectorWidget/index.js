@@ -5,7 +5,9 @@ import Component from "./component";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import {
-  getAndConnectToDevice,
+  setAvailableMuses,
+  getMuses,
+  setConnectedMuseInfo,
   setConnectionStatus,
   setOfflineMode
 } from "../../redux/actions";
@@ -13,6 +15,8 @@ import {
 // Import properties stored in Redux
 function mapStateToProps(state) {
   return {
+    availableMuses: state.availableMuses,
+    museInfo: state.museInfo,
     connectionStatus: state.connectionStatus,
     isOfflineMode: state.isOfflineMode
   };
@@ -22,7 +26,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      getAndConnectToDevice,
+      setAvailableMuses,
+      getMuses,
+      setConnectedMuseInfo,
       setConnectionStatus,
       setOfflineMode,
     },

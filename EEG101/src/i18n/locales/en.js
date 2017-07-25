@@ -1,10 +1,11 @@
-export default { 
+export default {
 
 	//global
 	nextLink:  ' NEXT ',
 	museDisconnectedTitle:  'Muse Disconnected',
 	museDisconnectedDescription:  'Please reconnect to continue the tutorial.',
-	closeButton:  'Close',
+	closeButton:  'CLOSE',
+	connectButton: 'CONNECT',
 
 	//begin-landing.js
 	welcomeEEG101:  'Welcome to EEG 101',

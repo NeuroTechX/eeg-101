@@ -5,22 +5,113 @@ import React, { Component } from "react";
 import {
   Text,
   View,
+  TouchableOpacity,
   DeviceEventEmitter,
   StyleSheet,
-  PermissionsAndroid
+  PermissionsAndroid,
+  Modal,
+  ScrollView,
+  ActivityIndicator
 } from "react-native";
+import { MediaQueryStyleSheet } from "react-native-responsive";
 import config from "../../redux/config";
 import Connector from "../../interface/Connector";
 import WhiteButton from "../WhiteButton";
+import Button from "../Button.js";
 import SandboxButton from "../SandboxButton.js";
 import I18n from "../../i18n/i18n";
+
+class MusesPopUp extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  renderRow(muse, index) {
+    return (
+      <TouchableOpacity
+        key={index}
+        onPress={() => {
+          this.props.onPress(index);
+        }}
+      >
+        <View
+          style={
+            this.props.selectedMuse === index
+              ? { backgroundColor: "#459acc" }
+              : {}
+          }
+        >
+          <View style={styles.item}>
+            <View style={styles.label}>
+              <Text style={styles.itemText}>
+                {index + 1}.
+              </Text>
+            </View>
+            <View style={styles.value}>
+              <Text style={styles.itemText}>
+                {muse.name}
+              </Text>
+            </View>
+            <Text style={styles.itemText}>
+              Model: {muse.model}
+            </Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  }
+
+  render() {
+    return (
+      <Modal
+        animationType={"fade"}
+        transparent={true}
+        onRequestClose={this.props.onClose}
+        visible={this.props.visible}
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalInnerContainer}>
+            <Text style={styles.modalTitle}>Available Muses</Text>
+            <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+              {this.props.availableMuses.map((muse, i) => {
+                return this.renderRow(muse, i);
+              })}
+            </ScrollView>
+            <View style={{ flexDirection: "row" }}>
+              <View style={{ flex: 1 }}>
+                <Button
+                  onPress={() =>
+                    Connector.connectToMuseWithIndex(this.props.selectedMuse)}
+                >
+                  {I18n.t("connectButton")}
+                </Button>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Button onPress={this.props.onClose}>
+                  {I18n.t("closeButton")}
+                </Button>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Button onPress={() =>
+                  Connector.refreshMuseList()}>
+                  REFRESH LIST
+                </Button>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    );
+  }
+}
 
 export default class ConnectorWidget extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      listeners: []
+      musePopUpIsVisible: false,
+      selectedMuse: 0
     };
   }
 
@@ -45,30 +136,33 @@ export default class ConnectorWidget extends Component {
     if (
       this.props.connectionStatus === config.connectionStatus.NOT_YET_CONNECTED
     ) {
-      // This listener will update connection status if no Muses are found in getMuses call
-      DeviceEventEmitter.addListener("NO_MUSES", event => {
+      Connector.init();
 
-        this.props.setConnectionStatus(config.connectionStatus.NO_MUSES);
-      });
+      DeviceEventEmitter.addListener("CONNECTION_CHANGED", params => {
+        console.log('CONNECTION_CHANGED ' + JSON.stringify(params));
+        switch (params.connectionStatus) {
+          case "CONNECTED":
+            this.props.setConnectionStatus(config.connectionStatus.CONNECTED);
+            break;
 
-      // This listener will detect when the connector module enters the temporary 'connecting...' state
-      DeviceEventEmitter.addListener("CONNECT_ATTEMPT", event => {
-        this.props.setConnectionStatus(config.connectionStatus.CONNECTING);
-      });
+          case "CONNECTING":
+            this.props.setConnectionStatus(config.connectionStatus.CONNECTING);
+            break;
 
-      // This creates a persistent listener that will update connectionStatus when connection events are broadcast in Java
-      DeviceEventEmitter.addListener("DISCONNECTED", event => {
-        this.props.setConnectionStatus(config.connectionStatus.DISCONNECTED);
-      });
-
-      DeviceEventEmitter.addListener("CONNECTED", event => {
-        this.props.setConnectionStatus(config.connectionStatus.CONNECTED);
+          case "DISCONNECTED":
+          default:
+            this.props.setConnectionStatus(
+              config.connectionStatus.DISCONNECTED
+            );
+            break;
+        }
       });
     }
 
-    if(this.props.connectionStatus != config.connectionStatus.CONNECTED){
-      this.props.getAndConnectToDevice()
-    }
+    DeviceEventEmitter.addListener("MUSE_LIST_CHANGED", params => {
+     console.log('MUSE_CHANGED ' + JSON.stringify(params));
+     this.props.setAvailableMuses(params);
+   });
   }
 
   // request location permissions and call getAndConnectToDevice and register event listeners when component loads
@@ -77,20 +171,34 @@ export default class ConnectorWidget extends Component {
     this.startConnector();
   }
 
+  componentWillUnmount() {
+    DeviceEventEmitter.removeListener("MUSE_LIST_CHANGED", params => {
+     console.log('MUSE_CHANGED ' + JSON.stringify(params));
+     this.props.setAvailableMuses(params);
+   });
+  }
+
+  getAndConnectToDevice() {
+    this.props.setConnectionStatus(config.connectionStatus.SEARCHING);
+    this.props.getMuses().then(action => {
+      if (action.payload.length > 1) {
+        this.setState({ musePopUpIsVisible: true });
+      } else if (action.payload.length === 1) {
+        Connector.connectToMuseWithIndex(0);
+      } else {
+        this.props.setConnectionStatus(config.connectionStatus.NO_MUSES);
+      }
+    });
+  }
+
   render() {
-    // switch could also further functionality to handle multiple connection conditions
     switch (this.props.connectionStatus) {
-      case config.connectionStatus.CONNECTED:
-        connectionString = I18n.t("statusConnected");
-        dynamicTextStyle = styles.connected;
-        break;
+      case config.connectionStatus.NOT_YET_CONNECTED:
+      case config.connectionStatus.DISCONNECTED:
       case config.connectionStatus.NO_MUSES:
-        dynamicTextStyle = styles.noMuses;
         return (
           <View style={styles.container}>
-            <Text style={dynamicTextStyle}>
-              {I18n.t("statusNoMusesTitle")}
-            </Text>
+            <Text style={styles.noMuses}>No connected Muse</Text>
             <SandboxButton
               onPress={() =>
                 this.props.setOfflineMode(!this.props.isOfflineMode)}
@@ -99,21 +207,41 @@ export default class ConnectorWidget extends Component {
               Enable Offline Mode (beta)
             </SandboxButton>
 
-            <WhiteButton onPress={() => this.props.getAndConnectToDevice()}>
-              {I18n.t("searchAgain")}
+            <WhiteButton onPress={() => this.getAndConnectToDevice()}>
+              SEARCH
             </WhiteButton>
           </View>
         );
-      case config.connectionStatus.CONNECTING:
-        connectionString = I18n.t("statusConnecting");
-        dynamicTextStyle = styles.connecting;
-        break;
-      case config.connectionStatus.NOT_YET_CONNECTED:
-      case config.connectionStatus.DISCONNECTED:
-        connectionString = I18n.t("statusDisconnected");
-        dynamicTextStyle = styles.disconnected;
-    }
 
+      case config.connectionStatus.SEARCHING:
+        return (
+          <View style={styles.container}>
+            <MusesPopUp
+              onPress={index => this.setState({ selectedMuse: index })}
+              selectedMuse={this.state.selectedMuse}
+              visible={this.state.musePopUpIsVisible}
+              onClose={() => {
+                this.props.setConnectionStatus(
+                  config.connectionStatus.DISCONNECTED
+                );
+                this.setState({ musePopUpIsVisible: false });
+              }}
+              availableMuses={this.props.availableMuses}
+            />
+            <View style={[styles.textContainer, { flexDirection: "row" }]}>
+              <Text style={styles.connecting}>Searching...</Text>
+              <ActivityIndicator color={"#94DAFA"} size={"large"} />
+            </View>
+          </View>
+        );
+
+      case config.connectionStatus.CONNECTED:
+        return (
+          <View style={styles.textContainer}>
+            <Text style={styles.connected}>Connected</Text>
+          </View>
+        );
+    }
     return (
       <View style={styles.textContainer}>
         <Text style={dynamicTextStyle}>
@@ -124,63 +252,145 @@ export default class ConnectorWidget extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 2.5,
-    flexDirection: "column",
-    justifyContent: "space-around",
-    alignItems: "center",
-    marginLeft: 50,
-    marginRight: 50
-  },
+const styles = MediaQueryStyleSheet.create(
+  // Base styles
+  {
+    container: {
+      flex: 2.5,
+      flexDirection: "column",
+      justifyContent: "space-around",
+      alignItems: "center",
+      marginLeft: 50,
+      marginRight: 50
+    },
 
-  buttonContainer: {
-    flex: 1,
-    margin: 40,
-    justifyContent: "center"
-  },
+    buttonContainer: {
+      flex: 1,
+      margin: 40,
+      justifyContent: "center"
+    },
 
-  textContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    height: 50,
-    margin: 40,
-    padding: 5,
-    backgroundColor: "#ffffff",
-    borderRadius: 50
-  },
+    textContainer: {
+      justifyContent: "center",
+      alignItems: "center",
+      height: 50,
+      margin: 40,
+      padding: 5,
+      backgroundColor: "#ffffff",
+      borderRadius: 50
+    },
 
-  body: {
-    fontFamily: "Roboto-Light",
-    fontSize: 15,
-    marginBottom: 5,
-    color: "#ffffff",
-    textAlign: "center"
-  },
+    body: {
+      fontFamily: "Roboto-Light",
+      fontSize: 15,
+      marginBottom: 5,
+      color: "#ffffff",
+      textAlign: "center"
+    },
 
-  connected: {
-    fontFamily: "Roboto-Light",
-    fontSize: 20,
-    color: "#0ef357"
-  },
+    connected: {
+      fontFamily: "Roboto-Light",
+      fontSize: 20,
+      color: "#0ef357"
+    },
 
-  disconnected: {
-    fontFamily: "Roboto-Light",
-    fontSize: 20,
-    color: "#f3410e",
-    textAlign: "center"
-  },
+    disconnected: {
+      fontFamily: "Roboto-Light",
+      fontSize: 20,
+      color: "#f3410e",
+      textAlign: "center"
+    },
 
-  noMuses: {
-    fontFamily: "Roboto-Light",
-    fontSize: 20,
-    color: "#ffffff",
-    textAlign: "center"
-  },
+    noMuses: {
+      fontFamily: "Roboto-Light",
+      fontSize: 20,
+      color: "#ffffff",
+      textAlign: "center"
+    },
 
-  connecting: {
-    fontFamily: "Roboto-Light",
-    fontSize: 20,
-    color: "#42f4d9"
+    connecting: {
+      fontFamily: "Roboto-Light",
+      fontSize: 20,
+      color: "#42f4d9"
+    },
+
+    modalBackground: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "stretch",
+      padding: 20,
+      backgroundColor: "rgba(12, 89, 128, 0.8)"
+    },
+
+    modalTitle: {
+      fontFamily: "Roboto-Bold",
+      color: "#484848",
+      fontSize: 20,
+      margin: 5
+    },
+
+    scrollViewContainer: {
+      marginTop: 20,
+      marginBottom: 20
+    },
+
+    modalInnerContainer: {
+      alignItems: "stretch",
+      backgroundColor: "white",
+      padding: 20
+    },
+
+    close: {
+      alignSelf: "center",
+      padding: 20,
+      fontSize: 22
+    },
+
+    item: {
+      flex: 1,
+      flexDirection: "row",
+      alignItems: "center",
+      height: 48,
+      paddingLeft: 16,
+      paddingRight: 16,
+      flexWrap: "wrap"
+    },
+
+    icon: {
+      position: "absolute",
+      top: 13
+    },
+
+    label: {
+      paddingRight: 10,
+      top: 2,
+      width: 35
+    },
+
+    value: {
+      flex: 1,
+      top: 2
+    },
+
+    itemText: {
+      color: "#484848",
+      fontFamily: "Roboto-Light",
+      fontSize: 19
+    }
+  },
+  // Responsive styles
+  {
+    "@media (min-device-height: 700)": {
+      modalBackground: {
+        paddingTop: 100,
+        backgroundColor: "rgba(12, 89, 128, 0.25)"
+      }
+    },
+    "@media (min-device-height: 1000)": {
+      modalBackground: {
+        paddingTop: 200,
+        backgroundColor: "rgba(12, 89, 128, 0.25)"
+      }
+    }
   }
-});
+);
