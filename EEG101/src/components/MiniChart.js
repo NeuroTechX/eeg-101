@@ -16,17 +16,8 @@ export default class MiniChart extends Component {
     super(props);
   }
 
-  getFeatureRanks(electrode, data) {
-    const lowBound = (electrode - 1) * 4;
-    const highBound = electrode * 4;
-    const featureArray = [0];
-
-    Array.from(data).forEach((val, i) => {
-      if (val >= lowBound && val < highBound) {
-        featureArray[val % 4] = i;
-      }
-    });
-    return featureArray;
+  getElectrodeData(electrode, data) {
+    return data.slice((electrode - 1) * 4, electrode * 4)
   }
 
   render() {
@@ -51,9 +42,9 @@ export default class MiniChart extends Component {
               position: "absolute",
               left: -20,
               fontWeight: "100",
-              color: "#000000",
+              color: colors.black,
               fontFamily: "Roboto-Light",
-              fontSize: 9,
+              fontSize: 11,
               transform: [{ rotate: "270deg" }]
             }}
           >
@@ -76,24 +67,23 @@ export default class MiniChart extends Component {
             />
             <VictoryAxis
               dependentAxis={true}
-              tickValues={[1, 15]}
-              tickFormat={["16th", "1st"]}
+              tickCount={2}
               style={{  tickLabels: { fontSize: 9 } }}
             />
             <VictoryLine
-              data={this.getFeatureRanks(1, this.props.data)}
+              data={this.getElectrodeData(1, this.props.data)}
               style={{ data: { stroke: "#E86A21" } }}
             />
             <VictoryLine
-              data={this.getFeatureRanks(2, this.props.data)}
+              data={this.getElectrodeData(2, this.props.data)}
               style={{ data: { stroke: "#009987" } }}
             />
             <VictoryLine
-              data={this.getFeatureRanks(3, this.props.data)}
+              data={this.getElectrodeData(3, this.props.data)}
               style={{ data: { stroke: "#565C9B" } }}
             />
             <VictoryLine
-              data={this.getFeatureRanks(4, this.props.data)}
+              data={this.getElectrodeData(4, this.props.data)}
               style={{ data: { stroke: "#D10E89" } }}
             />
           </VictoryChart>

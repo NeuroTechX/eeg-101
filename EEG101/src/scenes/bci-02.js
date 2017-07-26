@@ -45,6 +45,10 @@ class BCITwo extends Component {
     };
   }
 
+  componentDidMount() {
+    Classifier.init()
+  }
+
   handleScroll() {
     if (this.state.enableScroll === true) {
       return (

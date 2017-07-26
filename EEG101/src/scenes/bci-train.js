@@ -51,15 +51,14 @@ class BCITrain extends Component {
       isCollecting2: false,
       isFitting: false,
       score: "",
-      counts: "",
-      priors: "",
-      means: "",
-      variances: "",
-      discrimPower: "",
-      featureRanking: ""
+      featurePower: "",
     };
 
     Classifier.getNumSamples().then(promise => this.setState(promise));
+  }
+
+  componentDidMount() {
+    Classifier.init()
   }
 
   renderClass1() {
@@ -222,7 +221,7 @@ class BCITrain extends Component {
               <MiniChart
                 height={this.props.dimensions.height / 1.25}
                 width={this.props.dimensions.width / 1.5}
-                data={this.state.featureRanking}
+                data={this.state.featurePower}
               />
             </View>
           </View>

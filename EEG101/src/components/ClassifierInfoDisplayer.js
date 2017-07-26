@@ -30,12 +30,7 @@ export default class ClassifierInfoDisplayer extends Component {
       popUp2Visible: false,
       isFitting: false,
       score: "",
-      counts: "",
-      priors: "",
-      means: "",
-      variances: "",
-      discrimPower: "",
-      featureRanking: ""
+      featurePower: "",
     };
   }
 

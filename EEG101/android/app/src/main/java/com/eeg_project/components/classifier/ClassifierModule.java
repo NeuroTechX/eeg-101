@@ -30,7 +30,6 @@ import java.util.LinkedList;
 /**
  * Bridged native module for classifier.
  * Starts ClassifierDataListener to record data from Muse
- * Receives contents of CircularBuffer whenever it fills up in bufferFull
  * Posts data to dataRunnable in background HandlerThread to get PSD and extract band powers
  */
 
@@ -40,21 +39,20 @@ public class ClassifierModule extends ReactContextBaseJavaModule {
     // ---------------------------------------------------------
     // Variables
     public static final int FFT_LENGTH = 256;
-    public static final int numChannels = 4;
+    public static final int NUM_CHANNELS = 4;
     private final String TAG = "Classifier";
     private int dataClass;
     public CircularBuffer eegBuffer;
     public int samplingRate = 256;
     public ClassifierDataListener dataListener;
-    public ClassifierRunnable classifierRunnable = new ClassifierRunnable();
+    public ClassifierRunnable classifierRunnable;
     public NoiseDetector noiseDetector = new NoiseDetector(600, getReactApplicationContext());
     private double[][] smoothLogPower;
     private Thread dataThread;
-    boolean isLowEnergy;
     private boolean isTraining;
     private boolean isPredicting;
     private Promise collectionPromise;
-    private int stepSize = 4;
+    private int stepSize = 256;
 
     public GaussianNaiveBayesClassifier classifier = new GaussianNaiveBayesClassifier();
     public LinkedList<double[]> trainingData = new LinkedList<>();
@@ -69,7 +67,6 @@ public class ClassifierModule extends ReactContextBaseJavaModule {
     // Constructor
     public ClassifierModule(ReactApplicationContext reactContext) {
         super(reactContext);
-        Log.w("ClassifierModule", "constructor");
     }
 
     // ---------------------------------------------------------
@@ -93,22 +90,29 @@ public class ClassifierModule extends ReactContextBaseJavaModule {
     // Bridged methods
 
     @ReactMethod
-    public void collectTrainingData(int dClass, Promise promise) {
-        Log.w("ClassifierModule", "Collect Training Data called");
+    public void init() {
+        Log.w(TAG, "init called");
         if(appState.connectedMuse != null) {
             if (!appState.connectedMuse.isLowEnergy()) {
                 samplingRate = 220;
             }
         }
-
-        this.collectionPromise = promise;
-        this.isTraining = true;
-        eegBuffer = new CircularBuffer(samplingRate, numChannels);
-        this.dataClass = dClass;
+        eegBuffer = new CircularBuffer(samplingRate, NUM_CHANNELS);
         dataListener = new ClassifierDataListener();
+        classifierRunnable = new ClassifierRunnable();
+    }
+
+    @ReactMethod
+    public void collectTrainingData(int dClass, Promise promise) {
+        collectionPromise = promise;
+        isTraining = true;
+        dataClass = dClass;
+
+        // Epochs for training set collected with 0 overlap to avoid overfitting
+        stepSize = samplingRate;
+
         appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         startThread();
-
     }
 
     @ReactMethod
@@ -117,7 +121,6 @@ public class ClassifierModule extends ReactContextBaseJavaModule {
         int numClass1Samples = 0;
         int numClass2Samples = 0;
         if (labels.size() >= 1) {
-
 
             for (Integer i : labels) {
                 if (i == 1) {
@@ -134,9 +137,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void stopCollecting() {
-        // Stop ongoing any ongoing data collection processes
-        // Unregister datalistener
-        classifierRunnable.stopThread();
+        stopThread();
         appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
         isPredicting = false;
         isTraining = false;
@@ -154,58 +155,54 @@ public class ClassifierModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void fit(boolean partialFit) {
-        // Train classifier on saved data arrays
-        // Return promise with cross-val score
-        // Use partialfit if partialFit is true
-        if(partialFit){
-            Log.w(TAG,"partial fit linkedlist fn needs to be written");
-            //classifier.partialFit(trainingData, labels);
-        } else {
-            classifier.fit(trainingData, labels);
-            classifier.print();
-        }
+    public void fit() {
+        classifier.fit(trainingData, labels);
     }
 
     @ReactMethod
     public void fitWithScore(Integer k, Promise promise) {
         WritableMap classifierMap = Arguments.createMap();
-
         classifierMap.putDouble("score",crossValidate(k));
         classifier.fit(trainingData, labels);
-        classifierMap.putString("counts", Arrays.toString(classifier.getClassCounts()));
         classifierMap.putString("priors", Arrays.toString(classifier.getClassPriors()));
-        classifierMap.putString("means", Arrays.deepToString(classifier.getMeans()));
-        classifierMap.putString("variances", Arrays.deepToString(classifier.getVariances()));
-        classifierMap.putString("discrimPower", Arrays.toString(classifier.computeFeatDiscrimPower()));
-        classifierMap.putArray("featureRanking", classifier.rankWritableFeats());
+        classifierMap.putArray("featurePower", classifier.getDiscrimPowerArray());
         promise.resolve(classifierMap);
     }
 
     @ReactMethod
     public void runClassification() {
-        Log.w("ClassifierModule", "runClassification called");
-        if(appState.connectedMuse != null) {
-            if (!appState.connectedMuse.isLowEnergy()) {
-                samplingRate = 220;
-            }
-        }
         isPredicting = true;
-        eegBuffer = new CircularBuffer(samplingRate, numChannels);
-        dataListener = new ClassifierDataListener();
+
+        // Experimental overlapping epochs during collection to improve UX
+        stepSize = 10;
+
         appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         startThread();
     }
 
     @ReactMethod
     public void reset() {
-        // Reset entire classifier, including clearing all variables and ongoing processes
-
         stopCollecting();
-
         trainingData = new LinkedList<>();
         labels = new LinkedList<>();
         classifier = new GaussianNaiveBayesClassifier();
+        eegBuffer = new CircularBuffer(samplingRate, NUM_CHANNELS);
+    }
+
+    // ------------------------------------------------------------------------------
+    // Threading functions
+
+    public void startThread() {
+        classifierRunnable.startThread();
+        dataThread = new Thread(classifierRunnable);
+        dataThread.start();
+    }
+
+    public void stopThread() {
+        classifierRunnable.stopThread();
+        dataThread.interrupt();
+        dataThread = null;
+
     }
 
     // ------------------------------------------------------------------------------
@@ -213,30 +210,27 @@ public class ClassifierModule extends ReactContextBaseJavaModule {
 
     public class ClassifierRunnable implements Runnable {
         public BandPowerExtractor bandExtractor;
-
-
         private FFT fft;
         private double[][] logpower;
         private double[][] smoothPSD;
         PSDBuffer2D psdBuffer;
         private double[] bandMeans;
-        private boolean keepRunning;
+        private volatile boolean keepRunning;
         private double[][] latestSamples;
 
         public ClassifierRunnable() {
+            keepRunning = true;
             fft = new FFT(samplingRate, FFT_LENGTH, samplingRate);
             int nbBins = fft.getFreqBins().length;
-            psdBuffer = new PSDBuffer2D(samplingRate, numChannels, nbBins);
-            logpower = new double[numChannels][nbBins];
-            smoothLogPower = new double[numChannels][nbBins];
+            psdBuffer = new PSDBuffer2D(samplingRate, NUM_CHANNELS, nbBins);
+            logpower = new double[NUM_CHANNELS][nbBins];
+            smoothLogPower = new double[NUM_CHANNELS][nbBins];
             bandExtractor = new BandPowerExtractor(fft.getFreqBins());
         }
 
         @Override
         public void run() {
-            Log.w("ClassifierModule", "dataclass = " + dataClass);
             try {
-                keepRunning = true;
                 while (keepRunning) {
                     if (eegBuffer.getPts() >= stepSize) {
 
@@ -257,13 +251,10 @@ public class ClassifierModule extends ReactContextBaseJavaModule {
                         eegBuffer.resetPts();
                     }
                 }
-
-
                     } catch(Exception e){
                         Log.w(TAG, e);
                         return;
                     }
-
         }
 
         public boolean noisePresent(double[][] buffer) {
@@ -277,7 +268,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule {
 
         public double[][] getPSD(double[][] buffer) {
             // [nbch][nbsmp]
-            for (int i = 0; i < numChannels; i++) {
+            for (int i = 0; i < NUM_CHANNELS; i++) {
                 double[] channelPower = fft.computeLogPSD(buffer[i]);
                 for (int j = 0; j < channelPower.length; j++){
                     logpower[i][j] = channelPower[j];
@@ -288,6 +279,10 @@ public class ClassifierModule extends ReactContextBaseJavaModule {
             return smoothLogPower;
         }
 
+        public void startThread() {
+            keepRunning = true;
+        }
+
         public void stopThread() {
             keepRunning = false;
         }
@@ -296,12 +291,6 @@ public class ClassifierModule extends ReactContextBaseJavaModule {
         // ---------------------------------------------------------
         // Methods
 
-
-
-        public void startThread(){
-            dataThread = new Thread(classifierRunnable);
-            dataThread.start();
-        }
 
         public double crossValidate(Integer k) {
             // runs k fold cross validation on training data List
@@ -381,9 +370,9 @@ public class ClassifierModule extends ReactContextBaseJavaModule {
 
         // if connected Muse is a 2016 BLE version, init a bandstop filter to remove 60hz noise
         ClassifierDataListener() {
-            if (appState.connectedMuse.isLowEnergy()) {
+            if (samplingRate == 256) {
                 filterOn = true;
-                bandstopFilter = new Filter(256, "bandstop", 5, 55, 65);
+                bandstopFilter = new Filter(samplingRate, "bandstop", 5, 55, 65);
                 bandstopFiltState = new double[4][bandstopFilter.getNB()];
             }
             newData = new double[4];
@@ -415,8 +404,6 @@ public class ClassifierModule extends ReactContextBaseJavaModule {
             // Does nothing for now
         }
     }
-
-
 }
 
 

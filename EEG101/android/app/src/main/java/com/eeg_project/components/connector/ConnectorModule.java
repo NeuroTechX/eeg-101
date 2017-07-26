@@ -12,7 +12,6 @@ import com.choosemuse.libmuse.MuseConnectionPacket;
 import com.choosemuse.libmuse.MuseListener;
 import com.choosemuse.libmuse.MuseManagerAndroid;
 import com.eeg_project.MainApplication;
-import com.eeg_project.components.signal.NoiseDetector;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;

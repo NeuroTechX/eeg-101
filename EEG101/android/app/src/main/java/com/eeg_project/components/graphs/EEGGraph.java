@@ -252,7 +252,7 @@ public class EEGGraph extends FrameLayout {
         // if connected Muse is a 2016 BLE version, init a bandstop filter to remove 60hz noise
         DataListener() {
             if (appState.connectedMuse.isLowEnergy()) {
-                filterOn = true;
+                filterOn = false;
                 bandstopFilter = new Filter(256, "bandstop", 5, 55, 65);
                 bandstopFiltState = new double[4][bandstopFilter.getNB()];
             }
@@ -351,7 +351,6 @@ public class EEGGraph extends FrameLayout {
         int numEEGPoints = eegBuffer.getPts();
         if (dataSeries.size() >= PLOT_LENGTH) {
             dataSeries.remove(numEEGPoints);
-
         }
 
         // For adding all data points (Full sampling)
