@@ -167,8 +167,9 @@ export default class ConnectorWidget extends Component {
 
   // request location permissions and call getAndConnectToDevice and register event listeners when component loads
   componentDidMount() {
-    this.requestLocationPermission();
-    this.startConnector();
+    this.requestLocationPermission().then(
+      () => this.startConnector()
+    )
   }
 
   componentWillUnmount() {
