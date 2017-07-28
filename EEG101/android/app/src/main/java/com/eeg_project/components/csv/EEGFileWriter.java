@@ -46,19 +46,27 @@ public class EEGFileWriter {
     public void initFile(String title) {
         builder = new StringBuilder();
         builder.append("Timestamp (ms),");
+        makeToast(title);
+        isRecording = true;
         if(title.contains("Power")) {
             for(int i=1; i<129; i++) {
                 builder.append(i + " hz,");
             }
             builder.append("\n");
-        } else {
-            for(int i=1; i<5; i++) {
-                builder.append("Electrode " + i +",");
+        } else if(title.contains("Classifier")) {
+            builder.append("Label,");
+            for(int i=1; i<=16; i++) {
+                builder.append(" Feature " + i + ",");
             }
             builder.append("\n");
         }
-        makeToast(title);
-        isRecording = true;
+        else {
+            for(int i=1; i<5; i++) {
+                builder.append("Electrode " + i + ",");
+            }
+            builder.append("\n");
+        }
+
     }
 
     public void addDataToFile(double[] data) {
@@ -71,6 +79,11 @@ public class EEGFileWriter {
                 builder.append(",");
             }
         }
+        builder.append("\n");
+    }
+
+    public void addLineToFile(String line){
+        builder.append(line);
         builder.append("\n");
     }
 
