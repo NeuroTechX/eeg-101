@@ -85,7 +85,6 @@ public class PSDGraph extends FrameLayout {
                 this.samplingRate = 220;
             }
         }
-        dataListener = new DataListener();
     }
 
     // -----------------------------------------------------------------------
@@ -97,6 +96,9 @@ public class PSDGraph extends FrameLayout {
     }
 
     public void startRecording() {
+        if(dataSource.fileWriter == null) {
+            dataSource.fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
+        }
         dataSource.fileWriter.initFile(PLOT_TITLE);
         dataSource.isRecording = true;
     }
@@ -184,6 +186,9 @@ public class PSDGraph extends FrameLayout {
         if(offlineData.length() >= 1) {
             startOfflineData(offlineData);
         } else {
+            if(dataListener == null) {
+                dataListener = new DataListener();
+            }
             // Register a listener to receive dataSource packets from Muse. Second argument defines which type(s) of dataSource will be transmitted to listener
             appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         }
@@ -279,16 +284,13 @@ public class PSDGraph extends FrameLayout {
         public void run() {
             try {
                 while (keepRunning) {
-
+                    Thread.sleep(6);
                     eegBuffer.update(data.get(index));
                     index++;
-
 
                     if(index >= data.size()) {
                         index = 0;
                     }
-
-                    Thread.sleep(5);
                 }
             } catch(InterruptedException e){
                 Log.w("PSDGraph", "interrupted exception");
@@ -340,7 +342,7 @@ public class PSDGraph extends FrameLayout {
         // TODO: document why this is 26
         int stepSize = 26;
         public boolean isRecording;
-        public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), "Power_Spectral_Density");
+        public EEGFileWriter fileWriter;
         private int samplingFrequency;
         private FFT fft;
         private PSDBuffer psdBuffer;
@@ -399,9 +401,6 @@ public class PSDGraph extends FrameLayout {
 
         public void stopThread() {
             keepRunning = false;
-            if (isRecording) {
-                fileWriter.writeFile(PLOT_TITLE);
-            }
         }
     }
 

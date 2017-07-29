@@ -58,7 +58,7 @@ public class EEGGraphManager extends SimpleViewManager<EEGGraph> {
     // Bridge function for offline Prop. Calls setOfflineMode in EEGGraph
     @ReactProp(name = "offlineData")
     public void setOfflineData(EEGGraph graph, @Nullable String offlineData) {
-
+        Log.w("EEGGraphManager", "offlineData prop updated " + offlineData);
         graph.setOfflineData(offlineData);
     }
 

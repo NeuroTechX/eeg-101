@@ -101,7 +101,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     graphContainer: {
-      backgroundColor: colors.skyBlue,
+      backgroundColor: colors.malibu,
       flex: 4,
       justifyContent: "center",
       alignItems: "stretch"

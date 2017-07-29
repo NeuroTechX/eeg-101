@@ -59,21 +59,19 @@ public class FilterGraph extends FrameLayout {
     private LineAndPointFormatter lineFormatter;
     public DynamicSeries dataSeries;
     private FilterDataListener dataListener;
-    public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
+    public EEGFileWriter fileWriter;
     private OfflineFilterDataListener offlineDataListener;
     private Thread dataThread;
+    public int samplingRate = 256;
+    public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
 
     // Reference to global application state used for connected Muse
     MainApplication appState;
 
-    // Filter specific variables
-    public int samplingRate;
-    public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
-    public Filter activeFilter;
     // Filter states represent info about previous samples; intermediate values that represent
     // polynomial components determined by previous samples in the epoch. For more info, read the Rational Transfer Function description here: https://www.mathworks.com/help/matlab/ref/filter.html
     public double[][] filtState;
-
+    public Filter activeFilter;
 
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
@@ -92,10 +90,9 @@ public class FilterGraph extends FrameLayout {
         if(appState.connectedMuse != null) {
             if (appState.connectedMuse.isLowEnergy()) {
                 samplingRate = 220;
-            } else { samplingRate = 256; }
+            }
         }
         initView(context);
-        dataListener = new FilterDataListener();
     }
 
     // -----------------------------------------------------------------------
@@ -138,6 +135,9 @@ public class FilterGraph extends FrameLayout {
     }
 
     public void startRecording() {
+        if(fileWriter == null) {
+            fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
+        }
         fileWriter.initFile(PLOT_TITLE);
         isRecording = true;
     }
@@ -228,6 +228,9 @@ public class FilterGraph extends FrameLayout {
         if(offlineData.length() >= 1) {
             startOfflineData(offlineData);
         } else {
+            if(dataListener == null) {
+                dataListener = new FilterDataListener();
+            }
             appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         }
     }
@@ -332,24 +335,20 @@ public class FilterGraph extends FrameLayout {
         public void run() {
             try {
                 while (keepRunning) {
-
+                    Thread.sleep(6);
                     filtState = activeFilter.transform(data.get(index), filtState);
                     eegBuffer.update(activeFilter.extractFilteredSamples(filtState));
 
                     index++;
                     counter++;
 
-                    if (counter >= 15) {
+                    if (counter % 15 == 0) {
                         updatePlot();
-                        counter = 0;
                     }
 
                     if(index >= data.size()) {
                         index = 0;
                     }
-
-
-                    Thread.sleep(5);
                 }
             } catch(InterruptedException e){
                 Log.w("FilterGraph", "interrupted exception");

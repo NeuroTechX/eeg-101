@@ -61,7 +61,7 @@ public class EEGGraph extends FrameLayout {
     public  DataListener dataListener;
     public OfflineDataListener offlineDataListener;
     public  CircularBuffer eegBuffer = new CircularBuffer(220, 4);
-    public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
+    public EEGFileWriter fileWriter;
     private int numEEGPoints;
     private Thread dataThread;
 
@@ -80,7 +80,6 @@ public class EEGGraph extends FrameLayout {
     public EEGGraph(Context context) {
         super(context);
         appState = ((MainApplication)context.getApplicationContext());
-        dataListener = new DataListener();
         initView(context);
     }
 
@@ -114,6 +113,9 @@ public class EEGGraph extends FrameLayout {
     }
 
     public void startRecording() {
+        if(fileWriter == null) {
+            fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
+        }
         fileWriter.initFile(PLOT_TITLE);
         isRecording = true;
     }
@@ -142,6 +144,7 @@ public class EEGGraph extends FrameLayout {
 
         // get datasets (Y will be dataSeries, x will be implicitly generated):
         //dataSource = new EEGDataSource(appState.connectedMuse.isLowEnergy());
+
         dataSeries = new DynamicSeries("dataSeries");
 
         // Set X and Y domain
@@ -210,6 +213,9 @@ public class EEGGraph extends FrameLayout {
         if(offlineData.length() >= 1) {
             startOfflineData(offlineData);
         } else {
+            if(dataListener == null) {
+                dataListener = new DataListener();
+            }
             appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         }
     }
@@ -316,19 +322,19 @@ public class EEGGraph extends FrameLayout {
         public void run() {
             try {
                 while (keepRunning) {
+                    Thread.sleep(6);
                     eegBuffer.update(data.get(index));
                     index++;
                     counter++;
 
-                    if (counter >= 15) {
+                    if (counter % 15 == 0) {
                         updatePlot();
-                        counter = 0;
                     }
 
                     if(index >= data.size()) {
                         index = 0;
                     }
-                    Thread.sleep(5);
+
                 }
             } catch(InterruptedException e){
                 Log.w("EEGGraph", "interrupted exception");

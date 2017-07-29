@@ -47,7 +47,7 @@ class SlideOne extends Component {
   }
 
   offlineDataSource(slidePosition) {
-    console.log(slidePosition);
+    console.log(slidePosition + 'slidePosition')
     if(this.props.isOfflineMode){
       switch (slidePosition) {
         case 0:
@@ -59,17 +59,14 @@ class SlideOne extends Component {
         case 2:
           return "cat";
           break;
+        case 3:
+          return "relax";
+          break;
       }
     }
   }
 
   render() {
-    const offlineDataSource =  slidePosition => {
-      if(this.props.isOfflineMode){
-        return "blinks"
-      }
-    }
-
     return (
       <View style={styles.container}>
 
@@ -85,10 +82,8 @@ class SlideOne extends Component {
               height: height
             });
           }}
-          onPageSelected={e =>
-            this.setState({ slidePosition: e.nativeEvent.position })}
         >
-          <GraphView offlineData={offlineDataSource(this.state.slidePosition)} style={{ flex: 1 }}/>
+          <GraphView offlineData={this.offlineDataSource(this.state.slidePosition)} style={{ flex: 1 }}/>
         </View>
 
         <Text style={styles.currentTitle}>{I18n.t('introductionSlideTitle')}</Text>
@@ -96,12 +91,14 @@ class SlideOne extends Component {
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
           initialPage={0}
+          onPageSelected={e =>
+            this.setState({ slidePosition: e.nativeEvent.position })}
         >
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>{I18n.t('brainElectricity')}</Text>
+            <Text style={styles.header}>{this.props.isOfflineMode ? I18n.t('brainElectricityOffline') : I18n.t('brainElectricity')}</Text>
             <Text style={styles.body}>
-			  {I18n.t('usingThe')}<PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>{I18n.t('EEGLink')}</PopUpLink>{I18n.t('deviceCanDetect')}
+			  {I18n.t('usingThe')}<PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>{I18n.t('EEGLink')}</PopUpLink>{this.props.isOfflineMode ? I18n.t('deviceCanDetectOffline') : I18n.t('deviceCanDetect')}
             </Text>
             <Image
               source={require("../assets/swipeicon.png")}
