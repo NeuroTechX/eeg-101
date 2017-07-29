@@ -261,8 +261,6 @@ public class GaussianNaiveBayesClassifier {
 		// Returns:
 		//  predicted label
 
-		Log.w("Classifier", "predict called in " + Thread.currentThread().getName());
-
 		double[] prob = predictProba(X);
 		int yHat = this.classes[argmax(prob)];
 
@@ -406,7 +404,6 @@ public class GaussianNaiveBayesClassifier {
 		WritableArray discrimPowerArray = Arguments.createArray();
 		double[] coeffs = computeFeatDiscrimPower();
 		for (int i = 0; i < coeffs.length; i++){
-			Log.w("getDiscrimPower", i + " " + coeffs[i]);
 			discrimPowerArray.pushDouble(coeffs[i]);
 		}
 		return discrimPowerArray;

@@ -62,8 +62,7 @@ public class EEGGraph extends FrameLayout {
     public OfflineDataListener offlineDataListener;
     public  CircularBuffer eegBuffer = new CircularBuffer(220, 4);
     public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
-
-
+    private int numEEGPoints;
     private Thread dataThread;
 
     // Bridged props
@@ -81,6 +80,7 @@ public class EEGGraph extends FrameLayout {
     public EEGGraph(Context context) {
         super(context);
         appState = ((MainApplication)context.getApplicationContext());
+        dataListener = new DataListener();
         initView(context);
     }
 
@@ -152,7 +152,7 @@ public class EEGGraph extends FrameLayout {
         PixelUtils.init(getContext());
 
         // Create line formatter with set color
-        lineFormatter = new FastLineAndPointRenderer.Formatter(Color.WHITE, null,  null);
+        lineFormatter = new FastLineAndPointRenderer.Formatter(LINE_COLOUR, null,  null);
 
         // Set line thickness
         lineFormatter.getLinePaint().setStrokeWidth(3);
@@ -170,7 +170,6 @@ public class EEGGraph extends FrameLayout {
         // Make plot background blue (including removing grid lines)
         XYGraphWidget graph = eegPlot.getGraph();
         graph.getBackgroundPaint().setColor(BACKGROUND_COLOUR);
-        //eegPlot.getGraph().setBackgroundPaint(null);
         graph.getGridBackgroundPaint().setColor(Color.TRANSPARENT);
         graph.getDomainGridLinePaint().setColor(Color.TRANSPARENT);
         graph.getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
@@ -211,8 +210,6 @@ public class EEGGraph extends FrameLayout {
         if(offlineData.length() >= 1) {
             startOfflineData(offlineData);
         } else {
-
-            dataListener = new DataListener();
             appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         }
     }
@@ -221,6 +218,8 @@ public class EEGGraph extends FrameLayout {
         if (dataListener != null || offlineDataListener != null) {
             if(offlineData.length() > 1) {
                 offlineDataListener.stopThread();
+                dataThread.interrupt();
+                dataThread = null;
             } else {
                 appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
             }
@@ -237,7 +236,7 @@ public class EEGGraph extends FrameLayout {
     // Listeners
 
     // Listener that receives incoming dataSource from the Muse.
-    // Will call receiveMuseDataPacket as dataSource comes in around 220hz (256hz for Muse 2016)
+    // Will call receiveMuseDataPacket as dataSource comes in around 256hz (220hz for Muse 2014)
     // Updates eegBuffer with latest values for all 4 electrodes and calls updatePlot() every 15
     // samples to trigger addition to the DataSeries and redrawing of the plot
     private final class DataListener extends MuseDataListener {
@@ -252,7 +251,7 @@ public class EEGGraph extends FrameLayout {
         // if connected Muse is a 2016 BLE version, init a bandstop filter to remove 60hz noise
         DataListener() {
             if (appState.connectedMuse.isLowEnergy()) {
-                filterOn = false;
+                filterOn = true;
                 bandstopFilter = new Filter(256, "bandstop", 5, 55, 65);
                 bandstopFiltState = new double[4][bandstopFilter.getNB()];
             }
@@ -297,7 +296,7 @@ public class EEGGraph extends FrameLayout {
 
     // Listener that loops over pre-recorded data read from csv
     // Only used in Offline Mode
-    // Updates eegbuffer at approx. the same frequency as the real DataListener
+    // Updates eegbuffer at approx. the same frequency as the real PSDDataListener using Thread.sleep
     private final class OfflineDataListener implements Runnable {
 
         List<double[]> data;
@@ -317,7 +316,6 @@ public class EEGGraph extends FrameLayout {
         public void run() {
             try {
                 while (keepRunning) {
-
                     eegBuffer.update(data.get(index));
                     index++;
                     counter++;
@@ -330,8 +328,6 @@ public class EEGGraph extends FrameLayout {
                     if(index >= data.size()) {
                         index = 0;
                     }
-
-
                     Thread.sleep(5);
                 }
             } catch(InterruptedException e){
@@ -348,7 +344,7 @@ public class EEGGraph extends FrameLayout {
     // Plot update functions
 
     public void updatePlot() {
-        int numEEGPoints = eegBuffer.getPts();
+        numEEGPoints = eegBuffer.getPts();
         if (dataSeries.size() >= PLOT_LENGTH) {
             dataSeries.remove(numEEGPoints);
         }
@@ -359,6 +355,7 @@ public class EEGGraph extends FrameLayout {
         // resets the 'points-since-dataSource-read' value
         eegBuffer.resetPts();
 
+        // Draws the newly updated dataseries on the plot
         eegPlot.redraw();
     }
 }

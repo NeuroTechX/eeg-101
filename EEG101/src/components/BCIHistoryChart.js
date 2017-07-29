@@ -22,7 +22,7 @@ export default class BCIHistoryChart extends Component {
       <View
         style={{
           alignItems: "center",
-          backgroundColor: "colors.skyblue",
+          backgroundColor: colors.skyBlue,
           height: this.props.height,
           width: this.props.width
         }}

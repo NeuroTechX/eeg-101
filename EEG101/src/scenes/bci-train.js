@@ -216,6 +216,7 @@ class BCITrain extends Component {
               >
                 {I18n.t("trainReFit")}
               </SandboxButton>
+              <SandboxButton onPress={()=>Classifier.exportClassifier()}>EXPORT CLASSIFIER</SandboxButton>
             </View>
             <View style={styles.classifierGraphContainer}>
               <MiniChart

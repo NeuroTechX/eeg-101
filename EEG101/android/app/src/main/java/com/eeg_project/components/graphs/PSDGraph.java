@@ -85,6 +85,7 @@ public class PSDGraph extends FrameLayout {
                 this.samplingRate = 220;
             }
         }
+        dataListener = new DataListener();
     }
 
     // -----------------------------------------------------------------------
@@ -168,7 +169,7 @@ public class PSDGraph extends FrameLayout {
 
         // Set position of plot (should be tweaked in order to center chart position)
         psdPlot.getGraph().position(0, HorizontalPositioning.ABSOLUTE_FROM_LEFT.ABSOLUTE_FROM_LEFT,
-               0, VerticalPositioning.ABSOLUTE_FROM_TOP);
+                0, VerticalPositioning.ABSOLUTE_FROM_TOP);
 
         // Add plot to FilterGraph
         this.addView(psdPlot, new LayoutParams(
@@ -183,7 +184,6 @@ public class PSDGraph extends FrameLayout {
         if(offlineData.length() >= 1) {
             startOfflineData(offlineData);
         } else {
-            dataListener = new DataListener();
             // Register a listener to receive dataSource packets from Muse. Second argument defines which type(s) of dataSource will be transmitted to listener
             appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         }

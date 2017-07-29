@@ -18,11 +18,11 @@ public class CircBuffer2D {
     // -----------------------------------------------------------------------
     // Constructor
 
-    public CircBuffer2D(int n, int m, int l) {
+    public CircBuffer2D(int length, int channels, int bins) {
 
-        bufferLength = n;
-        nbCh = m;
-        nbBins = l;
+        bufferLength = length;
+        nbCh = channels;
+        nbBins = bins;
         index = 0;
         pts = 0;
         buffer = new double[bufferLength][nbCh][nbBins];
@@ -64,6 +64,12 @@ public class CircBuffer2D {
 
     public void resetPts() {
         pts = 0;
+    }
+
+    public void clear() {
+        pts = 0;
+        index = 0;
+        buffer = new double[bufferLength][nbCh][nbBins];
     }
 
     public void print() {

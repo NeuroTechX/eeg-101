@@ -67,7 +67,6 @@ export default class MiniChart extends Component {
             />
             <VictoryAxis
               dependentAxis={true}
-              tickCount={2}
               style={{  tickLabels: { fontSize: 9 } }}
             />
             <VictoryLine
