@@ -35,7 +35,6 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
     private ConnectionListener connectionListener;
     private int museIndex = 0;
     private List<Muse> availableMuses;
-    private Boolean isReactNative = false;
     private Muse muse;
     public MainApplication appState;
     public Handler connectHandler;
@@ -76,7 +75,6 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void init() {
-        isReactNative = true;
         startMuseManager();
         startConnectorThread();
     }
@@ -158,7 +156,6 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
         connectThread = new HandlerThread("connectThread");
         connectThread.start();
         connectHandler = new Handler(connectThread.getLooper());
-
     }
 
 
@@ -228,9 +225,8 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
             availableMuses = manager.getMuses();
 
             // Only need to execute this code if in React Native app to send info about available Muses
-            if (isReactNative) {
-                sendEvent(getReactApplicationContext(), MUSE_LIST_CHANGED, getWritableMuseList(availableMuses));
-            }
+            sendEvent(getReactApplicationContext(), MUSE_LIST_CHANGED, getWritableMuseList(availableMuses));
+
 
         }
     }
@@ -254,35 +250,28 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
 
                 // Only need to execute this code if in React Native app to send info about connected Muse
                 // Creates a Map with connectionStatus and info about the Muse to send to React Native
-                if (isReactNative) {
-                    museMap = Arguments.createMap();
-                    museMap.putString("connectionStatus", "CONNECTED");
-                    museMap.putString("name", muse.getName());
-                    if (muse.isLowEnergy()) {
-                        museMap.putString("model", "2016");
-                    } else {
-                        museMap.putString("model", "2014");
-                    }
-                    sendEvent(getReactApplicationContext(), CONNECTION_CHANGED, museMap);
-                    return;
+                museMap = Arguments.createMap();
+                museMap.putString("connectionStatus", "CONNECTED");
+                museMap.putString("name", muse.getName());
+                if (muse.isLowEnergy()) {
+                    museMap.putString("model", "2016");
+                } else {
+                    museMap.putString("model", "2014");
                 }
+                sendEvent(getReactApplicationContext(), CONNECTION_CHANGED, museMap);
+                return;
             }
 
             if (current == ConnectionState.DISCONNECTED) {
+                museMap = Arguments.createMap();
+                museMap.putString("connectionStatus", "DISCONNECTED");
+                sendEvent(getReactApplicationContext(), CONNECTION_CHANGED, museMap);
 
-                if (isReactNative) {
-                    museMap = Arguments.createMap();
-                    museMap.putString("connectionStatus", "DISCONNECTED");
-                    sendEvent(getReactApplicationContext(), CONNECTION_CHANGED, museMap);
-                }
             }
             if (current == ConnectionState.CONNECTING) {
-
-                if (isReactNative) {
-                    museMap = Arguments.createMap();
-                    museMap.putString("connectionStatus", "CONNECTING");
-                    sendEvent(getReactApplicationContext(), CONNECTION_CHANGED, museMap);
-                }
+                museMap = Arguments.createMap();
+                museMap.putString("connectionStatus", "CONNECTING");
+                sendEvent(getReactApplicationContext(), CONNECTION_CHANGED, museMap);
             }
         }
     }

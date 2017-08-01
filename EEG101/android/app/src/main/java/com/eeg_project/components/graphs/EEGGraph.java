@@ -61,7 +61,7 @@ public class EEGGraph extends FrameLayout {
     public  DataListener dataListener;
     public OfflineDataListener offlineDataListener;
     public  CircularBuffer eegBuffer = new CircularBuffer(220, 4);
-    public EEGFileWriter fileWriter;
+    public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
     private int numEEGPoints;
     private Thread dataThread;
 
@@ -113,9 +113,6 @@ public class EEGGraph extends FrameLayout {
     }
 
     public void startRecording() {
-        if(fileWriter == null) {
-            fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
-        }
         fileWriter.initFile(PLOT_TITLE);
         isRecording = true;
     }

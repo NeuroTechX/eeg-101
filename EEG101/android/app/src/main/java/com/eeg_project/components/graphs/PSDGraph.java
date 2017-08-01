@@ -96,9 +96,6 @@ public class PSDGraph extends FrameLayout {
     }
 
     public void startRecording() {
-        if(dataSource.fileWriter == null) {
-            dataSource.fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
-        }
         dataSource.fileWriter.initFile(PLOT_TITLE);
         dataSource.isRecording = true;
     }
@@ -342,7 +339,7 @@ public class PSDGraph extends FrameLayout {
         // TODO: document why this is 26
         int stepSize = 26;
         public boolean isRecording;
-        public EEGFileWriter fileWriter;
+        public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
         private int samplingFrequency;
         private FFT fft;
         private PSDBuffer psdBuffer;

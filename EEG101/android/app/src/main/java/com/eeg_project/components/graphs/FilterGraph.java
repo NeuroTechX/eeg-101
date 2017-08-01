@@ -59,7 +59,7 @@ public class FilterGraph extends FrameLayout {
     private LineAndPointFormatter lineFormatter;
     public DynamicSeries dataSeries;
     private FilterDataListener dataListener;
-    public EEGFileWriter fileWriter;
+    public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
     private OfflineFilterDataListener offlineDataListener;
     private Thread dataThread;
     public int samplingRate = 256;
@@ -135,9 +135,6 @@ public class FilterGraph extends FrameLayout {
     }
 
     public void startRecording() {
-        if(fileWriter == null) {
-            fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
-        }
         fileWriter.initFile(PLOT_TITLE);
         isRecording = true;
     }
