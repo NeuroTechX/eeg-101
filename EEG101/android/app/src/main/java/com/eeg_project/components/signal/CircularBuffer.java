@@ -13,14 +13,11 @@ public class CircularBuffer {
     // ------------------------------------------------------------------------
     // Variables
 
-    private int bufferLength;
-    private int nbCh;
-    private int index;
-    private int pts;
-
-    // Step size (num samples) before updating listeners with latest epoch
-    private double[][] buffer;
-    private ArrayList<BufferListener> listeners = new ArrayList<BufferListener>();
+    protected int bufferLength;
+    protected int nbCh;
+    protected int index;
+    protected int pts;
+    protected double[][] buffer;
 
     // ------------------------------------------------------------------------
     // Constructor
@@ -36,20 +33,13 @@ public class CircularBuffer {
     // ------------------------------------------------------------------------
     // Methods
 
-    public void addListener(BufferListener listener) {
-        listeners.add(listener);
-    }
-
     // Updates the 2D buffer array with the 1D newData array at the current index.
-    // When index reaches the maximum samplingRate it returns to 0.
-    // When buffer is full, calls bufferFull and sends contents of buffer to all registered listeners
+    // When index reaches the maximum samplingFrequency it returns to 0.
     public void update(double[] newData) {
-
         for(int i = 0; i < nbCh; i++) {
             buffer[index][i] = newData[i];
         }
         index = (index + 1) % bufferLength;
-
         pts++;
     }
 

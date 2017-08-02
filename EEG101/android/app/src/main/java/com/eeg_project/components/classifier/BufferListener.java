@@ -5,5 +5,5 @@ package com.eeg_project.components.classifier;
  */
 
 public interface BufferListener {
-    void bufferFull(double[][] buffer);
+    void getEpoch(double[][] buffer);
 }
