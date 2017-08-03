@@ -139,7 +139,6 @@ export default class ConnectorWidget extends Component {
       Connector.init();
 
       DeviceEventEmitter.addListener("CONNECTION_CHANGED", params => {
-        console.log("CONNECTION_CHANGED " + JSON.stringify(params));
         switch (params.connectionStatus) {
           case "CONNECTED":
             this.props.setConnectionStatus(config.connectionStatus.CONNECTED);
@@ -155,12 +154,15 @@ export default class ConnectorWidget extends Component {
               config.connectionStatus.DISCONNECTED
             );
             break;
+
+          case "BLUETOOTH_DISABLED":
+            this.props.setConnectionStatus(config.connectionStatus.BLUETOOTH_DISABLED);
+            break;
         }
       });
     }
 
     DeviceEventEmitter.addListener("MUSE_LIST_CHANGED", params => {
-      console.log("MUSE_CHANGED " + JSON.stringify(params));
       this.props.setAvailableMuses(params);
     });
   }
@@ -174,7 +176,6 @@ export default class ConnectorWidget extends Component {
 
   componentWillUnmount() {
     DeviceEventEmitter.removeListener("MUSE_LIST_CHANGED", params => {
-      console.log("MUSE_CHANGED " + JSON.stringify(params));
       this.props.setAvailableMuses(params);
     });
   }
@@ -186,8 +187,6 @@ export default class ConnectorWidget extends Component {
         this.setState({ musePopUpIsVisible: true });
       } else if (action.payload.length === 1) {
         Connector.connectToMuseWithIndex(0);
-      } else {
-        this.props.setConnectionStatus(config.connectionStatus.NO_MUSES);
       }
     });
   }
@@ -214,6 +213,24 @@ export default class ConnectorWidget extends Component {
             </WhiteButton>
           </View>
         );
+
+      case config.connectionStatus.BLUETOOTH_DISABLED:
+      return (
+        <View style={styles.container}>
+          <Text style={styles.noMuses}>Bluetooth appears to be disabled!</Text>
+          <SandboxButton
+            onPress={() =>
+              this.props.setOfflineMode(!this.props.isOfflineMode)}
+            active={this.props.isOfflineMode}
+          >
+            Enable Offline Mode (beta)
+          </SandboxButton>
+
+          <WhiteButton onPress={() => this.getAndConnectToDevice()}>
+            SEARCH
+          </WhiteButton>
+        </View>
+      );
 
       case config.connectionStatus.SEARCHING:
         return (

@@ -13,7 +13,6 @@ import com.choosemuse.libmuse.MuseDataPacketType;
 import com.eeg_project.MainApplication;
 import com.eeg_project.components.csv.EEGFileWriter;
 import com.eeg_project.components.signal.BandPowerExtractor;
-import com.eeg_project.components.signal.CircularBuffer;
 import com.eeg_project.components.signal.FFT;
 import com.eeg_project.components.signal.Filter;
 import com.eeg_project.components.signal.NoiseDetector;
@@ -173,7 +172,6 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
             collectionPromise = null;
         }
     }
-
 
     @ReactMethod
     public void fitWithScore(Integer k, Promise promise) {

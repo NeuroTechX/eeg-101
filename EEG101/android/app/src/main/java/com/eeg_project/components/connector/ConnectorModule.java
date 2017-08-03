@@ -1,9 +1,9 @@
 package com.eeg_project.components.connector;
 
+import android.bluetooth.BluetoothAdapter;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.choosemuse.libmuse.ConnectionState;
 import com.choosemuse.libmuse.Muse;
@@ -15,7 +15,6 @@ import com.eeg_project.MainApplication;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableArray;
@@ -36,6 +35,7 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
     private int museIndex = 0;
     private List<Muse> availableMuses;
     private Muse muse;
+    private WritableMap bluetoothMap;
     public MainApplication appState;
     public Handler connectHandler;
     public HandlerThread connectThread;
@@ -57,15 +57,15 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
     }
 
     // Send events with Map params (CONNECTION_CHANGED)
-    private void sendEvent(ReactContext reactContext, String eventName, @Nullable WritableMap params) {
-        reactContext
+    private void sendEvent(String eventName, @Nullable WritableMap params) {
+        getReactApplicationContext()
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, params);
     }
 
     // Send events with Array params (MUSE_LIST_CHANGED)
-    private void sendEvent(ReactContext reactContext, String eventName, @Nullable WritableArray params) {
-        reactContext
+    private void sendEvent(String eventName, @Nullable WritableArray params) {
+        getReactApplicationContext()
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, params);
     }
@@ -81,18 +81,24 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getMuses(Promise promise) {
-        if(manager == null) {
-            startMuseManager();
-            startConnectorThread();
+        if(checkBluetoothEnabled()) {
+            if (manager == null) {
+                startMuseManager();
+                startConnectorThread();
+            }
+
+            availableMuses = manager.getMuses();
+            if (availableMuses.isEmpty()) {
+                promise.reject("NO_MUSES", "NO_MUSES");
+                return;
+            }
+
+            promise.resolve(getWritableMuseList(availableMuses));
+        }
+        else {
+            promise.reject("BLUETOOTH_DISABLED", "BLUETOOTH_DISABLED");
         }
 
-        availableMuses = manager.getMuses();
-        if (availableMuses.isEmpty()) {
-            promise.reject(new Exception("No Muses"));
-            return;
-        }
-
-        promise.resolve(getWritableMuseList(availableMuses));
     }
 
     @ReactMethod
@@ -181,6 +187,8 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
         }
     }
 
+
+
     // ------------------------------------------------------------------------------
     // Runnables
 
@@ -203,7 +211,6 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
                 muse.runAsynchronously();
 
             } catch (IllegalArgumentException | NullPointerException | IndexOutOfBoundsException e) {
-                Log.w("ConnectorModule", e);
                 return;
             }
         }
@@ -225,7 +232,7 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
             availableMuses = manager.getMuses();
 
             // Only need to execute this code if in React Native app to send info about available Muses
-            sendEvent(getReactApplicationContext(), MUSE_LIST_CHANGED, getWritableMuseList(availableMuses));
+            sendEvent(MUSE_LIST_CHANGED, getWritableMuseList(availableMuses));
 
 
         }
@@ -258,20 +265,20 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
                 } else {
                     museMap.putString("model", "2014");
                 }
-                sendEvent(getReactApplicationContext(), CONNECTION_CHANGED, museMap);
+                sendEvent(CONNECTION_CHANGED, museMap);
                 return;
             }
 
             if (current == ConnectionState.DISCONNECTED) {
                 museMap = Arguments.createMap();
                 museMap.putString("connectionStatus", "DISCONNECTED");
-                sendEvent(getReactApplicationContext(), CONNECTION_CHANGED, museMap);
+                sendEvent( CONNECTION_CHANGED, museMap);
 
             }
             if (current == ConnectionState.CONNECTING) {
                 museMap = Arguments.createMap();
                 museMap.putString("connectionStatus", "CONNECTING");
-                sendEvent(getReactApplicationContext(), CONNECTION_CHANGED, museMap);
+                sendEvent(CONNECTION_CHANGED, museMap);
             }
         }
     }
@@ -297,6 +304,16 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
         }
 
         return museArray;
+    }
+
+    public boolean checkBluetoothEnabled() {
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(!bluetoothAdapter.isEnabled()) {
+            bluetoothMap = Arguments.createMap();
+            bluetoothMap.putString("connectionStatus", "BLUETOOTH_DISABLED");
+            sendEvent("CONNECTION_CHANGED", bluetoothMap);
+        }
+        return bluetoothAdapter.isEnabled();
     }
 }
 

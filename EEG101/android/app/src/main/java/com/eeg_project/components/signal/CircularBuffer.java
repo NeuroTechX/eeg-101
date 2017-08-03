@@ -1,10 +1,5 @@
 package com.eeg_project.components.signal;
 
-import android.util.Log;
-
-import com.eeg_project.components.classifier.BufferListener;
-
-import java.util.ArrayList;
 import java.util.Arrays; // For printing arrays when debugging
 
 // A pure Java implementation of a circular buffer

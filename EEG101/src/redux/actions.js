@@ -44,7 +44,16 @@ export function getMuses() {
   return dispatch => {
     return Connector.getMuses().then(
       resolveValue => dispatch(setAvailableMuses(resolveValue)),
-      rejectValue => dispatch(setAvailableMuses(new Array()))
+      rejectValue => {
+        if (rejectValue.code === config.connectionStatus.BLUETOOTH_DISABLED) {
+          dispatch(
+            setConnectionStatus(config.connectionStatus.BLUETOOTH_DISABLED)
+          );
+        } else {
+          dispatch(setConnectionStatus(config.connectionStatus.NO_MUSES));
+        }
+        return dispatch(setAvailableMuses(new Array()))
+      }
     );
   };
 }
