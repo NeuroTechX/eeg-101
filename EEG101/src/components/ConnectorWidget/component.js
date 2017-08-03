@@ -154,10 +154,6 @@ export default class ConnectorWidget extends Component {
               config.connectionStatus.DISCONNECTED
             );
             break;
-
-          case "BLUETOOTH_DISABLED":
-            this.props.setConnectionStatus(config.connectionStatus.BLUETOOTH_DISABLED);
-            break;
         }
       });
     }

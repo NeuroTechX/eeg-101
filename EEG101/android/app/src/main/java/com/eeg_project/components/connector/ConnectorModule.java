@@ -36,9 +36,11 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
     private List<Muse> availableMuses;
     private Muse muse;
     private WritableMap bluetoothMap;
+    private boolean isBluetoothEnabled;
     public MainApplication appState;
     public Handler connectHandler;
     public HandlerThread connectThread;
+
 
     // ---------------------------------------------------------
     // Constructor
@@ -75,8 +77,10 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void init() {
-        startMuseManager();
-        startConnectorThread();
+        if(checkBluetoothEnabled()) {
+            startMuseManager();
+            startConnectorThread();
+        }
     }
 
     @ReactMethod
@@ -146,6 +150,7 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
         // we can connect to.
         manager.setMuseListener(new MuseL());
         manager.startListening();
+
     }
 
 
@@ -308,12 +313,8 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
 
     public boolean checkBluetoothEnabled() {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(!bluetoothAdapter.isEnabled()) {
-            bluetoothMap = Arguments.createMap();
-            bluetoothMap.putString("connectionStatus", "BLUETOOTH_DISABLED");
-            sendEvent("CONNECTION_CHANGED", bluetoothMap);
-        }
-        return bluetoothAdapter.isEnabled();
+        isBluetoothEnabled = bluetoothAdapter.isEnabled();
+        return isBluetoothEnabled;
     }
 }
 
