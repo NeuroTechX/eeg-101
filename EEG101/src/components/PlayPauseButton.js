@@ -19,7 +19,7 @@ export default class PlayPauseButton extends Component{
     return(
       <TouchableOpacity onPress={this.props.onPress} disabled={this.props.disabled}>
         <Image source={imageSource} resizeMode='contain'
-               style={{height: 100, width: 100, alignSelf: 'center'}}/>
+               style={{height: 80, width: 80, alignSelf: 'center'}}/>
       </TouchableOpacity>
     )
   }

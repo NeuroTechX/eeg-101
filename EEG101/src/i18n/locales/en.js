@@ -240,6 +240,7 @@ export default {
 	trainSamples:  'samples',
 	trainStop:  'STOP',
 	trainCollect:  'COLLECT',
+	trainCollectMore: 'COLLECT MORE (OPTIONAL)',
 	trainOn:  'ON',
 	trainOff:  'OFF',
 	trainFitClassifier:  'FIT CLASSIFIER',

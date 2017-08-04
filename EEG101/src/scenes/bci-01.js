@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
+import config from "../redux/config";
 import I18n from "../i18n/i18n";
 import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
@@ -13,6 +14,7 @@ import * as colors from "../styles/colors";
 
 function mapStateToProps(state) {
   return {
+    connectionStatus: state.connectionStatus,
     dimensions: state.graphViewDimensions,
     isOfflineMode: state.isOfflineMode
   };
@@ -82,6 +84,16 @@ class BCIOne extends Component {
           visible={this.state.popUp2Visible}
           title={I18n.t('machineLearningTitle')}
         > {I18n.t('machineLearningDefinition')} </PopUp>
+
+        <PopUp
+          onClose={()=>this.props.history.push('/connectorOne')}
+          visible={
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
+          }
+          title={I18n.t('museDisconnectedTitle')}
+        >
+			{I18n.t('museDisconnectedDescription')}
+        </PopUp>
 
       </View>
     );

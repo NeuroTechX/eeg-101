@@ -41,6 +41,7 @@ export default class MiniChart extends Component {
             style={{
               position: "absolute",
               left: -20,
+              bottom: 75,
               fontWeight: "100",
               color: colors.black,
               fontFamily: "Roboto-Light",
@@ -48,12 +49,12 @@ export default class MiniChart extends Component {
               transform: [{ rotate: "270deg" }]
             }}
           >
-            {" "}Feature Rank
+            {" "}Feature Power
           </Text>
           <VictoryChart
             width={this.props.width}
             height={this.props.height - 50}
-            padding={{ bottom: 30, top: 10, right: 10, left: 30 }}
+            padding={{ bottom: 30, top: 10, right: 10, left: 55 }}
             domainPadding={{y:[0,10]}}
             style={{ labels: { fontSize: 10 } }}
           >
@@ -67,6 +68,7 @@ export default class MiniChart extends Component {
             />
             <VictoryAxis
               dependentAxis={true}
+              tickCount={4}
               style={{  tickLabels: { fontSize: 9 } }}
             />
             <VictoryLine
@@ -87,11 +89,18 @@ export default class MiniChart extends Component {
             />
           </VictoryChart>
         </View>
+        <View style={{alignItems: 'center', flexDirection: 'row'}}>
         <Image
           source={require("../assets/electrodelegend.png")}
           style={{ width: 150, height: 30 }}
           resizeMode="contain"
         />
+        <Image
+          source={require("../assets/electrodediagram.png")}
+          style={{ width: 50, height: 50 }}
+          resizeMode="contain"
+        />
+      </View>
       </View>
     );
   }

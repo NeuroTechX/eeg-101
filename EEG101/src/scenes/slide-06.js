@@ -65,7 +65,7 @@ class SlideSix extends Component {
 		<PopUp
           onClose={()=>this.props.history.push('/connectorOne')}
           visible={
-            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED 
           }
           title={I18n.t('museDisconnectedTitle')}
         >

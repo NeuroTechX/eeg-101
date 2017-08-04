@@ -28,6 +28,7 @@ import * as colors from "../styles/colors";
 
 function mapStateToProps(state) {
   return {
+    connectionStatus: state.connectionStatus,
     dimensions: state.graphViewDimensions,
     bciAction: state.bciAction
   };
@@ -40,7 +41,7 @@ class ClassifierRun extends Component {
     // Initialize States
     this.state = {
       popUp1Visible: false,
-      data: [1,1,1],
+      data: new Array(30).fill(1),
       noise: [],
       isRunning: false,
     };
@@ -153,6 +154,15 @@ class ClassifierRun extends Component {
             </View>
           </View>
         </ViewPagerAndroid>
+        <PopUp
+          onClose={()=>this.props.history.push('/connectorOne')}
+          visible={
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
+          }
+          title={I18n.t('museDisconnectedTitle')}
+        >
+			{I18n.t('museDisconnectedDescription')}
+        </PopUp>
       </View>
     );
   }

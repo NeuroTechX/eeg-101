@@ -44,14 +44,12 @@ export default function reducer(state = initialState, action = {}) {
       };
 
     case SET_AVAILABLE_MUSES:
-      console.log(JSON.stringify(action.payload));
       return {
         ...state,
         availableMuses: action.payload,
       };
 
     case SET_MUSE_INFO:
-      console.log(JSON.stringify(action.payload));
       return {
         ...state,
         museInfo: action.payload
@@ -60,7 +58,8 @@ export default function reducer(state = initialState, action = {}) {
     case SET_OFFLINE_MODE:
       return {
         ...state,
-        isOfflineMode: action.payload
+        isOfflineMode: action.payload,
+        connectionStatus: config.connectionStatus.NO_MUSES
       };
 
     case SET_MENU:

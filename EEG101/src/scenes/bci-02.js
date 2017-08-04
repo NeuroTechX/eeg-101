@@ -17,6 +17,7 @@ import * as colors from "../styles/colors";
 
 function mapStateToProps(state) {
   return {
+    connectionStatus: state.connectionStatus,
     dimensions: state.graphViewDimensions,
     bciAction: state.bciAction
   };
@@ -171,6 +172,16 @@ class BCITwo extends Component {
             </View>
           </View>
         </ViewPagerAndroid>
+
+        <PopUp
+          onClose={()=>this.props.history.push('/connectorOne')}
+          visible={
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
+          }
+          title={I18n.t('museDisconnectedTitle')}
+        >
+			{I18n.t('museDisconnectedDescription')}
+        </PopUp>
       </View>
     );
   }

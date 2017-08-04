@@ -18,6 +18,7 @@ import GraphView from "../interface/GraphView";
 function mapStateToProps(state) {
   return {
     connectionStatus: state.connectionStatus,
+    isOfflineMode: state.isOfflineMode,
   };
 }
 
@@ -37,11 +38,31 @@ class SlideOne extends Component {
 
     // Initialize States
     this.state = {
+      slidePosition: 0,
       popUp1Visible: false,
       popUp2Visible: false,
       popUp3Visible: false,
       popUp4Visible: false,
     };
+  }
+
+  offlineDataSource(slidePosition) {
+    if(this.props.isOfflineMode){
+      switch (slidePosition) {
+        case 0:
+          return "clean";
+          break;
+        case 1:
+          return "blinks"
+          break;
+        case 2:
+          return "cat";
+          break;
+        case 3:
+          return "relax";
+          break;
+      }
+    }
   }
 
   render() {
@@ -60,8 +81,11 @@ class SlideOne extends Component {
               height: height
             });
           }}
+          // Receives a native callback event e that is used to set slidePosition state
+          onPageSelected={e =>
+            this.setState({ slidePosition: e.nativeEvent.position })}
         >
-          <GraphView style={{ flex: 1 }}/>
+          <GraphView offlineData={this.offlineDataSource(this.state.slidePosition)} style={{ flex: 1 }}/>
         </View>
 
         <Text style={styles.currentTitle}>{I18n.t('introductionSlideTitle')}</Text>

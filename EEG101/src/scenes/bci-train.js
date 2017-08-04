@@ -15,6 +15,7 @@ import { setBCIAction } from "../redux/actions";
 import config from "../redux/config.js";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import Classifier from "../interface/Classifier.js";
+import PopUp from "../components/PopUp";
 import DecisionButton from "../components/DecisionButton.js";
 import SandboxButton from "../components/SandboxButton.js";
 import Button from "../components/Button.js";
@@ -25,6 +26,7 @@ import * as colors from "../styles/colors";
 
 function mapStateToProps(state) {
   return {
+    connectionStatus: state.connectionStatus,
     bciAction: state.bciAction,
     dimensions: state.graphViewDimensions
   };
@@ -197,7 +199,7 @@ class BCITrain extends Component {
           <View style={styles.classifierDataContainer}>
             <View style={styles.classifierTextContainer}>
               <Text style={styles.body}>
-                {I18n.t("trainAccuracy")}:{" "}
+                {I18n.t("trainAccuracy")}:{"\n"}
                 {Math.round(this.state.score * 1000) / 1000}
               </Text>
               <SandboxButton
@@ -216,7 +218,7 @@ class BCITrain extends Component {
               >
                 {I18n.t("trainReFit")}
               </SandboxButton>
-              <SandboxButton onPress={()=>Classifier.exportClassifier()}>EXPORT CLASSIFIER</SandboxButton>
+              <SandboxButton active="true" onPress={()=>Classifier.exportClassifier()}>EXPORT</SandboxButton>
             </View>
             <View style={styles.classifierGraphContainer}>
               <MiniChart
@@ -305,6 +307,15 @@ class BCITrain extends Component {
             </Button>
           </View>
         </View>
+        <PopUp
+          onClose={()=>this.props.history.push('/connectorOne')}
+          visible={
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
+          }
+          title={I18n.t('museDisconnectedTitle')}
+        >
+			{I18n.t('museDisconnectedDescription')}
+        </PopUp>
       </View>
     );
   }

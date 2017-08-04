@@ -139,8 +139,6 @@ public class EEGGraph extends FrameLayout {
         // Create eegPlot
         eegPlot = new XYPlot(context, "Raw EEG Plot");
 
-        // get datasets (Y will be dataSeries, x will be implicitly generated):
-        //dataSource = new EEGDataSource(appState.connectedMuse.isLowEnergy());
 
         dataSeries = new DynamicSeries("dataSeries");
 
