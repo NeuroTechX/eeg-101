@@ -11,7 +11,8 @@ import {
   PermissionsAndroid,
   Modal,
   ScrollView,
-  ActivityIndicator
+  ActivityIndicator,
+  Image
 } from "react-native";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import config from "../../redux/config";
@@ -38,7 +39,7 @@ class MusesPopUp extends Component {
         <View
           style={
             this.props.selectedMuse === index
-              ? { backgroundColor: "#459acc" }
+              ? { backgroundColor: colors.faintBlue }
               : {}
           }
         >
@@ -72,7 +73,18 @@ class MusesPopUp extends Component {
       >
         <View style={styles.modalBackground}>
           <View style={styles.modalInnerContainer}>
-            <Text style={styles.modalTitle}>Available Muses</Text>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <Text style={styles.modalTitle}>Available Muses</Text>
+              <TouchableOpacity onPress={() => Connector.refreshMuseList()}>
+                <Image
+                  source={require("../../assets/refresh.png")}
+                  resizeMode={"contain"}
+                  style={styles.refreshButton}
+                />
+              </TouchableOpacity>
+            </View>
             <ScrollView contentContainerStyle={styles.scrollViewContainer}>
               {this.props.availableMuses.map((muse, i) => {
                 return this.renderRow(muse, i);
@@ -90,11 +102,6 @@ class MusesPopUp extends Component {
               <View style={{ flex: 1 }}>
                 <Button onPress={this.props.onClose}>
                   {I18n.t("closeButton")}
-                </Button>
-              </View>
-              <View style={{ flex: 1 }}>
-                <Button onPress={() => Connector.refreshMuseList()}>
-                  REFRESH LIST
                 </Button>
               </View>
             </View>
@@ -165,9 +172,7 @@ export default class ConnectorWidget extends Component {
 
   // request location permissions and call getAndConnectToDevice and register event listeners when component loads
   componentDidMount() {
-    this.requestLocationPermission().then(
-      () => this.startConnector()
-    )
+    this.requestLocationPermission().then(() => this.startConnector());
   }
 
   componentWillUnmount() {
@@ -201,7 +206,7 @@ export default class ConnectorWidget extends Component {
                 this.props.setOfflineMode(!this.props.isOfflineMode)}
               active={this.props.isOfflineMode}
             >
-              Enable Offline Mode (beta)
+              ENABLE OFFLINE MODE (BETA)
             </SandboxButton>
 
             <WhiteButton onPress={() => this.getAndConnectToDevice()}>
@@ -211,26 +216,28 @@ export default class ConnectorWidget extends Component {
         );
 
       case config.connectionStatus.BLUETOOTH_DISABLED:
-      return (
-        <View style={styles.container}>
-          <Text style={styles.noMuses}>Bluetooth appears to be disabled!</Text>
-          <SandboxButton
-            onPress={() =>
-              this.props.setOfflineMode(!this.props.isOfflineMode)}
-            active={this.props.isOfflineMode}
-          >
-            Enable Offline Mode (beta)
-          </SandboxButton>
+        return (
+          <View style={styles.container}>
+            <Text style={styles.noMuses}>
+              Bluetooth appears to be disabled!
+            </Text>
+            <SandboxButton
+              onPress={() =>
+                this.props.setOfflineMode(!this.props.isOfflineMode)}
+              active={this.props.isOfflineMode}
+            >
+              ENABLE OFFLINE MODE (BETA)
+            </SandboxButton>
 
-          <WhiteButton onPress={() => this.getAndConnectToDevice()}>
-            SEARCH
-          </WhiteButton>
-        </View>
-      );
+            <WhiteButton onPress={() => this.getAndConnectToDevice()}>
+              SEARCH
+            </WhiteButton>
+          </View>
+        );
 
       case config.connectionStatus.SEARCHING:
         return (
-          <View>
+          <View style={styles.container}>
             <MusesPopUp
               onPress={index => this.setState({ selectedMuse: index })}
               selectedMuse={this.state.selectedMuse}
@@ -243,26 +250,33 @@ export default class ConnectorWidget extends Component {
               }}
               availableMuses={this.props.availableMuses}
             />
-            <View style={[styles.textContainer, { flexDirection: "row" }]}>
-              <Text style={styles.connecting}>Searching...</Text>
+
+            <View style={styles.connectingContainer}>
               <ActivityIndicator color={"#94DAFA"} size={"large"} />
+              <Text style={styles.connecting}>Searching...</Text>
             </View>
           </View>
         );
 
       case config.connectionStatus.CONNECTING:
         return (
-          <View style={[styles.textContainer, { flexDirection: "row" }]}>
-            <Text style={styles.connecting}>Connecting...</Text>
-            <ActivityIndicator color={"#94DAFA"} size={"large"} />
+          <View style={styles.container}>
+            <View style={styles.connectingContainer}>
+              <ActivityIndicator color={"#94DAFA"} size={"large"} />
+              <View >
+              <Text style={styles.connecting}>Connecting...</Text>
+              <Text style={styles.connectingName}>{this.props.availableMuses[this.state.selectedMuse].name}</Text>
+            </View>
+            </View>
           </View>
-
         );
 
       case config.connectionStatus.CONNECTED:
         return (
-          <View style={styles.textContainer}>
-            <Text style={styles.connected}>Connected</Text>
+          <View style={styles.container}>
+            <View style={styles.connectingContainer}>
+              <Text style={styles.connected}>Connected</Text>
+            </View>
           </View>
         );
     }
@@ -276,25 +290,21 @@ const styles = MediaQueryStyleSheet.create(
       flex: 2.5,
       flexDirection: "column",
       justifyContent: "space-around",
-      alignItems: "center",
+      alignItems: "stretch",
       marginLeft: 50,
       marginRight: 50
     },
 
-    buttonContainer: {
-      flex: 1,
-      margin: 40,
-      justifyContent: "center"
-    },
-
-    textContainer: {
-      justifyContent: "center",
-      alignItems: "center",
-      height: 50,
-      margin: 40,
-      padding: 5,
+    connectingContainer: {
+      alignSelf: 'center',
+      borderRadius: 50,
       backgroundColor: colors.white,
-      borderRadius: 50
+      flexDirection: "row",
+      alignItems: 'center',
+      justifyContent: "space-around",
+      padding: 20,
+      height: 70,
+      width: 240,
     },
 
     body: {
@@ -306,29 +316,35 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     connected: {
-      fontFamily: "Roboto-Light",
+      fontFamily: "Roboto",
       fontSize: 20,
       color: colors.malachite
     },
 
     disconnected: {
-      fontFamily: "Roboto-Light",
+      fontFamily: "Roboto",
       fontSize: 20,
       color: colors.pomegranate,
       textAlign: "center"
     },
 
     noMuses: {
-      fontFamily: "Roboto-Light",
+      fontFamily: "Roboto",
       fontSize: 20,
       color: colors.white,
       textAlign: "center"
     },
 
     connecting: {
-      fontFamily: "Roboto-Light",
+      fontFamily: "Roboto",
       fontSize: 20,
       color: colors.turquoise
+    },
+
+    connectingName: {
+      fontFamily: 'Roboto-Light',
+      fontSize: 18,
+      color: colors.turquoise,
     },
 
     modalBackground: {
@@ -340,6 +356,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     modalTitle: {
+      flex: 1,
       fontFamily: "Roboto-Bold",
       color: colors.black,
       fontSize: 20,
@@ -354,7 +371,9 @@ const styles = MediaQueryStyleSheet.create(
     modalInnerContainer: {
       alignItems: "stretch",
       backgroundColor: "white",
-      padding: 20
+      padding: 20,
+      elevation: 4,
+      borderRadius: 4
     },
 
     close: {
@@ -371,6 +390,11 @@ const styles = MediaQueryStyleSheet.create(
       paddingLeft: 16,
       paddingRight: 16,
       flexWrap: "wrap"
+    },
+
+    refreshButton: {
+      width: 30,
+      height: 30
     },
 
     icon: {
@@ -405,7 +429,7 @@ const styles = MediaQueryStyleSheet.create(
     },
     "@media (min-device-height: 1000)": {
       modalBackground: {
-        paddingTop: 200,
+        paddingTop: 200
       }
     }
   }

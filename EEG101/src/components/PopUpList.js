@@ -58,6 +58,8 @@ const styles = MediaQueryStyleSheet.create(
       alignItems: 'stretch',
       backgroundColor: colors.white,
       padding: 20,
+      elevation: 4,
+      borderRadius: 4,
     },
 
     close: {

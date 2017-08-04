@@ -7,7 +7,7 @@ export const turquoise = '#42f4d9'
 export const faintBlue = '#cce9f8'
 export const englishBlue = '#459acc'
 export const mariner = '#2c85b9'
-export const malachite = '#0EF357'
+export const malachite = '#58f189'
 export const pomegranate = '#f3410e'
 
 export const modalBlue = 'rgba(12, 89, 128, 0.8)'

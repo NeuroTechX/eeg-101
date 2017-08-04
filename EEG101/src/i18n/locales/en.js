@@ -190,7 +190,7 @@ export default {
 
 	//DeviceStatusWdiget
 	widgetConnected:  'Muse connected',
-	widgetDisconnected:  'No connected device',
+	widgetDisconnected:  'No connected Muse',
 	widgetConnecting:  'Connecting...',
 
 	//ConnectorModule/component.js

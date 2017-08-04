@@ -43,7 +43,7 @@ const styles = MediaQueryStyleSheet.create(
       height: 30,
       margin: 5,
       padding: 5,
-      alignItems: 'stretch',
+      alignItems: 'center',
       elevation: 3,
     },
 
@@ -55,7 +55,7 @@ const styles = MediaQueryStyleSheet.create(
       height: 30,
       margin: 5,
       padding: 5,
-      alignItems: 'stretch',
+      alignItems: 'center',
       elevation: 3,
     },
 

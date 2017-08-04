@@ -75,6 +75,7 @@ const styles = MediaQueryStyleSheet.create(
       backgroundColor: colors.white,
       padding: 20,
       elevation: 5,
+      borderRadius: 4,
     },
 
     activeImage: {

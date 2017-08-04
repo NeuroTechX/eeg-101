@@ -35,7 +35,7 @@ const styles = MediaQueryStyleSheet.create(
   // Base styles
   active: {
     justifyContent: 'center',
-    backgroundColor: colors.skyBlue,
+    backgroundColor: colors.malibu,
     height: 50,
     margin: 5,
     padding: 5,
