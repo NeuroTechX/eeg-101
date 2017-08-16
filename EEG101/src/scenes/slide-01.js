@@ -8,8 +8,9 @@ import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
 import { MediaQueryStyleSheet } from "react-native-responsive";
-import I18n from '../i18n/i18n';
+import I18n from "../i18n/i18n";
 import * as colors from "../styles/colors";
+import PlayPauseButton from "../components/PlayPauseButton.js";
 
 //Interfaces. For elements that bridge to native
 import GraphView from "../interface/GraphView";
@@ -18,7 +19,7 @@ import GraphView from "../interface/GraphView";
 function mapStateToProps(state) {
   return {
     connectionStatus: state.connectionStatus,
-    isOfflineMode: state.isOfflineMode,
+    isOfflineMode: state.isOfflineMode
   };
 }
 
@@ -39,21 +40,22 @@ class SlideOne extends Component {
     // Initialize States
     this.state = {
       slidePosition: 0,
+      isPlaying: true,
       popUp1Visible: false,
       popUp2Visible: false,
       popUp3Visible: false,
-      popUp4Visible: false,
+      popUp4Visible: false
     };
   }
 
   offlineDataSource(slidePosition) {
-    if(this.props.isOfflineMode){
+    if (this.props.isOfflineMode) {
       switch (slidePosition) {
         case 0:
           return "clean";
           break;
         case 1:
-          return "blinks"
+          return "blinks";
           break;
         case 2:
           return "cat";
@@ -68,7 +70,6 @@ class SlideOne extends Component {
   render() {
     return (
       <View style={styles.container}>
-
         <View
           style={styles.graphContainer}
           onLayout={event => {
@@ -85,10 +86,23 @@ class SlideOne extends Component {
           onPageSelected={e =>
             this.setState({ slidePosition: e.nativeEvent.position })}
         >
-          <GraphView offlineData={this.offlineDataSource(this.state.slidePosition)} style={{ flex: 1 }}/>
+          <GraphView
+            offlineData={this.offlineDataSource(this.state.slidePosition)}
+            style={{ flex: 1 }}
+            isPlaying={this.state.isPlaying}
+          />
         </View>
 
-        <Text style={styles.currentTitle}>{I18n.t('introductionSlideTitle')}</Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.currentTitle}>
+            {I18n.t("introductionSlideTitle")}
+          </Text>
+          <PlayPauseButton
+            onPress={() => this.setState({ isPlaying: !this.state.isPlaying })}
+            isRunning={this.state.isPlaying}
+            size={40}
+          />
+        </View>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
@@ -96,11 +110,16 @@ class SlideOne extends Component {
           onPageSelected={e =>
             this.setState({ slidePosition: e.nativeEvent.position })}
         >
-
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>{I18n.t('brainElectricity')}</Text>
+            <Text style={styles.header}>
+              {I18n.t("brainElectricity")}
+            </Text>
             <Text style={styles.body}>
-			  {I18n.t('usingThe')}<PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>{I18n.t('EEGLink')}</PopUpLink>{I18n.t('deviceCanDetect')}
+              {I18n.t("usingThe")}
+              <PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>
+                {I18n.t("EEGLink")}
+              </PopUpLink>
+              {I18n.t("deviceCanDetect")}
             </Text>
             <Image
               source={require("../assets/swipeicon.png")}
@@ -110,72 +129,93 @@ class SlideOne extends Component {
           </View>
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>{I18n.t('tryBlinkingEyes')}</Text>
-            <Text style={styles.body}>{I18n.t('doesSignalChange')}</Text>
+            <Text style={styles.header}>
+              {I18n.t("tryBlinkingEyes")}
+            </Text>
             <Text style={styles.body}>
-				{I18n.t('eyeMovementCreates')}<PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>{I18n.t('noiseLink')}</PopUpLink>{I18n.t('inEEGSignal')}
+              {I18n.t("doesSignalChange")}
+            </Text>
+            <Text style={styles.body}>
+              {I18n.t("eyeMovementCreates")}
+              <PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>
+                {I18n.t("noiseLink")}
+              </PopUpLink>
+              {I18n.t("inEEGSignal")}
             </Text>
           </View>
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>{I18n.t('tryThinkingAbout')}</Text>
-            <Text style={styles.body}>{I18n.t('doesSignalChange')}</Text>
+            <Text style={styles.header}>
+              {I18n.t("tryThinkingAbout")}
+            </Text>
             <Text style={styles.body}>
-				{I18n.t('althoughEEG')}<PopUpLink onPress={() => this.setState({ popUp3Visible: true })}>{I18n.t('readingMindsLink')}</PopUpLink>.
+              {I18n.t("doesSignalChange")}
+            </Text>
+            <Text style={styles.body}>
+              {I18n.t("althoughEEG")}
+              <PopUpLink onPress={() => this.setState({ popUp3Visible: true })}>
+                {I18n.t("readingMindsLink")}
+              </PopUpLink>.
             </Text>
           </View>
 
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>{I18n.t('tryClosingEyes10')}</Text>
-            <Text style={styles.body}>
-				{I18n.t('mayNoticeSignalChange')}<PopUpLink onPress={() => this.setState({ popUp4Visible: true })}>{I18n.t('alphaWavesLink')}</PopUpLink>
+            <Text style={styles.header}>
+              {I18n.t("tryClosingEyes10")}
             </Text>
-            <LinkButton path="/slideTwo">{I18n.t('nextLink')}</LinkButton>
+            <Text style={styles.body}>
+              {I18n.t("mayNoticeSignalChange")}
+              <PopUpLink onPress={() => this.setState({ popUp4Visible: true })}>
+                {I18n.t("alphaWavesLink")}
+              </PopUpLink>
+            </Text>
+            <LinkButton path="/slideTwo">
+              {I18n.t("nextLink")}
+            </LinkButton>
           </View>
-
         </ViewPagerAndroid>
 
         <PopUp
           onClose={() => this.setState({ popUp1Visible: false })}
           visible={this.state.popUp1Visible}
-          title={I18n.t('whatIsEEGTitle')}
+          title={I18n.t("whatIsEEGTitle")}
           image={require("../assets/hansberger.jpg")}
         >
-			{I18n.t('whatIsEEGDescription')}
-		</PopUp>
+          {I18n.t("whatIsEEGDescription")}
+        </PopUp>
 
         <PopUp
           onClose={() => this.setState({ popUp2Visible: false })}
           visible={this.state.popUp2Visible}
-          title={I18n.t('noiseTitle')}
+          title={I18n.t("noiseTitle")}
         >
-			{I18n.t('noiseDescription')}
+          {I18n.t("noiseDescription")}
         </PopUp>
 
         <PopUp
           onClose={() => this.setState({ popUp3Visible: false })}
           visible={this.state.popUp3Visible}
-          title={I18n.t('cannotReadMindsTitle')}
+          title={I18n.t("cannotReadMindsTitle")}
         >
-			{I18n.t('cannotReadMindsDescription')}
+          {I18n.t("cannotReadMindsDescription")}
         </PopUp>
 
         <PopUp
           onClose={() => this.setState({ popUp4Visible: false })}
           visible={this.state.popUp4Visible}
-          title={I18n.t('eyeRythymsTitle')}
+          title={I18n.t("eyeRythymsTitle")}
         >
-			{I18n.t('eyeRythymsDescription')}
+          {I18n.t("eyeRythymsDescription")}
         </PopUp>
 
         <PopUp
-          onClose={()=>this.props.history.push('/connectorOne')}
+          onClose={() => this.props.history.push("/connectorOne")}
           visible={
             this.props.connectionStatus === config.connectionStatus.DISCONNECTED
           }
-          title={I18n.t('museDisconnectedTitle')}
+          title={I18n.t("museDisconnectedTitle")}
         >
-			{I18n.t('museDisconnectedDescription')}
+          {I18n.t("museDisconnectedDescription")}
         </PopUp>
       </View>
     );
@@ -194,8 +234,6 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     currentTitle: {
-      marginLeft: 20,
-      marginTop: 10,
       fontSize: 13,
       fontFamily: "Roboto-Medium",
       color: colors.skyBlue
@@ -218,6 +256,15 @@ const styles = MediaQueryStyleSheet.create(
       flex: 4,
       justifyContent: "center",
       alignItems: "stretch"
+    },
+
+    titleContainer: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: 'center',
+      marginLeft: 20,
+      marginRight: 20,
+      marginTop: 10
     },
 
     sandboxButtonContainer: {

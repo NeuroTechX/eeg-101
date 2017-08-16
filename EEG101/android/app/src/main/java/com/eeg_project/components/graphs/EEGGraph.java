@@ -64,6 +64,7 @@ public class EEGGraph extends FrameLayout {
     public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
     private int numEEGPoints;
     private Thread dataThread;
+    private boolean isPlaying = true;
 
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
@@ -73,6 +74,7 @@ public class EEGGraph extends FrameLayout {
 
     // grab reference to global Muse
     MainApplication appState;
+
 
 
     // ------------------------------------------------------------------------
@@ -127,6 +129,14 @@ public class EEGGraph extends FrameLayout {
 
     public void setOfflineData(String data) {
         this.offlineData = data;
+    }
+
+    public void pause() {
+        isPlaying = false;
+    }
+
+    public void resume() {
+        isPlaying = true;
     }
 
     // -----------------------------------------------------------------------
@@ -345,18 +355,19 @@ public class EEGGraph extends FrameLayout {
     // Plot update functions
 
     public void updatePlot() {
-        numEEGPoints = eegBuffer.getPts();
-        if (dataSeries.size() >= PLOT_LENGTH) {
-            dataSeries.remove(numEEGPoints);
+        if(isPlaying) {
+            numEEGPoints = eegBuffer.getPts();
+            if (dataSeries.size() >= PLOT_LENGTH) {
+                dataSeries.remove(numEEGPoints);
+            }
+
+            // For adding all data points (Full sampling)
+            dataSeries.addAll(eegBuffer.extractSingleChannelTransposedAsDouble(numEEGPoints, channelOfInterest - 1));
+
+            // Draws the newly updated dataseries on the plot
+            eegPlot.redraw();
         }
-
-        // For adding all data points (Full sampling)
-        dataSeries.addAll(eegBuffer.extractSingleChannelTransposedAsDouble(numEEGPoints, channelOfInterest - 1));
-
         // resets the 'points-since-dataSource-read' value
         eegBuffer.resetPts();
-
-        // Draws the newly updated dataseries on the plot
-        eegPlot.redraw();
     }
 }

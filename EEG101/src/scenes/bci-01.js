@@ -3,7 +3,6 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
-import config from "../redux/config";
 import I18n from "../i18n/i18n";
 import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
