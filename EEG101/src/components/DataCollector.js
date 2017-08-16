@@ -57,7 +57,7 @@ export default class DataCollector extends Component {
           <Text style={styles.body}>
             {I18n.t("collecting")}
           </Text>
-          <ActivityIndicator color={"#94DAFA"} size={"large"} />
+          <DataCollectionIndicator/>
         </View>
       );
     } else if (this.state.samples < 15 && this.state.hasCollected) {

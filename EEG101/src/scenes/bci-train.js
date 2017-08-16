@@ -16,6 +16,7 @@ import config from "../redux/config.js";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import Classifier from "../interface/Classifier.js";
 import PopUp from "../components/PopUp";
+import DataCollectionIndicator from "../components/DataCollectionIndicator.js";
 import DecisionButton from "../components/DecisionButton.js";
 import SandboxButton from "../components/SandboxButton.js";
 import Button from "../components/Button.js";
@@ -75,7 +76,7 @@ class BCITrain extends Component {
               {this.state.class1Samples} {I18n.t("trainSamples")}{" "}
             </Text>
           </View>
-          <ActivityIndicator color={colors.skyBlue} size={"large"} />
+          <DataCollectionIndicator/>
           <SandboxButton
             onPress={() => Classifier.stopCollecting()}
             active={true}
@@ -124,7 +125,7 @@ class BCITrain extends Component {
               {this.state.class2Samples} {I18n.t("trainSamples")}
             </Text>
           </View>
-          <ActivityIndicator color={colors.skyBlue} size={"large"} />
+          <DataCollectionIndicator/>
           <SandboxButton
             onPress={() => Classifier.stopCollecting()}
             active={true}

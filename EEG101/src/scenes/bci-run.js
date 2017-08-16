@@ -122,7 +122,9 @@ class ClassifierRun extends Component {
       <View style={styles.container}>
         <View style={styles.graphContainer}>
           <BCIHistoryChart data={this.state.data} width={this.props.dimensions.width} height={this.props.dimensions.height} />
-          <NoiseIndicator noise={this.state.noise} width={this.props.dimensions.width} height={this.props.dimensions.height} />
+          <View style={{position: 'absolute', top: 30, right:30}}>
+          <NoiseIndicator noise={this.state.noise} width={100} height={100} />
+        </View>
         </View>
         <Text style={styles.currentTitle}>{I18n.t('bciRunSlideTitle')}</Text>
         <ViewPagerAndroid style={styles.viewPager} initialPage={0}>
@@ -139,6 +141,7 @@ class ClassifierRun extends Component {
                 Vibration.cancel();
               }}
               isRunning={this.state.isRunning}
+              size={80}
             />
             <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
               <View style={{ flex: 1 }}>
