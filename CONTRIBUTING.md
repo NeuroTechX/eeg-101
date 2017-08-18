@@ -22,8 +22,8 @@ This project is maintained by the [NeuroTechX](www.neurotechx.com) community. Jo
 
 ## How can I contribute?
 
-This is currently a small, humble project so our contribution process is rather casual. Take a look at our [Trello board](https://trello.com/b/Da3A090M/interactive-eeg-bci-app-tutorial) to see all the features we are currently working on. If there's a feature you'd be interested in building, go ahead! Let us know on the #interactive-tutorial channel on [the NeuroTechX Slack](http://neurotechx.herokuapp.com/) and we'll support you as much as we can. When you're finished submit a pull request to the master branch referencing the specific issue you addressed.
+This is currently a small, humble project so our contribution process is rather casual. Take a look at our [GitHub Projects board to see](https://github.com/NeuroTechX/eeg-101/projects) to see all the features we are currently working on. If there's a feature you'd be interested in building, go ahead! Let us know on the #interactive-tutorial channel on [the NeuroTechX Slack](http://neurotechx.herokuapp.com/) and we'll support you as much as we can. When you're finished submit a pull request to the master branch referencing the specific issue you addressed.
 
 If you find a bug, or have a suggestion on how to improve the project, just fill out a Github issue!
 
-If you're in the Toronto area, we often have group in-person meetings :beers: and hacknights :pizza:. Once again, the Slack channel is the best place to keep abreast of such things.
+If you're in the Toronto area, the NeuroTechTO community often gets together to work on EEG 101 and other cool neurotech projects :beers: :pizza:. The NeuroTechX Slack channel is a good place to stay aware of such things, as is the NeuroTechTO newsletter, which you can sign up for [here](http://eepurl.com/cQssYz)
