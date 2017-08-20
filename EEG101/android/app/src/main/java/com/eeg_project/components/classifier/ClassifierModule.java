@@ -176,6 +176,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     @ReactMethod
     public void fitWithScore(Integer k, Promise promise) {
         WritableMap classifierMap = Arguments.createMap();
+        WritableMap meansMap = Arguments.createMap();
         classifierMap.putDouble("score",crossValidate(k));
         classifier.fit(trainingData, labels);
         classifierMap.putArray("featurePower", classifier.getDiscrimPowerArray());

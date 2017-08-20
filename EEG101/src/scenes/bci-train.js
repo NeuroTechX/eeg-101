@@ -7,7 +7,9 @@ import {
   Image,
   NativeEventEmitter,
   NativeModules,
-  ActivityIndicator
+  ActivityIndicator,
+  Modal,
+  TouchableOpacity,
 } from "react-native";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -22,6 +24,7 @@ import SandboxButton from "../components/SandboxButton.js";
 import Button from "../components/Button.js";
 import LinkButton from "../components/LinkButton";
 import MiniChart from "../components/MiniChart.js";
+import FeatureChart from "../components/FeatureChart.js";
 import I18n from "../i18n/i18n";
 import * as colors from "../styles/colors";
 
@@ -54,14 +57,14 @@ class BCITrain extends Component {
       isCollecting2: false,
       isFitting: false,
       score: "",
-      featurePower: "",
+      featurePower: ""
     };
 
     Classifier.getNumSamples().then(promise => this.setState(promise));
   }
 
   componentDidMount() {
-    Classifier.init()
+    Classifier.init();
   }
 
   renderClass1() {
@@ -76,7 +79,7 @@ class BCITrain extends Component {
               {this.state.class1Samples} {I18n.t("trainSamples")}{" "}
             </Text>
           </View>
-          <DataCollectionIndicator/>
+          <DataCollectionIndicator />
           <SandboxButton
             onPress={() => Classifier.stopCollecting()}
             active={true}
@@ -125,7 +128,7 @@ class BCITrain extends Component {
               {this.state.class2Samples} {I18n.t("trainSamples")}
             </Text>
           </View>
-          <DataCollectionIndicator/>
+          <DataCollectionIndicator />
           <SandboxButton
             onPress={() => Classifier.stopCollecting()}
             active={true}
@@ -219,10 +222,15 @@ class BCITrain extends Component {
               >
                 {I18n.t("trainReFit")}
               </SandboxButton>
-              <SandboxButton active="true" onPress={()=>Classifier.exportClassifier()}>EXPORT</SandboxButton>
+              <SandboxButton
+                active="true"
+                onPress={() => Classifier.exportClassifier()}
+              >
+                EXPORT
+              </SandboxButton>
             </View>
-            <View style={styles.classifierGraphContainer}>
-              <MiniChart
+            <View style={styles.classifierGraphContainer} onPress={()=>this.setState({popUp1Visible: true})}>
+              <FeatureChart
                 height={this.props.dimensions.height / 1.25}
                 width={this.props.dimensions.width / 1.5}
                 data={this.state.featurePower}
@@ -239,7 +247,11 @@ class BCITrain extends Component {
       <View style={styles.container}>
         <View style={styles.contentContainer}>
           <View
-            style={{ flexDirection: "row", justifyContent: "space-between", height: 30, }}
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              height: 30
+            }}
           >
             <Text style={styles.sectionTitle}>Training Data</Text>
             <View style={styles.decisionContainer}>
@@ -279,7 +291,10 @@ class BCITrain extends Component {
         </View>
         <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
           <View style={{ flex: 1 }}>
-            <LinkButton path="/bciRun" disabled={this.state.score === "" || this.state.bciAction == ""}>
+            <LinkButton
+              path="/bciRun"
+              disabled={this.state.score === "" || this.state.bciAction == ""}
+            >
               {I18n.t("trainRunIt")}
             </LinkButton>
           </View>
@@ -309,13 +324,13 @@ class BCITrain extends Component {
           </View>
         </View>
         <PopUp
-          onClose={()=>this.props.history.push('/connectorOne')}
+          onClose={() => this.props.history.push("/connectorOne")}
           visible={
             this.props.connectionStatus === config.connectionStatus.DISCONNECTED
           }
-          title={I18n.t('museDisconnectedTitle')}
+          title={I18n.t("museDisconnectedTitle")}
         >
-			{I18n.t('museDisconnectedDescription')}
+          {I18n.t("museDisconnectedDescription")}
         </PopUp>
       </View>
     );
@@ -380,8 +395,8 @@ const styles = MediaQueryStyleSheet.create(
       lineHeight: 30,
       fontSize: 22,
       position: "absolute",
-      top:0,
-      left:0,
+      top: 0,
+      left: 0
     },
 
     classTitle: {
@@ -415,9 +430,9 @@ const styles = MediaQueryStyleSheet.create(
       flexDirection: "row",
       width: 80,
       justifyContent: "space-between",
-      position: 'absolute',
-      top:0,
-      right:0,
+      position: "absolute",
+      top: 0,
+      right: 0
     },
 
     classifierContainer: {
@@ -446,7 +461,38 @@ const styles = MediaQueryStyleSheet.create(
       paddingBottom: 20,
       alignItems: "center",
       justifyContent: "center"
-    }
+    },
+
+    modalBackground: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "stretch",
+      padding: 20,
+      backgroundColor: colors.modalBlue
+    },
+
+    modalText: {
+      fontFamily: "Roboto-Light",
+      color: colors.black,
+      fontSize: 15,
+      margin: 5
+    },
+
+    modalTitle: {
+      fontFamily: "Roboto-Bold",
+      color: colors.black,
+      fontSize: 20,
+      margin: 5
+    },
+
+    modalInnerContainer: {
+      alignItems: "stretch",
+      backgroundColor: colors.white,
+      padding: 20,
+      elevation: 5,
+      borderRadius: 4,
+    },
+
   },
   // Responsive styles
   {
