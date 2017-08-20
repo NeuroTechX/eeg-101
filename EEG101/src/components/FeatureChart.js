@@ -33,7 +33,7 @@ export default class MiniChart extends Component {
         <View
           style={{
             flexDirection: "row",
-            alignItems: "center",
+            alignItems: "flex-start",
             justifyContent: "space-between"
           }}
         >
@@ -79,18 +79,12 @@ export default class MiniChart extends Component {
             </VictoryGroup>
           </VictoryChart>
         </View>
-        <View style={{alignItems: 'center', flexDirection: 'row'}}>
+
         <Image
-          source={require("../assets/electrodelegend.png")}
-          style={{ width: 150, height: 30 }}
+          source={require("../assets/electrodeheadlegend.png")}
+          style={{ width: 75, height: 75, marginTop: -20, marginLeft: 55}}
           resizeMode="contain"
         />
-        <Image
-          source={require("../assets/electrodediagram.png")}
-          style={{ width: 50, height: 50 }}
-          resizeMode="contain"
-        />
-      </View>
       </View>
     );
   }
