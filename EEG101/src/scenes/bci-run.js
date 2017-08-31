@@ -76,7 +76,7 @@ class ClassifierRun extends Component {
       );
       this.noiseSubscription = lightListener.addListener("NOISE", message => {
         this.setState({ noise: Object.keys(message) });
-        Torch.switchState(false);
+        //Torch.switchState(false);
       });
     }
     // Vibration action
@@ -88,7 +88,7 @@ class ClassifierRun extends Component {
         "PREDICT_RESULT",
         message => {
           if (message == 2) {
-            Vibration.vibrate([0, 1000], true);
+            Vibration.vibrate([0, 1100], true);
           } else {
             Vibration.cancel();
           }
@@ -129,6 +129,7 @@ class ClassifierRun extends Component {
         <Text style={styles.currentTitle}>{I18n.t('bciRunSlideTitle')}</Text>
         <ViewPagerAndroid style={styles.viewPager} initialPage={0}>
           <View style={styles.pageStyle}>
+            <View style={{padding: 40}}>
             <PlayPauseButton
               onPress={() => {
                 if (this.state.isRunning) {
@@ -143,6 +144,7 @@ class ClassifierRun extends Component {
               isRunning={this.state.isRunning}
               size={80}
             />
+          </View>
             <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
               <View style={{ flex: 1 }}>
                 <LinkButton path="/end">

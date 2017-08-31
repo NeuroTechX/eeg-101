@@ -29,7 +29,7 @@ export default class ElectrodeSelector extends Component {
       return (
         <Image
           source={require("../assets/electrodediagram.png")}
-          style={{height: this.props.height, width: this.props.width}}
+          style={{height: this.props.height, width: this.props.width, alignSelf: 'center'}}
         >
           <View style={styles.horizontalContainer}>
             {this.renderNoiseIcon("1")}

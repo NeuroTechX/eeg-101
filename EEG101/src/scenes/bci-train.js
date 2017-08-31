@@ -23,7 +23,6 @@ import DecisionButton from "../components/DecisionButton.js";
 import SandboxButton from "../components/SandboxButton.js";
 import Button from "../components/Button.js";
 import LinkButton from "../components/LinkButton";
-import MiniChart from "../components/MiniChart.js";
 import FeatureChart from "../components/FeatureChart.js";
 import I18n from "../i18n/i18n";
 import * as colors from "../styles/colors";
@@ -310,12 +309,7 @@ class BCITrain extends Component {
                   isCollecting2: false,
                   isFitting: false,
                   score: "",
-                  counts: "",
-                  priors: "",
-                  means: "",
-                  variances: "",
                   discrimPower: "",
-                  featureRanking: ""
                 });
               }}
             >

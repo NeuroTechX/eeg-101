@@ -84,10 +84,7 @@ class End extends Component {
             <View style={styles.listBox}>
               <Text style={styles.header}>{I18n.t('theTeam')}</Text>
               <Text style={styles.body}>Hubert Banville - Visionary</Text>
-              <TouchableOpacity onPress={() => {Linking.openURL('http://neurosponge.com')}}>
-                <Text style={styles.link}>Dano Morrison - Developer</Text>
-              </TouchableOpacity>
-
+              <Text style={styles.body}>Dano Morrison - Developer</Text>
               <Text style={styles.body}>Geordan King - Producer</Text>
               <Text style={styles.body}>Michael Vu - Author</Text>
               <Text style={styles.body}>Joanna Jang - Author</Text>

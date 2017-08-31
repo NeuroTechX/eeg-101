@@ -127,7 +127,7 @@ export default class DataCollector extends Component {
               {I18n.t("totalCleanData2")}
             </Text>
             <Button onPress={() => this.collectData()}>
-              {I18n.t("trainCollect")}
+              {I18n.t("trainCollectMore")}
             </Button>
           </View>
         );
