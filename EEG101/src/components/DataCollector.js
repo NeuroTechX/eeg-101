@@ -17,6 +17,7 @@ import Classifier from "../interface/Classifier.js";
 import Button from "../components/Button.js";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import I18n from "../i18n/i18n";
+import DataCollectionIndicator from "../components/DataCollectionIndicator.js";
 import * as colors from "../styles/colors";
 
 export default class DataCollector extends Component {
@@ -40,7 +41,6 @@ export default class DataCollector extends Component {
         hasCollected: true
       });
       if (this.state.samples >= 15) {
-        console.log("onComplete called");
         this.props.onComplete();
       }
     });

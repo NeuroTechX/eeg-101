@@ -9,6 +9,7 @@ import PopUp from "../components/PopUp";
 import PopUpList from "../components/PopUpList.js";
 import ListItemBlock from "../components/ListItemBlock.js";
 import PopUpLink from "../components/PopUpLink";
+import config from "../redux/config.js";
 import * as colors from "../styles/colors";
 
 function mapStateToProps(state) {
