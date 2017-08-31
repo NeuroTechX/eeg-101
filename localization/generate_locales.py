@@ -27,11 +27,7 @@ for language in languages:
     
     # create locale file
     locale_file = open(language + '.js', 'w' , newline='\n')
-<<<<<<< HEAD
-    locale_file.write('export default {\n')
-=======
     locale_file.write('export default { \n')
->>>>>>> upstream/master
     
     for key, label in zip(keys, language_labels):
         if key.startswith('//'):
