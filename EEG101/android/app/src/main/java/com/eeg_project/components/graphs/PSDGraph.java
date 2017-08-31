@@ -62,7 +62,7 @@ public class PSDGraph extends FrameLayout {
     public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
     private OfflinePSDDataListener offlineDataListener;
     private Thread offlineDataThread;
-    private int samplingRate;
+    private int samplingRate = 256;
 
     // Reference to global application state used for connected Muse
     MainApplication appState;
@@ -82,9 +82,9 @@ public class PSDGraph extends FrameLayout {
         initView(context);
         if(appState.connectedMuse != null) {
             if (!appState.connectedMuse.isLowEnergy()) {
-                samplingRate = 220;
+                this.samplingRate = 220;
             }
-        } else { samplingRate = 256; }
+        }
     }
 
     // -----------------------------------------------------------------------
@@ -168,7 +168,7 @@ public class PSDGraph extends FrameLayout {
 
         // Set position of plot (should be tweaked in order to center chart position)
         psdPlot.getGraph().position(0, HorizontalPositioning.ABSOLUTE_FROM_LEFT.ABSOLUTE_FROM_LEFT,
-               0, VerticalPositioning.ABSOLUTE_FROM_TOP);
+                0, VerticalPositioning.ABSOLUTE_FROM_TOP);
 
         // Add plot to FilterGraph
         this.addView(psdPlot, new LayoutParams(
@@ -183,7 +183,9 @@ public class PSDGraph extends FrameLayout {
         if(offlineData.length() >= 1) {
             startOfflineData(offlineData);
         } else {
-            dataListener = new DataListener();
+            if(dataListener == null) {
+                dataListener = new DataListener();
+            }
             // Register a listener to receive dataSource packets from Muse. Second argument defines which type(s) of dataSource will be transmitted to listener
             appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         }
@@ -279,16 +281,13 @@ public class PSDGraph extends FrameLayout {
         public void run() {
             try {
                 while (keepRunning) {
-
+                    Thread.sleep(6);
                     eegBuffer.update(data.get(index));
                     index++;
-
 
                     if(index >= data.size()) {
                         index = 0;
                     }
-
-                    Thread.sleep(5);
                 }
             } catch(InterruptedException e){
                 Log.w("PSDGraph", "interrupted exception");
@@ -337,9 +336,10 @@ public class PSDGraph extends FrameLayout {
     public final class PSDDataSource implements Runnable {
         private boolean keepRunning = true;
         double[] latestSamples;
+        // TODO: document why this is 26
         int stepSize = 26;
         public boolean isRecording;
-        public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), "Power_Spectral_Density");
+        public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
         private int samplingFrequency;
         private FFT fft;
         private PSDBuffer psdBuffer;
@@ -351,8 +351,6 @@ public class PSDGraph extends FrameLayout {
 
             if(samplingFrequency == 220) {
                 stepSize = 22;
-            } else {
-                stepSize = 26;
             }
 
             // Initialize FFT transform
@@ -400,9 +398,6 @@ public class PSDGraph extends FrameLayout {
 
         public void stopThread() {
             keepRunning = false;
-            if (isRecording) {
-                fileWriter.writeFile(PLOT_TITLE);
-            }
         }
     }
 

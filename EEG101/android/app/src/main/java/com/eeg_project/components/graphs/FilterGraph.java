@@ -62,18 +62,16 @@ public class FilterGraph extends FrameLayout {
     public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
     private OfflineFilterDataListener offlineDataListener;
     private Thread dataThread;
+    public int samplingRate = 256;
+    public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
 
     // Reference to global application state used for connected Muse
     MainApplication appState;
 
-    // Filter specific variables
-    public int samplingRate;
-    public CircularBuffer eegBuffer = new CircularBuffer(220, 4);
-    public Filter activeFilter;
     // Filter states represent info about previous samples; intermediate values that represent
     // polynomial components determined by previous samples in the epoch. For more info, read the Rational Transfer Function description here: https://www.mathworks.com/help/matlab/ref/filter.html
     public double[][] filtState;
-
+    public Filter activeFilter;
 
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
@@ -89,9 +87,12 @@ public class FilterGraph extends FrameLayout {
     public FilterGraph(Context context) {
         super(context);
         appState = ((MainApplication)context.getApplicationContext());
+        if(appState.connectedMuse != null) {
+            if (appState.connectedMuse.isLowEnergy()) {
+                samplingRate = 220;
+            }
+        }
         initView(context);
-        // Data listener is started in setFilterType method
-
     }
 
     // -----------------------------------------------------------------------
@@ -104,12 +105,6 @@ public class FilterGraph extends FrameLayout {
 
     public void setFilterType(String filterType) {
         dataSeries.clear();
-        this.samplingRate = 256;
-        if(appState.connectedMuse != null) {
-            if (!appState.connectedMuse.isLowEnergy()) {
-                this.samplingRate = 220;
-            }
-        }
 
         switch(filterType) {
 
@@ -153,7 +148,7 @@ public class FilterGraph extends FrameLayout {
     }
 
     public void setOfflineData(String data) {
-        this.offlineData = data;
+        offlineData = data;
     }
 
     // -----------------------------------------------------------------------
@@ -170,16 +165,14 @@ public class FilterGraph extends FrameLayout {
         filterPlot.setRangeBoundaries(PLOT_LOW_BOUND, PLOT_HIGH_BOUND, BoundaryMode.FIXED);
         filterPlot.setDomainBoundaries(0, PLOT_LENGTH, BoundaryMode.FIXED);
 
-        // add dataSeries to plot and define color of plotted line
         // Create line formatter with set color
-
         lineFormatter = new FastLineAndPointRenderer.Formatter(Color.WHITE, null,  null);
 
         // Set line thickness
         lineFormatter.getLinePaint().setStrokeWidth(3);
 
-        filterPlot.addSeries(dataSeries,
-                lineFormatter);
+        // Add line to plot
+        filterPlot.addSeries(dataSeries, lineFormatter);
 
         // Format plot layout
         //Remove margins, padding and border
@@ -232,8 +225,9 @@ public class FilterGraph extends FrameLayout {
         if(offlineData.length() >= 1) {
             startOfflineData(offlineData);
         } else {
-
-            dataListener = new FilterDataListener();
+            if(dataListener == null) {
+                dataListener = new FilterDataListener();
+            }
             appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         }
     }
@@ -258,14 +252,11 @@ public class FilterGraph extends FrameLayout {
     // Listeners
 
     // Listener that receives incoming dataSource from the Muse.
-    // Will call receiveMuseDataPacket as dataSource comes in around 220hz (256hz for Muse 2016)
+    // Will call receiveMuseDataPacket as dataSource comes in around 256hz (220hz for Muse 2014)
     // Updates eegBuffer with latest values for all 4 electrodes
-
     private final class FilterDataListener extends MuseDataListener {
         public double[] newData;
-
-        // Filter variables
-        public boolean isMuse2016 = false;
+        public boolean isBandStopFilterOn = false;
         public Filter bandstopFilter;
         public double[][] bandstopFiltState;
         private int frameCounter = 0;
@@ -273,7 +264,7 @@ public class FilterGraph extends FrameLayout {
         // if connected Muse is a 2016 BLE version, init a bandstop filter to remove 60hz noise
         FilterDataListener() {
             if (appState.connectedMuse.isLowEnergy()) {
-                isMuse2016 = true;
+                isBandStopFilterOn = true;
                 bandstopFilter = new Filter(256, "bandstop", 5, 55, 65);
                 bandstopFiltState = new double[4][bandstopFilter.getNB()];
             }
@@ -287,7 +278,7 @@ public class FilterGraph extends FrameLayout {
 
             // Need to apply a bandpass (notch) filter at 60hz if Muse is 2016 model
             // bandpass filter is built into 2014 Muses
-            if (isMuse2016) {
+            if (isBandStopFilterOn) {
                 bandstopFiltState = bandstopFilter.transform(newData, bandstopFiltState);
                 newData = bandstopFilter.extractFilteredSamples(bandstopFiltState);
             }
@@ -321,7 +312,7 @@ public class FilterGraph extends FrameLayout {
 
     // Listener that loops over pre-recorded data read from csv
     // Only used in Offline Mode
-    // Updates eegbuffer at approx. the same frequency as the real DataListener
+    // Updates eegbuffer at approx. the same frequency as the real PSDDataListener
     private final class OfflineFilterDataListener implements Runnable {
 
         List<double[]> data;
@@ -341,24 +332,20 @@ public class FilterGraph extends FrameLayout {
         public void run() {
             try {
                 while (keepRunning) {
-
+                    Thread.sleep(6);
                     filtState = activeFilter.transform(data.get(index), filtState);
                     eegBuffer.update(activeFilter.extractFilteredSamples(filtState));
 
                     index++;
                     counter++;
 
-                    if (counter >= 15) {
+                    if (counter % 15 == 0) {
                         updatePlot();
-                        counter = 0;
                     }
 
                     if(index >= data.size()) {
                         index = 0;
                     }
-
-
-                    Thread.sleep(5);
                 }
             } catch(InterruptedException e){
                 Log.w("FilterGraph", "interrupted exception");

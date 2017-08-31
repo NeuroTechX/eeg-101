@@ -9,23 +9,15 @@ import {
   VictoryLegend,
   VictoryAxis
 } from "victory-native";
+import * as colors from "../styles/colors";
 
 export default class MiniChart extends Component {
   constructor(props) {
     super(props);
   }
 
-  getFeatureRanks(electrode, data) {
-    const lowBound = (electrode - 1) * 4;
-    const highBound = electrode * 4;
-    const featureArray = [0];
-
-    Array.from(data).forEach((val, i) => {
-      if (val >= lowBound && val < highBound) {
-        featureArray[val % 4] = i;
-      }
-    });
-    return featureArray;
+  getElectrodeData(electrode, data) {
+    return data.slice((electrode - 1) * 4, electrode * 4)
   }
 
   render() {
@@ -33,7 +25,7 @@ export default class MiniChart extends Component {
       <View
         style={{
           alignItems: "center",
-          backgroundColor: "#ffffff",
+          backgroundColor: colors.white,
           height: this.props.height,
           width: this.props.width,
         }}
@@ -49,25 +41,26 @@ export default class MiniChart extends Component {
             style={{
               position: "absolute",
               left: -20,
+              bottom: 75,
               fontWeight: "100",
-              color: "#000000",
+              color: colors.black,
               fontFamily: "Roboto-Light",
-              fontSize: 9,
+              fontSize: 11,
               transform: [{ rotate: "270deg" }]
             }}
           >
-            {" "}Feature Rank
+            {" "}Feature Power
           </Text>
           <VictoryChart
             width={this.props.width}
             height={this.props.height - 50}
-            padding={{ bottom: 30, top: 10, right: 10, left: 30 }}
+            padding={{ bottom: 30, top: 10, right: 10, left: 55 }}
             domainPadding={{y:[0,10]}}
             style={{ labels: { fontSize: 10 } }}
           >
             <VictoryAxis
               style={{
-              
+
                 tickLabels: { fontSize: 10 }
               }}
               tickValues={[0, 1, 2, 3]}
@@ -75,33 +68,39 @@ export default class MiniChart extends Component {
             />
             <VictoryAxis
               dependentAxis={true}
-              tickValues={[1, 15]}
-              tickFormat={["16th", "1st"]}
+              tickCount={4}
               style={{  tickLabels: { fontSize: 9 } }}
             />
             <VictoryLine
-              data={this.getFeatureRanks(1, this.props.data)}
+              data={this.getElectrodeData(1, this.props.data)}
               style={{ data: { stroke: "#E86A21" } }}
             />
             <VictoryLine
-              data={this.getFeatureRanks(2, this.props.data)}
+              data={this.getElectrodeData(2, this.props.data)}
               style={{ data: { stroke: "#009987" } }}
             />
             <VictoryLine
-              data={this.getFeatureRanks(3, this.props.data)}
+              data={this.getElectrodeData(3, this.props.data)}
               style={{ data: { stroke: "#565C9B" } }}
             />
             <VictoryLine
-              data={this.getFeatureRanks(4, this.props.data)}
+              data={this.getElectrodeData(4, this.props.data)}
               style={{ data: { stroke: "#D10E89" } }}
             />
           </VictoryChart>
         </View>
+        <View style={{alignItems: 'center', flexDirection: 'row'}}>
         <Image
           source={require("../assets/electrodelegend.png")}
           style={{ width: 150, height: 30 }}
           resizeMode="contain"
         />
+        <Image
+          source={require("../assets/electrodediagram.png")}
+          style={{ width: 50, height: 50 }}
+          resizeMode="contain"
+        />
+      </View>
       </View>
     );
   }

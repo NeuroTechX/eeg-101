@@ -19,6 +19,7 @@ import config from "../redux/config.js";
 import DeviceStatusWidget from "../components/DeviceStatusWidget.js";
 import MenuSection from "../components/MenuSection.js";
 import I18n from "../i18n/i18n";
+import * as colors from "../styles/colors";
 
 function mapStateToProps(state) {
   return {
@@ -160,7 +161,7 @@ class SideMenu extends Component {
             {
               //icon: "face",
               value: I18n.t("howBuildBciValue"),
-              disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+              disabled: this.props.connectionStatus !==
               config.connectionStatus.CONNECTED,
               active: this.props.location.pathname === "/bciTwo",
               onPress: () => this.navTo("/bciTwo")
@@ -186,7 +187,7 @@ export default withRouter(
 const styles = StyleSheet.create({
   menuContainer: {
     flex: 1,
-    backgroundColor: "#3f93c4"
+    backgroundColor: colors.englishBlue
   },
 
   image: {

@@ -14,7 +14,7 @@ Args:
 inputLength (int) : length of the input signal (number of samples)
 fftLength (int) : FFT length; if different than inputLength, the input
 will be zero-padded (larger) or truncated (smaller)
-samplingFrequency (double) : sampling frequency of the input signal, in Hz.
+samplingRate (double) : sampling frequency of the input signal, in Hz.
 used to define frequency bins
 
 The use of an encapsulated class (rather than using JTransforms

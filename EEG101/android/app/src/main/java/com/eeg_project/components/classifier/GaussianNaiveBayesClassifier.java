@@ -1,6 +1,5 @@
 package com.eeg_project.components.classifier;
 
-import android.provider.CalendarContract;
 import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
@@ -14,17 +13,15 @@ import java.util.*;
 public class GaussianNaiveBayesClassifier {
 
 	private boolean fitted;
-
-	private int[] classes;
-	private int nbClasses;
-	private int nbFeats;
-
-	private int[] classCounts;
-	private double[][] sum;
-	private double[][] sumSquares;
-	private double[][] theta;
-	private double[][] sigma;
-	private double[] classPriors;
+	public int[] classes;
+	public int nbClasses;
+	public int nbFeats;
+	public int[] classCounts;
+	public double[][] sum;
+	public double[][] sumSquares;
+	public double[][] theta;
+	public double[][] sigma;
+	public double[] classPriors;
 
 	public GaussianNaiveBayesClassifier() {
 		// Gaussian Naive Bayes classifier.
@@ -258,10 +255,10 @@ public class GaussianNaiveBayesClassifier {
 		// Classify examples X given the learned model parameters.
 		//
 		// Args:
-		//  X: data to classify, [nbExamples, nbFeatures]
+		//  X: data to classify, [nbFeatures]
 		//
 		// Returns:
-		//  predicted labels, [nbExamples]
+		//  predicted label
 
 		double[] prob = predictProba(X);
 		int yHat = this.classes[argmax(prob)];
@@ -320,17 +317,7 @@ public class GaussianNaiveBayesClassifier {
 			y[k] = labels.get(k);
 		}
 
-		assert (X.length == y.length) :
-				"X and y must contain the same number of examples.";
-
-		int[] yHat = predict(X);
-		int nbGoodDecisions = 0;
-		for (int i = 0; i < y.length; i++) {
-			if (yHat[i] == y[i]) {
-				nbGoodDecisions += 1;
-			}
-		}
-		return (double) nbGoodDecisions/y.length;
+		return score(X, y);
 	}
 
 
@@ -407,19 +394,18 @@ public class GaussianNaiveBayesClassifier {
 
 	}
 
-	public WritableArray rankWritableFeats() {
-		// List the feature indices by decreasing discriminative power.
+	public WritableArray getDiscrimPowerArray() {
+		// Get the discriminatory power of all the features in the classifier
 		//
 		// Returns:
-		//  list of indices
+		//  WritableArray of discrimpower
 
-		WritableArray featInd = Arguments.createArray();
+		WritableArray discrimPowerArray = Arguments.createArray();
 		double[] coeffs = computeFeatDiscrimPower();
-		for (int i = 0; i < this.nbFeats; i++){
-			featInd.pushInt(argmax(coeffs));
-			coeffs[featInd.getInt(i)] = -1;
+		for (int i = 0; i < coeffs.length; i++){
+			discrimPowerArray.pushDouble(coeffs[i]);
 		}
-		return featInd;
+		return discrimPowerArray;
 
 	}
 

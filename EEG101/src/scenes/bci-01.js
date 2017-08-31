@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+
 import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
@@ -8,9 +9,11 @@ import PopUp from "../components/PopUp";
 import PopUpList from "../components/PopUpList.js";
 import ListItemBlock from "../components/ListItemBlock.js";
 import PopUpLink from "../components/PopUpLink";
+import * as colors from "../styles/colors";
 
 function mapStateToProps(state) {
   return {
+    connectionStatus: state.connectionStatus,
     dimensions: state.graphViewDimensions,
     isOfflineMode: state.isOfflineMode
   };
@@ -81,6 +84,16 @@ class BCIOne extends Component {
           title={I18n.t('machineLearningTitle')}
         > {I18n.t('machineLearningDefinition')} </PopUp>
 
+        <PopUp
+          onClose={()=>this.props.history.push('/connectorOne')}
+          visible={
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
+          }
+          title={I18n.t('museDisconnectedTitle')}
+        >
+			{I18n.t('museDisconnectedDescription')}
+        </PopUp>
+
       </View>
     );
   }
@@ -96,24 +109,24 @@ const styles = MediaQueryStyleSheet.create(
       marginTop: 10,
       fontSize: 13,
       fontFamily: "Roboto-Medium",
-      color: "#6CCBEF"
+      color: colors.skyBlue
     },
 
     body: {
       fontFamily: "Roboto-Light",
-      color: "#484848",
+      color: colors.black,
       fontSize: 19
     },
 
     container: {
-      backgroundColor: "#ffffff",
+      backgroundColor: colors.white,
       flex: 1,
       justifyContent: "space-around",
       alignItems: "stretch"
     },
 
     graphContainer: {
-      backgroundColor: "#72c2f1",
+      backgroundColor: colors.malibu,
       flex: 4,
       justifyContent: "center",
       alignItems: "stretch"
@@ -127,7 +140,7 @@ const styles = MediaQueryStyleSheet.create(
 
     header: {
       fontFamily: "Roboto-Bold",
-      color: "#484848",
+      color: colors.black,
       fontSize: 20
     },
 

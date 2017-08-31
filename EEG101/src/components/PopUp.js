@@ -10,6 +10,7 @@ import { Text, View, Modal, StyleSheet, Image } from "react-native";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import Button from "../components/Button";
 import I18n from "../i18n/i18n";
+import * as colors from "../styles/colors";
 
 export default class PopUp extends Component {
   render() {
@@ -52,36 +53,29 @@ const styles = MediaQueryStyleSheet.create(
       justifyContent: "center",
       alignItems: "stretch",
       padding: 20,
-      backgroundColor: "rgba(12, 89, 128, 0.8)"
+      backgroundColor: colors.modalBlue
     },
 
     modalText: {
       fontFamily: "Roboto-Light",
-      color: "#484848",
+      color: colors.black,
       fontSize: 15,
       margin: 5
     },
 
     modalTitle: {
       fontFamily: "Roboto-Bold",
-      color: "#484848",
+      color: colors.black,
       fontSize: 20,
       margin: 5
     },
 
     modalInnerContainer: {
       alignItems: "stretch",
-      backgroundColor: "#ffffff",
+      backgroundColor: colors.white,
       padding: 20,
       elevation: 5,
-    },
-
-    modal: {
-      flex: 0.25,
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      elevation: 5,
+      borderRadius: 4,
     },
 
     activeImage: {
@@ -99,7 +93,7 @@ const styles = MediaQueryStyleSheet.create(
   {
     "@media (min-device-height: 700)": {
       modalBackground: {
-        backgroundColor: "rgba(12, 89, 128, 0.25)",
+        backgroundColor: colors.modalTransparent,
         justifyContent: "flex-end",
         paddingBottom: 50
       },

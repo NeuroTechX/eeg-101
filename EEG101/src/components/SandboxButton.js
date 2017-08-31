@@ -10,6 +10,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
+import * as colors from "../styles/colors";
 
 export default class SandboxButton extends Component{
   constructor(props){
@@ -19,10 +20,11 @@ export default class SandboxButton extends Component{
 
   render() {
     const dynamicButtonStyle = (this.props.active) ? styles.activeButton: styles.inactiveButton;
+    const dynamicTextStyle = (this.props.active) ? styles.activeText: styles.inactiveText;
     return(
       <TouchableOpacity onPress={this.props.onPress} disabled={this.props.disabled}>
         <View style={dynamicButtonStyle}>
-          <Text style={styles.text}>{this.props.children}</Text>
+          <Text style={dynamicTextStyle}>{this.props.children}</Text>
         </View>
       </TouchableOpacity>
     )
@@ -35,29 +37,36 @@ const styles = MediaQueryStyleSheet.create(
     // Base styles
     activeButton: {
       justifyContent: 'center',
-      backgroundColor: '#94DAFA',
-      borderColor: '#484848',
-
+      backgroundColor: colors.englishBlue,
+      borderColor: colors.heather,
+      borderRadius: 4,
       height: 30,
       margin: 5,
       padding: 5,
-      alignItems: 'stretch',
+      alignItems: 'center',
       elevation: 3,
     },
 
     inactiveButton: {
       justifyContent: 'center',
-      backgroundColor: '#ffffff',
-      borderColor: 'gray',
+      backgroundColor: colors.white,
+      borderColor: colors.heather,
+      borderRadius: 4,
       height: 30,
       margin: 5,
       padding: 5,
-      alignItems: 'stretch',
+      alignItems: 'center',
       elevation: 3,
     },
 
-    text:{
-      color: '#484848',
+    activeText:{
+      color: colors.white,
+      fontFamily: 'Roboto-Regular',
+      fontSize: 15
+    },
+
+    inactiveText:{
+      color: colors.englishBlue,
       fontFamily: 'Roboto-Regular',
       fontSize: 15
     },

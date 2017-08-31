@@ -12,6 +12,7 @@ import { MediaQueryStyleSheet} from 'react-native-responsive';
 import {connect } from 'react-redux';
 import LinkButton from '../components/WhiteLinkButton';
 import I18n from '../i18n/i18n';
+import * as colors from "../styles/colors";
 
 class End extends Component {
   constructor(props) {
@@ -111,7 +112,7 @@ const styles = MediaQueryStyleSheet.create(
   body: {
       fontFamily: 'Roboto-Light',
       fontSize: 17,
-      color: '#ffffff',
+      color: colors.white,
       textAlign: 'center',
     },
 
@@ -127,7 +128,7 @@ const styles = MediaQueryStyleSheet.create(
 
     header: {
       fontFamily: 'Roboto-Bold',
-      color: '#ffffff',
+      color: colors.white,
       fontSize: 20,
       margin: 15,
     },
@@ -167,14 +168,14 @@ const styles = MediaQueryStyleSheet.create(
       textAlign: 'center',
       marginTop: 15,
       lineHeight: 50,
-      color: '#ffffff',
+      color: colors.white,
       fontFamily: 'Roboto-Black',
       fontSize: 30,
       },
 
       link: {
-        color: '#ffffff',
-        fontFamily: 'Roboto-Medium',
+        color: colors.white,
+        fontFamily: 'Roboto-Light',
         textDecorationLine: 'underline',
       },
 

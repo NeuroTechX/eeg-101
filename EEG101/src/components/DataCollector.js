@@ -17,6 +17,7 @@ import Classifier from "../interface/Classifier.js";
 import Button from "../components/Button.js";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import I18n from "../i18n/i18n";
+import * as colors from "../styles/colors";
 
 export default class DataCollector extends Component {
   constructor(props) {
@@ -56,7 +57,7 @@ export default class DataCollector extends Component {
           <Text style={styles.body}>
             {I18n.t("collecting")}
           </Text>
-          <ActivityIndicator color={"#94DAFA"} size={"large"} />
+          <DataCollectionIndicator/>
         </View>
       );
     } else if (this.state.samples < 15 && this.state.hasCollected) {
@@ -98,7 +99,7 @@ export default class DataCollector extends Component {
               {I18n.t("totalCleanData")}
             </Text>
             <Button onPress={() => this.collectData()}>
-              {I18n.t("trainCollect")}
+              {I18n.t("trainCollectMore")}
             </Button>
           </View>
         );
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Roboto-Light",
     fontSize: 18,
-    color: "#484848",
+    color: colors.black,
     marginBottom: 30
   }
 });

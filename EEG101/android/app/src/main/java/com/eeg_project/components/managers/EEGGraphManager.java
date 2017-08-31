@@ -55,10 +55,20 @@ public class EEGGraphManager extends SimpleViewManager<EEGGraph> {
         }
     }
 
+    // Bridge function for isRecording Prop. Calls setIsRecording in EEGGraph
+    @ReactProp(name = "isPlaying")
+    public void setIsPlaying(EEGGraph graph, @Nullable boolean isPlaying) {
+        Log.w("Manager", "isPlaying: " + isPlaying);
+        if(isPlaying) {
+            graph.resume();
+        } else {
+            graph.pause();
+        }
+    }
+
     // Bridge function for offline Prop. Calls setOfflineMode in EEGGraph
     @ReactProp(name = "offlineData")
     public void setOfflineData(EEGGraph graph, @Nullable String offlineData) {
-
         graph.setOfflineData(offlineData);
     }
 

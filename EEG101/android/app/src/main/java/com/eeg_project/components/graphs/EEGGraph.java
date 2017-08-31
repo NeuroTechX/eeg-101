@@ -62,9 +62,9 @@ public class EEGGraph extends FrameLayout {
     public OfflineDataListener offlineDataListener;
     public  CircularBuffer eegBuffer = new CircularBuffer(220, 4);
     public EEGFileWriter fileWriter = new EEGFileWriter(getContext(), PLOT_TITLE);
-
-
+    private int numEEGPoints;
     private Thread dataThread;
+    private boolean isPlaying = true;
 
     // Bridged props
     // Default channelOfInterest = 1 (left ear)
@@ -74,6 +74,7 @@ public class EEGGraph extends FrameLayout {
 
     // grab reference to global Muse
     MainApplication appState;
+
 
 
     // ------------------------------------------------------------------------
@@ -130,6 +131,14 @@ public class EEGGraph extends FrameLayout {
         this.offlineData = data;
     }
 
+    public void pause() {
+        isPlaying = false;
+    }
+
+    public void resume() {
+        isPlaying = true;
+    }
+
     // -----------------------------------------------------------------------
     // Lifecycle methods (initView and onVisibilityChanged)
 
@@ -140,8 +149,7 @@ public class EEGGraph extends FrameLayout {
         // Create eegPlot
         eegPlot = new XYPlot(context, "Raw EEG Plot");
 
-        // get datasets (Y will be dataSeries, x will be implicitly generated):
-        //dataSource = new EEGDataSource(appState.connectedMuse.isLowEnergy());
+
         dataSeries = new DynamicSeries("dataSeries");
 
         // Set X and Y domain
@@ -152,7 +160,7 @@ public class EEGGraph extends FrameLayout {
         PixelUtils.init(getContext());
 
         // Create line formatter with set color
-        lineFormatter = new FastLineAndPointRenderer.Formatter(Color.WHITE, null,  null);
+        lineFormatter = new FastLineAndPointRenderer.Formatter(LINE_COLOUR, null,  null);
 
         // Set line thickness
         lineFormatter.getLinePaint().setStrokeWidth(3);
@@ -170,7 +178,6 @@ public class EEGGraph extends FrameLayout {
         // Make plot background blue (including removing grid lines)
         XYGraphWidget graph = eegPlot.getGraph();
         graph.getBackgroundPaint().setColor(BACKGROUND_COLOUR);
-        //eegPlot.getGraph().setBackgroundPaint(null);
         graph.getGridBackgroundPaint().setColor(Color.TRANSPARENT);
         graph.getDomainGridLinePaint().setColor(Color.TRANSPARENT);
         graph.getDomainOriginLinePaint().setColor(Color.TRANSPARENT);
@@ -211,8 +218,9 @@ public class EEGGraph extends FrameLayout {
         if(offlineData.length() >= 1) {
             startOfflineData(offlineData);
         } else {
-
-            dataListener = new DataListener();
+            if(dataListener == null) {
+                dataListener = new DataListener();
+            }
             appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
         }
     }
@@ -221,6 +229,8 @@ public class EEGGraph extends FrameLayout {
         if (dataListener != null || offlineDataListener != null) {
             if(offlineData.length() > 1) {
                 offlineDataListener.stopThread();
+                dataThread.interrupt();
+                dataThread = null;
             } else {
                 appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
             }
@@ -237,7 +247,7 @@ public class EEGGraph extends FrameLayout {
     // Listeners
 
     // Listener that receives incoming dataSource from the Muse.
-    // Will call receiveMuseDataPacket as dataSource comes in around 220hz (256hz for Muse 2016)
+    // Will call receiveMuseDataPacket as dataSource comes in around 256hz (220hz for Muse 2014)
     // Updates eegBuffer with latest values for all 4 electrodes and calls updatePlot() every 15
     // samples to trigger addition to the DataSeries and redrawing of the plot
     private final class DataListener extends MuseDataListener {
@@ -297,7 +307,7 @@ public class EEGGraph extends FrameLayout {
 
     // Listener that loops over pre-recorded data read from csv
     // Only used in Offline Mode
-    // Updates eegbuffer at approx. the same frequency as the real DataListener
+    // Updates eegbuffer at approx. the same frequency as the real PSDDataListener using Thread.sleep
     private final class OfflineDataListener implements Runnable {
 
         List<double[]> data;
@@ -317,22 +327,19 @@ public class EEGGraph extends FrameLayout {
         public void run() {
             try {
                 while (keepRunning) {
-
+                    Thread.sleep(6);
                     eegBuffer.update(data.get(index));
                     index++;
                     counter++;
 
-                    if (counter >= 15) {
+                    if (counter % 15 == 0) {
                         updatePlot();
-                        counter = 0;
                     }
 
                     if(index >= data.size()) {
                         index = 0;
                     }
 
-
-                    Thread.sleep(5);
                 }
             } catch(InterruptedException e){
                 Log.w("EEGGraph", "interrupted exception");
@@ -348,18 +355,19 @@ public class EEGGraph extends FrameLayout {
     // Plot update functions
 
     public void updatePlot() {
-        int numEEGPoints = eegBuffer.getPts();
-        if (dataSeries.size() >= PLOT_LENGTH) {
-            dataSeries.remove(numEEGPoints);
+        if(isPlaying) {
+            numEEGPoints = eegBuffer.getPts();
+            if (dataSeries.size() >= PLOT_LENGTH) {
+                dataSeries.remove(numEEGPoints);
+            }
 
+            // For adding all data points (Full sampling)
+            dataSeries.addAll(eegBuffer.extractSingleChannelTransposedAsDouble(numEEGPoints, channelOfInterest - 1));
+
+            // Draws the newly updated dataseries on the plot
+            eegPlot.redraw();
         }
-
-        // For adding all data points (Full sampling)
-        dataSeries.addAll(eegBuffer.extractSingleChannelTransposedAsDouble(numEEGPoints, channelOfInterest - 1));
-
         // resets the 'points-since-dataSource-read' value
         eegBuffer.resetPts();
-
-        eegPlot.redraw();
     }
 }

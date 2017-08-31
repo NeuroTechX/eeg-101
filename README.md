@@ -11,8 +11,9 @@
 </p>
 
 ## Overview
-- Teaches the very basics of EEG, including where signals come from, how EEG devices work, and how to process EEG data
-- Streams data from the Muse with LibMuse Java API
+- Teaches the basics of EEG, including where signals come from, how devices work, and how to process data
+- Contains a general purpose binary classifier for EEG data
+- Streams data from the Muse with the LibMuse Java API
 - Built with React Native for Android
 - Completely free, open-source, and available for use/adaption in any project
 
@@ -22,10 +23,22 @@ Find [EEG 101](https://play.google.com/store/apps/details?id=com.eeg_project&hl=
 
 https://www.youtube.com/watch?v=GunGP1yrqM8&feature=youtu.be
 
+## Lesson Content
+- Neurophysiology of EEG
+- EEG hardware
+- Filtering
+- Epoching
+- Artefact Removal
+- The Fourier Transform
+- The Power Spectral Density Curve
+- Brain waves
+- Brain-Computer Interfaces
+- Machine Learning
+
 ## Currently In Development
-- Offline mode
 - iOS version
-- Advanced lesson content ([Riemannian Potato](http://alexandre.barachant.org/papers/conferences/potato/))
+- UI/UX Tweaks
+- Advanced lesson content, including event-related potentials
 
 ## How it works
 
@@ -33,19 +46,19 @@ https://www.youtube.com/watch?v=GunGP1yrqM8&feature=youtu.be
     <img alt="screens" src="/images/ScreenBanner.png/">
 </p>
 
-Our goal with EEG 101 was to create a flexible base for EEG and BCI mobile development that novice programmers could build on top of, and could be adapted to work on multiple platforms with different EEG devices. To satisfy those concerns, we've built the app in React Native, which allows for fast, straight-forward front-end development and the promise of an easy port to iOS in the future (hopefully).  
+Our goal with EEG 101 was to create a flexible base for EEG and BCI mobile development that novice programmers can build on top of for multiple platforms with different EEG devices. To satisfy those concerns, we've built the app in React Native, which allows for fast, straight-forward front-end development and the potential to port to iOS, Web, or Desktop (Electron) in the future.  
 
-EEG 101 is split right down the middle between Java and React. If you're interested in how we communicate with the Muse, process EEG data, and plot the results in real time, check out the graph and signal classes in the android source folders. Our implementations are all (for the most part) typical Android components written in Java.
+Currently, EEG 101 is split right down the middle between Java and React. If you're interested in how we [connect to the Muse](https://github.com/NeuroTechX/eeg-101/blob/master/EEG101/android/app/src/main/java/com/eeg_project/components/connector/ConnectorModule.java), [process EEG data](https://github.com/NeuroTechX/eeg-101/tree/master/EEG101/android/app/src/main/java/com/eeg_project/components/signal), and [plot the results](https://github.com/NeuroTechX/eeg-101/blob/master/EEG101/android/app/src/main/java/com/eeg_project/components/graphs/EEGGraph.java) in real time, check out the graph and signal classes in the android source folders. Our implementations are all (for the most part) typical Android components written in Java.
 
-If you'd like to use EEG 101 as a base for your own React Native app, take a look at how we've written the tutorial in the src folder. Connecting to a Muse and plotting real-time EEG data is as simple as using one of the React components we have already defined.
+If you'd like to use EEG 101 as a base for your own app in React Native, take a look at how we've written the tutorial in the src folder. Connecting to a Muse and plotting real-time EEG data is as simple as using one of the Native components we have already prepared.
 
 ## Setup
 
-1. Install and setup [React Native](https://facebook.github.io/react-native/docs/getting-started.html). This may involve also installing the [JDK](https://www3.ntu.edu.sg/home/ehchua/programming/howto/JDK_Howto.html), [Node](https://nodejs.org/en/download/package-manager/), [Watchman](https://medium.com/@vonchristian/how-to-setup-watchman-on-ubuntu-16-04-53196cc0227c), and the [Gradle Daemon](https://docs.gradle.org/2.9/userguide/gradle_daemon.html) as well
+1. Install and setup [React Native](https://facebook.github.io/react-native/docs/getting-started.html). Note: EEG 101 uses lots of native code, so create-react-native-app and Expo are not an option. Follow the instructions for "Building Apps with Native Code." You may also need to install the [JDK](https://www3.ntu.edu.sg/home/ehchua/programming/howto/JDK_Howto.html), [Node](https://nodejs.org/en/download/package-manager/), [Watchman](https://medium.com/@vonchristian/how-to-setup-watchman-on-ubuntu-16-04-53196cc0227c), and the [Gradle Daemon](https://docs.gradle.org/2.9/userguide/gradle_daemon.html) as well
 2. Install [yarn](https://github.com/yarnpkg/yarn)
 3. Clone this repo `git clone https://github.com/NeuroTechX/eeg-101.git`
 4. run `yarn install` in the EEG101 folder
-5. Connect an Android device with USB debug mode enabled. There can be issues running this app on a virtual device and we recommend real hardware.
+5. Connect an Android device with USB debug mode enabled. Because the LibMuse library depends on an ARM architecture, EEG 101 will not build in an emulator
 6. Run `react-native start` to start React packager
 7. In new terminal, run `adb reverse tcp:8081 tcp:8081` to ensure debug server is connected to your device and then `react-native run-android` to install EEG 101
 

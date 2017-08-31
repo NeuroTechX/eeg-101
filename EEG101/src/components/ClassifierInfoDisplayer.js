@@ -19,6 +19,7 @@ import PopUpLink from "./PopUpLink.js";
 import PopUp from "./PopUp.js";
 import LinkButton from "./LinkButton.js";
 import I18n from "../i18n/i18n";
+import * as colors from "../styles/colors";
 
 export default class ClassifierInfoDisplayer extends Component {
   constructor(props) {
@@ -29,12 +30,7 @@ export default class ClassifierInfoDisplayer extends Component {
       popUp2Visible: false,
       isFitting: false,
       score: "",
-      counts: "",
-      priors: "",
-      means: "",
-      variances: "",
-      discrimPower: "",
-      featureRanking: ""
+      featurePower: "",
     };
   }
 
@@ -72,7 +68,7 @@ export default class ClassifierInfoDisplayer extends Component {
     } else if (this.state.isFitting) {
       return (
         <View style={styles.classifierContainer}>
-          <ActivityIndicator color={"#6CCBEF"} size={"large"} />
+          <ActivityIndicator color={colors.skyBlue} size={"large"} />
         </View>
       );
     } else {
@@ -123,6 +119,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Roboto-Light",
     fontSize: 18,
-    color: "#484848"
+    color: colors.black
   }
 });

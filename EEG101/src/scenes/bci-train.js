@@ -7,7 +7,9 @@ import {
   Image,
   NativeEventEmitter,
   NativeModules,
-  ActivityIndicator
+  ActivityIndicator,
+  Modal,
+  TouchableOpacity,
 } from "react-native";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -15,15 +17,20 @@ import { setBCIAction } from "../redux/actions";
 import config from "../redux/config.js";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import Classifier from "../interface/Classifier.js";
+import PopUp from "../components/PopUp";
+import DataCollectionIndicator from "../components/DataCollectionIndicator.js";
 import DecisionButton from "../components/DecisionButton.js";
 import SandboxButton from "../components/SandboxButton.js";
 import Button from "../components/Button.js";
 import LinkButton from "../components/LinkButton";
 import MiniChart from "../components/MiniChart.js";
+import FeatureChart from "../components/FeatureChart.js";
 import I18n from "../i18n/i18n";
+import * as colors from "../styles/colors";
 
 function mapStateToProps(state) {
   return {
+    connectionStatus: state.connectionStatus,
     bciAction: state.bciAction,
     dimensions: state.graphViewDimensions
   };
@@ -50,15 +57,14 @@ class BCITrain extends Component {
       isCollecting2: false,
       isFitting: false,
       score: "",
-      counts: "",
-      priors: "",
-      means: "",
-      variances: "",
-      discrimPower: "",
-      featureRanking: ""
+      featurePower: ""
     };
 
     Classifier.getNumSamples().then(promise => this.setState(promise));
+  }
+
+  componentDidMount() {
+    Classifier.init();
   }
 
   renderClass1() {
@@ -73,7 +79,7 @@ class BCITrain extends Component {
               {this.state.class1Samples} {I18n.t("trainSamples")}{" "}
             </Text>
           </View>
-          <ActivityIndicator color={"#6CCBEF"} size={"large"} />
+          <DataCollectionIndicator />
           <SandboxButton
             onPress={() => Classifier.stopCollecting()}
             active={true}
@@ -122,7 +128,7 @@ class BCITrain extends Component {
               {this.state.class2Samples} {I18n.t("trainSamples")}
             </Text>
           </View>
-          <ActivityIndicator color={"#6CCBEF"} size={"large"} />
+          <DataCollectionIndicator />
           <SandboxButton
             onPress={() => Classifier.stopCollecting()}
             active={true}
@@ -187,7 +193,7 @@ class BCITrain extends Component {
       return (
         <View style={styles.classifierContainer}>
           <Text style={styles.sectionTitle}>Classifier</Text>
-          <ActivityIndicator color={"#6CCBEF"} size={"large"} />
+          <ActivityIndicator color={colors.skyBlue} size={"large"} />
         </View>
       );
     } else {
@@ -197,7 +203,7 @@ class BCITrain extends Component {
           <View style={styles.classifierDataContainer}>
             <View style={styles.classifierTextContainer}>
               <Text style={styles.body}>
-                {I18n.t("trainAccuracy")}:{" "}
+                {I18n.t("trainAccuracy")}:{"\n"}
                 {Math.round(this.state.score * 1000) / 1000}
               </Text>
               <SandboxButton
@@ -216,12 +222,18 @@ class BCITrain extends Component {
               >
                 {I18n.t("trainReFit")}
               </SandboxButton>
+              <SandboxButton
+                active="true"
+                onPress={() => Classifier.exportClassifier()}
+              >
+                EXPORT
+              </SandboxButton>
             </View>
-            <View style={styles.classifierGraphContainer}>
-              <MiniChart
+            <View style={styles.classifierGraphContainer} onPress={()=>this.setState({popUp1Visible: true})}>
+              <FeatureChart
                 height={this.props.dimensions.height / 1.25}
                 width={this.props.dimensions.width / 1.5}
-                data={this.state.featureRanking}
+                data={this.state.featurePower}
               />
             </View>
           </View>
@@ -235,7 +247,11 @@ class BCITrain extends Component {
       <View style={styles.container}>
         <View style={styles.contentContainer}>
           <View
-            style={{ flexDirection: "row", justifyContent: "space-between", height: 30, }}
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              height: 30
+            }}
           >
             <Text style={styles.sectionTitle}>Training Data</Text>
             <View style={styles.decisionContainer}>
@@ -275,7 +291,10 @@ class BCITrain extends Component {
         </View>
         <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
           <View style={{ flex: 1 }}>
-            <LinkButton path="/bciRun" disabled={this.state.score === "" || this.state.bciAction == ""}>
+            <LinkButton
+              path="/bciRun"
+              disabled={this.state.score === "" || this.state.bciAction == ""}
+            >
               {I18n.t("trainRunIt")}
             </LinkButton>
           </View>
@@ -304,6 +323,15 @@ class BCITrain extends Component {
             </Button>
           </View>
         </View>
+        <PopUp
+          onClose={() => this.props.history.push("/connectorOne")}
+          visible={
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
+          }
+          title={I18n.t("museDisconnectedTitle")}
+        >
+          {I18n.t("museDisconnectedDescription")}
+        </PopUp>
       </View>
     );
   }
@@ -319,19 +347,19 @@ const styles = MediaQueryStyleSheet.create(
       marginTop: 10,
       fontSize: 13,
       fontFamily: "Roboto-Medium",
-      color: "#484848"
+      color: colors.black
     },
 
     body: {
       fontFamily: "Roboto-Light",
       fontSize: 16,
-      color: "#484848",
+      color: colors.black,
       textAlign: "center"
     },
 
     container: {
       paddingBottom: 15,
-      backgroundColor: "#ffffff",
+      backgroundColor: colors.white,
       flex: 1,
       justifyContent: "space-around",
       alignItems: "stretch"
@@ -349,36 +377,36 @@ const styles = MediaQueryStyleSheet.create(
 
     hr: {
       borderBottomWidth: 1,
-      borderColor: "#D3D3D3"
+      borderColor: colors.faintGrey
     },
 
     title: {
       textAlign: "center",
       margin: 15,
       lineHeight: 50,
-      color: "#484848",
+      color: colors.black,
       fontFamily: "Roboto-Black",
       fontSize: 48
     },
 
     sectionTitle: {
       fontFamily: "Roboto-Black",
-      color: "#484848",
+      color: colors.black,
       lineHeight: 30,
       fontSize: 22,
       position: "absolute",
-      top:0,
-      left:0,
+      top: 0,
+      left: 0
     },
 
     classTitle: {
       fontSize: 20,
       fontFamily: "Roboto-Medium",
-      color: "#484848"
+      color: colors.black
     },
 
     graphContainer: {
-      backgroundColor: "#72c2f1",
+      backgroundColor: colors.skyBlue,
       flex: 4,
       justifyContent: "center",
       alignItems: "stretch"
@@ -402,9 +430,9 @@ const styles = MediaQueryStyleSheet.create(
       flexDirection: "row",
       width: 80,
       justifyContent: "space-between",
-      position: 'absolute',
-      top:0,
-      right:0,
+      position: "absolute",
+      top: 0,
+      right: 0
     },
 
     classifierContainer: {
@@ -433,7 +461,38 @@ const styles = MediaQueryStyleSheet.create(
       paddingBottom: 20,
       alignItems: "center",
       justifyContent: "center"
-    }
+    },
+
+    modalBackground: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "stretch",
+      padding: 20,
+      backgroundColor: colors.modalBlue
+    },
+
+    modalText: {
+      fontFamily: "Roboto-Light",
+      color: colors.black,
+      fontSize: 15,
+      margin: 5
+    },
+
+    modalTitle: {
+      fontFamily: "Roboto-Bold",
+      color: colors.black,
+      fontSize: 20,
+      margin: 5
+    },
+
+    modalInnerContainer: {
+      alignItems: "stretch",
+      backgroundColor: colors.white,
+      padding: 20,
+      elevation: 5,
+      borderRadius: 4,
+    },
+
   },
   // Responsive styles
   {

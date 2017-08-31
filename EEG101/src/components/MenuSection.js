@@ -4,6 +4,7 @@
 import React, { Component, PropTypes } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { MediaQueryStyleSheet } from "react-native-responsive";
+import * as colors from "../styles/colors";
 
 export default class MenuSection extends Component {
   constructor(props) {
@@ -13,7 +14,7 @@ export default class MenuSection extends Component {
   renderRow(item, index) {
     return (
       <TouchableOpacity key={index} disabled={item.disabled} onPress={item.onPress}>
-        <View style={item.active ? {backgroundColor: "#459acc"} : {}}>
+        <View style={item.active ? {backgroundColor: colors.englishBlue} : {}}>
         <View style={styles.item}>
           <View style={styles.label}>
             <Text style={item.disabled ? styles.disabledItemLabel : styles.itemLabel}>
@@ -62,7 +63,7 @@ const styles = MediaQueryStyleSheet.create(
     title: {
       paddingLeft: 16,
       fontFamily: "Roboto-Bold",
-      color: "#ffffff",
+      color: colors.white,
       fontSize: 18
     },
 
@@ -86,13 +87,13 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     itemValue: {
-      color: "#ffffff",
+      color: colors.white,
       fontFamily: "Roboto-Light",
       fontSize: 15
     },
 
     disabledItemValue: {
-      color: "#adadad",
+      color: colors.heather,
       fontFamily: "Roboto-Light",
       fontSize: 15
     },
@@ -104,13 +105,13 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     itemLabel: {
-      color: "#ffffff",
+      color: colors.white,
       fontFamily: "Roboto-Light",
       fontSize: 15
     },
 
     disabledItemLabel: {
-      color: "#adadad",
+      color: colors.heather,
       fontFamily: "Roboto-Light",
       fontSize: 15
     }

@@ -24,9 +24,11 @@ import PopUpLink from "../components/PopUpLink";
 import I18n from "../i18n/i18n";
 import BCIHistoryChart from "../components/BCIHistoryChart.js";
 import NoiseIndicator from "../components/NoiseIndicator.js";
+import * as colors from "../styles/colors";
 
 function mapStateToProps(state) {
   return {
+    connectionStatus: state.connectionStatus,
     dimensions: state.graphViewDimensions,
     bciAction: state.bciAction
   };
@@ -39,14 +41,14 @@ class ClassifierRun extends Component {
     // Initialize States
     this.state = {
       popUp1Visible: false,
-      data: [1,1,1,1,1,1,1,1,1,1,1],
+      data: new Array(30).fill(1),
       noise: [],
       isRunning: false,
     };
   }
 
   updateData(data, message) {
-    if (data.length >= 10) {
+    if (data.length >= 30) {
       data.shift();
     }
     data.push(message);
@@ -54,9 +56,6 @@ class ClassifierRun extends Component {
   }
 
   componentDidMount() {
-    Classifier.fitWithScore(6).then(promise => {
-      this.setState(promise);
-    });
 
     // Light action
     if (this.props.bciAction === config.bciAction.LIGHT) {
@@ -79,12 +78,12 @@ class ClassifierRun extends Component {
         this.setState({ noise: Object.keys(message) });
         Torch.switchState(false);
       });
-    } else {
+    }
+    // Vibration action
+    else {
       const vibrationListener = new NativeEventEmitter(
         NativeModules.Classifier
       );
-
-      // Vibration action
       this.predictSubscription = vibrationListener.addListener(
         "PREDICT_RESULT",
         message => {
@@ -123,7 +122,9 @@ class ClassifierRun extends Component {
       <View style={styles.container}>
         <View style={styles.graphContainer}>
           <BCIHistoryChart data={this.state.data} width={this.props.dimensions.width} height={this.props.dimensions.height} />
-          <NoiseIndicator noise={this.state.noise} width={this.props.dimensions.width} height={this.props.dimensions.height} />
+          <View style={{position: 'absolute', top: 30, right:30}}>
+          <NoiseIndicator noise={this.state.noise} width={100} height={100} />
+        </View>
         </View>
         <Text style={styles.currentTitle}>{I18n.t('bciRunSlideTitle')}</Text>
         <ViewPagerAndroid style={styles.viewPager} initialPage={0}>
@@ -140,6 +141,7 @@ class ClassifierRun extends Component {
                 Vibration.cancel();
               }}
               isRunning={this.state.isRunning}
+              size={80}
             />
             <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
               <View style={{ flex: 1 }}>
@@ -155,6 +157,15 @@ class ClassifierRun extends Component {
             </View>
           </View>
         </ViewPagerAndroid>
+        <PopUp
+          onClose={()=>this.props.history.push('/connectorOne')}
+          visible={
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
+          }
+          title={I18n.t('museDisconnectedTitle')}
+        >
+			{I18n.t('museDisconnectedDescription')}
+        </PopUp>
       </View>
     );
   }
@@ -168,40 +179,40 @@ const styles = MediaQueryStyleSheet.create(
       marginTop: 10,
       fontSize: 13,
       fontFamily: "Roboto-Medium",
-      color: "#6CCBEF"
+      color: colors.skyBlue
     },
 
     classText: {
       textAlign: "center",
       margin: 15,
       lineHeight: 50,
-      color: "#ffffff",
+      color: colors.white,
       fontFamily: "Roboto-Black",
       fontSize: 48
     },
 
     body: {
       fontFamily: "Roboto-Light",
-      color: "#484848",
+      color: colors.black,
       fontSize: 19,
       textAlign: "center"
     },
 
     container: {
-      backgroundColor: "#ffffff",
+      backgroundColor: colors.white,
       flex: 1,
       justifyContent: "space-around",
       alignItems: "stretch"
     },
 
     graphContainer: {
-      backgroundColor: "#72c2f1",
+      backgroundColor: colors.skyBlue,
       flex: 4,
     },
 
     header: {
       fontFamily: "Roboto-Bold",
-      color: "#484848",
+      color: colors.black,
       fontSize: 20
     },
 

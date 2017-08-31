@@ -5,6 +5,7 @@ import { PropTypes } from 'react';
 import { requireNativeComponent, View, StyleSheet, Text } from 'react-native';
 import React, { Component } from 'react';
 import Svg, { Rect, Line } from 'react-native-svg';
+import * as colors from "../styles/colors";
 
 let WaveGraph = requireNativeComponent('PSD_GRAPH', WaveGraphView);
 
@@ -48,7 +49,7 @@ export default class WaveGraphView extends Component{
             y1='100%'
             x2='0%'
             y2='0%'
-            stroke='white'
+            stroke={colors.white}
             strokeWidth='3'
           />
 
@@ -57,7 +58,7 @@ export default class WaveGraphView extends Component{
             y1='100%'
             x2='100%'
             y2='100%'
-            stroke='white'
+            stroke={colors.white}
             strokeWidth='3'
           />
 
@@ -151,7 +152,7 @@ WaveGraphView.propTypes = {
 const styles=StyleSheet.create({
   graphContainer: {
     flex: 4,
-    backgroundColor: '#72C2F1'
+    backgroundColor: colors.malibu
   },
 
   graph: {
@@ -164,14 +165,14 @@ const styles=StyleSheet.create({
   },
 
   rangeLabel: {
-    color: 'white',
+    color: colors.white,
     position: 'absolute',
     fontSize: 18,
     transform: [{ rotate: '270deg'}],
   },
 
   domainLabel: {
-    color: 'white',
+    color: colors.white,
     position: 'absolute',
     fontSize: 18,
     alignSelf: 'center'

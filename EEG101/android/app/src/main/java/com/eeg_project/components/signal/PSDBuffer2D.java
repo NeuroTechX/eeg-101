@@ -1,4 +1,5 @@
 package com.eeg_project.components.signal;
+
 import java.util.Arrays; // For printing arrays when debugging
 
 public class PSDBuffer2D extends CircBuffer2D {
@@ -7,8 +8,8 @@ public class PSDBuffer2D extends CircBuffer2D {
 
     private boolean[][] noiseBuffer;
 
-    public PSDBuffer2D(int n, int m, int l) {
-        super(n,m,l);
+    public PSDBuffer2D(int length, int channels, int  bins) {
+        super(length, channels, bins);
         noiseBuffer = new boolean[bufferLength][nbCh];
 
     }
@@ -26,13 +27,16 @@ public class PSDBuffer2D extends CircBuffer2D {
 
     public double[][] mean() {
         // Compute the mean of the buffer across epochs (1st dimension of `buffer`).
+        // Doesn't include 0 values in calculation
 
         double[][] bufferMean = new double[nbCh][nbBins];
         double[] nbPointsSummed = new double[nbCh];
 
         for (int i = 0; i <  bufferLength; i++) {
             for (int c = 0; c <  nbCh; c++) {
-                nbPointsSummed[c]++;
+                if(buffer[i][c][0] > 0){
+                    nbPointsSummed[c]++;
+                }
                 for (int n = 0; n <  nbBins; n++) {
                     bufferMean[c][n] += buffer[i][c][n];
                 }

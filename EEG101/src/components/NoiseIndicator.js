@@ -29,7 +29,7 @@ export default class ElectrodeSelector extends Component {
       return (
         <Image
           source={require("../assets/electrodediagram.png")}
-          style={styles.container}
+          style={{height: this.props.height, width: this.props.width}}
         >
           <View style={styles.horizontalContainer}>
             {this.renderNoiseIcon("1")}
@@ -48,14 +48,6 @@ export default class ElectrodeSelector extends Component {
 const styles = MediaQueryStyleSheet.create(
   // Base styles
   {
-    container: {
-      height: 100,
-      width: 100,
-      alignItems: "center",
-      position: "absolute",
-      right: 20,
-      top: 20
-    },
 
     horizontalContainer: {
       flexDirection: "row",
@@ -66,9 +58,6 @@ const styles = MediaQueryStyleSheet.create(
     horizontalLowerContainer: {
       flexDirection: "row",
       flex: 1,
-      marginLeft: -30,
-      marginRight: -30,
-      marginTop: -5
     },
 
     image: {

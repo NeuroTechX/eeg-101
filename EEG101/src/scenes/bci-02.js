@@ -13,9 +13,11 @@ import LinkButton from "../components/LinkButton";
 import DecisionButton from "../components/DecisionButton.js";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
+import * as colors from "../styles/colors";
 
 function mapStateToProps(state) {
   return {
+    connectionStatus: state.connectionStatus,
     dimensions: state.graphViewDimensions,
     bciAction: state.bciAction
   };
@@ -42,6 +44,10 @@ class BCITwo extends Component {
       slidePosition: 0,
       maxSlidePosition: 0
     };
+  }
+
+  componentDidMount() {
+    Classifier.init()
   }
 
   handleScroll() {
@@ -85,6 +91,7 @@ class BCITwo extends Component {
               </View>
               <View style={styles.decisionContainer}>
                 <DecisionButton
+                  size={100}
                   onPress={() => {
                     this.setState({
                       enableScroll: true
@@ -93,9 +100,11 @@ class BCITwo extends Component {
                   }}
                   active={this.props.bciAction == config.bciAction.VIBRATE}
                 >
-                  <Image style={{width: 60, height: 60}} source={require('../assets/vibrate.png')} resizeMode='contain'/>
+                  <Image style={{height: 50}} source={require('../assets/vibrate.png')} resizeMode='contain'/>
+                  <Text style={styles.iconText}>Vibrate</Text>
                 </DecisionButton>
                 <DecisionButton
+                  size={100}
                   onPress={() => {
                     this.setState({
                       enableScroll: true
@@ -104,8 +113,8 @@ class BCITwo extends Component {
                   }}
                   active={this.props.bciAction == config.bciAction.LIGHT}
                 >
-                  <Image style={{width: 60, height: 60}} source={require('../assets/light.png')} resizeMode='contain'/>
-
+                  <Image style={{height: 50}} source={require('../assets/light.png')} resizeMode='contain'/>
+                  <Text style={styles.iconText}>Light</Text>
                 </DecisionButton>
               </View>
             </View>
@@ -163,6 +172,16 @@ class BCITwo extends Component {
             </View>
           </View>
         </ViewPagerAndroid>
+
+        <PopUp
+          onClose={()=>this.props.history.push('/connectorOne')}
+          visible={
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
+          }
+          title={I18n.t('museDisconnectedTitle')}
+        >
+			{I18n.t('museDisconnectedDescription')}
+        </PopUp>
       </View>
     );
   }
@@ -178,18 +197,18 @@ const styles = MediaQueryStyleSheet.create(
       marginTop: 10,
       fontSize: 13,
       fontFamily: "Roboto-Medium",
-      color: "#484848"
+      color: colors.black
     },
 
     body: {
       fontFamily: "Roboto-Light",
       fontSize: 18,
-      color: "#484848",
+      color: colors.black,
       textAlign: "center"
     },
 
     container: {
-      backgroundColor: "#ffffff",
+      backgroundColor: colors.white,
       flex: 1,
       justifyContent: "space-around",
       alignItems: "stretch"
@@ -199,7 +218,7 @@ const styles = MediaQueryStyleSheet.create(
       textAlign: "center",
       margin: 15,
       lineHeight: 50,
-      color: "#484848",
+      color: colors.black,
       fontFamily: "Roboto-Black",
       fontSize: 48
     },
@@ -207,11 +226,17 @@ const styles = MediaQueryStyleSheet.create(
     subTitle: {
       fontSize: 16,
       fontFamily: "Roboto-Medium",
-      color: "#484848"
+      color: colors.black
+    },
+
+    iconText: {
+      fontFamily: "Roboto-Medium",
+      color: colors.black,
+      fontSize: 20,
     },
 
     graphContainer: {
-      backgroundColor: "#72c2f1",
+      backgroundColor: colors.skyBlue,
       flex: 4,
       justifyContent: "center",
       alignItems: "stretch"
@@ -233,7 +258,7 @@ const styles = MediaQueryStyleSheet.create(
       fontFamily: "Roboto-Bold",
       fontSize: 18,
       margin: 20,
-      color: "#ffffff",
+      color: colors.white,
       alignSelf: "flex-start"
     },
 

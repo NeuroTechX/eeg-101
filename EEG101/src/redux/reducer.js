@@ -8,12 +8,14 @@ import {
   SET_BCI_ACTION,
   SET_OFFLINE_MODE,
   SET_MENU,
-
+  SET_MUSE_INFO,
+  SET_AVAILABLE_MUSES
 } from "./actionTypes";
 
 const initialState = {
   connectionStatus: config.connectionStatus.NOT_YET_CONNECTED,
-  availableMuses: false,
+  availableMuses: [],
+  museInfo: {},
   graphViewDimensions: { x: 0, y: 0, width: 300, height: 250 },
   bciAction: "",
   isMenuOpen: false,
@@ -41,17 +43,30 @@ export default function reducer(state = initialState, action = {}) {
         bciAction: action.payload
       };
 
+    case SET_AVAILABLE_MUSES:
+      return {
+        ...state,
+        availableMuses: action.payload,
+      };
+
+    case SET_MUSE_INFO:
+      return {
+        ...state,
+        museInfo: action.payload
+      };
+
     case SET_OFFLINE_MODE:
       return {
         ...state,
         isOfflineMode: action.payload,
-      }
+        connectionStatus: config.connectionStatus.NO_MUSES
+      };
 
     case SET_MENU:
       return {
         ...state,
         isMenuOpen: action.payload
-      }
+      };
 
     // ...other actions
 

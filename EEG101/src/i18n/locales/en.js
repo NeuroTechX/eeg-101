@@ -1,10 +1,11 @@
-export default { 
+export default {
 
 	//global
 	nextLink:  ' NEXT ',
 	museDisconnectedTitle:  'Muse Disconnected',
 	museDisconnectedDescription:  'Please reconnect to continue the tutorial.',
-	closeButton:  'Close',
+	closeButton:  'CLOSE',
+	connectButton: 'CONNECT',
 
 	//begin-landing.js
 	welcomeEEG101:  'Welcome to EEG 101',
@@ -20,7 +21,7 @@ export default {
 	//connector-02.js
 	step2Title:  'Step 2',
 	getStartedLink:  ' GET STARTED ',
-	waitMusePair:  'Wait for your Muse to pair \n with EEG 101...',
+	waitMusePair:  'Search for Muses to connect to EEG 101...',
 
 	//connector-03.js
 	step3Title:  'Step 3',
@@ -189,7 +190,7 @@ export default {
 
 	//DeviceStatusWdiget
 	widgetConnected:  'Muse connected',
-	widgetDisconnected:  'No connected device',
+	widgetDisconnected:  'No connected Muse',
 	widgetConnecting:  'Connecting...',
 
 	//ConnectorModule/component.js
@@ -239,6 +240,7 @@ export default {
 	trainSamples:  'samples',
 	trainStop:  'STOP',
 	trainCollect:  'COLLECT',
+	trainCollectMore: 'COLLECT MORE (OPTIONAL)',
 	trainOn:  'ON',
 	trainOff:  'OFF',
 	trainFitClassifier:  'FIT CLASSIFIER',

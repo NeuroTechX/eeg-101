@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import * as colors from "../styles/colors";
 
 export default class WhiteButton extends Component{
   constructor(props){
@@ -26,7 +27,7 @@ export default class WhiteButton extends Component{
         component={TouchableOpacity}
       >
   			<View style={dynamicStyle}>
-            		<Text style={{color: 'white', fontFamily: 'Roboto-Bold', fontSize: 15}}>{this.props.children}</Text>
+            		<Text style={{color: colors.white, fontFamily: 'Roboto-Bold', fontSize: 15}}>{this.props.children}</Text>
           	</View>
 		</Link>
 		)
@@ -38,20 +39,22 @@ const styles = StyleSheet.create({
   // Base styles
   active: {
     justifyContent: 'center',
-    backgroundColor: '#94DAFA',
+    backgroundColor: colors.skyBlue,
     height: 50,
     margin: 5,
     padding: 5,
     alignItems: 'center',
     elevation: 2,
+    borderRadius: 4,
     },
 
   disabled: {
     justifyContent: 'center',
-    backgroundColor: '#b6bfcb',
+    backgroundColor: colors.heather,
     height: 50,
     margin: 5,
     padding: 5,
     alignItems: 'center',
+    borderRadius: 4,
     }
 });

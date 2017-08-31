@@ -4,7 +4,6 @@ import android.app.Application;
 import android.util.Log;
 
 import com.choosemuse.libmuse.Muse;
-import com.facebook.react.BuildConfig;
 import com.facebook.react.ReactApplication;
 import com.cubicphuse.RCTTorch.RCTTorchPackage;
 import com.airbnb.android.react.lottie.LottiePackage;

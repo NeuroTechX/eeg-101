@@ -92,6 +92,8 @@ public class PSDGraphManager extends SimpleViewManager<PSDGraph> {
         psdGraph.startDataListener();
         psdGraph.startDataThread();
         psdGraph.startRenderingThread();
+
     }
 }
+
 

@@ -75,10 +75,9 @@ public class NoiseDetector {
             noiseMap.putBoolean(String.valueOf(i),true);
         }
 
-        if(noiseDetected){
-            sendEvent("NOISE", noiseMap);
-            noiseMap = Arguments.createMap();
-        }
+        sendEvent("NOISE", noiseMap);
+        noiseMap = Arguments.createMap();
+
 
         return decisions;
     }

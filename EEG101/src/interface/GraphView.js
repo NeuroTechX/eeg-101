@@ -11,6 +11,7 @@ const iface = {
         graphType: PropTypes.string,
         isRecording: PropTypes.bool,
         offlineData: PropTypes.string,
+        isPlaying: PropTypes.bool,
     ...View.propTypes // include the default view properties
   },
 };

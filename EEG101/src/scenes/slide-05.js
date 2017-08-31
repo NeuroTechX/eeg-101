@@ -15,6 +15,7 @@ import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
 import I18n from '../i18n/i18n';
+import * as colors from "../styles/colors";
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
@@ -100,7 +101,7 @@ class SlideFive extends Component {
 		<PopUp
           onClose={()=>this.props.history.push('/connectorOne')}
           visible={
-            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED 
           }
           title={I18n.t('museDisconnectedTitle')}
         >
@@ -119,17 +120,17 @@ const styles = MediaQueryStyleSheet.create(
       marginTop: 10,
       fontSize: 13,
       fontFamily: "Roboto-Medium",
-      color: "#6CCBEF"
+      color: colors.skyBlue
     },
 
     body: {
       fontFamily: "Roboto-Light",
-      color: "#484848",
+      color: colors.black,
       fontSize: 19
     },
 
     container: {
-      backgroundColor: "#ffffff",
+      backgroundColor: colors.white,
       flex: 1,
       justifyContent: "space-around",
       alignItems: "stretch"
@@ -144,7 +145,7 @@ const styles = MediaQueryStyleSheet.create(
 
     header: {
       fontFamily: "Roboto-Bold",
-      color: "#484848",
+      color: colors.black,
       fontSize: 20
     },
 

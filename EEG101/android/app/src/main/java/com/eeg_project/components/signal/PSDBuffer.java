@@ -1,5 +1,7 @@
 package com.eeg_project.components.signal;
 
+import android.util.Log;
+
 // This class implements a PSD-specific single channel buffer with methods
 // such as noise marking in a joined buffer, and mean across epochs
 public class PSDBuffer {
@@ -29,7 +31,7 @@ public class PSDBuffer {
     // ------------------------------------------------------------------------
     // Methods
 
-    // Updates the 2D buffer array with the 1D newData array at the current index. When index reaches the maximum samplingFrequency it returns to 0.
+    // Updates the 2D buffer array with the 1D newData array at the current index. When index reaches the maximum samplingRate it returns to 0.
     public void update(double[] newData) {
 
             // loop through bins
@@ -43,15 +45,19 @@ public class PSDBuffer {
 
     public double[] mean() {
         // Compute the mean of the buffer across epochs (1st dimension of `buffer`).
+        // Doesn't include 0 values
 
         double[] bufferMean = new double[nbBins];
         double nbPointsSummed = 0;
 
         for (int i = 0; i <  this.bufferlength; i++) {
+            if(buffer[i][0] > 0){
                 nbPointsSummed++;
+            }
                 for (int n = 0; n <  this.nbBins; n++) {
                     bufferMean[n] += buffer[i][n];
                 }
+
             }
 
         for (int n = 0; n <  nbBins; n++) {
