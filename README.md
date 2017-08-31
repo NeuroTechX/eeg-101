@@ -54,7 +54,7 @@ If you'd like to use EEG 101 as a base for your own app in React Native, take a 
 
 ## Setup
 
-1. Install and setup [React Native](https://facebook.github.io/react-native/docs/getting-started.html). This may involve also installing the [JDK](https://www3.ntu.edu.sg/home/ehchua/programming/howto/JDK_Howto.html), [Node](https://nodejs.org/en/download/package-manager/), [Watchman](https://medium.com/@vonchristian/how-to-setup-watchman-on-ubuntu-16-04-53196cc0227c), and the [Gradle Daemon](https://docs.gradle.org/2.9/userguide/gradle_daemon.html) as well
+1. Install and setup [React Native](https://facebook.github.io/react-native/docs/getting-started.html). Note: EEG 101 uses lots of native code, so create-react-native-app and Expo are not an option. Follow the instructions for "Building Apps with Native Code." You may also need to install the [JDK](https://www3.ntu.edu.sg/home/ehchua/programming/howto/JDK_Howto.html), [Node](https://nodejs.org/en/download/package-manager/), [Watchman](https://medium.com/@vonchristian/how-to-setup-watchman-on-ubuntu-16-04-53196cc0227c), and the [Gradle Daemon](https://docs.gradle.org/2.9/userguide/gradle_daemon.html) as well
 2. Install [yarn](https://github.com/yarnpkg/yarn)
 3. Clone this repo `git clone https://github.com/NeuroTechX/eeg-101.git`
 4. run `yarn install` in the EEG101 folder
