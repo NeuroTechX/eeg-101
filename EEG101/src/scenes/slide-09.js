@@ -19,7 +19,6 @@ function mapStateToProps(state) {
   return {
     dimensions: state.graphViewDimensions,
     connectionStatus: state.connectionStatus,
-    isOfflineMode: state.isOfflineMode
   };
 }
 
@@ -35,17 +34,10 @@ class SlideNine extends Component {
     };
   }
 
-  offlineDataSource() {
-    if (this.props.isOfflineMode) {
-      return "relax";
-    }
-  }
-
   render() {
     return (
       <View style={styles.container}>
         <WaveGraphView
-          offlineData={this.offlineDataSource()}
           dimensions={this.props.dimensions}
         />
 
@@ -124,7 +116,7 @@ class SlideNine extends Component {
         <PopUp
           onClose={() => this.props.history.push("/connectorOne")}
           visible={
-            this.props.connectionStatus === config.connectionStatus.DISCONNECTED 
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
           }
           title={I18n.t("museDisconnectedTitle")}
         >

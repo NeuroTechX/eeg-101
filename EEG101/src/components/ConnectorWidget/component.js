@@ -19,7 +19,6 @@ import config from "../../redux/config";
 import Connector from "../../interface/Connector";
 import WhiteButton from "../WhiteButton";
 import Button from "../Button.js";
-import SandboxButton from "../SandboxButton.js";
 import I18n from "../../i18n/i18n";
 import * as colors from "../../styles/colors";
 
@@ -201,14 +200,6 @@ export default class ConnectorWidget extends Component {
         return (
           <View style={styles.container}>
             <Text style={styles.noMuses}>No connected Muse</Text>
-            <SandboxButton
-              onPress={() =>
-                this.props.setOfflineMode(!this.props.isOfflineMode)}
-              active={this.props.isOfflineMode}
-            >
-              ENABLE OFFLINE MODE (BETA)
-            </SandboxButton>
-
             <WhiteButton onPress={() => this.getAndConnectToDevice()}>
               SEARCH
             </WhiteButton>
@@ -221,14 +212,6 @@ export default class ConnectorWidget extends Component {
             <Text style={styles.noMuses}>
               Bluetooth appears to be disabled!
             </Text>
-            <SandboxButton
-              onPress={() =>
-                this.props.setOfflineMode(!this.props.isOfflineMode)}
-              active={this.props.isOfflineMode}
-            >
-              ENABLE OFFLINE MODE (BETA)
-            </SandboxButton>
-
             <WhiteButton onPress={() => this.getAndConnectToDevice()}>
               SEARCH
             </WhiteButton>

@@ -1,23 +1,24 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
 import { connect } from "react-redux";
-import config from "../redux/config";
 import { bindActionCreators } from "redux";
-import { setGraphViewDimensions } from "../redux/actions";
-import LinkButton from "../components/LinkButton";
-import PopUp from "../components/PopUp";
-import PopUpLink from "../components/PopUpLink";
 import { MediaQueryStyleSheet } from "react-native-responsive";
-import I18n from "../i18n/i18n";
-import * as colors from "../styles/colors";
-import PlayPauseButton from "../components/PlayPauseButton.js";
 
-//Interfaces. For elements that bridge to native
-import GraphView from "../interface/GraphView";
+import { setGraphViewDimensions } from "../../redux/actions";
+import config from "../../redux/config";
+import LinkButton from "../../components/LinkButton";
+import PopUp from "../../components/PopUp";
+import PopUpLink from "../../components/PopUpLink";
+import I18n from "../../i18n/i18n";
+import * as colors from "../../styles/colors";
+import PlayPauseButton from "../../components/PlayPauseButton.js";
+import GraphView from "../../interface/GraphView";
 
+// Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
   return {
     connectionStatus: state.connectionStatus,
+    isOfflineMode: state.isOfflineMode
   };
 }
 
@@ -46,7 +47,26 @@ class SlideOne extends Component {
     };
   }
 
+  offlineDataSource(slidePosition) {
+    if (this.props.isOfflineMode) {
+      switch (slidePosition) {
+        case 0:
+          return "clean";
+
+        case 1:
+          return "blinks";
+
+        case 2:
+          return "cat";
+
+        case 3:
+          return "relax";
+      }
+    }
+  }
+
   render() {
+    console.log("location: " + this.props.location.pathname);
     return (
       <View style={styles.container}>
         <View
@@ -66,6 +86,7 @@ class SlideOne extends Component {
             this.setState({ slidePosition: e.nativeEvent.position })}
         >
           <GraphView
+            offlineData={this.offlineDataSource(this.state.slidePosition)}
             style={{ flex: 1 }}
             isPlaying={this.state.isPlaying}
           />
@@ -100,7 +121,7 @@ class SlideOne extends Component {
               {I18n.t("deviceCanDetect")}
             </Text>
             <Image
-              source={require("../assets/swipeicon.png")}
+              source={require("../../assets/swipeicon.png")}
               resizeMode="contain"
               style={styles.swipeImage}
             />
@@ -157,7 +178,7 @@ class SlideOne extends Component {
           onClose={() => this.setState({ popUp1Visible: false })}
           visible={this.state.popUp1Visible}
           title={I18n.t("whatIsEEGTitle")}
-          image={require("../assets/hansberger.jpg")}
+          image={require("../../assets/hansberger.jpg")}
         >
           {I18n.t("whatIsEEGDescription")}
         </PopUp>
@@ -239,7 +260,7 @@ const styles = MediaQueryStyleSheet.create(
     titleContainer: {
       flexDirection: "row",
       justifyContent: "space-between",
-      alignItems: 'center',
+      alignItems: "center",
       marginLeft: 20,
       marginRight: 20,
       marginTop: 10

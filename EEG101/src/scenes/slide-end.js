@@ -14,9 +14,32 @@ import LinkButton from '../components/WhiteLinkButton';
 import I18n from '../i18n/i18n';
 import * as colors from "../styles/colors";
 
+function mapStateToProps(state) {
+  return {
+    isOfflineMode: state.isOfflineMode,
+  };
+}
+
 class End extends Component {
   constructor(props) {
     super(props);
+  }
+
+
+
+  renderButton() {
+    if (this.props.isOfflineMode) {
+      return (
+        <LinkButton path="/offline/slideOne">
+          {I18n.t("getStartedLink")}
+        </LinkButton>
+      );
+    } else
+      return (
+        <LinkButton path="/connectorThree">
+          {I18n.t("restartButton")}
+        </LinkButton>
+      );
   }
 
   render() {
@@ -94,7 +117,7 @@ class End extends Component {
             </View>
 
             <View style={styles.buttonBox}>
-              <LinkButton path='/connectorThree'>{I18n.t('restartButton')}</LinkButton>
+              {this.renderButton()}
             </View>
           </View>
         </ViewPagerAndroid>
@@ -229,4 +252,4 @@ const styles = MediaQueryStyleSheet.create(
     }
   });
 
-export default connect(({route}) => ({route}))(End);
+export default connect(mapStateToProps)(End);

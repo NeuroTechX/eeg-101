@@ -1,21 +1,22 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
 import { connect } from "react-redux";
-import config from "../redux/config";
 import { MediaQueryStyleSheet } from "react-native-responsive";
-import LinkButton from "../components/LinkButton";
-import PopUp from "../components/PopUp";
-import PopUpLink from "../components/PopUpLink";
-import ElectrodeSelector from "../components/ElectrodeSelector";
-import I18n from "../i18n/i18n";
-import * as colors from "../styles/colors";
 
-//Interfaces. For elements that bridge to native
-import GraphView from "../interface/GraphView";
+import WhiteButton from "../../components/LinkButton";
+import config from "../../redux/config";
+import LinkButton from "../../components/LinkButton";
+import PopUp from "../../components/PopUp";
+import PopUpLink from "../../components/PopUpLink";
+import ElectrodeSelector from "../../components/ElectrodeSelector";
+import I18n from "../../i18n/i18n";
+import * as colors from "../../styles/colors";
+import GraphView from "../../interface/GraphView";
 
 function mapStateToProps(state) {
   return {
     connectionStatus: state.connectionStatus,
+    isOfflineMode: state.isOfflineMode
   };
 }
 
@@ -32,11 +33,19 @@ class SlideThree extends Component {
     };
   }
 
+  offlineDataSource() {
+    if (this.props.isOfflineMode) {
+      return "clean";
+    }
+  }
+
   render() {
+    console.log("location: " + this.props.location.pathname);
     return (
       <View style={styles.container}>
         <View style={styles.graphContainer}>
           <GraphView
+            offlineData={this.offlineDataSource()}
             style={{ flex: 1 }}
             channelOfInterest={this.state.channelOfInterest}
           />
@@ -111,7 +120,7 @@ class SlideThree extends Component {
           onClose={() => this.setState({ popUp2Visible: false })}
           visible={this.state.popUp2Visible}
           title={I18n.t("electrodeNamingTitle")}
-          image={require("../assets/electrodelocations.png")}
+          image={require("../../assets/electrodelocations.png")}
         >
           {I18n.t("electrodeNamingDescription")}
         </PopUp>
@@ -120,7 +129,7 @@ class SlideThree extends Component {
           onClose={() => this.setState({ popUp3Visible: false })}
           visible={this.state.popUp3Visible}
           title={I18n.t("referencingTitle")}
-          image={require("../assets/reference.png")}
+          image={require("../../assets/reference.png")}
         >
           {I18n.t("referencingDescription")}
         </PopUp>

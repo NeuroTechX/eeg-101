@@ -4,7 +4,8 @@ key,en,fr,es
 nextLink, NEXT , NEXT  FR,SIGUIENTE
 museDisconnectedTitle,Muse Disconnected,Muse Disconnected FR,Muse desconectado
 museDisconnectedDescription,Please reconnect to continue the tutorial.,Please reconnect to continue the tutorial. FR,"Por favor, reconecta el Muse para continuar con el tutorial."
-closeButton,Close,Close FR,Cerrar
+closeButton,CLOSE,Close FR,Cerrar
+connectButton,CONNECT,,
 ,,,
 //begin-landing.js,//begin-landing.js,//begin-landing.js,//begin-landing.js
 welcomeEEG101,Welcome to EEG 101,Welcome to EEG 101 FR,Bienvenid@ a EEG101
@@ -15,6 +16,8 @@ getStartedLink, GET STARTED , GET STARTED  FR,EMPEZAR
 step1Title,Step 1,Step 1 FR,Paso 1
 musePowerOnWarning,Make sure your Muse is powered on.,Make sure your Muse is powered on. FR,Asegúrate de que el dispositivo Muse se encuentre encendido.
 museFirstGenWarning,If you are using a first generation Muse you may need to pair your device in bluetooth settings.,If you are using a first generation Muse you may need to pair your device in bluetooth settings. FR,"Si estás utilizando un Muse Primera Generación, es posible que sea necesario conectarlo manualmente en los ajustes del Bluetooth."
+offlineModeEnable,ENABLE OFFLINE MODE,,
+offlineModeDisable,DISABLE OFFLINE MODE,,
 connector2Link," OK, IT\'S ON "," OK, IT\'S ON  FR","OK, ESTÁ ENCENDIDO"
 ,,,
 //connector-02.js,//connector-02.js,//connector-02.js,//connector-02.js
@@ -197,7 +200,6 @@ needsPermission,EEG 101 needs your permission,EEG 101 needs your permission FR,E
 requiresLocation,This app requires coarse location permission in order to discover and connect to the 2016 Muse.,This app requires coarse location permission in order to discover and connect to the 2016 Muse. FR,Esta aplicación necesita permisos de localización precisa para poder detectar y conectarse al Muse 2016
 statusConnected,Connected,Connected FR,Conectado
 statusNoMusesTitle,No Muses were detected.,No Muses were detected. FR,Ningún Muse ha sido detectado.
-statusNoMusesDescription,"If you don\'t own a Muse, we\'re terribly sorry! We are working on an offline mode that should be available soon","If you don\'t own a Muse, don\'t worry! We are working on an offline mode that should be avaible in early 2017! FR","Si no tienes un Muse, ¡de verdad lo sentimos mucho! Estamos trabajando actualmente en un modo ""Sin conexión"" que estará disponible próximamente"
 searchAgain, SEARCH AGAIN , SEARCH AGAIN  FR,VOLVER A BUSCAR
 statusConnecting,Connecting...,Connecting... FR,Conectando...
 statusDisconnected,Searching for Muses,Searching for Muses FR,Buscando el Muse

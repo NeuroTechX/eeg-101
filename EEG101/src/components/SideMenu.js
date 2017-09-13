@@ -83,24 +83,24 @@ class SideMenu extends Component {
               value: I18n.t("introductionValue"),
               disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
               config.connectionStatus.CONNECTED,
-              active: this.props.location.pathname === "/slideOne",
-              onPress: () => this.navTo("/slideOne")
+              active: this.props.location.pathname === "./slideOne",
+              onPress: () => this.navTo("./slideOne")
             },
             {
               //icon: "face",
               value: I18n.t("physiologyValue"),
               disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
               config.connectionStatus.CONNECTED,
-              active: this.props.location.pathname === "/slideTwo",
-              onPress: () => this.navTo("/slideTwo")
+              active: this.props.location.pathname === "./slideTwo",
+              onPress: () => this.navTo("./slideTwo")
             },
             {
               //icon: "face",
               value: I18n.t("hardwareValue"),
               disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
               config.connectionStatus.CONNECTED,
-              active: this.props.location.pathname === "/slideThree",
-              onPress: () => this.navTo("/slideThree")
+              active: this.props.location.pathname === "./slideThree",
+              onPress: () => this.navTo("./slideThree")
             },
             {
               //icon: "face",

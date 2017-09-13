@@ -81,7 +81,7 @@ class SlideSeven extends Component {
             <Text style={styles.body}>
 			  {I18n.t('complexSignalsBrokenDown')}<PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>{I18n.t('fourierTransformLink')}</PopUpLink>
 			</Text>
-            <LinkButton path="/slideEight">{I18n.t('nextLink')}</LinkButton>
+            <LinkButton path="./slideEight">{I18n.t('nextLink')}</LinkButton>
           </View>
 
         </ViewPagerAndroid>

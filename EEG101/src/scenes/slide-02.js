@@ -29,6 +29,8 @@ class SlideTwo extends Component {
   }
 
   render() {
+    console.log("location: " + this.props.location.pathname);
+
     // Sets the source of the lesson image based on the position of the ViewPager
     const imageSource = slidePosition => {
       switch (slidePosition) {
@@ -89,7 +91,7 @@ class SlideTwo extends Component {
             <Text style={styles.body}>
 				{I18n.t('organizedElectricalActivity')}<PopUpLink onPress={() => this.setState({ popUp3Visible: true })}>{I18n.t('sleepWakefulnessLink')}</PopUpLink>
             </Text>
-            <LinkButton path="/slideThree">{I18n.t('nextLink')}</LinkButton>
+            <LinkButton path="./slideThree">{I18n.t('nextLink')}</LinkButton>
           </View>
         </ViewPagerAndroid>
 

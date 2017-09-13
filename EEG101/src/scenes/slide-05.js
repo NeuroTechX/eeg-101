@@ -85,7 +85,7 @@ class SlideFive extends Component {
             <Text style={styles.body}>
 			  {I18n.t('EEGDividedSegments')}<PopUpLink onPress={() => this.setState({ popUpVisible: true })}>{I18n.t('epochsLink')}</PopUpLink>.
             </Text>
-            <LinkButton path="/slideSix">{I18n.t('nextLink')}</LinkButton>
+            <LinkButton path="./slideSix">{I18n.t('nextLink')}</LinkButton>
           </View>
 
         </ViewPagerAndroid>
@@ -101,7 +101,7 @@ class SlideFive extends Component {
 		<PopUp
           onClose={()=>this.props.history.push('/connectorOne')}
           visible={
-            this.props.connectionStatus === config.connectionStatus.DISCONNECTED 
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
           }
           title={I18n.t('museDisconnectedTitle')}
         >
