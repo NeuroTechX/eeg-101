@@ -13,7 +13,7 @@ import { setMenu } from "./src/redux/actions";
 import Drawer from "react-native-drawer";
 import thunk from "redux-thunk";
 import NavBar from "./src/components/NavBar";
-import SideMenu from "./src/components/SideMenu.js";
+import SideMenu from "./src/components/SideMenu";
 import * as colors from "./src/styles/colors.js";
 
 // Scenes
