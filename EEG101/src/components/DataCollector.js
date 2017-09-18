@@ -40,7 +40,7 @@ export default class DataCollector extends Component {
         isCollecting: false,
         hasCollected: true
       });
-      if (this.state.samples >= 15) {
+      if (this.state.samples >= 10) {
         this.props.onComplete();
       }
     });
@@ -60,7 +60,7 @@ export default class DataCollector extends Component {
           <DataCollectionIndicator/>
         </View>
       );
-    } else if (this.state.samples < 15 && this.state.hasCollected) {
+    } else if (this.state.samples < 10 && this.state.hasCollected) {
       return (
         <View style={styles.dataClassContainer}>
           <Text style={styles.body}>
@@ -88,7 +88,7 @@ export default class DataCollector extends Component {
             </Button>
           </View>
         );
-      } else if (this.state.samples >= 15) {
+      } else if (this.state.samples >= 10) {
         return (
           <View style={styles.dataClassContainer}>
             <Text style={styles.body}>
@@ -116,7 +116,7 @@ export default class DataCollector extends Component {
             </Button>
           </View>
         );
-      } else if (this.state.samples >= 15) {
+      } else if (this.state.samples >= 10) {
         return (
           <View style={styles.dataClassContainer}>
             <Text style={styles.body}>

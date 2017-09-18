@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
+import { Text, View, ViewPagerAndroid, Image } from "react-native";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
@@ -17,7 +17,6 @@ import GraphView from "../../interface/GraphView";
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
   return {
-    connectionStatus: state.connectionStatus,
     isOfflineMode: state.isOfflineMode
   };
 }
@@ -39,7 +38,6 @@ class SlideOne extends Component {
     // Initialize States
     this.state = {
       slidePosition: 0,
-      isPlaying: true,
       popUp1Visible: false,
       popUp2Visible: false,
       popUp3Visible: false,
@@ -66,7 +64,6 @@ class SlideOne extends Component {
   }
 
   render() {
-    console.log("location: " + this.props.location.pathname);
     return (
       <View style={styles.container}>
         <View
@@ -87,8 +84,7 @@ class SlideOne extends Component {
         >
           <GraphView
             offlineData={this.offlineDataSource(this.state.slidePosition)}
-            style={{ flex: 1 }}
-            isPlaying={this.state.isPlaying}
+            style={styles.graphView}
           />
         </View>
 
@@ -96,11 +92,6 @@ class SlideOne extends Component {
           <Text style={styles.currentTitle}>
             {I18n.t("introductionSlideTitle")}
           </Text>
-          <PlayPauseButton
-            onPress={() => this.setState({ isPlaying: !this.state.isPlaying })}
-            isRunning={this.state.isPlaying}
-            size={40}
-          />
         </View>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
@@ -111,14 +102,14 @@ class SlideOne extends Component {
         >
           <View style={styles.pageStyle}>
             <Text style={styles.header}>
-              {I18n.t("brainElectricity")}
+              The brain produces electricity
             </Text>
             <Text style={styles.body}>
-              {I18n.t("usingThe")}
+              This is an example of
               <PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>
-                {I18n.t("EEGLink")}
+                {" EEG "}
               </PopUpLink>
-              {I18n.t("deviceCanDetect")}
+              data, showing the electrical activity of the brain
             </Text>
             <Image
               source={require("../../assets/swipeicon.png")}
@@ -129,49 +120,37 @@ class SlideOne extends Component {
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>
-              {I18n.t("tryBlinkingEyes")}
+              Noise in the EEG signal
             </Text>
             <Text style={styles.body}>
-              {I18n.t("doesSignalChange")}
-            </Text>
-            <Text style={styles.body}>
-              {I18n.t("eyeMovementCreates")}
+              The EEG is subject to many different types of{' '}
               <PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>
-                {I18n.t("noiseLink")}
+                noise.
               </PopUpLink>
-              {I18n.t("inEEGSignal")}
+            </Text>
+            <Text style={styles.body}>
+              Blinks, for example, produce large fluctuations in the signal due to muscle activity
             </Text>
           </View>
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>
-              {I18n.t("tryThinkingAbout")}
+              EEG cannot read minds
             </Text>
             <Text style={styles.body}>
-              {I18n.t("doesSignalChange")}
+              For the most part, raw EEG data is pretty uninformative
             </Text>
             <Text style={styles.body}>
-              {I18n.t("althoughEEG")}
+              With processing, EEG can give clues to overall brain activity, but it's not capable of{' '}
               <PopUpLink onPress={() => this.setState({ popUp3Visible: true })}>
                 {I18n.t("readingMindsLink")}
               </PopUpLink>.
-            </Text>
-          </View>
-
-          <View style={styles.pageStyle}>
-            <Text style={styles.header}>
-              {I18n.t("tryClosingEyes10")}
-            </Text>
-            <Text style={styles.body}>
-              {I18n.t("mayNoticeSignalChange")}
-              <PopUpLink onPress={() => this.setState({ popUp4Visible: true })}>
-                {I18n.t("alphaWavesLink")}
-              </PopUpLink>
             </Text>
             <LinkButton path="./slideTwo">
               {I18n.t("nextLink")}
             </LinkButton>
           </View>
+
         </ViewPagerAndroid>
 
         <PopUp
@@ -197,24 +176,6 @@ class SlideOne extends Component {
           title={I18n.t("cannotReadMindsTitle")}
         >
           {I18n.t("cannotReadMindsDescription")}
-        </PopUp>
-
-        <PopUp
-          onClose={() => this.setState({ popUp4Visible: false })}
-          visible={this.state.popUp4Visible}
-          title={I18n.t("eyeRythymsTitle")}
-        >
-          {I18n.t("eyeRythymsDescription")}
-        </PopUp>
-
-        <PopUp
-          onClose={() => this.props.history.push("/connectorOne")}
-          visible={
-            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
-          }
-          title={I18n.t("museDisconnectedTitle")}
-        >
-          {I18n.t("museDisconnectedDescription")}
         </PopUp>
       </View>
     );
@@ -250,6 +211,8 @@ const styles = MediaQueryStyleSheet.create(
       justifyContent: "space-around",
       alignItems: "stretch"
     },
+
+    graphView: {flex: 1},
 
     graphContainer: {
       flex: 4,

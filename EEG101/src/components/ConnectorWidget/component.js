@@ -7,7 +7,6 @@ import {
   View,
   TouchableOpacity,
   DeviceEventEmitter,
-  StyleSheet,
   PermissionsAndroid,
   Modal,
   ScrollView,
@@ -140,7 +139,9 @@ export default class ConnectorWidget extends Component {
   // Calls getAndConnectoToDevice in native ConnectorModule after creating promise listeners
   startConnector() {
     if (
-      this.props.connectionStatus === config.connectionStatus.NOT_YET_CONNECTED
+      this.props.connectionStatus ===
+        config.connectionStatus.NOT_YET_CONNECTED ||
+      this.props.connectionStatus === config.connectionStatus.NO_MUSES
     ) {
       Connector.init();
 
@@ -182,13 +183,17 @@ export default class ConnectorWidget extends Component {
 
   getAndConnectToDevice() {
     this.props.setConnectionStatus(config.connectionStatus.SEARCHING);
-    this.props.getMuses().then(action => {
-      if (action.payload.length > 1) {
-        this.setState({ musePopUpIsVisible: true });
-      } else if (action.payload.length === 1) {
-        Connector.connectToMuseWithIndex(0);
-      }
-    });
+    setTimeout(
+      () =>
+        this.props.getMuses().then(action => {
+          if (action.payload.length > 1) {
+            this.setState({ musePopUpIsVisible: true });
+          } else if (action.payload.length === 1) {
+            Connector.connectToMuseWithIndex(0);
+          }
+        }),
+      2000
+    );
   }
 
   render() {
@@ -246,10 +251,12 @@ export default class ConnectorWidget extends Component {
           <View style={styles.container}>
             <View style={styles.connectingContainer}>
               <ActivityIndicator color={"#94DAFA"} size={"large"} />
-              <View >
-              <Text style={styles.connecting}>Connecting...</Text>
-              <Text style={styles.connectingName}>{this.props.availableMuses[this.state.selectedMuse].name}</Text>
-            </View>
+              <View>
+                <Text style={styles.connecting}>Connecting...</Text>
+                <Text style={styles.connectingName}>
+                  {this.props.availableMuses[this.state.selectedMuse].name}
+                </Text>
+              </View>
             </View>
           </View>
         );
@@ -279,15 +286,15 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     connectingContainer: {
-      alignSelf: 'center',
+      alignSelf: "center",
       borderRadius: 50,
       backgroundColor: colors.white,
       flexDirection: "row",
-      alignItems: 'center',
+      alignItems: "center",
       justifyContent: "space-around",
       padding: 20,
       height: 70,
-      width: 240,
+      width: 240
     },
 
     body: {
@@ -325,9 +332,9 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     connectingName: {
-      fontFamily: 'Roboto-Light',
+      fontFamily: "Roboto-Light",
       fontSize: 18,
-      color: colors.turquoise,
+      color: colors.turquoise
     },
 
     modalBackground: {

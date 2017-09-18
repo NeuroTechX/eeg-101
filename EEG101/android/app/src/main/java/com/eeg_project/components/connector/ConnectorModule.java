@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.choosemuse.libmuse.ConnectionState;
 import com.choosemuse.libmuse.Muse;

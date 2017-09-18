@@ -1,26 +1,20 @@
 import React, { Component } from "react";
 import {
-  StyleSheet,
   Text,
   View,
   ViewPagerAndroid,
-  Image,
   NativeEventEmitter,
   NativeModules,
-  Vibration,
-  TouchableOpacity
+  Vibration
 } from "react-native";
 import { connect } from "react-redux";
 import config from "../redux/config";
 import { MediaQueryStyleSheet } from "react-native-responsive";
-import { Link } from "react-router-native";
 import Torch from "react-native-torch";
 import Classifier from "../interface/Classifier.js";
-import Button from "../components/Button.js";
 import LinkButton from "../components/LinkButton";
 import PlayPauseButton from "../components/PlayPauseButton.js";
 import PopUp from "../components/PopUp";
-import PopUpLink from "../components/PopUpLink";
 import I18n from "../i18n/i18n";
 import BCIHistoryChart from "../components/BCIHistoryChart.js";
 import NoiseIndicator from "../components/NoiseIndicator.js";
@@ -43,7 +37,7 @@ class ClassifierRun extends Component {
       popUp1Visible: false,
       data: new Array(30).fill(1),
       noise: [],
-      isRunning: false,
+      isRunning: false
     };
   }
 
@@ -56,7 +50,6 @@ class ClassifierRun extends Component {
   }
 
   componentDidMount() {
-
     // Light action
     if (this.props.bciAction === config.bciAction.LIGHT) {
       const lightListener = new NativeEventEmitter(NativeModules.Classifier);
@@ -78,9 +71,8 @@ class ClassifierRun extends Component {
         this.setState({ noise: Object.keys(message) });
         //Torch.switchState(false);
       });
-    }
-    // Vibration action
-    else {
+    } else {
+      // Vibration action
       const vibrationListener = new NativeEventEmitter(
         NativeModules.Classifier
       );
@@ -102,8 +94,9 @@ class ClassifierRun extends Component {
         "NOISE",
         message => {
           this.setState({ noise: Object.keys(message) });
-          Vibration.cancel();
-
+          if (Object.keys(message).length >= 1) {
+            Vibration.cancel();
+          }
         }
       );
     }
@@ -121,31 +114,39 @@ class ClassifierRun extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.graphContainer}>
-          <BCIHistoryChart data={this.state.data} width={this.props.dimensions.width} height={this.props.dimensions.height} />
-          <View style={{position: 'absolute', top: 30, right:30}}>
-          <NoiseIndicator noise={this.state.noise} width={100} height={100} />
+          <BCIHistoryChart
+            data={this.state.data}
+            width={this.props.dimensions.width}
+            height={this.props.dimensions.height}
+          />
+          <View style={{ position: "absolute", top: 30, right: 30 }}>
+            <NoiseIndicator noise={this.state.noise} width={100} height={100} />
+          </View>
         </View>
-        </View>
-        <Text style={styles.currentTitle}>{I18n.t('bciRunSlideTitle')}</Text>
+        <Text style={styles.currentTitle}>
+          {I18n.t("bciRunSlideTitle")}
+        </Text>
         <ViewPagerAndroid style={styles.viewPager} initialPage={0}>
           <View style={styles.pageStyle}>
-            <View style={{padding: 40}}>
-            <PlayPauseButton
-              onPress={() => {
-                if (this.state.isRunning) {
-                  Classifier.stopCollecting();
-                } else {
-                  Classifier.runClassification();
-                }
-                this.setState({ isRunning: !this.state.isRunning });
-                Torch.switchState(false);
-                Vibration.cancel();
-              }}
-              isRunning={this.state.isRunning}
-              size={80}
-            />
-          </View>
-            <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+            <View style={{ padding: 40 }}>
+              <PlayPauseButton
+                onPress={() => {
+                  if (this.state.isRunning) {
+                    Classifier.stopCollecting();
+                  } else {
+                    Classifier.runClassification();
+                  }
+                  this.setState({ isRunning: !this.state.isRunning });
+                  Torch.switchState(false);
+                  Vibration.cancel();
+                }}
+                isRunning={this.state.isRunning}
+                size={80}
+              />
+            </View>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-around" }}
+            >
               <View style={{ flex: 1 }}>
                 <LinkButton path="/end">
                   {I18n.t("endEeg101")}
@@ -160,13 +161,13 @@ class ClassifierRun extends Component {
           </View>
         </ViewPagerAndroid>
         <PopUp
-          onClose={()=>this.props.history.push('/connectorOne')}
+          onClose={() => this.props.history.push("/connectorOne")}
           visible={
             this.props.connectionStatus === config.connectionStatus.DISCONNECTED
           }
-          title={I18n.t('museDisconnectedTitle')}
+          title={I18n.t("museDisconnectedTitle")}
         >
-			{I18n.t('museDisconnectedDescription')}
+          {I18n.t("museDisconnectedDescription")}
         </PopUp>
       </View>
     );
@@ -209,7 +210,7 @@ const styles = MediaQueryStyleSheet.create(
 
     graphContainer: {
       backgroundColor: colors.skyBlue,
-      flex: 4,
+      flex: 4
     },
 
     header: {

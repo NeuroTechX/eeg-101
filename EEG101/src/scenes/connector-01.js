@@ -11,7 +11,6 @@ import {
   setOfflineMode
 } from "../redux/actions";
 
-// Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
   return {
     connectionStatus: state.connectionStatus,

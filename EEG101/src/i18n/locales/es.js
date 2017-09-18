@@ -33,6 +33,7 @@ export default {
 	//slide-01.js
 	introductionSlideTitle:  'INTRODUCCIÓN',
 	brainElectricity:  'Tu cerebro produce electricidad.',
+	brainElectricityOffline:  '',
 	EEGLink:  'EEG',
 	deviceCanDetect:  ' que estás utilizando, es posible detectar la actividad eléctrica de tu cerebro.',
 	usingThe:  'A través del dispositivo ',
@@ -241,6 +242,8 @@ export default {
 	trainSamples:  'muestras',
 	trainStop:  'ALTO',
 	trainCollect:  'ADQUIRIR',
+	trainCollectMore:  'ADQUIRIR',
+	teamMemberBrian:  '',
 	trainOn:  'ON',
 	trainOff:  'OFF',
 	trainFitClassifier:  'ENTRENAR AL CLASIFICADOR',

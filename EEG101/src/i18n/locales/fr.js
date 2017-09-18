@@ -33,6 +33,7 @@ export default {
 	//slide-01.js
 	introductionSlideTitle:  'INTRODUCTION FR',
 	brainElectricity:  'Your brain produces electricity.  FR',
+	brainElectricityOffline:  '',
 	EEGLink:  'EEG FR',
 	deviceCanDetect:  ' device that you are wearing, we can detect the electrical activity of your brain. FR',
 	usingThe:  'Using the  FR',
@@ -241,6 +242,8 @@ export default {
 	trainSamples:  'samples FR',
 	trainStop:  'STOP FR',
 	trainCollect:  'COLLECT FR',
+	trainCollectMore:  'COLLECT FR',
+	teamMemberBrian:  '',
 	trainOn:  'ON FR',
 	trainOff:  'OFF FR',
 	trainFitClassifier:  'FIT CLASSIFIER FR',

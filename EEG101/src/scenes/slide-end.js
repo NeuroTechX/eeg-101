@@ -27,21 +27,6 @@ class End extends Component {
 
 
 
-  renderButton() {
-    if (this.props.isOfflineMode) {
-      return (
-        <LinkButton path="/offline/slideOne">
-          {I18n.t("getStartedLink")}
-        </LinkButton>
-      );
-    } else
-      return (
-        <LinkButton path="/connectorThree">
-          {I18n.t("restartButton")}
-        </LinkButton>
-      );
-  }
-
   render() {
     return (
       <Image source={require('../assets/clouds.png')} style={styles.container} resizeMode='stretch'>
@@ -51,7 +36,7 @@ class End extends Component {
           <View style={styles.page}>
             <View style={styles.titleBox}>
               <Text style={styles.title}>{I18n.t('thanksForCompleting')}</Text>
-              <Text style={[styles.body, {margin: 10}]}>{I18n.t('hopeYouEnjoyed')}</Text>
+              <Text style={styles.body}>{I18n.t('hopeYouEnjoyed')}</Text>
             </View>
 
             <View style={styles.listBox}>
@@ -117,7 +102,9 @@ class End extends Component {
             </View>
 
             <View style={styles.buttonBox}>
-              {this.renderButton()}
+              <LinkButton path={this.props.isOfflineMode ? "/offline/slideOne" : "/connectorThree"}>
+                {I18n.t("restartButton")}
+              </LinkButton>
             </View>
           </View>
         </ViewPagerAndroid>
@@ -134,10 +121,11 @@ const styles = MediaQueryStyleSheet.create(
       fontSize: 17,
       color: colors.white,
       textAlign: 'center',
+      paddingLeft: 15,
+      paddingRight: 15,
     },
 
     container: {
-
       flex: 1,
       justifyContent: 'space-around',
       alignItems: 'stretch',

@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
+import {Text, View, ViewPagerAndroid } from "react-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 
-import WhiteButton from "../../components/LinkButton";
 import config from "../../redux/config";
 import LinkButton from "../../components/LinkButton";
 import PopUp from "../../components/PopUp";
@@ -15,7 +14,6 @@ import GraphView from "../../interface/GraphView";
 
 function mapStateToProps(state) {
   return {
-    connectionStatus: state.connectionStatus,
     isOfflineMode: state.isOfflineMode
   };
 }
@@ -40,7 +38,6 @@ class SlideThree extends Component {
   }
 
   render() {
-    console.log("location: " + this.props.location.pathname);
     return (
       <View style={styles.container}>
         <View style={styles.graphContainer}>
@@ -74,7 +71,7 @@ class SlideThree extends Component {
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>
-              {I18n.t("deviceHas4Electrodes")}
+              EEG devices have multiple electrodes
             </Text>
             <View style={{ flexDirection: "row" }}>
               <Text style={[styles.body, { flex: 0.5, marginRight: 10 }]}>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, ViewPagerAndroid, Image, TouchableOpacity } from "react-native";
+import { Text, View, ViewPagerAndroid, Image } from "react-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import config from "../redux/config";
@@ -9,10 +9,8 @@ import Classifier from "../interface/Classifier.js";
 import I18n from "../i18n/i18n";
 import DataCollector from "../components/DataCollector.js";
 import ClassifierInfoDisplayer from "../components/ClassifierInfoDisplayer.js";
-import LinkButton from "../components/LinkButton";
 import DecisionButton from "../components/DecisionButton.js";
 import PopUp from "../components/PopUp";
-import PopUpLink from "../components/PopUpLink";
 import * as colors from "../styles/colors";
 
 function mapStateToProps(state) {
@@ -40,17 +38,17 @@ class BCITwo extends Component {
     // Initialize States
     this.state = {
       popUpVisible: false,
-      enableScroll: false,
+      enableScroll: this.props.bciAction.length >= 3,
       slidePosition: 0,
       maxSlidePosition: 0
     };
   }
 
   componentDidMount() {
-    Classifier.init()
+    Classifier.init();
   }
 
-  handleScroll() {
+  renderSwipeImage() {
     if (this.state.enableScroll === true) {
       return (
         <Image
@@ -70,11 +68,14 @@ class BCITwo extends Component {
           initialPage={0}
           scrollEnabled={this.state.enableScroll}
           // Receives a native callback event e that is used to set slidePosition state
-          onPageSelected={e => {
-            this.setState({ slidePosition: e.nativeEvent.position });
-            if (e.nativeEvent.position > this.state.maxSlidePosition && this.state.maxSlidePosition < 2) {
+          onPageSelected={event => {
+            this.setState({ slidePosition: event.nativeEvent.position });
+            if (
+              event.nativeEvent.position > this.state.maxSlidePosition &&
+              this.state.maxSlidePosition < 2
+            ) {
               this.setState({
-                maxSlidePosition: e.nativeEvent.position,
+                maxSlidePosition: event.nativeEvent.position,
                 enableScroll: false
               });
             }
@@ -82,12 +83,18 @@ class BCITwo extends Component {
         >
           <View style={styles.pageStyle}>
             <View style={styles.textWrapper}>
-              <Text style={styles.title}>{I18n.t('step1Title')}</Text>
-              <Text style={styles.subTitle}>{I18n.t('chooseCommand')}</Text>
+              <Text style={styles.title}>
+                {I18n.t("step1Title")}
+              </Text>
+              <Text style={styles.subTitle}>
+                {I18n.t("chooseCommand")}
+              </Text>
             </View>
             <View style={styles.contentContainer}>
               <View style={styles.textWrapper}>
-                <Text style={styles.body}>{I18n.t('bciCommands')}</Text>
+                <Text style={styles.body}>
+                  {I18n.t("bciCommands")}
+                </Text>
               </View>
               <View style={styles.decisionContainer}>
                 <DecisionButton
@@ -100,7 +107,11 @@ class BCITwo extends Component {
                   }}
                   active={this.props.bciAction == config.bciAction.VIBRATE}
                 >
-                  <Image style={{height: 50}} source={require('../assets/vibrate.png')} resizeMode='contain'/>
+                  <Image
+                    style={{ height: 50 }}
+                    source={require("../assets/vibrate.png")}
+                    resizeMode="contain"
+                  />
                   <Text style={styles.iconText}>Vibrate</Text>
                 </DecisionButton>
                 <DecisionButton
@@ -113,21 +124,28 @@ class BCITwo extends Component {
                   }}
                   active={this.props.bciAction == config.bciAction.LIGHT}
                 >
-                  <Image style={{height: 50}} source={require('../assets/light.png')} resizeMode='contain'/>
+                  <Image
+                    style={{ height: 50 }}
+                    source={require("../assets/light.png")}
+                    resizeMode="contain"
+                  />
                   <Text style={styles.iconText}>Light</Text>
                 </DecisionButton>
               </View>
             </View>
             <View style={{ flex: 1 }}>
-              {this.handleScroll()}
+              {this.renderSwipeImage()}
             </View>
           </View>
 
           <View style={styles.pageStyle}>
             <View style={styles.textWrapper}>
-              <Text style={styles.title}>{I18n.t('step2Title')}</Text>
-              <Text style={styles.subTitle}>{I18n.t('offData')}</Text>
-
+              <Text style={styles.title}>
+                {I18n.t("step2Title")}
+              </Text>
+              <Text style={styles.subTitle}>
+                {I18n.t("offData")}
+              </Text>
             </View>
             <View style={styles.contentContainer}>
               <DataCollector
@@ -137,14 +155,18 @@ class BCITwo extends Component {
               />
             </View>
             <View style={{ flex: 1 }}>
-              {this.handleScroll()}
+              {this.renderSwipeImage()}
             </View>
           </View>
 
           <View style={styles.pageStyle}>
             <View style={styles.textWrapper}>
-              <Text style={styles.title}>{I18n.t('step3Title')}</Text>
-              <Text style={styles.subTitle}>{I18n.t('onData')}</Text>
+              <Text style={styles.title}>
+                {I18n.t("step3Title")}
+              </Text>
+              <Text style={styles.subTitle}>
+                {I18n.t("onData")}
+              </Text>
             </View>
             <View style={styles.contentContainer}>
               <DataCollector
@@ -154,15 +176,18 @@ class BCITwo extends Component {
               />
             </View>
             <View style={{ flex: 1 }}>
-              {this.handleScroll()}
+              {this.renderSwipeImage()}
             </View>
           </View>
 
           <View style={styles.pageStyle}>
             <View style={styles.textWrapper}>
-              <Text style={styles.title}>{I18n.t('step4Title')}</Text>
-              <Text style={styles.subTitle}>{I18n.t('trainClassifier')}</Text>
-
+              <Text style={styles.title}>
+                {I18n.t("step4Title")}
+              </Text>
+              <Text style={styles.subTitle}>
+                {I18n.t("trainClassifier")}
+              </Text>
             </View>
             <View style={styles.contentContainer}>
               <ClassifierInfoDisplayer
@@ -174,13 +199,13 @@ class BCITwo extends Component {
         </ViewPagerAndroid>
 
         <PopUp
-          onClose={()=>this.props.history.push('/connectorOne')}
+          onClose={() => this.props.history.push("/connectorOne")}
           visible={
             this.props.connectionStatus === config.connectionStatus.DISCONNECTED
           }
-          title={I18n.t('museDisconnectedTitle')}
+          title={I18n.t("museDisconnectedTitle")}
         >
-			{I18n.t('museDisconnectedDescription')}
+          {I18n.t("museDisconnectedDescription")}
         </PopUp>
       </View>
     );
@@ -232,7 +257,7 @@ const styles = MediaQueryStyleSheet.create(
     iconText: {
       fontFamily: "Roboto-Medium",
       color: colors.black,
-      fontSize: 20,
+      fontSize: 20
     },
 
     graphContainer: {
@@ -265,7 +290,7 @@ const styles = MediaQueryStyleSheet.create(
     textWrapper: {
       flex: 2,
       justifyContent: "center",
-      alignItems: 'center',
+      alignItems: "center"
     },
 
     dataClassContainer: {
@@ -289,7 +314,6 @@ const styles = MediaQueryStyleSheet.create(
       height: 50
     }
   },
-
   // Responsive styles
   {
     "@media (min-device-height: 700)": {

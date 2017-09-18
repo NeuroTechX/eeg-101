@@ -56,7 +56,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     private FFT fft;
     public BandPowerExtractor bandExtractor;
 
-    public NoiseDetector noiseDetector = new NoiseDetector(600, getReactApplicationContext());
+    public NoiseDetector noiseDetector = new NoiseDetector(500, getReactApplicationContext());
     public GaussianNaiveBayesClassifier classifier = new GaussianNaiveBayesClassifier();
     public LinkedList<double[]> trainingData = new LinkedList<>();
     public LinkedList<Integer> labels = new LinkedList<>();
@@ -267,8 +267,8 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         for(int i = 0; i < k; i++){
 
 
-            LinkedList<Integer> testIndices = new LinkedList<Integer>();
             LinkedList<Integer> trainIndices = new LinkedList<Integer>();
+            LinkedList<Integer> testIndices = new LinkedList<Integer>();
             LinkedList<double[]> trainData = new LinkedList<double[]>();
             LinkedList<double[]> testData = new LinkedList<double[]>();
             LinkedList<Integer> trainLabels = new LinkedList<Integer>();
@@ -310,9 +310,6 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     // ------------------------------------------------------------------------------
     // Helper Classes
 
-    // Test this out with different headbands, althought the continually smoothing design is a little bit slower and hard to interpret there are
-    // promisingly low accuracies coming out of it
-    //
 
     public class ClassifierRunnable implements Runnable {
 
@@ -376,7 +373,6 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
             psdBuffer2D.update(PSD);
             PSD = psdBuffer2D.mean();
         }
-
     }
 
 

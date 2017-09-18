@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
+import { Text, View, ViewPagerAndroid, Image } from "react-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import I18n from "../i18n/i18n";
@@ -64,7 +64,7 @@ class BCIOne extends Component {
                 {I18n.t('machineLearning')}
               </PopUpLink>
             </Text>
-            <LinkButton path={this.props.isOfflineMode ? "/end" : "/bciTwo"}> {I18n.t('buildBci')} </LinkButton>
+            <LinkButton path={this.props.isOfflineMode ? "/end" : "/bciTwo"}> {this.props.isOfflineMode ? 'END' : I18n.t('buildBci')} </LinkButton>
           </View>
 
         </ViewPagerAndroid>
@@ -154,12 +154,6 @@ const styles = MediaQueryStyleSheet.create(
       alignItems: "stretch",
       justifyContent: "space-around"
     },
-
-    image: {
-      flex: 1,
-      width: null,
-      height: null
-    }
   },
   // Responsive styles
   {
