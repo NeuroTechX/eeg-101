@@ -10,6 +10,10 @@ import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.lang.reflect.Array;
+import java.nio.ByteBuffer;
 import java.util.Arrays; // For printing arrays when debugging
 
 import javax.annotation.Nullable;
