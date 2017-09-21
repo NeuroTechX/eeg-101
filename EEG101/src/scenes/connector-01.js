@@ -1,17 +1,30 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { Link } from "react-router-native";
+import { Text, View } from "react-native";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import LinkButton from "../components/WhiteLinkButton";
-import I18n from '../i18n/i18n';
+import SandboxButton from "../components/SandboxButton";
+import I18n from "../i18n/i18n";
 import * as colors from "../styles/colors";
+import {
+  setOfflineMode
+} from "../redux/actions";
 
-// Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
   return {
-    connectionStatus: state.connectionStatus
+    connectionStatus: state.connectionStatus,
+    isOfflineMode: state.isOfflineMode
   };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      setOfflineMode,
+    },
+    dispatch
+  );
 }
 
 class ConnectorOne extends Component {
@@ -19,23 +32,53 @@ class ConnectorOne extends Component {
     super(props);
   }
 
+  renderButton() {
+    if (this.props.isOfflineMode) {
+      return (
+        <LinkButton path="/offline/slideOne">
+          {I18n.t("getStartedLink")}
+        </LinkButton>
+      );
+    } else
+      return (
+        <LinkButton path="/ConnectorTwo">
+          {I18n.t("connector2Link")}
+        </LinkButton>
+      );
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.titleBox}>
-          <Text style={styles.title}>{I18n.t('step1Title')}</Text>
-          <Text style={styles.instructions}>{I18n.t('musePowerOnWarning')}</Text>
-          <Text style={styles.body}>{I18n.t('museFirstGenWarning')}</Text>
+          <Text style={styles.title}>
+            {I18n.t("step1Title")}
+          </Text>
+          <Text style={styles.instructions}>
+            {I18n.t("musePowerOnWarning")}
+          </Text>
+          <Text style={styles.body}>
+            {I18n.t("museFirstGenWarning")}
+          </Text>
         </View>
+        <View style={styles.offlineButtonContainer}>
+        <SandboxButton
+          onPress={() =>
+            this.props.setOfflineMode(!this.props.isOfflineMode)}
+          active={this.props.isOfflineMode}
+        >
+          {this.props.isOfflineMode ? I18n.t("offlineModeDisable") : I18n.t("offlineModeEnable")}
+        </SandboxButton>
+      </View>
         <View style={styles.buttonContainer}>
-          <LinkButton path="/connectorTwo">{I18n.t('connector2Link')}</LinkButton>
+          {this.renderButton()}
         </View>
       </View>
     );
   }
 }
 
-export default connect(mapStateToProps)(ConnectorOne);
+export default connect(mapStateToProps, mapDispatchToProps)(ConnectorOne);
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -69,6 +112,13 @@ const styles = MediaQueryStyleSheet.create(
     buttonContainer: {
       flex: 1,
       margin: 40,
+      justifyContent: "center"
+    },
+
+    offlineButtonContainer: {
+      flex: 1,
+      marginLeft: 40,
+      marginRight: 40,
       justifyContent: "center"
     },
 

@@ -13,7 +13,6 @@ import * as colors from "../styles/colors";
 function mapStateToProps(state) {
   return {
     connectionStatus: state.connectionStatus,
-    isOfflineMode: state.isOfflineMode
   };
 }
 
@@ -31,10 +30,6 @@ class ConnectorTwo extends Component {
           {I18n.t("getStartedLink")}
         </LinkButton>
       );
-    } else if (this.props.isOfflineMode) {
-      return (<LinkButton path="/slideOne">
-        {I18n.t("getStartedLink")}
-      </LinkButton>)
     } else return (
         <WhiteButton onPress={() => null} disabled={true}>
           {I18n.t("getStartedLink")}

@@ -556,6 +556,10 @@ public class GaussianNaiveBayesClassifier {
 		// Returns:
 		//  index of the element with the highest value in x
 
+		if(x.length <= 1){
+			return 0;
+		}
+
 		double max = x[0];
 		int maxInd = 0;
 		for (int i = 1; i < x.length; i++) {

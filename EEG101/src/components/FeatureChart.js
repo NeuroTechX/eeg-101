@@ -2,11 +2,10 @@
 // A chart to help people understand the features in the classifier
 
 import React, { Component } from "react";
-import { Image, Text, View, TouchableOpacity } from "react-native";
+import { Image, Text, View,} from "react-native";
 import {
   VictoryChart,
   VictoryBar,
-  VictoryLegend,
   VictoryGroup,
   VictoryAxis
 } from "victory-native";

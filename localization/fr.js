@@ -5,6 +5,7 @@ export default {
 	museDisconnectedTitle:  'Muse Disconnected FR',
 	museDisconnectedDescription:  'Please reconnect to continue the tutorial. FR',
 	closeButton:  'Close FR',
+	connectButton:  '',
 
 	//begin-landing.js
 	welcomeEEG101:  'Welcome to EEG 101 FR',
@@ -15,6 +16,8 @@ export default {
 	step1Title:  'Step 1 FR',
 	musePowerOnWarning:  'Make sure your Muse is powered on. FR',
 	museFirstGenWarning:  'If you are using a first generation Muse you may need to pair your device in bluetooth settings. FR',
+	offlineModeEnable:  '',
+	offlineModeDisable:  '',
 	connector2Link:  ' OK, IT\'S ON  FR',
 
 	//connector-02.js
@@ -197,7 +200,6 @@ export default {
 	requiresLocation:  'This app requires coarse location permission in order to discover and connect to the 2016 Muse. FR',
 	statusConnected:  'Connected FR',
 	statusNoMusesTitle:  'No Muses were detected. FR',
-	statusNoMusesDescription:  'If you don\'t own a Muse, don\'t worry! We are working on an offline mode that should be avaible in early 2017! FR',
 	searchAgain:  ' SEARCH AGAIN  FR',
 	statusConnecting:  'Connecting... FR',
 	statusDisconnected:  'Searching for Muses FR',

@@ -14,10 +14,18 @@ import LinkButton from '../components/WhiteLinkButton';
 import I18n from '../i18n/i18n';
 import * as colors from "../styles/colors";
 
+function mapStateToProps(state) {
+  return {
+    isOfflineMode: state.isOfflineMode,
+  };
+}
+
 class End extends Component {
   constructor(props) {
     super(props);
   }
+
+
 
   render() {
     return (
@@ -28,7 +36,7 @@ class End extends Component {
           <View style={styles.page}>
             <View style={styles.titleBox}>
               <Text style={styles.title}>{I18n.t('thanksForCompleting')}</Text>
-              <Text style={[styles.body, {margin: 10}]}>{I18n.t('hopeYouEnjoyed')}</Text>
+              <Text style={styles.body}>{I18n.t('hopeYouEnjoyed')}</Text>
             </View>
 
             <View style={styles.listBox}>
@@ -94,7 +102,9 @@ class End extends Component {
             </View>
 
             <View style={styles.buttonBox}>
-              <LinkButton path='/connectorThree'>{I18n.t('restartButton')}</LinkButton>
+              <LinkButton path={this.props.isOfflineMode ? "/offline/slideOne" : "/connectorThree"}>
+                {I18n.t("restartButton")}
+              </LinkButton>
             </View>
           </View>
         </ViewPagerAndroid>
@@ -111,10 +121,11 @@ const styles = MediaQueryStyleSheet.create(
       fontSize: 17,
       color: colors.white,
       textAlign: 'center',
+      paddingLeft: 15,
+      paddingRight: 15,
     },
 
     container: {
-
       flex: 1,
       justifyContent: 'space-around',
       alignItems: 'stretch',
@@ -229,4 +240,4 @@ const styles = MediaQueryStyleSheet.create(
     }
   });
 
-export default connect(({route}) => ({route}))(End);
+export default connect(mapStateToProps)(End);

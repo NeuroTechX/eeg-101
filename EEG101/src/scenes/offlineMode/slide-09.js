@@ -2,54 +2,56 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
-import config from "../redux/config";
-import { bindActionCreators } from "redux";
-import { setGraphViewDimensions } from "../redux/actions";
-import LinkButton from "../components/LinkButton";
-import PopUp from "../components/PopUp";
-import PopUpLink from "../components/PopUpLink";
-import I18n from "../i18n/i18n";
-import * as colors from "../styles/colors";
+
+import LinkButton from "../../components/LinkButton";
+import config from "../../redux/config";
+import PopUp from "../../components/PopUp";
+import PopUpList from "../../components/PopUpList";
+import ListItemBlock from "../../components/ListItemBlock";
+import PopUpLink from "../../components/PopUpLink";
+import I18n from "../../i18n/i18n";
+import * as colors from "../../styles/colors";
 
 //Interfaces. For elements that bridge to native
-import PSDGraphView from "../interface/PSDGraphView";
+import WaveGraphView from "../../interface/WaveGraphView";
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
   return {
     dimensions: state.graphViewDimensions,
     connectionStatus: state.connectionStatus,
+    isOfflineMode: state.isOfflineMode
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    {
-      setGraphViewDimensions,
-    },
-    dispatch
-  );
-}
-
-class SlideEight extends Component {
+class SlideNine extends Component {
   constructor(props) {
     super(props);
 
     // Initialize States
     this.state = {
-      popUp1Visible: false
+      channelOfInterest: 1,
+      popUp1Visible: false,
+      popUp2Visible: false
     };
+  }
+
+  offlineDataSource() {
+    if (this.props.isOfflineMode) {
+      return "relax";
+    }
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <PSDGraphView
+        <WaveGraphView
+          offlineData={this.offlineDataSource()}
           dimensions={this.props.dimensions}
         />
 
         <Text style={styles.currentTitle}>
-          {I18n.t("PSDSlideTitle")}
+          {I18n.t("brainWavesSlideTitle")}
         </Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
@@ -58,26 +60,66 @@ class SlideEight extends Component {
         >
           <View style={styles.pageStyle}>
             <Text style={styles.header}>
-              {I18n.t("powerSpectralDensity")}
+              {I18n.t("whatDoFrequenciesRepresent")}
             </Text>
             <Text style={styles.body}>
-              {I18n.t("whenWeApplyFourier")}
+              {I18n.t("PSDDividedBands")}
+            </Text>
+          </View>
+
+          <View style={styles.pageStyle}>
+            <Text style={styles.header}>
+              {I18n.t("brainWaves")}
+            </Text>
+            <Text style={styles.body}>
+              {I18n.t("freqCorrelatedBrain")}
               <PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>
-                {I18n.t("powerLink")}
+                {I18n.t("brainWavesLink")}
               </PopUpLink>.
             </Text>
-            <LinkButton path="./slideNine">
+          </View>
+
+          <View style={styles.pageStyle}>
+            <Text style={styles.header}>
+              {I18n.t("harnessingBrainWaves")}
+            </Text>
+            <Text style={styles.body}>
+              {I18n.t("noticePowerChanges")}
+              {I18n.t("BCILink")}.
+            </Text>
+            <LinkButton path="/bciOne">
               {I18n.t("nextLink")}
             </LinkButton>
           </View>
         </ViewPagerAndroid>
 
-        <PopUp
+        <PopUpList
           onClose={() => this.setState({ popUp1Visible: false })}
           visible={this.state.popUp1Visible}
-          title={I18n.t("powerTitle")}
         >
-          {I18n.t("powerDescription")}
+          <ListItemBlock title={I18n.t("deltaTitle")}>
+            {I18n.t("deltaDescription")}
+          </ListItemBlock>
+          <ListItemBlock title={I18n.t("thetaTitle")}>
+            {I18n.t("thetaDescription")}
+          </ListItemBlock>
+          <ListItemBlock title={I18n.t("alphaTitle")}>
+            {I18n.t("alphaDescription")}
+          </ListItemBlock>
+          <ListItemBlock title={I18n.t("betaTitle")}>
+            {I18n.t("betaDescription")}
+          </ListItemBlock>
+          <ListItemBlock title={I18n.t("gammaTitle")}>
+            {I18n.t("gammaDescription")}
+          </ListItemBlock>
+        </PopUpList>
+
+        <PopUp
+          onClose={() => this.setState({ popUp2Visible: false })}
+          visible={this.state.popUp2Visible}
+          title={I18n.t("BCITitle")}
+        >
+          {I18n.t("BCIDescription")}
         </PopUp>
 
         <PopUp
@@ -108,7 +150,7 @@ const styles = MediaQueryStyleSheet.create(
     body: {
       fontFamily: "Roboto-Light",
       color: colors.black,
-      fontSize: 17
+      fontSize: 19
     },
 
     container: {
@@ -169,4 +211,4 @@ const styles = MediaQueryStyleSheet.create(
   }
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(SlideEight);
+export default connect(mapStateToProps)(SlideNine);

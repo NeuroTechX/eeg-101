@@ -1,58 +1,64 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
 import { connect } from "react-redux";
-import LinkButton from "../components/LinkButton";
-import PopUp from "../components/PopUp";
-import PopUpLink from "../components/PopUpLink";
 import { MediaQueryStyleSheet } from "react-native-responsive";
+import { bindActionCreators } from "redux";
+
+import config from "../../redux/config";
+import { setGraphViewDimensions } from "../../redux/actions";
+import LinkButton from "../../components/LinkButton";
+import PopUp from "../../components/PopUp";
+import PopUpLink from "../../components/PopUpLink";
+import I18n from "../../i18n/i18n";
+import * as colors from "../../styles/colors";
 
 //Interfaces. For elements that bridge to native
-import GraphView from "../interface/GraphView";
-import FilterGraphView from "../interface/FilterGraphView";
-import config from "../redux/config";
-import I18n from "../i18n/i18n";
-import * as colors from "../styles/colors";
+import PSDGraphView from "../../interface/PSDGraphView";
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
   return {
+    dimensions: state.graphViewDimensions,
     connectionStatus: state.connectionStatus,
-    dimensions: state.graphviewDimensions,
+    isOfflineMode: state.isOfflineMode
   };
 }
 
-class SlideFour extends Component {
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      setGraphViewDimensions,
+    },
+    dispatch
+  );
+}
+
+class SlideEight extends Component {
   constructor(props) {
     super(props);
-    isVisible: true;
 
     // Initialize States
     this.state = {
-      popUpVisible: false
+      popUp1Visible: false
     };
+  }
+
+  offlineDataSource() {
+    if (this.props.isOfflineMode) {
+      return "clean";
+    }
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.halfGraphContainer}>
-          <GraphView style={{ flex: 1 }} />
-          <Text style={styles.halfGraphLabelText}>
-            {I18n.t("raw")}
-          </Text>
-        </View>
-        <View style={styles.halfGraphContainer}>
-          <FilterGraphView
-            style={{ flex: 1 }}
-            filterType={config.filterType.BANDPASS}
-          />
-          <Text style={styles.halfGraphLabelText}>
-            {I18n.t("bandPassFilter")}
-          </Text>
-        </View>
+        <PSDGraphView
+          offlineData={this.offlineDataSource()}
+          dimensions={this.props.dimensions}
+        />
 
         <Text style={styles.currentTitle}>
-          {I18n.t("filteringSlideTitle")}
+          {I18n.t("PSDSlideTitle")}
         </Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
@@ -61,27 +67,26 @@ class SlideFour extends Component {
         >
           <View style={styles.pageStyle}>
             <Text style={styles.header}>
-              {I18n.t("meaningfulData")}
+              {I18n.t("powerSpectralDensity")}
             </Text>
             <Text style={styles.body}>
-              {I18n.t("firstEEGMust")}
-              <PopUpLink onPress={() => this.setState({ popUpVisible: true })}>
-                {I18n.t("filteredLink")}
-              </PopUpLink>{" "}
-              {I18n.t("toReduceSignals")}
+              {I18n.t("whenWeApplyFourier")}
+              <PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>
+                {I18n.t("powerLink")}
+              </PopUpLink>.
             </Text>
-            <LinkButton path="./slideFive">
+            <LinkButton path="./slideNine">
               {I18n.t("nextLink")}
             </LinkButton>
           </View>
         </ViewPagerAndroid>
 
         <PopUp
-          onClose={() => this.setState({ popUpVisible: false })}
-          visible={this.state.popUpVisible}
-          title={I18n.t("filtersTitle")}
+          onClose={() => this.setState({ popUp1Visible: false })}
+          visible={this.state.popUp1Visible}
+          title={I18n.t("powerTitle")}
         >
-          {I18n.t("filtersDescription")}
+          {I18n.t("powerDescription")}
         </PopUp>
 
         <PopUp
@@ -101,18 +106,6 @@ class SlideFour extends Component {
 const styles = MediaQueryStyleSheet.create(
   // Base styles
   {
-    pageStyle: {
-      padding: 20,
-      alignItems: "stretch",
-      justifyContent: "space-around"
-    },
-
-    body: {
-      fontFamily: "Roboto-Light",
-      color: colors.black,
-      fontSize: 19
-    },
-
     currentTitle: {
       marginLeft: 20,
       marginTop: 10,
@@ -121,10 +114,23 @@ const styles = MediaQueryStyleSheet.create(
       color: colors.skyBlue
     },
 
+    body: {
+      fontFamily: "Roboto-Light",
+      color: colors.black,
+      fontSize: 17
+    },
+
     container: {
       backgroundColor: colors.white,
       flex: 1,
       justifyContent: "space-around",
+      alignItems: "stretch"
+    },
+
+    graphContainer: {
+      backgroundColor: "white",
+      flex: 4,
+      justifyContent: "center",
       alignItems: "stretch"
     },
 
@@ -138,19 +144,16 @@ const styles = MediaQueryStyleSheet.create(
       flex: 4
     },
 
-    halfGraphContainer: {
-      flex: 2,
-      justifyContent: "center",
-      alignItems: "stretch"
+    pageStyle: {
+      padding: 20,
+      alignItems: "stretch",
+      justifyContent: "space-around"
     },
 
-    halfGraphLabelText: {
-      position: "absolute",
-      top: 5,
-      left: 5,
-      fontSize: 13,
-      fontFamily: "Roboto-Medium",
-      color: colors.white
+    image: {
+      flex: 1,
+      width: null,
+      height: null
     }
   },
   // Responsive styles
@@ -175,4 +178,4 @@ const styles = MediaQueryStyleSheet.create(
   }
 );
 
-export default connect(mapStateToProps)(SlideFour);
+export default connect(mapStateToProps, mapDispatchToProps)(SlideEight);

@@ -46,7 +46,7 @@ class Landing extends Component {
               x: x,
               y: y,
               width: width,
-              height: height * .75
+              height: height * 0.75
             });
           }}
           style={styles.titleBox}
@@ -81,7 +81,6 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     container: {
-
       flex: 1,
       justifyContent: "center",
       alignItems: "stretch",

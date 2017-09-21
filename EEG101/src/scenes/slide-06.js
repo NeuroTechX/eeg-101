@@ -49,7 +49,7 @@ class SlideSix extends Component {
             <Text style={styles.body}>
 		      {I18n.t('afterEEGDividedEpochs')}<PopUpLink onPress={() => this.setState({ popUpVisible: true })}>{I18n.t('significantLink')}</PopUpLink>{I18n.t('amountNoiseIgnored')}
             </Text>
-            <LinkButton path="/slideSeven">{I18n.t('nextLink')}</LinkButton>
+            <LinkButton path="./slideSeven">{I18n.t('nextLink')}</LinkButton>
           </View>
 
         </ViewPagerAndroid>
@@ -65,7 +65,7 @@ class SlideSix extends Component {
 		<PopUp
           onClose={()=>this.props.history.push('/connectorOne')}
           visible={
-            this.props.connectionStatus === config.connectionStatus.DISCONNECTED 
+            this.props.connectionStatus === config.connectionStatus.DISCONNECTED
           }
           title={I18n.t('museDisconnectedTitle')}
         >

@@ -5,16 +5,11 @@ import React, { Component } from "react";
 import {
   Text,
   View,
-  TouchableOpacity,
   StyleSheet,
-  Image,
   ActivityIndicator
 } from "react-native";
 import Classifier from "../interface/Classifier.js";
 import Button from "../components/Button.js";
-import SandboxButton from "../components/SandboxButton.js";
-import { MediaQueryStyleSheet } from "react-native-responsive";
-import { Link } from "react-router-native";
 import PopUpLink from "./PopUpLink.js";
 import PopUp from "./PopUp.js";
 import LinkButton from "./LinkButton.js";

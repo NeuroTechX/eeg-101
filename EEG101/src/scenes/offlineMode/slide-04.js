@@ -1,23 +1,23 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
 import { connect } from "react-redux";
-import LinkButton from "../components/LinkButton";
-import PopUp from "../components/PopUp";
-import PopUpLink from "../components/PopUpLink";
-import { MediaQueryStyleSheet } from "react-native-responsive";
 
-//Interfaces. For elements that bridge to native
-import GraphView from "../interface/GraphView";
-import FilterGraphView from "../interface/FilterGraphView";
-import config from "../redux/config";
-import I18n from "../i18n/i18n";
-import * as colors from "../styles/colors";
+import LinkButton from "../../components/LinkButton";
+import PopUp from "../../components/PopUp";
+import PopUpLink from "../../components/PopUpLink";
+import { MediaQueryStyleSheet } from "react-native-responsive";
+import GraphView from "../../interface/GraphView";
+import FilterGraphView from "../../interface/FilterGraphView";
+import config from "../../redux/config";
+import I18n from "../../i18n/i18n";
+import * as colors from "../../styles/colors";
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
   return {
     connectionStatus: state.connectionStatus,
     dimensions: state.graphviewDimensions,
+    isOfflineMode: state.isOfflineMode
   };
 }
 
@@ -32,17 +32,24 @@ class SlideFour extends Component {
     };
   }
 
+  offlineDataSource() {
+    if(this.props.isOfflineMode){
+      return "blinks";
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.halfGraphContainer}>
-          <GraphView style={{ flex: 1 }} />
+          <GraphView offlineData={this.offlineDataSource()} style={{ flex: 1 }} />
           <Text style={styles.halfGraphLabelText}>
             {I18n.t("raw")}
           </Text>
         </View>
         <View style={styles.halfGraphContainer}>
           <FilterGraphView
+            offlineData={this.offlineDataSource()}
             style={{ flex: 1 }}
             filterType={config.filterType.BANDPASS}
           />

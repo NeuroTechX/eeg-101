@@ -48,6 +48,7 @@ class SideMenu extends Component {
   }
 
   render() {
+    if(!this.props.isOfflineMode){
     return (
       <ScrollView style={styles.menuContainer}>
         <DeviceStatusWidget connectionStatus={this.props.connectionStatus} isOfflineMode={this.props.isOfflineMode}/>
@@ -177,6 +178,135 @@ class SideMenu extends Component {
         <View style={{ height: 30 }} />
       </ScrollView>
     );
+  } else return(
+    <ScrollView style={styles.menuContainer}>
+      <DeviceStatusWidget connectionStatus={this.props.connectionStatus} isOfflineMode={this.props.isOfflineMode}/>
+
+      <MenuSection
+        title={I18n.t("toolsTitle")}
+        items={[
+          {
+            //icon: "face",
+            value: I18n.t("eegSandbox"),
+            disabled:
+              this.props.connectionStatus !==
+              config.connectionStatus.CONNECTED,
+            active: this.props.location.pathname === "/sandbox",
+            onPress: () => this.navTo("/sandbox")
+          },
+          {
+            //icon: "face",
+            value: I18n.t("bciValue"),
+            disabled:
+              this.props.connectionStatus !==
+              config.connectionStatus.CONNECTED,
+            active: this.props.location.pathname === "/bciTrain",
+            onPress: () => this.navTo("/bciTrain")
+          }
+        ]}
+      />
+      <MenuSection
+        title={I18n.t("tutorialTitle")}
+        items={[
+          {
+            //icon: "face",
+            value: I18n.t("introductionValue"),
+            disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+            config.connectionStatus.CONNECTED,
+            active: this.props.location.pathname === "/offline/slideOne",
+            onPress: () => this.navTo("/offline/slideOne")
+          },
+          {
+            //icon: "face",
+            value: I18n.t("physiologyValue"),
+            disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+            config.connectionStatus.CONNECTED,
+            active: this.props.location.pathname === "/offline/slideTwo",
+            onPress: () => this.navTo("/offline/slideTwo")
+          },
+          {
+            //icon: "face",
+            value: I18n.t("hardwareValue"),
+            disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+            config.connectionStatus.CONNECTED,
+            active: this.props.location.pathname === "/offline/slideThree",
+            onPress: () => this.navTo("/offline/slideThree")
+          },
+          {
+            //icon: "face",
+            value: I18n.t("filteringValue"),
+            disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+            config.connectionStatus.CONNECTED,
+            active: this.props.location.pathname === "/offline/slideFour",
+            onPress: () => this.navTo("/offline/slideFour")
+          },
+          {
+            //icon: "face",
+            value: I18n.t("epochingValue"),
+            disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+            config.connectionStatus.CONNECTED,
+            active: this.props.location.pathname === "/offline/slideFive",
+            onPress: () => this.navTo("/offline/slideFive")
+          },
+          {
+            //icon: "face",
+            value: I18n.t("artefactValue"),
+            disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+            config.connectionStatus.CONNECTED,
+            active: this.props.location.pathname === "/offline/slideSix",
+            onPress: () => this.navTo("/offline/slideSix")
+          },
+          {
+            //icon: "face",
+            value: I18n.t("featureValue"),
+            disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+            config.connectionStatus.CONNECTED,
+            active: this.props.location.pathname === "/offline/slideSeven",
+            onPress: () => this.navTo("/offline/slideSeven")
+          },
+          {
+            //icon: "face",
+            value: I18n.t("psdValue"),
+            disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+            config.connectionStatus.CONNECTED,
+            active: this.props.location.pathname === "/offline/slideEight",
+            onPress: () => this.navTo("/offline/slideEight")
+          },
+          {
+            //icon: "face",
+            value: I18n.t("brainWavesValue"),
+            disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+            config.connectionStatus.CONNECTED,
+            active: this.props.location.pathname === "/offline/slideNine",
+            onPress: () => this.navTo("/offline/slideNine")
+          },
+          {
+            //icon: "face",
+            value: I18n.t("brainComputerInterfaceValue"),
+            disabled: !this.props.isOfflineMode && this.props.connectionStatus !==
+            config.connectionStatus.CONNECTED,
+            active: this.props.location.pathname === "/bciOne",
+            onPress: () => this.navTo("/bciOne")
+          },
+          {
+            //icon: "face",
+            value: I18n.t("howBuildBciValue"),
+            disabled: this.props.connectionStatus !==
+            config.connectionStatus.CONNECTED,
+            active: this.props.location.pathname === "/bciTwo",
+            onPress: () => this.navTo("/bciTwo")
+          },
+          {
+            //icon: "face",
+            value: I18n.t("infoValue"),
+            active: this.props.location.pathname === "/end",
+            onPress: () => this.navTo("/end")
+          }
+        ]}
+      />
+      <View style={{ height: 30 }} />
+    </ScrollView>
+  )
   }
 }
 
@@ -189,13 +319,4 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.englishBlue
   },
-
-  image: {
-    flexWrap: "wrap",
-    justifyContent: "flex-start",
-    paddingHorizontal: 16,
-    marginBottom: 8,
-    width: "100%",
-    height: 140
-  }
 });

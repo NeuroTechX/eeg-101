@@ -7,7 +7,6 @@ import {
   View,
   TouchableOpacity,
   DeviceEventEmitter,
-  StyleSheet,
   PermissionsAndroid,
   Modal,
   ScrollView,
@@ -19,7 +18,6 @@ import config from "../../redux/config";
 import Connector from "../../interface/Connector";
 import WhiteButton from "../WhiteButton";
 import Button from "../Button.js";
-import SandboxButton from "../SandboxButton.js";
 import I18n from "../../i18n/i18n";
 import * as colors from "../../styles/colors";
 
@@ -141,7 +139,9 @@ export default class ConnectorWidget extends Component {
   // Calls getAndConnectoToDevice in native ConnectorModule after creating promise listeners
   startConnector() {
     if (
-      this.props.connectionStatus === config.connectionStatus.NOT_YET_CONNECTED
+      this.props.connectionStatus ===
+        config.connectionStatus.NOT_YET_CONNECTED ||
+      this.props.connectionStatus === config.connectionStatus.NO_MUSES
     ) {
       Connector.init();
 
@@ -183,13 +183,17 @@ export default class ConnectorWidget extends Component {
 
   getAndConnectToDevice() {
     this.props.setConnectionStatus(config.connectionStatus.SEARCHING);
-    this.props.getMuses().then(action => {
-      if (action.payload.length > 1) {
-        this.setState({ musePopUpIsVisible: true });
-      } else if (action.payload.length === 1) {
-        Connector.connectToMuseWithIndex(0);
-      }
-    });
+    setTimeout(
+      () =>
+        this.props.getMuses().then(action => {
+          if (action.payload.length > 1) {
+            this.setState({ musePopUpIsVisible: true });
+          } else if (action.payload.length === 1) {
+            Connector.connectToMuseWithIndex(0);
+          }
+        }),
+      2000
+    );
   }
 
   render() {
@@ -201,14 +205,6 @@ export default class ConnectorWidget extends Component {
         return (
           <View style={styles.container}>
             <Text style={styles.noMuses}>No connected Muse</Text>
-            <SandboxButton
-              onPress={() =>
-                this.props.setOfflineMode(!this.props.isOfflineMode)}
-              active={this.props.isOfflineMode}
-            >
-              ENABLE OFFLINE MODE (BETA)
-            </SandboxButton>
-
             <WhiteButton onPress={() => this.getAndConnectToDevice()}>
               SEARCH
             </WhiteButton>
@@ -221,14 +217,6 @@ export default class ConnectorWidget extends Component {
             <Text style={styles.noMuses}>
               Bluetooth appears to be disabled!
             </Text>
-            <SandboxButton
-              onPress={() =>
-                this.props.setOfflineMode(!this.props.isOfflineMode)}
-              active={this.props.isOfflineMode}
-            >
-              ENABLE OFFLINE MODE (BETA)
-            </SandboxButton>
-
             <WhiteButton onPress={() => this.getAndConnectToDevice()}>
               SEARCH
             </WhiteButton>
@@ -263,10 +251,12 @@ export default class ConnectorWidget extends Component {
           <View style={styles.container}>
             <View style={styles.connectingContainer}>
               <ActivityIndicator color={"#94DAFA"} size={"large"} />
-              <View >
-              <Text style={styles.connecting}>Connecting...</Text>
-              <Text style={styles.connectingName}>{this.props.availableMuses[this.state.selectedMuse].name}</Text>
-            </View>
+              <View>
+                <Text style={styles.connecting}>Connecting...</Text>
+                <Text style={styles.connectingName}>
+                  {this.props.availableMuses[this.state.selectedMuse].name}
+                </Text>
+              </View>
             </View>
           </View>
         );
@@ -296,15 +286,15 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     connectingContainer: {
-      alignSelf: 'center',
+      alignSelf: "center",
       borderRadius: 50,
       backgroundColor: colors.white,
       flexDirection: "row",
-      alignItems: 'center',
+      alignItems: "center",
       justifyContent: "space-around",
       padding: 20,
       height: 70,
-      width: 240,
+      width: 240
     },
 
     body: {
@@ -342,9 +332,9 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     connectingName: {
-      fontFamily: 'Roboto-Light',
+      fontFamily: "Roboto-Light",
       fontSize: 18,
-      color: colors.turquoise,
+      color: colors.turquoise
     },
 
     modalBackground: {
