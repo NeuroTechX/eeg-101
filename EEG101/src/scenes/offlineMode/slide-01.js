@@ -5,13 +5,11 @@ import { bindActionCreators } from "redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 
 import { setGraphViewDimensions } from "../../redux/actions";
-import config from "../../redux/config";
 import LinkButton from "../../components/LinkButton";
 import PopUp from "../../components/PopUp";
 import PopUpLink from "../../components/PopUpLink";
 import I18n from "../../i18n/i18n";
 import * as colors from "../../styles/colors";
-import PlayPauseButton from "../../components/PlayPauseButton.js";
 import GraphView from "../../interface/GraphView";
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
@@ -102,14 +100,14 @@ class SlideOne extends Component {
         >
           <View style={styles.pageStyle}>
             <Text style={styles.header}>
-              The brain produces electricity
+              {I18n.t("theBrainProduces")}
             </Text>
             <Text style={styles.body}>
-              This is an example of
+              {I18n.t("thisExample")}
               <PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>
                 {" EEG "}
               </PopUpLink>
-              data, showing the electrical activity of the brain
+              {I18n.t("dataShowing")}
             </Text>
             <Image
               source={require("../../assets/swipeicon.png")}
@@ -120,28 +118,28 @@ class SlideOne extends Component {
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>
-              Noise in the EEG signal
+              {I18n.t("noiseInSignal")}
             </Text>
             <Text style={styles.body}>
-              The EEG is subject to many different types of{' '}
+              {I18n.t("differentTypes")}
               <PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>
-                noise.
+                {I18n.t("noiseLink")}.
               </PopUpLink>
             </Text>
             <Text style={styles.body}>
-              Blinks, for example, produce large fluctuations in the signal due to muscle activity
+              {I18n.t("blinksExample")}
             </Text>
           </View>
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>
-              EEG cannot read minds
+              {I18n.t("cannotReadMindsTitle")}
             </Text>
             <Text style={styles.body}>
-              For the most part, raw EEG data is pretty uninformative
+              {I18n.t("uninformativeRaw")}.
             </Text>
             <Text style={styles.body}>
-              With processing, EEG can give clues to overall brain activity, but it's not capable of{' '}
+              {I18n.t("needsProcessing")}{' '}
               <PopUpLink onPress={() => this.setState({ popUp3Visible: true })}>
                 {I18n.t("readingMindsLink")}
               </PopUpLink>.

@@ -4,20 +4,19 @@ export default {
 	nextLink:  'SIGUIENTE',
 	museDisconnectedTitle:  'Muse desconectado',
 	museDisconnectedDescription:  'Por favor, reconecta el Muse para continuar con el tutorial.',
-	closeButton:  'Cerrar',
-	connectButton:  '',
+	closeButton:  'CERRAR',
+	connectButton:  'CONECTAR',
 
 	//begin-landing.js
 	welcomeEEG101:  'Bienvenid@ a EEG101',
 	tutorialDescription:  'Al finalizar este tutorial, conocerás la manera en la que un dispositivo EEG puede ser usado para medir la actividad eléctrica cerebral.',
-	getStartedLink:  'EMPEZAR',
 
 	//connector-01.js
 	step1Title:  'Paso 1',
 	musePowerOnWarning:  'Asegúrate de que el dispositivo Muse se encuentre encendido.',
 	museFirstGenWarning:  'Si estás utilizando un Muse Primera Generación, es posible que sea necesario conectarlo manualmente en los ajustes del Bluetooth.',
-	offlineModeEnable:  'MODO OFFLINE',
-	offlineModeDisable:  'MODO OFFLINE',
+	offlineModeEnable:  'HABILITAR EL MODO OFFLINE',
+	offlineModeDisable:  'DESACTIVAR EL MODO OFFLINE',
 	connector2Link:  'OK, ESTÁ ENCENDIDO',
 
 	//connector-02.js
@@ -42,7 +41,6 @@ export default {
 	noiseLink:  'ruido',
 	inEEGSignal:  'en la señal de EEG.',
 	tryThinkingAbout:  'Intenta pensar en un gato...',
-	doesSignalChange:  '¿Observas algún cambio en la señal?',
 	althoughEEG:  'Aunque el EEG registra la actividad cerebral general, no tiene la capacidad',
 	readingMindsLink:  'de leer mentes',
 	tryClosingEyes10:  'Ahora, intenta cerrar tus ojos durante 10 segundos.',
@@ -57,24 +55,34 @@ export default {
 	eyeRythymsTitle:  'Ritmo alfa con ojos cerrados',
 	eyeRythymsDescription:  'Cuando cierras tus ojos, hay un incremento en la actividad rítmica cerebral en el rango de 8 - 13 ciclos por segundo (Hz). Estas ondas cerebrales, denominadas alfa, fueron uno de los primeros descubrimientos que Hans Berger hizo con EEG. La habilidad para detectar ondas alfa cuando los ojos están cerrados varía de persona a persona. ¡No te sientas mal si no puedes verlas!',
 
+	// slide-01.js offline
+	theBrainProduces:  'El cerebro produce electricidad.',
+	thisExample:  'Este es un ejemplo de',
+	dataShowing:  'datos, mostrando la actividad eléctrica del cerebro',
+	noiseInSignal:  'Ruido en la señal EEG',
+	differentTypes:  'El EEG se ve afectado por',
+	blinksExample:  'Los parpadeos, por ejemplo, producen grandes fluctuaciones en la señal debido a la actividad muscular',
+	uninformativeRaw:  'Los datos crudos del EEG son bastante poco informativos',
+	needsProcessing:  'Con el procesamiento, el EEG puede dar pistas sobre la actividad cerebral general, pero no es capaz de',
+
 	//slide-02.js
-	physiologySlideTitle:  'FISIOLOGÍA',
-	EEGComeFrom:  '¿Cuál es el origen de la señal de EEG?',
-	EEGMeasures:  'La señal de EEG registra la señal eléctrica que ocurre cuando',
-	neuronsLink:  'las neuronas',
-	receiveAndTransmit:  'reciben y transmiten información.',
-	organizedNeural:  'La actividad neuronal organizada produce campos eléctricos.',
-	whenBillionsOfNeurons:  'Cuando miles de millones de neuronas',
-	workTogetherLink:  'trabajan juntas',
-	produceThoughts:  ' para producir pensamientos, sentimientos y comportamientos, su actividad eléctrica es detectada por los electrodos sobre la cabeza.',
-	EEGDetects:  'El EEG detecta el estado general del cerebro.',
-	organizedElectricalActivity:  'Esta actividad organizada eléctrica varía para diferentes estados cerebrales, por ejemplo',
-	sleepWakefulnessLink:  'si estás dormido o despierto.',
-	neuralBasisEEGTitle:  'Las bases neuronales del EEG.',
-	neuralBasisEEGDescription1:  'Cuando las sinapsis en las dendritas de una neurona se activan, un pequeño campo eléctrico (dipolo) se crea a lo largo del cuerpo de la neurona debido a la diferencia de carga eléctrica entre las dendritas y el axón. Este campo eléctrico dura un par de milisegundos.',
-	neuralBasisEEGDescription2:  'El campo eléctrico producido por una neurona es diminuto. No obstante, cuando muchas neuronas corticales disparan de manera rítmica, su actividad puede producir campos eléctricos que son lo suficientemente grandes para cruzar la superficie del cráneo. Este proceso depende de diferentes factores, incluyendo la profundidad, la orientación, el subtipo de neurona... y es un tema actual de investigación.',
-	brainStatesTitle:  'Estados cerebrales',
-	brainStatesDescription:  'Mientras dormimos, nuestros cerebros producen un tipo particular de actividad eléctrica rítmica. Cuando estamos despiertos, los patrones rítmicos cerebrales tienden a ser dinámicos e irregulares, mientras que ritmos lentos y organizados se vuelven dominantes cuando nos vamos quedando dormidos y pasamos por las diferentes etapas del sueño. \n Ciertas emociones y procesos cognitivos también han sido asociados con patrones característicos de actividad rítmica cerebral que pueden ser registrados con el EEG.',
+	physiologySlideTitle:  'PHYSIOLOGY ES',
+	EEGComeFrom:  'Where does the EEG signal come from? ES',
+	EEGMeasures:  'The EEG measures the electrical activity that occurs when  ES',
+	neuronsLink:  'neurons  ES',
+	receiveAndTransmit:  ' receive and transmit information. ES',
+	organizedNeural:  'Organized neural activity produces electric fields. ES',
+	whenBillionsOfNeurons:  'When billions of neurons  ES',
+	workTogetherLink:  'work together ES',
+	produceThoughts:  ' to produce thoughts, feelings, and behaviours, their electricity can be detected by electrodes on the scalp. ES',
+	EEGDetects:  'EEG detects the "state" of the brain. ES',
+	organizedElectricalActivity:  'This organized electrical activity varies between different brain states, such as  ES',
+	sleepWakefulnessLink:  'sleep and wakefulness. ES',
+	neuralBasisEEGTitle:  'Neural basis of EEG. ES',
+	neuralBasisEEGDescription1:  'When synapses are activated on a neuron\'s dendrites, a small electric field (dipole) is created along the body of the neuron due to the difference in charge between those dendrites and the axon. This electric field only lasts for a few milliseconds. ES',
+	neuralBasisEEGDescription2:  'The electric fields produced by single neurons are vanishingly small. However, when large numbers of cortical neurons fire rhythmically, their activity can produce electric fields that are large enough to cross the surface of the skull. This process is influenced by many factors, including depth, orientation, and subtype of neurons, and is a topic of ongoing research. ES',
+	brainStatesTitle:  'Brain states ES',
+	brainStatesDescription:  'During sleep our brains produce very different kinds of rhythmic electrical activity. When awake, brain rhythms tend to be rapidly-changing and irregular, while slowly-changing, organized rhythms become more dominant as we fall asleep and pass through the multiple sleep stages. \n Certain emotions and cognitive processes have also been linked with characteristic patterns of rhythmic activity that can be identified with EEG. ES',
 
 	//slide-03.js
 	hardwareSlideTitle:  'HARDWARE',
@@ -97,6 +105,9 @@ export default {
 	referencingTitle:  'Referencia',
 	referencingDescription:  'La señal de cada electrodo refleja la diferencia en potencial eléctrico entre ese electrodo y otro electrodo de referencia. Por lo tanto, los datos registrados con dispositivos EEG utilizando diferentes posiciones de electrodo de referencia pueden variar considerablemente. En el dispositivo Muse el electrodo de referencia se localiza en la frente.',
 
+	//slide-03.js offline
+	devicesHaveElectrodes:  'Los dispositivos EEG tienen múltiples electrodos',
+
 	//slide-04.js
 	filteringSlideTitle:  'FILTRADO',
 	raw:  'Señal sin procesar',
@@ -109,7 +120,7 @@ export default {
 	filtersDescription:  'Los filtros remueven frecuencias que están situadas fuera de un espectro de señales producidas por el cerebro, reduciendo el ruido producido por la actividad muscular o la actividad eléctrica del ambiente. Los filtros se clasifican normalmente como paso altas (remueve frecuencias bajas), paso bajas (remueve frecuencias altas) o paso banda (deja un rango específico de frecuencias y remueve todo lo demás). Aquí hemos implementado un filtro paso banda que remueve todas las frecuencias producidas fuera del rango típico de la actividad cerebral.',
 
 	//slide-05.js
-	epochingSlideTitle:  'División en épocas',
+	epochingSlideTitle:  'DIVISIÓN EN ÉPOCAS',
 	chunkingSignal:  'Segmentando la señal',
 	EEGDividedSegments:  'El siguiente paso es dividir la señal de EEG en segmentos cortos o',
 	epochsLink:  'épocas',
@@ -117,7 +128,7 @@ export default {
 	epochsDescription:  'El cerebro está constantemente cambiando y el EEG cambia con él. Segmentar el EEG en épocas permite que cada momento sea analizado individualmente. Analizar las propiedades de estas épocas nos ayuda a cuantizar cómo el cerebro cambia con el tiempo',
 
 	//slide-06.js
-	artefactRemovalSlideTitle:  'Remoción de artefactos',
+	artefactRemovalSlideTitle:  'REMOCIÓN DE ARTEFACTOS',
 	removingNoise:  'Quitando ruido eléctrico',
 	afterEEGDividedEpochs:  'Después de que el EEG ha sido dividido en épocas, aquellas que contienen una cantidad ',
 	significantLink:  'significante',
@@ -126,7 +137,8 @@ export default {
 	artefactDetectionDescription:  'Una manera simple de definir una cantidad "significante de ruido" es cuantificar que tan diferente es una época comparada con sus adyacentes. Si la señal varía mucho más en una época que en aquellas adyacentes, probablemente sea porque hubo un parpadeo o alguna otra fuente de ruido. ¡Deshazte de ellos!',
 
 	//slide-07.js
-	featureDetectionSlideTitle:  'Extracción de características',
+	featureDetectionSlideTitle:  '
+EXTRACCIÓN DE CARACTERISTICAS',
 	breakingDownEEG:  'Analizando el EEG',
 	onceNoiseRemoved:  'Una vez que el ruido ha sido removido, el EEG puede ser descompuesto en señales periódicas más simples',
 	wavesLink:  'u ondas',
@@ -139,7 +151,7 @@ export default {
 	fourierTransformDescription:  'La transformada de Fourier descompone la señal compleja en una colección de ondas sinusoidales más simples. Normalmente utilizamos una implementación especial de la transformada de Fourier, la transformada rápida de Fourier (FFT, por sus siglas en inglés) para efectuar la descomposición de la señal de EEG.',
 
 	//slide-08.js
-	PSDSlideTitle:  'PSD',
+	PSDSlideTitle:  'PSD (Power Spectral Density)',
 	powerSpectralDensity:  'Densidad Espectral de Potencia (PSD, por sus siglas en inglés)',
 	whenWeApplyFourier:  'Cuando aplicamos la transformada de Fourier al EEG, obtenemos una medida de la fuerza de la señal en frecuencias específicas, representada en unidades de',
 	powerLink:  'potencia',
@@ -200,9 +212,9 @@ export default {
 	requiresLocation:  'Esta aplicación necesita permisos de localización precisa para poder detectar y conectarse al Muse 2016',
 	statusConnected:  'Conectado',
 	statusNoMusesTitle:  'Ningún Muse ha sido detectado.',
-	searchAgain:  'VOLVER A BUSCAR',
-	statusConnecting:  'Conectando...',
-	statusDisconnected:  'Buscando el Muse',
+	searchAgain:  'Si no tienes un Muse, ¡de verdad lo sentimos mucho! Estamos trabajando actualmente en un modo "Sin conexión" que estará disponible próximamente',
+	statusConnecting:  'VOLVER A BUSCAR',
+	statusDisconnected:  'Conectando...',
 
 	// bci-01.js
 	bciTitle:  'Interfaces Cerebro-Computadora',
@@ -222,12 +234,9 @@ export default {
 	machineLearningDefinition:  'Un algoritmo de aprendizaje de máquinas es un programa de computadora que aprende a través de ejemplos. Por ejemplo, un algoritmo de aprendizaje de máquinas puede aprender a reconocer objetos en una imagen después de analizar miles de imágenes de diferentes objetos. En una BCI controlada mediante EEG, este tipo de algoritmos analiza diferentes patrones de actividad cerebral y encuentra una manera óptima para reconocer lo que el usuario está haciendo ',
 
 	// bci-02.js
-	step1Title:  'Paso 1',
 	chooseCommand:  'Selecciona un comando',
 	bciCommands:  'Esta BCI te permitirá ejecutar un comando en tu teléfono cuando cambies de un estado cerebral arbitrario a otro. \n\n Primero que nada, ¿qué quieres que esta BCI haga?',
-	step2Title:  'Paso 2',
 	offData:  'Adquisición de EEG para estado OFF',
-	step3Title:  'Paso 3',
 	onData:  'Adquisición de EEG para estado ON',
 	step4Title:  'Paso 4',
 	trainClassifier:  'Entrena al clasificador',
@@ -241,6 +250,7 @@ export default {
 	trainSamples:  'muestras',
 	trainStop:  'ALTO',
 	trainCollect:  'ADQUIRIR',
+	trainCollectMore:  'ADQUIRIR MÁS (OPCIONAL)',
 	trainOn:  'ON',
 	trainOff:  'OFF',
 	trainFitClassifier:  'ENTRENAR AL CLASIFICADOR',
@@ -293,19 +303,6 @@ export default {
 	infoValue:  'Información y Agradecimientos',
 
 	// config.js
-	configConnected:  'CONECTADO',
-	configConnecting:  'CONECTANDO',
-	configDisconnected:  'DESCONECTADO',
-	configNoMuses:  'NO_MUSES',
-	configEeg:  'EEG',
-	configFilter:  'FILTRO',
-	configPsd:  'PSD',
-	configWaves:  'ONDAS',
-	configArtefact:  'ARTEFACTOS',
-	configLowpass:  'PASO BAJAS',
-	configHighpass:  'PASO ALTAS',
-	configBandstop:  'SUPRESOR DE BANDA',
-	configBandpass:  'PASO BANDA',
 	configLight:  'la luz',
 	configVibrate:  'vibración ',
 };

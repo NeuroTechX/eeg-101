@@ -10,7 +10,6 @@ export default {
 	//begin-landing.js
 	welcomeEEG101:  'Welcome to EEG 101',
 	tutorialDescription:  'At the end of this tutorial, you will have learned how EEG devices can be used to measure the electrical activity of the brain.',
-	getStartedLink:  ' GET STARTED ',
 
 	//connector-01.js
 	step1Title:  'Step 1',
@@ -42,7 +41,6 @@ export default {
 	noiseLink:  'noise ',
 	inEEGSignal:  ' in the EEG signal.',
 	tryThinkingAbout:  'Try thinking about a cat...',
-	doesSignalChange:  'Does the signal change?',
 	althoughEEG:  'Although EEG can measure overall brain activity, it’s not capable of ',
 	readingMindsLink:  'reading minds',
 	tryClosingEyes10:  'Now try closing your eyes for 10 seconds.',
@@ -56,6 +54,16 @@ export default {
 	cannotReadMindsDescription:  'The EEG signal is generated when tens of thousands of brain cells fire in synchrony. Although thinking about a cat produces some change in brain activity, it is too small to affect the large-scale, rhythmic firing of the brain that EEG detects.',
 	eyeRythymsTitle:  'Closed eye rhythms',
 	eyeRythymsDescription:  'When the eyes are closed, there is often a large increase in rhythmic brain activity in the range of 8-13 cycles per second (Hz). These alpha waves were one of the first discoveries that Hans Berger made with EEG. The ability to detect alpha waves when the eyes are closed varies greatly from person to person, however. Don\'t feel bad if you can\'t see them!',
+
+	// slide-01.js offline
+	theBrainProduces:  'The brain produces electricity',
+	thisExample:  'This is an example of ',
+	dataShowing:  'data, showing the electrical activity of the brain',
+	noiseInSignal:  'Noise in the EEG signal',
+	differentTypes:  'The EEG is subject to many different types of',
+	blinksExample:  'Blinks, for example, produce large fluctuations in the signal due to muscle activity',
+	uninformativeRaw:  'For the most part, raw EEG data is pretty uninformative',
+	needsProcessing:  'With processing, EEG can give clues to overall brain activity, but it is not capable of',
 
 	//slide-02.js
 	physiologySlideTitle:  'PHYSIOLOGY',
@@ -96,6 +104,9 @@ export default {
 	electrodeNamingDescription:  'EEG electrodes are typically identified by a combination of a letter and a number. The letter indicates the part of the head where the electrode is located (F for frontal, C for central, etc.). The number indicates distance from the midline of the head with even numbers on the right hemisphere and odd numbers on the left.',
 	referencingTitle:  'Referencing',
 	referencingDescription:  'Each electrode\'s signal reflects the difference in electrical potential between that electrode and a seperate reference electrode. Thus, data gathered from EEG devices with different reference electrode placement can vary considerably. With Muse, the reference is located on the front of the forehead.',
+
+	//slide-03.js offline
+	devicesHaveElectrodes:  'EEG devices have multiple electrodes',
 
 	//slide-04.js
 	filteringSlideTitle:  'FILTERING',
@@ -222,12 +233,9 @@ export default {
 	machineLearningDefinition:  'A machine learning algorithm is a computer program that learns by looking at examples. For instance, machine learning algorithms can learn to recognize objects in a picture by looking at thousands of pictures of different objects. In an EEG BCI, this type of algorithm looks at many instances of someone’s brain activity and finds an optimal way to recognize what the user is doing.',
 
 	// bci-02.js
-	step1Title:  'Step 1',
 	chooseCommand:  'Choose a command',
 	bciCommands:  'This BCI will allow you to execute a command on your phone by switching between two \'brain states\' \n\n First, what do you want this BCI to do?',
-	step2Title:  'Step 2',
 	offData:  'Collect "OFF" data',
-	step3Title:  'Step 3',
 	onData:  'Collect "ON" data',
 	step4Title:  'Step 4',
 	trainClassifier:  'Train the classifier',
@@ -241,6 +249,7 @@ export default {
 	trainSamples:  'samples',
 	trainStop:  'STOP',
 	trainCollect:  'COLLECT',
+	trainCollectMore:  'COLLECT MORE (OPTIONAL)',
 	trainOn:  'ON',
 	trainOff:  'OFF',
 	trainFitClassifier:  'FIT CLASSIFIER',
@@ -293,19 +302,6 @@ export default {
 	infoValue:  'Information & Acknowledgements',
 
 	// config.js
-	configConnected:  'CONNECTED',
-	configConnecting:  'CONNECTING',
-	configDisconnected:  'DISCONNECTED',
-	configNoMuses:  'NO_MUSES',
-	configEeg:  'EEG',
-	configFilter:  'FILTER',
-	configPsd:  'PSD',
-	configWaves:  'WAVES',
-	configArtefact:  'ARTEFACT',
-	configLowpass:  'LOWPASS',
-	configHighpass:  'HIGHPASS',
-	configBandstop:  'BANDSTOP',
-	configBandpass:  'BANDPASS',
 	configLight:  'the light',
 	configVibrate:  'vibration',
 };

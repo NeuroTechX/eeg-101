@@ -65,22 +65,25 @@ class SlideThree extends Component {
               <PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>
                 {I18n.t("electrodesLink")}
               </PopUpLink>
+              {' '}
               {I18n.t("placedOnScalp")}
             </Text>
           </View>
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>
-              EEG devices have multiple electrodes
+              {I18n.t('devicesHaveElectrodes')}
             </Text>
             <View style={{ flexDirection: "row" }}>
               <Text style={[styles.body, { flex: 0.5, marginRight: 10 }]}>
                 {I18n.t("touchTheHeadDiagram")}
+                {' '}
                 <PopUpLink
                   onPress={() => this.setState({ popUp2Visible: true })}
                 >
                   {I18n.t("namesLink")}
                 </PopUpLink>
+                {' '}
                 {I18n.t("forEachElectrode")}
               </Text>
               <ElectrodeSelector
@@ -95,10 +98,11 @@ class SlideThree extends Component {
               {I18n.t("whatElectrodesMeasure")}
             </Text>
             <Text style={styles.body}>
-              {I18n.t("voltageFluctuations")}
+              {I18n.t("voltageFluctuations")}{' '}
               <PopUpLink onPress={() => this.setState({ popUp3Visible: true })}>
                 {I18n.t("referenceElectrodeLink")}
               </PopUpLink>
+              {' '}
               {I18n.t("amplified1Mil")}
             </Text>
             <LinkButton path="./slideFour"> NEXT </LinkButton>

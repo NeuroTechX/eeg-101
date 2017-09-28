@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
+import { Text, View, ViewPagerAndroid, Image } from "react-native";
 import { connect } from "react-redux";
 import config from "../redux/config";
 import { bindActionCreators } from "redux";
@@ -93,11 +93,11 @@ class SlideOne extends Component {
               {I18n.t("brainElectricity")}
             </Text>
             <Text style={styles.body}>
-              {I18n.t("usingThe")}
+              {I18n.t("usingThe")}{' '}
               <PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>
                 {I18n.t("EEGLink")}
               </PopUpLink>
-              {I18n.t("deviceCanDetect")}
+              {' '}{I18n.t("deviceCanDetect")}
             </Text>
             <Image
               source={require("../assets/swipeicon.png")}
@@ -118,7 +118,7 @@ class SlideOne extends Component {
               <PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>
                 {I18n.t("noiseLink")}
               </PopUpLink>
-              {I18n.t("inEEGSignal")}
+            {' '}{I18n.t("inEEGSignal")}
             </Text>
           </View>
 
@@ -130,7 +130,7 @@ class SlideOne extends Component {
               {I18n.t("doesSignalChange")}
             </Text>
             <Text style={styles.body}>
-              {I18n.t("althoughEEG")}
+              {I18n.t("althoughEEG")}{' '}
               <PopUpLink onPress={() => this.setState({ popUp3Visible: true })}>
                 {I18n.t("readingMindsLink")}
               </PopUpLink>.

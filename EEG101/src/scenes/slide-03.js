@@ -59,6 +59,7 @@ class SlideThree extends Component {
               <PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>
                 {I18n.t("electrodesLink")}
               </PopUpLink>
+              {' '}
               {I18n.t("placedOnScalp")}
             </Text>
           </View>
@@ -69,13 +70,13 @@ class SlideThree extends Component {
             </Text>
             <View style={{ flexDirection: "row" }}>
               <Text style={[styles.body, { flex: 0.5, marginRight: 10 }]}>
-                {I18n.t("touchTheHeadDiagram")}
+                {I18n.t("touchTheHeadDiagram")}{' '}
                 <PopUpLink
                   onPress={() => this.setState({ popUp2Visible: true })}
                 >
                   {I18n.t("namesLink")}
                 </PopUpLink>
-                {I18n.t("forEachElectrode")}
+                {' '}{I18n.t("forEachElectrode")}
               </Text>
               <ElectrodeSelector
                 channelOfInterest={channel =>
@@ -89,11 +90,11 @@ class SlideThree extends Component {
               {I18n.t("whatElectrodesMeasure")}
             </Text>
             <Text style={styles.body}>
-              {I18n.t("voltageFluctuations")}
+              {I18n.t("voltageFluctuations")}{' '}
               <PopUpLink onPress={() => this.setState({ popUp3Visible: true })}>
                 {I18n.t("referenceElectrodeLink")}
               </PopUpLink>
-              {I18n.t("amplified1Mil")}
+              {' '}{I18n.t("amplified1Mil")}
             </Text>
             <LinkButton path="./slideFour"> NEXT </LinkButton>
           </View>
@@ -151,7 +152,7 @@ const styles = MediaQueryStyleSheet.create(
     body: {
       fontFamily: "Roboto-Light",
       color: colors.black,
-      fontSize: 19
+      fontSize: 17
     },
 
     currentTitle: {

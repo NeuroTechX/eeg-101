@@ -1,4 +1,4 @@
-export default { 
+export default {
 
 	//global
 	nextLink:  'PROCHAIN',
@@ -249,7 +249,7 @@ export default {
 	trainSamples:  '�chantillons',
 	trainStop:  'ARR�TER',
 	trainCollect:  'ACQU�RIR',
-	trainCollectMore:  'ACQU�RIR PLUS (D'OPTIONS)',
+	trainCollectMore:  'ACQU�RIR PLUS (D�OPTIONS)',
 	trainOn:  'ON',
 	trainOff:  'OFF',
 	trainFitClassifier:  'ENTRA�NER LE CLASSIFIEUR',

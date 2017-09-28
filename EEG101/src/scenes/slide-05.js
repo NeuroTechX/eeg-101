@@ -83,7 +83,7 @@ class SlideFive extends Component {
           <View style={styles.pageStyle}>
             <Text style={styles.header}>{I18n.t('chunkingSignal')}</Text>
             <Text style={styles.body}>
-			  {I18n.t('EEGDividedSegments')}<PopUpLink onPress={() => this.setState({ popUpVisible: true })}>{I18n.t('epochsLink')}</PopUpLink>.
+			  {I18n.t('EEGDividedSegments')}{' '}<PopUpLink onPress={() => this.setState({ popUpVisible: true })}>{I18n.t('epochsLink')}</PopUpLink>.
             </Text>
             <LinkButton path="./slideSix">{I18n.t('nextLink')}</LinkButton>
           </View>

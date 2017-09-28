@@ -48,7 +48,7 @@ class BCIOne extends Component {
 
           <View style={styles.pageStyle}>
             <Text style={styles.header}>{I18n.t('whatIsBci')}</Text>
-            <Text style={styles.body}>{I18n.t('bciDefinition1')}
+            <Text style={styles.body}>{I18n.t('bciDefinition1')}{' '}
               <PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>
                 {I18n.t('bciDefinition2')}
               </PopUpLink>{" "}
@@ -59,7 +59,7 @@ class BCIOne extends Component {
           <View style={styles.pageStyle}>
             <Text style={styles.header}>{I18n.t('makeUseBci')}</Text>
             <Text style={styles.body}>
-              {I18n.t('recognizePatternBrain')}
+              {I18n.t('recognizePatternBrain')}{' '}
               <PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>
                 {I18n.t('machineLearning')}
               </PopUpLink>
@@ -116,7 +116,7 @@ const styles = MediaQueryStyleSheet.create(
     body: {
       fontFamily: "Roboto-Light",
       color: colors.black,
-      fontSize: 19
+      fontSize: 17
     },
 
     container: {

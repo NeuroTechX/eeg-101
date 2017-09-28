@@ -47,7 +47,7 @@ class SlideSix extends Component {
           <View style={styles.pageStyle}>
             <Text style={styles.header}>{I18n.t('removingNoise')}</Text>
             <Text style={styles.body}>
-		      {I18n.t('afterEEGDividedEpochs')}<PopUpLink onPress={() => this.setState({ popUpVisible: true })}>{I18n.t('significantLink')}</PopUpLink>{I18n.t('amountNoiseIgnored')}
+		      {I18n.t('afterEEGDividedEpochs')}{' '}<PopUpLink onPress={() => this.setState({ popUpVisible: true })}>{I18n.t('significantLink')}</PopUpLink>{' '}{I18n.t('amountNoiseIgnored')}
             </Text>
             <LinkButton path="./slideSeven">{I18n.t('nextLink')}</LinkButton>
           </View>

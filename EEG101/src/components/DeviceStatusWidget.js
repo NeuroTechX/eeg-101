@@ -47,7 +47,7 @@ export default class DeviceStatusWidget extends Component {
         break;
     }
     if(this.props.isOfflineMode){
-      connectionString = 'Offline Mode (beta)'
+      connectionString = 'Offline Mode'
       imageSource = require('../assets/nomuseiconwhite.png')
     } else { imageSource = require('../assets/museiconwhite.png') }
 
