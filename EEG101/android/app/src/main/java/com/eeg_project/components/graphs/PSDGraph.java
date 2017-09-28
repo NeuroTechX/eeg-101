@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.util.Log;
 import android.widget.FrameLayout;
 
-import com.androidplot.Plot;
 import com.androidplot.ui.HorizontalPositioning;
 import com.androidplot.ui.Size;
 import com.androidplot.ui.SizeMetric;
@@ -30,19 +29,18 @@ import com.eeg_project.components.signal.PSDBuffer;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.ref.WeakReference;
 import java.util.List;
 
 /*
 View that plots a dynamic power spectral density (PSD) curve
 
 Plotting process:
-1. Creates AndroidPlot graph and MuseDataListener for EEG dataSource packets
+1. Creates AndroidPlot graph and MuseDataListener for incoming EEG data
 2. MuseDataListener updates circular eegBuffer at 220-260hz
 3. When view is visible, dataThread and renderingThread perform PSD computations and plot
 dataSeries, respectively
 4. dataThread computes smoothed log PSD with FFT from JTransforms library (in FFT class)
-5. renderingThread plots PSDseries at fixed frequency. PSDseries just points to smoothLogPower in
+5. renderingThread plots PSDseries at fixed frequency. PSDSeries just points to smoothLogPower in
  dataSource
 */
 public class PSDGraph extends FrameLayout {
@@ -113,7 +111,7 @@ public class PSDGraph extends FrameLayout {
     }
 
     // -----------------------------------------------------------------------
-    // Lifecycle methods (initView and onVisibilityChanged)
+    // Lifecycle methods (initView)
 
     // Initializes and styles the AndroidPlot XYPlot component of EEGGraph
     // All styling is performed entirely within this function, XML is not used
@@ -149,7 +147,6 @@ public class PSDGraph extends FrameLayout {
 
         // Remove gridlines
         psdPlot.getGraph().getGridBackgroundPaint().setColor(Color.TRANSPARENT);
-
 
         // Remove axis labels and values
         // Domain = X; Range = Y
@@ -302,34 +299,6 @@ public class PSDGraph extends FrameLayout {
 
     // --------------------------------------------------------------
     // Runnables
-
-    // Runnable class that redraws plot at a fixed frequency
-    class PlotUpdater implements Runnable {
-        WeakReference<Plot> plot;
-        private boolean keepRunning = true;
-        public PlotUpdater(Plot plot) {
-            this.plot = new WeakReference<Plot>(plot);
-        }
-
-        @Override
-        public void run() {
-            try {
-                keepRunning = true;
-                while (keepRunning) {
-                    // 33ms sleep = 30 fps
-                    Thread.sleep(33);
-                    plot.get().redraw();
-
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        public void stopThread() {
-            keepRunning = false;
-        }
-    }
 
     // Data source runnable
     // Processes raw EEG dataSource and updates dataSeries

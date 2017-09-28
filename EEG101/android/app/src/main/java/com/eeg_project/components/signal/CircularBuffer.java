@@ -29,7 +29,7 @@ public class CircularBuffer {
     // Methods
 
     // Updates the 2D buffer array with the 1D newData array at the current index.
-    // When index reaches the maximum samplingFrequency it returns to 0.
+    // When index reaches the bufferLength it returns to 0.
     public void update(double[] newData) {
         for(int i = 0; i < nbCh; i++) {
             buffer[index][i] = newData[i];

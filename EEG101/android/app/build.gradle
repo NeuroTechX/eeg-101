@@ -151,7 +151,7 @@ dependencies {
     compile "com.facebook.react:react-native:+"  // From node_modules
     compile 'org.apache.commons:commons-lang3:3.4'
     compile files('libs/libmuse_android.jar')
-    compile "com.androidplot:androidplot-core:1.4.2"
+    compile "com.androidplot:androidplot-core:1.5.1"
     compile group: 'com.github.wendykierp', name: 'JTransforms', version: '3.1'
 }
 
