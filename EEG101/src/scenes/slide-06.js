@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
+import { Text, View, ViewPagerAndroid, Image } from "react-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import config from "../redux/config.js";
 import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
 import PopUpLink from "../components/PopUpLink";
-import I18n from '../i18n/i18n';
+import I18n from "../i18n/i18n";
 import * as colors from "../styles/colors";
 
 function mapStateToProps(state) {
@@ -28,7 +28,6 @@ class SlideSix extends Component {
   render() {
     return (
       <View style={styles.container}>
-
         <View style={styles.graphContainer}>
           <Image
             source={require("../assets/artifact.png")}
@@ -37,39 +36,47 @@ class SlideSix extends Component {
           />
         </View>
 
-        <Text style={styles.currentTitle}>{I18n.t('artefactRemovalSlideTitle')}</Text>
+        <Text style={styles.currentTitle}>
+          {I18n.t("artefactRemovalSlideTitle")}
+        </Text>
 
         <ViewPagerAndroid //Allows us to swipe between blocks
           style={styles.viewPager}
           initialPage={0}
         >
-
           <View style={styles.pageStyle}>
-            <Text style={styles.header}>{I18n.t('removingNoise')}</Text>
-            <Text style={styles.body}>
-		      {I18n.t('afterEEGDividedEpochs')}{' '}<PopUpLink onPress={() => this.setState({ popUpVisible: true })}>{I18n.t('significantLink')}</PopUpLink>{' '}{I18n.t('amountNoiseIgnored')}
+            <Text style={styles.header}>
+              {I18n.t("removingNoise")}
             </Text>
-            <LinkButton path="./slideSeven">{I18n.t('nextLink')}</LinkButton>
+            <Text style={styles.body}>
+              {I18n.t("afterEEGDividedEpochs")}{" "}
+              <PopUpLink onPress={() => this.setState({ popUpVisible: true })}>
+                {I18n.t("significantLink")}
+              </PopUpLink>{" "}
+              {I18n.t("amountNoiseIgnored")}
+            </Text>
+            <LinkButton path="./slideSeven">
+              {I18n.t("nextLink")}
+            </LinkButton>
           </View>
-
         </ViewPagerAndroid>
 
         <PopUp
           onClose={() => this.setState({ popUpVisible: false })}
           visible={this.state.popUpVisible}
-          title={I18n.t('artefactDetectionTitle')}
+          title={I18n.t("artefactDetectionTitle")}
         >
-		  {I18n.t('artefactDetectionDescription')}
+          {I18n.t("artefactDetectionDescription")}
         </PopUp>
 
-		<PopUp
-          onClose={()=>this.props.history.push('/connectorOne')}
+        <PopUp
+          onClose={() => this.props.history.push("/connectorOne")}
           visible={
             this.props.connectionStatus === config.connectionStatus.DISCONNECTED
           }
-          title={I18n.t('museDisconnectedTitle')}
+          title={I18n.t("museDisconnectedTitle")}
         >
-			{I18n.t('museDisconnectedDescription')}
+          {I18n.t("museDisconnectedDescription")}
         </PopUp>
       </View>
     );

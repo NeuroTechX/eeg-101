@@ -119,7 +119,7 @@ class ClassifierRun extends Component {
             width={this.props.dimensions.width}
             height={this.props.dimensions.height}
           />
-          <View style={{ position: "absolute", top: 30, right: 30 }}>
+          <View style={styles.noiseView}>
             <NoiseIndicator noise={this.state.noise} width={100} height={100} />
           </View>
         </View>
@@ -128,7 +128,7 @@ class ClassifierRun extends Component {
         </Text>
         <ViewPagerAndroid style={styles.viewPager} initialPage={0}>
           <View style={styles.pageStyle}>
-            <View style={{ padding: 40 }}>
+            <View style={styles.buttonView}>
               <PlayPauseButton
                 onPress={() => {
                   if (this.state.isRunning) {
@@ -145,14 +145,14 @@ class ClassifierRun extends Component {
               />
             </View>
             <View
-              style={{ flexDirection: "row", justifyContent: "space-around" }}
+              style={styles.buttonContainer}
             >
-              <View style={{ flex: 1 }}>
+              <View style={styles.buttonFlex}>
                 <LinkButton path="/end">
                   {I18n.t("endEeg101")}
                 </LinkButton>
               </View>
-              <View style={{ flex: 1 }}>
+              <View style={styles.buttonFlex}>
                 <LinkButton path="/bciTrain">
                   {I18n.t("retrainBci")}
                 </LinkButton>
@@ -218,6 +218,14 @@ const styles = MediaQueryStyleSheet.create(
       color: colors.black,
       fontSize: 20
     },
+
+    buttonView: { padding: 40 },
+
+    noiseView: { position: "absolute", top: 30, right: 30 },
+
+    buttonContainer: { flexDirection: "row", justifyContent: "space-around" },
+
+    buttonFlex: {flex: 1},
 
     viewPager: {
       flex: 4

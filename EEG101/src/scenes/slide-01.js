@@ -66,7 +66,7 @@ class SlideOne extends Component {
             this.setState({ slidePosition: e.nativeEvent.position })}
         >
           <GraphView
-            style={{ flex: 1 }}
+            style={styles.graphView}
             isPlaying={this.state.isPlaying}
           />
         </View>
@@ -114,7 +114,7 @@ class SlideOne extends Component {
               {I18n.t("doesSignalChange")}
             </Text>
             <Text style={styles.body}>
-              {I18n.t("eyeMovementCreates")}
+              {I18n.t("eyeMovementCreates")}{' '}
               <PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>
                 {I18n.t("noiseLink")}
               </PopUpLink>
@@ -142,7 +142,7 @@ class SlideOne extends Component {
               {I18n.t("tryClosingEyes10")}
             </Text>
             <Text style={styles.body}>
-              {I18n.t("mayNoticeSignalChange")}
+              {I18n.t("mayNoticeSignalChange")}{' '}
               <PopUpLink onPress={() => this.setState({ popUp4Visible: true })}>
                 {I18n.t("alphaWavesLink")}
               </PopUpLink>
@@ -234,6 +234,10 @@ const styles = MediaQueryStyleSheet.create(
       flex: 4,
       justifyContent: "center",
       alignItems: "stretch"
+    },
+
+    graphView: {
+      flex: 1
     },
 
     titleContainer: {

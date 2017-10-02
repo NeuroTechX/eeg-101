@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import { Text, View } from "react-native";
 import { connect } from "react-redux";
 import config from "../redux/config";
 import { bindActionCreators } from "redux";
 import { setGraphViewDimensions } from "../redux/actions";
 import PopUp from "../components/PopUp";
-import Button from "../components/Button";
 import LinkButton from "../components/LinkButton";
 import RecorderButton from "../components/RecorderButton";
 import SandboxButton from "../components/SandboxButton";
@@ -72,40 +71,39 @@ class Sandbox extends Component {
             <Text style={styles.filterText}>
               {text}
             </Text>
-          <View style={styles.filterButtonContainer}>
-
-            <SandboxButton
-              onPress={() =>
-                this.setState({
-                  filterType: config.filterType.LOWPASS,
-                  isRecording: false
-                })}
-              active={this.state.filterType === config.filterType.LOWPASS}
-            >
-              LOW
-            </SandboxButton>
-            <SandboxButton
-              onPress={() =>
-                this.setState({
-                  filterType: config.filterType.HIGHPASS,
-                  isRecording: false
-                })}
-              active={this.state.filterType === config.filterType.HIGHPASS}
-            >
-              HIGH
-            </SandboxButton>
-            <SandboxButton
-              onPress={() =>
-                this.setState({
-                  filterType: config.filterType.BANDPASS,
-                  isRecording: false
-                })}
-              active={this.state.filterType === config.filterType.BANDPASS}
-            >
-              BAND
-            </SandboxButton>
+            <View style={styles.filterButtonContainer}>
+              <SandboxButton
+                onPress={() =>
+                  this.setState({
+                    filterType: config.filterType.LOWPASS,
+                    isRecording: false
+                  })}
+                active={this.state.filterType === config.filterType.LOWPASS}
+              >
+                LOW
+              </SandboxButton>
+              <SandboxButton
+                onPress={() =>
+                  this.setState({
+                    filterType: config.filterType.HIGHPASS,
+                    isRecording: false
+                  })}
+                active={this.state.filterType === config.filterType.HIGHPASS}
+              >
+                HIGH
+              </SandboxButton>
+              <SandboxButton
+                onPress={() =>
+                  this.setState({
+                    filterType: config.filterType.BANDPASS,
+                    isRecording: false
+                  })}
+                active={this.state.filterType === config.filterType.BANDPASS}
+              >
+                BAND
+              </SandboxButton>
+            </View>
           </View>
-        </View>
         );
 
       case config.graphType.WAVES:
@@ -135,7 +133,7 @@ class Sandbox extends Component {
           }}
         >
           <SandboxGraph
-            style={{ flex: 1 }}
+            style={styles.graphView}
             channelOfInterest={this.state.channelOfInterest}
             graphType={this.state.graphType}
             dimensions={this.props.dimensions}
@@ -148,58 +146,56 @@ class Sandbox extends Component {
 
         <View style={styles.pageContainer}>
           <View style={styles.rowContainer}>
-          <View style={styles.infoContainer}>
-            <View style={styles.buttonContainer}>
-              <SandboxButton
-                onPress={() =>
-                  this.setState({
-                    graphType: config.graphType.EEG,
-                    isRecording: false
-                  })}
-                active={this.state.graphType === config.graphType.EEG}
-              >
-                RAW
-              </SandboxButton>
-              <SandboxButton
-                onPress={() =>
-                  this.setState({
-                    graphType: config.graphType.FILTER,
-                    isRecording: false
-                  })}
-                active={this.state.graphType === config.graphType.FILTER}
-              >
-                FILTERED
-              </SandboxButton>
-              <SandboxButton
-                onPress={() =>
-                  this.setState({
-                    graphType: config.graphType.WAVES,
-                    isRecording: false
-                  })}
-                active={this.state.graphType === config.graphType.WAVES}
-              >
-                PSD
-              </SandboxButton>
-              <RecorderButton
-                isRecording={this.state.isRecording}
-                onPress={() => {
-                  this.setState({ isRecording: !this.state.isRecording });
-                }}
-              />
+            <View style={styles.infoContainer}>
+              <View style={styles.buttonContainer}>
+                <SandboxButton
+                  onPress={() =>
+                    this.setState({
+                      graphType: config.graphType.EEG,
+                      isRecording: false
+                    })}
+                  active={this.state.graphType === config.graphType.EEG}
+                >
+                  RAW
+                </SandboxButton>
+                <SandboxButton
+                  onPress={() =>
+                    this.setState({
+                      graphType: config.graphType.FILTER,
+                      isRecording: false
+                    })}
+                  active={this.state.graphType === config.graphType.FILTER}
+                >
+                  FILTERED
+                </SandboxButton>
+                <SandboxButton
+                  onPress={() =>
+                    this.setState({
+                      graphType: config.graphType.WAVES,
+                      isRecording: false
+                    })}
+                  active={this.state.graphType === config.graphType.WAVES}
+                >
+                  PSD
+                </SandboxButton>
+                <RecorderButton
+                  isRecording={this.state.isRecording}
+                  onPress={() => {
+                    this.setState({ isRecording: !this.state.isRecording });
+                  }}
+                />
+              </View>
+
+              <View style={styles.textContainer}>
+                {this.renderInfoView()}
+              </View>
             </View>
-
-            <View style={styles.textContainer}>
-              {this.renderInfoView()}
-            </View>
-
-
+            <ElectrodeSelector
+              style={styles.electrodeSelector}
+              channelOfInterest={channel =>
+                this.setState({ channelOfInterest: channel })}
+            />
           </View>
-          <ElectrodeSelector
-            style={{ alignSelf: "center" }}
-            channelOfInterest={channel =>
-              this.setState({ channelOfInterest: channel })}
-          />
-        </View>
 
           <LinkButton path="/end">END</LinkButton>
         </View>
@@ -235,6 +231,12 @@ const styles = MediaQueryStyleSheet.create(
       alignItems: "stretch"
     },
 
+    graphView: { flex: 1 },
+
+    electrodeSelector: {
+      alignSelf: "center"
+    },
+
     currentTitle: {
       marginLeft: 20,
       marginTop: 10,
@@ -247,7 +249,7 @@ const styles = MediaQueryStyleSheet.create(
     buttonContainer: {
       paddingTop: 10,
       flex: 1,
-      flexDirection: 'row',
+      flexDirection: "row",
       alignItems: "flex-start",
       justifyContent: "space-between"
     },
@@ -261,13 +263,13 @@ const styles = MediaQueryStyleSheet.create(
 
     filterContainer: {
       flex: 1,
-      alignItems: 'center',
+      alignItems: "center"
     },
 
     filterButtonContainer: {
       flex: 1,
-      alignItems: 'center',
-      flexDirection: 'row',
+      alignItems: "center",
+      flexDirection: "row",
       justifyContent: "space-between"
     },
 

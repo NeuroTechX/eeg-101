@@ -51,7 +51,7 @@ class BCIOne extends Component {
             <Text style={styles.body}>{I18n.t('bciDefinition1')}{' '}
               <PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>
                 {I18n.t('bciDefinition2')}
-              </PopUpLink>{" "}
+              </PopUpLink>{' '}
               {I18n.t('bciDefinition3')}
             </Text>
           </View>

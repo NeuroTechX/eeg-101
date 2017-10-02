@@ -37,7 +37,7 @@ class SlideThree extends Component {
       <View style={styles.container}>
         <View style={styles.graphContainer}>
           <GraphView
-            style={{ flex: 1 }}
+            style={styles.graphView}
             channelOfInterest={this.state.channelOfInterest}
           />
         </View>
@@ -55,7 +55,7 @@ class SlideThree extends Component {
               {I18n.t("howDoesEEGDeviceWork")}
             </Text>
             <Text style={styles.body}>
-              {I18n.t("electricalActivitySensed")}
+              {I18n.t("electricalActivitySensed")}{' '}
               <PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>
                 {I18n.t("electrodesLink")}
               </PopUpLink>
@@ -174,6 +174,10 @@ const styles = MediaQueryStyleSheet.create(
       flex: 4,
       justifyContent: "center",
       alignItems: "stretch"
+    },
+
+    graphView: {
+      flex: 1
     },
 
     header: {

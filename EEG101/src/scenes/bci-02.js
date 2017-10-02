@@ -108,7 +108,7 @@ class BCITwo extends Component {
                   active={this.props.bciAction == config.bciAction.VIBRATE}
                 >
                   <Image
-                    style={{ height: 50 }}
+                    style={styles.decisionImage}
                     source={require("../assets/vibrate.png")}
                     resizeMode="contain"
                   />
@@ -125,7 +125,7 @@ class BCITwo extends Component {
                   active={this.props.bciAction == config.bciAction.LIGHT}
                 >
                   <Image
-                    style={{ height: 50 }}
+                    style={styles.decisionImage}
                     source={require("../assets/light.png")}
                     resizeMode="contain"
                   />
@@ -133,7 +133,7 @@ class BCITwo extends Component {
                 </DecisionButton>
               </View>
             </View>
-            <View style={{ flex: 1 }}>
+            <View style={styles.swipeView}>
               {this.renderSwipeImage()}
             </View>
           </View>
@@ -154,7 +154,7 @@ class BCITwo extends Component {
                 onComplete={() => this.setState({ enableScroll: true })}
               />
             </View>
-            <View style={{ flex: 1 }}>
+            <View style={styles.swipeView}>
               {this.renderSwipeImage()}
             </View>
           </View>
@@ -175,7 +175,7 @@ class BCITwo extends Component {
                 onComplete={() => this.setState({ enableScroll: true })}
               />
             </View>
-            <View style={{ flex: 1 }}>
+            <View style={styles.swipeView}>
               {this.renderSwipeImage()}
             </View>
           </View>
@@ -258,6 +258,14 @@ const styles = MediaQueryStyleSheet.create(
       fontFamily: "Roboto-Medium",
       color: colors.black,
       fontSize: 20
+    },
+
+    decisionImage: {
+       height: 50
+    },
+
+    swipeView: {
+      flex: 1
     },
 
     graphContainer: {

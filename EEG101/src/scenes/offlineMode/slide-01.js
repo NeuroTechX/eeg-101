@@ -103,10 +103,11 @@ class SlideOne extends Component {
               {I18n.t("theBrainProduces")}
             </Text>
             <Text style={styles.body}>
-              {I18n.t("thisExample")}
+              {I18n.t("thisExample")}{" "}
               <PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>
-                {" EEG "}
+                {I18n.t("EEGLink")}
               </PopUpLink>
+              {" "}
               {I18n.t("dataShowing")}
             </Text>
             <Image
@@ -121,10 +122,10 @@ class SlideOne extends Component {
               {I18n.t("noiseInSignal")}
             </Text>
             <Text style={styles.body}>
-              {I18n.t("differentTypes")}
+              {I18n.t("differentTypes")}{' '}
               <PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>
-                {I18n.t("noiseLink")}.
-              </PopUpLink>
+                {I18n.t("noiseLink")}
+              </PopUpLink>.
             </Text>
             <Text style={styles.body}>
               {I18n.t("blinksExample")}

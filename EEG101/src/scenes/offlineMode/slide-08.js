@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
+import { Text, View, ViewPagerAndroid } from "react-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import { bindActionCreators } from "redux";
@@ -70,7 +70,7 @@ class SlideEight extends Component {
               {I18n.t("powerSpectralDensity")}
             </Text>
             <Text style={styles.body}>
-              {I18n.t("whenWeApplyFourier")}
+              {I18n.t("whenWeApplyFourier")}{' '}
               <PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>
                 {I18n.t("powerLink")}
               </PopUpLink>.
@@ -149,12 +149,6 @@ const styles = MediaQueryStyleSheet.create(
       alignItems: "stretch",
       justifyContent: "space-around"
     },
-
-    image: {
-      flex: 1,
-      width: null,
-      height: null
-    }
   },
   // Responsive styles
   {

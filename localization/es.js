@@ -8,7 +8,7 @@ export default {
 	connectButton:  'CONECTAR',
 
 	//begin-landing.js
-	welcomeEEG101:  'Bienvenid@ a EEG101',
+	welcomeEEG101:  'Bienvenido a EEG101',
 	tutorialDescription:  'Al finalizar este tutorial, conocerás la manera en la que un dispositivo EEG puede ser usado para medir la actividad eléctrica cerebral.',
 
 	//connector-01.js
@@ -47,7 +47,7 @@ export default {
 	mayNoticeSignalChange:  'Probablemente observaste cambios en la señal, cambios debido a un incremento en ',
 	alphaWavesLink:  'las ondas alfa.',
 	whatIsEEGTitle:  '¿Qué es exactamente el EEG?',
-	whatIsEEGDescription:  'La electroencefalografía (EEG) es una técnica que registra la actividad eléctrica del cerebro con ayuda de sensores que detectan las fluctuaciones de voltaje sobre la superficie del cuero cabelludo. El primer registro de EEG humano fue realizado en 1924 por Hans Berger, un psiquiatra alemán cuyo interés por la ‘energía psíquica’ lo llevó a experimentar con los campos eléctricos del cerebro.',
+	whatIsEEGDescription:  'La electroencefalografía (EEG) es una técnica que registra la actividad eléctrica del cerebro con ayuda de sensores que detectan las fluctuaciones de voltaje sobre la superficie del cuero cabelludo. El primer registro de EEG humano fue realizado en 1924 por Hans Berger, un psiquiatra alemán cuyo interés por la ‘energía psíquica\' lo llevó a experimentar con los campos eléctricos del cerebro.',
 	noiseTitle:  'Ruido',
 	noiseDescription:  'El movimiento de los ojos (los cuales poseen carga eléctrica) y la actividad muscular producen actividad eléctrica. Así, parpadear, tragar, o apretar la quijada producen ruido eléctrico que puede ser de mayor potencia que las señales generadas en el cerebro. Esto puede hacer que leer el EEG sea muy difícil. Para registrar la actividad del cerebro de forma acertada, se debe minimizar el movimiento corporal. ',
 	cannotReadMindsTitle:  'El EEG no puede leer mentes',
@@ -66,23 +66,23 @@ export default {
 	needsProcessing:  'Con el procesamiento, el EEG puede dar pistas sobre la actividad cerebral general, pero no es capaz de',
 
 	//slide-02.js
-	physiologySlideTitle:  'PHYSIOLOGY ES',
-	EEGComeFrom:  'Where does the EEG signal come from? ES',
-	EEGMeasures:  'The EEG measures the electrical activity that occurs when  ES',
-	neuronsLink:  'neurons  ES',
-	receiveAndTransmit:  ' receive and transmit information. ES',
-	organizedNeural:  'Organized neural activity produces electric fields. ES',
-	whenBillionsOfNeurons:  'When billions of neurons  ES',
-	workTogetherLink:  'work together ES',
-	produceThoughts:  ' to produce thoughts, feelings, and behaviours, their electricity can be detected by electrodes on the scalp. ES',
-	EEGDetects:  'EEG detects the "state" of the brain. ES',
-	organizedElectricalActivity:  'This organized electrical activity varies between different brain states, such as  ES',
-	sleepWakefulnessLink:  'sleep and wakefulness. ES',
-	neuralBasisEEGTitle:  'Neural basis of EEG. ES',
-	neuralBasisEEGDescription1:  'When synapses are activated on a neuron\'s dendrites, a small electric field (dipole) is created along the body of the neuron due to the difference in charge between those dendrites and the axon. This electric field only lasts for a few milliseconds. ES',
-	neuralBasisEEGDescription2:  'The electric fields produced by single neurons are vanishingly small. However, when large numbers of cortical neurons fire rhythmically, their activity can produce electric fields that are large enough to cross the surface of the skull. This process is influenced by many factors, including depth, orientation, and subtype of neurons, and is a topic of ongoing research. ES',
-	brainStatesTitle:  'Brain states ES',
-	brainStatesDescription:  'During sleep our brains produce very different kinds of rhythmic electrical activity. When awake, brain rhythms tend to be rapidly-changing and irregular, while slowly-changing, organized rhythms become more dominant as we fall asleep and pass through the multiple sleep stages. \n Certain emotions and cognitive processes have also been linked with characteristic patterns of rhythmic activity that can be identified with EEG. ES',
+	physiologySlideTitle:  'FISIOLOGÍA',
+	EEGComeFrom:  '¿Cuál es el origen de la señal de EEG?',
+	EEGMeasures:  'La señal de EEG registra la señal eléctrica que ocurre cuando',
+	neuronsLink:  'las neuronas',
+	receiveAndTransmit:  'reciben y transmiten información.',
+	organizedNeural:  'La actividad neuronal organizada produce campos eléctricos.',
+	whenBillionsOfNeurons:  'Cuando miles de millones de neuronas',
+	workTogetherLink:  'trabajan juntas',
+	produceThoughts:  ' para producir pensamientos, sentimientos y comportamientos, su actividad eléctrica es detectada por los electrodos sobre la cabeza.',
+	EEGDetects:  'El EEG detecta el estado general del cerebro.',
+	organizedElectricalActivity:  'Esta actividad organizada eléctrica varía para diferentes estados cerebrales, por ejemplo',
+	sleepWakefulnessLink:  'si estás dormido o despierto.',
+	neuralBasisEEGTitle:  'Las bases neuronales del EEG.',
+	neuralBasisEEGDescription1:  'Cuando las sinapsis en las dendritas de una neurona se activan, un pequeño campo eléctrico (dipolo) se crea a lo largo del cuerpo de la neurona debido a la diferencia de carga eléctrica entre las dendritas y el axón. Este campo eléctrico dura un par de milisegundos.',
+	neuralBasisEEGDescription2:  'El campo eléctrico producido por una neurona es diminuto. No obstante, cuando muchas neuronas corticales disparan de manera rítmica, su actividad puede producir campos eléctricos que son lo suficientemente grandes para cruzar la superficie del cráneo. Este proceso depende de diferentes factores, incluyendo la profundidad, la orientación, el subtipo de neurona... y es un tema actual de investigación.',
+	brainStatesTitle:  'Estados cerebrales',
+	brainStatesDescription:  'Mientras dormimos, nuestros cerebros producen un tipo particular de actividad eléctrica rítmica. Cuando estamos despiertos, los patrones rítmicos cerebrales tienden a ser dinámicos e irregulares, mientras que ritmos lentos y organizados se vuelven dominantes cuando nos vamos quedando dormidos y pasamos por las diferentes etapas del sueño. \n Ciertas emociones y procesos cognitivos también han sido asociados con patrones característicos de actividad rítmica cerebral que pueden ser registrados con el EEG.',
 
 	//slide-03.js
 	hardwareSlideTitle:  'HARDWARE',
@@ -137,8 +137,7 @@ export default {
 	artefactDetectionDescription:  'Una manera simple de definir una cantidad "significante de ruido" es cuantificar que tan diferente es una época comparada con sus adyacentes. Si la señal varía mucho más en una época que en aquellas adyacentes, probablemente sea porque hubo un parpadeo o alguna otra fuente de ruido. ¡Deshazte de ellos!',
 
 	//slide-07.js
-	featureDetectionSlideTitle:  '
-EXTRACCIÓN DE CARACTERISTICAS',
+	featureDetectionSlideTitle:  'EXTRACCIÓN DE CARACTERISTICAS',
 	breakingDownEEG:  'Analizando el EEG',
 	onceNoiseRemoved:  'Una vez que el ruido ha sido removido, el EEG puede ser descompuesto en señales periódicas más simples',
 	wavesLink:  'u ondas',

@@ -69,7 +69,7 @@ class SlideTwo extends Component {
 				{I18n.t('EEGComeFrom')}
             </Text>
             <Text style={styles.body}>
-				{I18n.t('EEGMeasures')}<PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>{I18n.t('neuronsLink')}</PopUpLink>{' '}{I18n.t('receiveAndTransmit')}
+				{I18n.t('EEGMeasures')}{' '}<PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>{I18n.t('neuronsLink')}</PopUpLink>{' '}{I18n.t('receiveAndTransmit')}
             </Text>
           </View>
 
@@ -78,7 +78,7 @@ class SlideTwo extends Component {
 				{I18n.t('organizedNeural')}
             </Text>
             <Text style={styles.body}>
-				{I18n.t('whenBillionsOfNeurons')}<PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>{I18n.t('workTogetherLink')}</PopUpLink>{' '}{I18n.t('produceThoughts')}
+				{I18n.t('whenBillionsOfNeurons')}{' '}<PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>{I18n.t('workTogetherLink')}</PopUpLink>{' '}{I18n.t('produceThoughts')}
             </Text>
           </View>
 

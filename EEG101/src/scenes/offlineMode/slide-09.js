@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
+import { Text, View, ViewPagerAndroid } from "react-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 
@@ -36,17 +36,11 @@ class SlideNine extends Component {
     };
   }
 
-  offlineDataSource() {
-    if (this.props.isOfflineMode) {
-      return "relax";
-    }
-  }
-
   render() {
     return (
       <View style={styles.container}>
         <WaveGraphView
-          offlineData={this.offlineDataSource()}
+          offlineData={'relax'}
           dimensions={this.props.dimensions}
         />
 
@@ -72,7 +66,7 @@ class SlideNine extends Component {
               {I18n.t("brainWaves")}
             </Text>
             <Text style={styles.body}>
-              {I18n.t("freqCorrelatedBrain")}
+              {I18n.t("freqCorrelatedBrain")}{' '}
               <PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>
                 {I18n.t("brainWavesLink")}
               </PopUpLink>.
@@ -182,12 +176,6 @@ const styles = MediaQueryStyleSheet.create(
       alignItems: "stretch",
       justifyContent: "space-around"
     },
-
-    image: {
-      flex: 1,
-      width: null,
-      height: null
-    }
   },
   // Responsive styles
   {

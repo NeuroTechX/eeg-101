@@ -1,6 +1,5 @@
 // actions.js
 // Functions that interact with the Redux store.
-import { DeviceEventEmitter } from "react-native";
 import Connector from "../interface/Connector";
 import {
   SET_CONNECTION_STATUS,

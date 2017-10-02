@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, ViewPagerAndroid, Image } from "react-native";
+import { Text, View, ViewPagerAndroid } from "react-native";
 import { connect } from "react-redux";
 import LinkButton from "../components/LinkButton";
 import PopUp from "../components/PopUp";
@@ -24,7 +24,6 @@ function mapStateToProps(state) {
 class SlideFour extends Component {
   constructor(props) {
     super(props);
-    isVisible: true;
 
     // Initialize States
     this.state = {
@@ -36,14 +35,14 @@ class SlideFour extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.halfGraphContainer}>
-          <GraphView style={{ flex: 1 }} />
+          <GraphView style={styles.graphView} />
           <Text style={styles.halfGraphLabelText}>
             {I18n.t("raw")}
           </Text>
         </View>
         <View style={styles.halfGraphContainer}>
           <FilterGraphView
-            style={{ flex: 1 }}
+            style={styles.graphView}
             filterType={config.filterType.BANDPASS}
           />
           <Text style={styles.halfGraphLabelText}>
@@ -64,10 +63,10 @@ class SlideFour extends Component {
               {I18n.t("meaningfulData")}
             </Text>
             <Text style={styles.body}>
-              {I18n.t("firstEEGMust")}
+              {I18n.t("firstEEGMust")}{' '}
               <PopUpLink onPress={() => this.setState({ popUpVisible: true })}>
                 {I18n.t("filteredLink")}
-              </PopUpLink>{" "}
+              </PopUpLink>{' '}
               {I18n.t("toReduceSignals")}
             </Text>
             <LinkButton path="./slideFive">
@@ -136,6 +135,10 @@ const styles = MediaQueryStyleSheet.create(
 
     viewPager: {
       flex: 4
+    },
+
+    graphView: {
+      flex: 1
     },
 
     halfGraphContainer: {

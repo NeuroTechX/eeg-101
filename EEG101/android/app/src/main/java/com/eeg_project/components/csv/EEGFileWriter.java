@@ -66,7 +66,6 @@ public class EEGFileWriter {
             }
             builder.append("\n");
         }
-
     }
 
     public void addDataToFile(double[] data) {

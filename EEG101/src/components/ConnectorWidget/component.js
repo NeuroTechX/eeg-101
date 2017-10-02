@@ -360,7 +360,7 @@ const styles = MediaQueryStyleSheet.create(
 
     modalInnerContainer: {
       alignItems: "stretch",
-      backgroundColor: "white",
+      backgroundColor: colors.white,
       padding: 20,
       elevation: 4,
       borderRadius: 4

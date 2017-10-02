@@ -21,7 +21,7 @@ export default {
 
 	//connector-02.js
 	step2Title:  'Schritt 2',
-	getStartedLink:  'LOS GEHT\’S',
+	getStartedLink:  'LOS GEHT\'S',
 	waitMusePair:  'Bitte warte, bis dein Muse mit \n EEG 101 gepaart wird…',
 
 	//connector-03.js
@@ -234,7 +234,7 @@ export default {
 
 	// bci-02.js
 	chooseCommand:  'Wähle einen Befehl aus',
-	bciCommands:  'Dieses BCI wird es dir ermöglichen, einen Befehl auf deinem Smartphone auszuführen, indem du zwischen zwei \’Hirnzuständen\’ wechselst\n\n Entscheide dich zuerst, welchen Befehl du ausführen möchtest:',
+	bciCommands:  'Dieses BCI wird es dir ermöglichen, einen Befehl auf deinem Smartphone auszuführen, indem du zwischen zwei \'Hirnzuständen\' wechselst\n\n Entscheide dich zuerst, welchen Befehl du ausführen möchtest:',
 	offData:  'Sammle “AUS”-Daten',
 	onData:  'Sammle “EIN”-Daten',
 	step4Title:  'Schritt 4',
@@ -255,7 +255,7 @@ export default {
 	trainFitClassifier:  'ANPASSEN DES KLASSIFIKATORS',
 	trainAccuracy:  'Genauigkeit',
 	trainReFit:  'ERNEUT ANPASSEN',
-	trainRunIt:  'LOS GEHT\’S',
+	trainRunIt:  'LOS GEHT\'S',
 	trainReset:  'ZURÜCKSETZEN',
 
 	// ClassifierInfoDisplayer.js
