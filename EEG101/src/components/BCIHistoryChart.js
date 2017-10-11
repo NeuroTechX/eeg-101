@@ -2,13 +2,11 @@
 // A dynamic line chart showing the history of BCI outputs
 
 import React, { Component } from "react";
-import { Image, View, TouchableOpacity } from "react-native";
+import { View } from "react-native";
 import {
   VictoryChart,
   VictoryLine,
   VictoryAxis,
-  VictoryScatter,
-  VictoryGroup
 } from "victory-native";
 import * as colors from "../styles/colors";
 

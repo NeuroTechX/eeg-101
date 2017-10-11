@@ -173,7 +173,7 @@ export default {
 	thetaDescription:  'Thetawellen sind hauptsächlich während “hypnagogen” Phasen direkt vor dem Einschlafen zu beobachten. Sie wurden außerdem während tiefen meditativen Stimulationen oder Hypnosen festgestellt.',
 	alphaTitle:  'Alpha α (8-13 Hz)',
 	alphaDescription:  'Alphawellen können den “Leerlauf” einer bestimmten Hirnregion andeuten. Sie steigen beispielsweise stark an, wenn die Augen geschlossen bleiben. Außerdem sind sie besonders stark am Hinterkopf, wo das Sehzentrum des Gehirns lokalisiert ist.',
-	betaTitle:  'Beta β (13-30 Hz)',
+
 	betaDescription:  'Betawellen sind die vorwiegende Kategorie während des Wachzustands des Gehirns. Sie werden mit Aufmerksamkeit, Konzentrationsfähigkeit und dem aktiven Feuern von Neuronen während intensiven Arbeitsphasen in Verbindung gebracht.',
 	gammaTitle:  'Gamma γ (30-100 Hz)',
 	gammaDescription:  'Gammawellen sind Wellen der schnellsten Form neuraler Oszillation. Sie sind wegen ihrer hohen Frequenz generell schwer mit klassischen EEG-Geräten zu erkennen, aber gerade deswegen ein aktuelles Forschungsthema. Sie werden lose mit Aufmerksamkeit, Erinnerungsvermögen und Bewusstsein assoziiert.',

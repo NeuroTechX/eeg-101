@@ -173,7 +173,7 @@ export default {
 	thetaDescription:  'Las ondas theta normalmente se observan en el periodo hipnagógico justo antes de quedarse dormido. También se han observado durante estados tanto de meditación profunda como hipnóticos.',
 	alphaTitle:  'Alfa α (8-13 Hz)',
 	alphaDescription:  'Las ondas alfa pueden indicar la baja actividad de una región cerebral. Por ejemplo, pueden aumentar dramáticamente cuando los ojos están cerrados. Son especialmente fuertes en la parte de atrás de la cabeza, donde el centro de la visión del cerebro se localiza .',
-	betaTitle:  'Beta β (13-30 Hz)',
+
 	betaDescription:  'Las ondas beta prevalecen cuando el cerebro está despierto y activo. Han sido asociadas con estados de alerta, de concentración, y el disparo activo de neuronas que están trabajando arduamente.',
 	gammaTitle:  'Gamma γ (30-100 Hz)',
 	gammaDescription:  'Las ondas gamma son el tipo de oscilación neuronal más rápida. Son difíciles de detectar y analizar con EEG ordinario, pero son un tema actual de investigación. Han sido asociadas con procesos cognitivos superiores como la atención, la memoria de trabajo, e incluso la consciencia.',

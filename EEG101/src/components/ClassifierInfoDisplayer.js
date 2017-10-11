@@ -33,7 +33,7 @@ export default class ClassifierInfoDisplayer extends Component {
     if (this.state.score == "") {
       return (
         <View style={styles.classifierContainer}>
-          <Text style={styles.body}>{I18n.t('nextTrain')}
+          <Text style={styles.body}>{I18n.t('nextTrain')}{" "}
             <PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>
               {I18n.t('classifierName')}
             </PopUpLink>{" "}{I18n.t('collectedData')}</Text>

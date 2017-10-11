@@ -1,7 +1,7 @@
 // MenuSection.js
 // Child component for SideMenu
 
-import React, { Component, PropTypes } from "react";
+import React, { Component  } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import * as colors from "../styles/colors";
