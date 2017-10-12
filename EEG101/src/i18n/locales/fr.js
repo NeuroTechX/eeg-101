@@ -117,7 +117,7 @@ export default {
 	filteredLink:  'filtré',
 	toReduceSignals:  'afin de réduire l\'importance des signaux qui ne proviennent pas du cerveau.',
 	filtersTitle:  'Filtres',
-	filtersDescription:  'Les filtres atténuent les fréquences se trouvant à l\'extérieur du spectre des signaux provenant du cerveau, ce qui permet de se débarrasser en partie du bruit produit par les muscles et l\'activité électrique environnante. Les filtres sont soit passe-haut (atténuent les basses fréquences), passe-bas (atténuent les hautes fréquences) ou passe-bande (laisse passer une bande de fréquences spécifique). Dans notre cas, nous avons implémenté un filtre passe-bande qui atténue les fréquences en dehors de celles typiquement générées par le cerveau.',
+	filtersDescription:  'Les filtres atténuent les fréquences se trouvant à l\'extérieur du spectre des signaux provenant du cerveau, ce qui permet de se débarrasser en partie du bruit produit par les muscles et l\'activité électrique environnante. Les filtres sont soit passe-haut (atténuent les basses fréquences), passe-bas (atténuent les hautes fréquences) ou passe-bande (laissent passer une bande de fréquences spécifique). Dans notre cas, nous avons implémenté un filtre passe-bande qui atténue les fréquences en dehors de celles typiquement générées par le cerveau.',
 
 	//slide-05.js
 	epochingSlideTitle:  'EXTRACTION D\'ÉPOQUES',
@@ -182,8 +182,8 @@ export default {
 
 	//slide-end.js
 	thanksForCompleting:  'Merci d\'avoir complété \n EEG 101',
-	hopeYouEnjoyed:  'Nous nous sommes efforcés d\'offrir une introduction simple aux neurosciences, au traitement de signals et aux interfaces cerveau-ordinateur. Bien entendu, il y a beaucoup encore à apprendre!',
-	furtherLearning:  'Ressources pour en apprendre plus',
+	hopeYouEnjoyed:  'Nous nous sommes efforcés d\'offrir une introduction simple aux neurosciences, au traitement de signaux et aux interfaces cerveau-ordinateur. Bien entendu, il y a beaucoup encore à apprendre!',
+	furtherLearning:  'Pour en apprendre plus (en anglais)',
 	bciResource:  'Excellente liste de ressources sur les ICO',
 	signalProcessingResource:  'Cours du MIT sur les signaux et systèmes',
 	machineLearningResource:  'L\'apprentissage machine est amusant!',
@@ -228,7 +228,7 @@ export default {
 	bciInteractionTitle:  'Types d\'ICO',
 	activeBci:  'Les ICO actives requièrent de l\'utilisateur qu\'il génère volontairement des signaux cérébraux afin de contrôler un ordinateur. Par exemple, en imaginant un movement de la main droite ou gauche afin de faire contrôler un avatar vers la droite ou vers la gauche. Les ICO actives servent à remplacer ou améliorer l\'utilisation d\'interfaces conventionelles comme les touches d\'un clavier.',
 	reactiveBci:  'Les ICO réactives utilisent la réponse naturelle du cerveau à un stimulus afin d\'inférer l\'intention de l\'utilisateur. Par exemple, en détectant l\'activité cérébrale induite par le clignotement de lumières sur un clavier, permettant à l\'utilisateur d\'épeler en fixant différents mots. Même si elles ne requièrent pas nécessairement un contrôle direct et volontaire, les ICO réactives utilisent des stimuli spécifiques qui, lorsque perçus, produisent des réponses cérébrales bien connues.',
-	passiveBci:  'Les ICO passives surveillent les états mentaux de l\'utiilisateur sans requérir un quelquonque effort de leur part. Par exemple, les ICO passives peuvent être utilisées pour le monitorage de l\'attention, de la relaxation ou de l\'état émotionnel, permettant à cette information d\'ajuster les éléments d\'un jeu vidéo.',
+	passiveBci:  'Les ICO passives surveillent les états mentaux de l\'utilisateur sans requérir un quelquonque effort de leur part. Par exemple, les ICO passives peuvent être utilisées pour le monitorage de l\'attention, de la relaxation ou de l\'état émotionnel, permettant à cette information d\'ajuster les éléments d\'un jeu vidéo.',
 	machineLearningTitle:  'Apprentissage machine',
 	machineLearningDefinition:  'Un algorithme d\'apprentissage machine est un programme informatique qui apprend à partir d\'exemples. Par exemple, les algorithmes d\'apprentissage machine peuvent apprendre à reconnaître des objets dans une photo en examinant des millers d\'images de différents objets. Dans une ICO basée sur l\'EEG, ce type d\'algorithmes utilise plusieurs exemples de l\'activité électrique cérébrale de l\'utilisateur afin de trouver une manière optimale de reconnaître ce que l\'utilisateur fait.',
 
