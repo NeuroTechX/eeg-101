@@ -78,7 +78,7 @@ public class FilterGraph extends FrameLayout {
     public int channelOfInterest = 1;
     private String offlineData = "";
     public boolean isRecording;
-
+    private int notchFrequency;
 
 
     // ------------------------------------------------------------------------
@@ -149,6 +149,13 @@ public class FilterGraph extends FrameLayout {
 
     public void setOfflineData(String data) {
         offlineData = data;
+    }
+
+    public void setNotchFrequency(int notchFrequency) {
+        this.notchFrequency = notchFrequency;
+        if(dataListener != null){
+            dataListener.updateFilter(notchFrequency);
+        }
     }
 
     // -----------------------------------------------------------------------
@@ -248,6 +255,7 @@ public class FilterGraph extends FrameLayout {
         dataThread.start();
     }
 
+
     // --------------------------------------------------------------
     // Listeners
 
@@ -265,7 +273,7 @@ public class FilterGraph extends FrameLayout {
         FilterDataListener() {
             if (appState.connectedMuse.isLowEnergy()) {
                 isBandStopFilterOn = true;
-                bandstopFilter = new Filter(256, "bandstop", 5, 55, 65);
+                bandstopFilter = new Filter(256, "bandstop", 5, notchFrequency - 5, notchFrequency + 5);
                 bandstopFiltState = new double[4][bandstopFilter.getNB()];
             }
             newData = new double[4];
@@ -307,6 +315,12 @@ public class FilterGraph extends FrameLayout {
         @Override
         public void receiveMuseArtifactPacket(final MuseArtifactPacket p, final Muse muse) {
             // Does nothing for now
+        }
+
+        public void updateFilter(int notchFrequency){
+            if(bandstopFilter != null){
+                bandstopFilter.updateFilter(notchFrequency - 5, notchFrequency + 5);
+            }
         }
     }
 

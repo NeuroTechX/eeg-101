@@ -18,6 +18,7 @@ function mapStateToProps(state) {
   return {
     connectionStatus: state.connectionStatus,
     dimensions: state.graphviewDimensions,
+    notchFrequency: state.notchFrequency
   };
 }
 
@@ -35,13 +36,14 @@ class SlideFour extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.halfGraphContainer}>
-          <GraphView style={styles.graphView} />
+          <GraphView notchFrequency={this.props.notchFrequency} style={styles.graphView} />
           <Text style={styles.halfGraphLabelText}>
             {I18n.t("raw")}
           </Text>
         </View>
         <View style={styles.halfGraphContainer}>
           <FilterGraphView
+            notchFrequency={this.props.notchFrequency}
             style={styles.graphView}
             filterType={config.filterType.BANDPASS}
           />

@@ -8,7 +8,7 @@ export default {
 	connectButton:  'CONECTAR',
 
 	//begin-landing.js
-	welcomeEEG101:  'Bienvenido a EEG101',
+	welcomeEEG101:  'Bienvenido a',
 	tutorialDescription:  'Al finalizar este tutorial, conocerás la manera en la que un dispositivo EEG puede ser usado para medir la actividad eléctrica cerebral.',
 
 	//connector-01.js
@@ -166,14 +166,14 @@ export default {
 	brainWavesLink:  'ondas cerebrales',
 	harnessingBrainWaves:  'Empleando las ondas cerebrales',
 	noticePowerChanges:  'Pon atención a como la potencia en una banda de frecuencia específica cambia con el tiempo. Es posible emplear estos cambios para crear una ',
-	BCILink:  'interfaz cerebro-computadora (BCI, por sus siglas en inglés)',
+	betaTitle:  'interfaz cerebro-computadora (BCI, por sus siglas en inglés)',
 	deltaTitle:  'Delta δ (0-4 Hz)',
 	deltaDescription:  'Las ondas delta son las ondas cerebrales más lentas (i.e. frecuencias bajas). Las ondas delta son predominantes mientras dormimos y tienden a tener una gran amplitud porque representan la actividad sincronizada de grandes poblaciones de neuronas disparando al mismo tiempo.',
 	thetaTitle:  'Theta θ (4-8 Hz)',
 	thetaDescription:  'Las ondas theta normalmente se observan en el periodo hipnagógico justo antes de quedarse dormido. También se han observado durante estados tanto de meditación profunda como hipnóticos.',
 	alphaTitle:  'Alfa α (8-13 Hz)',
 	alphaDescription:  'Las ondas alfa pueden indicar la baja actividad de una región cerebral. Por ejemplo, pueden aumentar dramáticamente cuando los ojos están cerrados. Son especialmente fuertes en la parte de atrás de la cabeza, donde el centro de la visión del cerebro se localiza .',
-
+	betatitle:  'Beta β (13-30 Hz)',
 	betaDescription:  'Las ondas beta prevalecen cuando el cerebro está despierto y activo. Han sido asociadas con estados de alerta, de concentración, y el disparo activo de neuronas que están trabajando arduamente.',
 	gammaTitle:  'Gamma γ (30-100 Hz)',
 	gammaDescription:  'Las ondas gamma son el tipo de oscilación neuronal más rápida. Son difíciles de detectar y analizar con EEG ordinario, pero son un tema actual de investigación. Han sido asociadas con procesos cognitivos superiores como la atención, la memoria de trabajo, e incluso la consciencia.',

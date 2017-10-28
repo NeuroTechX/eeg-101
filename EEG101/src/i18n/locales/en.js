@@ -8,7 +8,7 @@ export default {
 	connectButton:  'CONNECT',
 
 	//begin-landing.js
-	welcomeEEG101:  'Welcome to EEG 101',
+	welcomeEEG101:  'Welcome to',
 	tutorialDescription:  'At the end of this tutorial, you will have learned how EEG devices can be used to measure the electrical activity of the brain.',
 
 	//connector-01.js
@@ -61,7 +61,7 @@ export default {
 	dataShowing:  'data, showing the electrical activity of the brain',
 	noiseInSignal:  'Noise in the EEG signal',
 	differentTypes:  'The EEG is subject to many different types of',
-	blinksExample:  'Blinks, for example, produce large fluctuations in the signal due to muscle activity',
+	blinksExample:  'Blinks, for example, produce large fluctuations in the signal due to ',
 	uninformativeRaw:  'For the most part, raw EEG data is pretty uninformative',
 	needsProcessing:  'With processing, EEG can give clues to overall brain activity, but it is not capable of',
 
@@ -166,14 +166,14 @@ export default {
 	brainWavesLink:  'brain waves',
 	harnessingBrainWaves:  'Harnessing Brain Waves',
 	noticePowerChanges:  'Notice how the power in a given frequency band changes over time. It is possible to harness these changes to create a simple',
-	BCILink:  'betaTitle',
+	betaTitle:  'brain-computer interface',
 	deltaTitle:  'Delta δ (0-4 Hz)',
 	deltaDescription:  'Delta waves are the slowest (i.e. lowest frequency) brain waves. Delta waves dominate during deep sleep and tend to be high in amplitude because they represent the synchronized firing of large populations of neurons.',
 	thetaTitle:  'Theta θ (4-8 Hz)',
 	thetaDescription:  'Theta waves are most commonly observed in the "hypnagogic" period just before falling asleep. They have also been observed during deep meditative and hypnotic states.',
 	alphaTitle:  'Alpha α (8-13 Hz)',
 	alphaDescription:  'Alpha waves can indicate the idling of a brain region. For example, they increase dramatically at when the eyes are closed. They are especially strong at the back of the head, where the vision centre of the brain is located.',
-
+	betatitle:  'Beta β (13-30 Hz)',
 	betaDescription:  'Beta waves are prevalent when the brain is awake and active. They have been associated with alertness, concentration, and the active firing of neurons hard at work.',
 	gammaTitle:  'Gamma γ (30-100 Hz)',
 	gammaDescription:  'Gamma waves are the fastest form of neural oscillation. They are difficult to detect and analyze with ordinary EEG but are a topic of much ongoing research. They have been tentatively associated with attention, working memory, and even consciousness.',

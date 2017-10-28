@@ -72,6 +72,13 @@ public class EEGGraphManager extends SimpleViewManager<EEGGraph> {
         graph.setOfflineData(offlineData);
     }
 
+    // Bridge function for notch Prop. Calls setNotchFrequency in EEGGraph
+    @ReactProp(name = "notchFrequency")
+    public void setNotchFrequency(EEGGraph graph, @Nullable int notchFrequency) {
+        Log.w("MAnager", "received notch prop");
+        graph.setNotchFrequency(notchFrequency);
+    }
+
     // Bridge function for receiving 'start threads' and 'stop threads' commands from the
     // dispatchViewManagerCommand() method in JS. Currently, only used in stopping threads when
     // switching between graphs in the SandboxGraph component

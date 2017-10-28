@@ -16,6 +16,7 @@ import GraphView from "../interface/GraphView";
 function mapStateToProps(state) {
   return {
     connectionStatus: state.connectionStatus,
+    notchFrequency: state.notchFrequency
   };
 }
 
@@ -37,6 +38,7 @@ class SlideThree extends Component {
       <View style={styles.container}>
         <View style={styles.graphContainer}>
           <GraphView
+            notchFrequency={this.props.notchFrequency}
             style={styles.graphView}
             channelOfInterest={this.state.channelOfInterest}
           />

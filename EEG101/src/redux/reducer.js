@@ -9,7 +9,8 @@ import {
   SET_OFFLINE_MODE,
   SET_MENU,
   SET_MUSE_INFO,
-  SET_AVAILABLE_MUSES
+  SET_AVAILABLE_MUSES,
+  SET_NOTCH_FREQUENCY
 } from "./actionTypes";
 
 const initialState = {
@@ -19,7 +20,8 @@ const initialState = {
   graphViewDimensions: { x: 0, y: 0, width: 300, height: 250 },
   bciAction: "",
   isMenuOpen: false,
-  isOfflineMode: false
+  isOfflineMode: false,
+  notchFrequency: 60,
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -46,7 +48,7 @@ export default function reducer(state = initialState, action = {}) {
     case SET_AVAILABLE_MUSES:
       return {
         ...state,
-        availableMuses: action.payload,
+        availableMuses: action.payload
       };
 
     case SET_MUSE_INFO:
@@ -66,6 +68,12 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         isMenuOpen: action.payload
+      };
+
+    case SET_NOTCH_FREQUENCY:
+      return {
+        ...state,
+        notchFrequency: action.payload
       };
 
     // ...other actions

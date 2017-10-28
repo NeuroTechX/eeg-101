@@ -16,6 +16,8 @@ public class Filter {
     private static FilterPassType filterPassType;
     private static FilterCharacteristicsType filterCharacteristicsType;
     private static IirFilterCoefficients coeffs;
+    private final int filterOrder;
+    private final double samplingFrequency;
     private double[] b;
     private double[] a;
     private int nB;
@@ -48,7 +50,10 @@ public class Filter {
 
         } else {
             throw new RuntimeException("Filter type not recognized.");
-        }  
+        }
+
+        this.filterOrder = filterOrder;
+        this.samplingFrequency = samplingFrequency;
 
         coeffs = IirFilterDesignFisher.design(filterPassType, filterCharacteristicsType, filterOrder, 0., fc1/samplingFrequency, fc2/samplingFrequency);
 
@@ -132,6 +137,16 @@ public class Filter {
 
     public int getNA() {
         return nA;
+    }
+
+    public void updateFilter(int fc1, int fc2){
+        coeffs = IirFilterDesignFisher.design(filterPassType, filterCharacteristicsType, filterOrder, 0., fc1/samplingFrequency, fc2/samplingFrequency);
+
+        b = coeffs.b;
+        a = coeffs.a;
+
+        nB = b.length;
+        nA = a.length;
     }
 
 }

@@ -12,9 +12,10 @@ import { connect } from "react-redux";
 import { setMenu } from "../redux/actions";
 import { bindActionCreators } from "redux";
 import config from "../redux/config.js";
-import DeviceStatusWidget from "../components/DeviceStatusWidget.js";
-import MenuSection from "../components/MenuSection.js";
+import DeviceStatusWidget from "./DeviceStatusWidget";
+import MenuSection from "./MenuSection.js";
 import I18n from "../i18n/i18n";
+import LineNoisePicker from "./LineNoisePicker"
 import * as colors from "../styles/colors";
 
 function mapStateToProps(state) {
@@ -199,6 +200,7 @@ class SideMenu extends Component {
               }
             ]}
           />
+          <LineNoisePicker/>
         </ScrollView>
       );
     } else

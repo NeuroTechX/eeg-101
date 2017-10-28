@@ -40,6 +40,7 @@ export default class SandboxGraph extends Component {
       case config.graphType.EEG:
         return (
           <GraphView
+            notchFrequency={this.props.notchFrequency}
             style={{ flex: 1 }}
             ref={ref => (this.graphRef = ref)}
             channelOfInterest={this.props.channelOfInterest}
@@ -50,6 +51,7 @@ export default class SandboxGraph extends Component {
       case config.graphType.FILTER:
         return (
           <FilterGraphView
+            notchFrequency={this.props.notchFrequency}
             style={{ flex: 1 }}
             ref={ref => (this.graphRef = ref)}
             channelOfInterest={this.props.channelOfInterest}

@@ -8,7 +8,6 @@ import { bindActionCreators } from "redux";
 import { setGraphViewDimensions } from "../redux/actions";
 import * as colors from "../styles/colors";
 
-// Sets isVisible prop by comparing state.scene.key (active scene) to this scene's ley
 function mapStateToProps(state) {
   return {
     connectionStatus: state.connectionStatus
@@ -51,7 +50,7 @@ class Landing extends Component {
           style={styles.titleBox}
         >
           <Text style={styles.title}>
-            {I18n.t("welcomeEEG101")}
+            {I18n.t("welcomeEEG101")}{'\n'}EEG 101
           </Text>
           <Text style={styles.body}>
             {I18n.t("tutorialDescription")}

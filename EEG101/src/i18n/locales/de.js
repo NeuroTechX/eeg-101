@@ -8,7 +8,7 @@ export default {
 	connectButton:  'VERBINDEN',
 
 	//begin-landing.js
-	welcomeEEG101:  'Wilkommen zu EEG 101',
+	welcomeEEG101:  'Wilkommen zu',
 	tutorialDescription:  'Am Ende des Tutorials wirst du gelernt haben, wie ein EEG-Gerät dazu verwendet werden kann, elektrische Strömungen im Gehirn zu messen.',
 
 	//connector-01.js
@@ -166,14 +166,14 @@ export default {
 	brainWavesLink:  'Gehirnwellen',
 	harnessingBrainWaves:  'Gehirnwellen nutzen',
 	noticePowerChanges:  'Sieh dir an, wie sich die Signalstärke in verschiedenen Frequenzbändern über die Zeit hinweg verändert. Indem man diese Veränderungen misst und auswertet, erhält man ein einfaches',
-	BCILink:  'Gehirn-Computer-Interface (BCI)',
+	betaTitle:  'Gehirn-Computer-Interface (BCI)',
 	deltaTitle:  'Delta δ (0-4 Hz)',
 	deltaDescription:  'Deltawellen entsprechen den langsamsten Gehirnwellen (denen mit der niedrigsten Frequenz). Deltawellen dominieren während dem Tiefschlaf und neigen dazu, in starken Signalen aufzutreten, da sie synchronisierte Feuermuster von Neuronen repräsentieren.',
 	thetaTitle:  'Theta θ (4-8 Hz)',
 	thetaDescription:  'Thetawellen sind hauptsächlich während “hypnagogen” Phasen direkt vor dem Einschlafen zu beobachten. Sie wurden außerdem während tiefen meditativen Stimulationen oder Hypnosen festgestellt.',
 	alphaTitle:  'Alpha α (8-13 Hz)',
 	alphaDescription:  'Alphawellen können den “Leerlauf” einer bestimmten Hirnregion andeuten. Sie steigen beispielsweise stark an, wenn die Augen geschlossen bleiben. Außerdem sind sie besonders stark am Hinterkopf, wo das Sehzentrum des Gehirns lokalisiert ist.',
-
+	betatitle:  'Beta β (13-30 Hz)',
 	betaDescription:  'Betawellen sind die vorwiegende Kategorie während des Wachzustands des Gehirns. Sie werden mit Aufmerksamkeit, Konzentrationsfähigkeit und dem aktiven Feuern von Neuronen während intensiven Arbeitsphasen in Verbindung gebracht.',
 	gammaTitle:  'Gamma γ (30-100 Hz)',
 	gammaDescription:  'Gammawellen sind Wellen der schnellsten Form neuraler Oszillation. Sie sind wegen ihrer hohen Frequenz generell schwer mit klassischen EEG-Geräten zu erkennen, aber gerade deswegen ein aktuelles Forschungsthema. Sie werden lose mit Aufmerksamkeit, Erinnerungsvermögen und Bewusstsein assoziiert.',

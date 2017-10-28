@@ -17,7 +17,8 @@ import * as colors from "../styles/colors";
 function mapStateToProps(state) {
   return {
     connectionStatus: state.connectionStatus,
-    dimensions: state.graphViewDimensions
+    dimensions: state.graphViewDimensions,
+    notchFrequency: state.notchFrequency
   };
 }
 
@@ -139,6 +140,7 @@ class Sandbox extends Component {
             dimensions={this.props.dimensions}
             isRecording={this.state.isRecording}
             filterType={this.state.filterType}
+            notchFrequency={this.props.notchFrequency}
           />
         </View>
 

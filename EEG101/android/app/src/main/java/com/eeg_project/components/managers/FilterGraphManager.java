@@ -2,6 +2,7 @@ package com.eeg_project.components.managers;
 
 import android.util.Log;
 
+import com.eeg_project.components.graphs.EEGGraph;
 import com.eeg_project.components.graphs.FilterGraph;
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.ReadableArray;
@@ -64,6 +65,13 @@ public class FilterGraphManager extends SimpleViewManager<FilterGraph> {
     @ReactProp(name = "offlineData")
     public void setOfflineData(FilterGraph graph, @Nullable String offlineData) {
         graph.setOfflineData(offlineData);
+    }
+
+    // Bridge function for notch Prop. Calls setNotchFrequency in EEGGraph
+    @ReactProp(name = "notchFrequency")
+    public void setNotchFrequency(FilterGraph graph, @Nullable int notchFrequency) {
+        Log.w("MAnager", "received notch prop");
+        graph.setNotchFrequency(notchFrequency);
     }
 
     // Bridge function for receiving 'start threads' and 'stop threads' commands from the

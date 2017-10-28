@@ -11,6 +11,7 @@ const iface = {
         filterType: PropTypes.string,
         isRecording: PropTypes.bool,
         offlineData: PropTypes.string,
+        notchFrequency: PropTypes.number,
     ...View.propTypes // include the default view properties
   },
 };

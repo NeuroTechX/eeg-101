@@ -8,7 +8,8 @@ import {
   SET_OFFLINE_MODE,
   SET_MENU,
   SET_MUSE_INFO,
-  SET_AVAILABLE_MUSES
+  SET_AVAILABLE_MUSES,
+  SET_NOTCH_FREQUENCY
 } from "./actionTypes.js";
 import config from "./config";
 
@@ -38,6 +39,8 @@ export const setOfflineMode = payload => ({ payload, type: SET_OFFLINE_MODE });
 export const setBCIAction = payload => ({ payload, type: SET_BCI_ACTION });
 
 export const setMenu = payload => ({ payload, type: SET_MENU });
+
+export const setNotchFrequency = payload => ({ payload, type: SET_NOTCH_FREQUENCY });
 
 export function getMuses() {
   return dispatch => {

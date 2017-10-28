@@ -15,7 +15,8 @@ import GraphView from "../../interface/GraphView";
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
   return {
-    isOfflineMode: state.isOfflineMode
+    isOfflineMode: state.isOfflineMode,
+    notchFrequency: state.notchFrequency
   };
 }
 
@@ -81,6 +82,7 @@ class SlideOne extends Component {
             this.setState({ slidePosition: e.nativeEvent.position })}
         >
           <GraphView
+            notchFrequency={this.props.notchFrequency}
             offlineData={this.offlineDataSource(this.state.slidePosition)}
             style={styles.graphView}
           />

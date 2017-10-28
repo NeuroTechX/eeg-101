@@ -8,7 +8,7 @@ export default {
 	connectButton:  'CONNECTER',
 
 	//begin-landing.js
-	welcomeEEG101:  'Bienvenue dans EEG 101',
+	welcomeEEG101:  'Bienvenue dans',
 	tutorialDescription:  'À la fin de ce tutoriel, vous aurez appris comment l\'EEG peut être utilisé pour mesurer l\'activité électrique du cerveau.',
 
 	//connector-01.js
@@ -56,14 +56,14 @@ export default {
 	eyeRythymsDescription:  'Quand on ferme les yeux, une augmentation importante de l\'activité cérébrale peut être observée entre 8 et 13 cycles par seconde (Hz). Ce rythme, appelé onde alpha, a été une des premières découvertes de Hans Berger avec l\'EEG. Toutefois, la facilité avec laquelle les ondes alpha peuvent être détectées varie d\'une personne à l\'autre. Ne vous en faites pas si vous ne les voyez pas maintenant!',
 
 	// slide-01.js offline
-	theBrainProduces:  'La cerveau produit de l\'électricité.',
-	thisExample:  'Voici un example de',
-	dataShowing:  'données qui montrent l\'activité électrique du cerveau',
+	theBrainProduces:  'Le cerveau produit de l\'électricité.',
+	thisExample:  'Voici un example de données d’',
+	dataShowing:  'qui représentent l\'activité électrique du cerveau.',
 	noiseInSignal:  'Bruit dans le signal EEG',
-	differentTypes:  'L\'EEG est affecté par',
-	blinksExample:  'Les clignement des yeux, par exemple, produit de grandes fluctuations du signal en raison de l\'activité musculaire',
-	uninformativeRaw:  'Les données brutes d\'EEG sont assez peu informatives',
-	needsProcessing:  'Avec le traitement, l\'EEG peut donner des indices sur l\'activité globale du cerveau, mais il n\'est pas capable de',
+	differentTypes:  'L\'EEG est affecté par différents types de',
+	blinksExample:  'Les clignements de yeux, par exemple, produisent de grandes fluctuations du signal en raison du mouvement des globes oculaires',
+	uninformativeRaw:  'Sous leur forme brute, les données d\'EEG sont assez peu informatives',
+	needsProcessing:  'Avec un peu de traitement, l\'EEG peut nous renseigner sur l\'activité globale du cerveau, mais ne nous permet pas de ',
 
 	//slide-02.js
 	physiologySlideTitle:  'PHYSIOLOGIE',
@@ -121,7 +121,7 @@ export default {
 
 	//slide-05.js
 	epochingSlideTitle:  'EXTRACTION D\'ÉPOQUES',
-	chunkingSignal:  'Ségmenter le signal',
+	chunkingSignal:  'Segmenter le signal',
 	EEGDividedSegments:  'Ensuite, l\'EEG est divisé en petits segments appelés',
 	epochsLink:  'époques',
 	epochsTitle:  'Époques',
@@ -166,14 +166,14 @@ export default {
 	brainWavesLink:  'ondes cérébrales',
 	harnessingBrainWaves:  'Utiliser les ondes cérébrales',
 	noticePowerChanges:  'Remarquez comment la puissance dans une bande de fréquences change avec le temps. Il est possible d\'utiliser ces changements afin de créer une',
-	BCILink:  'interface cerveau-ordinateur (ICO)',
+	betaTitle:  'interface cerveau-ordinateur (ICO)',
 	deltaTitle:  'Delta δ (0-4 Hz)',
 	deltaDescription:  'Les ondes delta sont les plus lentes (c\'est-à-dire les fréquences les plus basses) des ondes cérébrales. Elles dominent notamment durant le sommeil profond et sont de forte amplitude, comme elles proviennent de l\'acitivité synchronisée de large populations de neurones.',
 	thetaTitle:  'Theta θ (4-8 Hz)',
 	thetaDescription:  'Les ondes theta sont communément observées dans la période dite «hypnagogique» qui survient juste avant de s\'endormir. Leur présence a aussi été observée lors d\'états méditatifs profonds et d\'états hypnotiques.',
 	alphaTitle:  'Alpha α (8-13 Hz)',
 	alphaDescription:  'Les ondes alpha indiquent une inactivité d\'une région cérébrale. Par exemple, elles augmentent dramatiquement lorsque les yeux sont fermés. On les retrouve plus particulièrement à l\'arrière de la tête, où le cortex visuel est localisé.',
-
+	betatitle:  'Beta β (13-30 Hz)',
 	betaDescription:  'Les ondes beta sont fréquemment observées lorsque le cerveau est en éveil et actif. Elles ont été associées à des états de vigilance et de concentration.',
 	gammaTitle:  'Gamma γ (30-100 Hz)',
 	gammaDescription:  'Les ondes gamma sont la forme d\'oscillation neuronale la plus rapide. Elles sont difficiles à détecter et à analyser avec l\'EEG traditionnel, mais font l\'objet de nombreuses recherches. Les ondes gamma sont hypothétiquement réliées à l\'attention, la mémoire opérationelle, de même qu\'à la conscience.',

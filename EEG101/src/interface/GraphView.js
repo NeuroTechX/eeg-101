@@ -12,6 +12,7 @@ const iface = {
         isRecording: PropTypes.bool,
         offlineData: PropTypes.string,
         isPlaying: PropTypes.bool,
+        notchFrequency: PropTypes.number,
     ...View.propTypes // include the default view properties
   },
 };

@@ -14,7 +14,8 @@ import GraphView from "../../interface/GraphView";
 
 function mapStateToProps(state) {
   return {
-    isOfflineMode: state.isOfflineMode
+    isOfflineMode: state.isOfflineMode,
+    notchFrequency: state.notchFrequency
   };
 }
 
@@ -42,6 +43,7 @@ class SlideThree extends Component {
       <View style={styles.container}>
         <View style={styles.graphContainer}>
           <GraphView
+            notchFrequency={this.props.notchFrequency}
             offlineData={this.offlineDataSource()}
             style={styles.graphView}
             channelOfInterest={this.state.channelOfInterest}

@@ -74,7 +74,7 @@ public class EEGGraph extends FrameLayout {
 
     // grab reference to global Muse
     MainApplication appState;
-
+    private int notchFrequency = 60;
 
 
     // ------------------------------------------------------------------------
@@ -129,6 +129,13 @@ public class EEGGraph extends FrameLayout {
 
     public void setOfflineData(String data) {
         this.offlineData = data;
+    }
+
+    public void setNotchFrequency(int notchFrequency) {
+        this.notchFrequency = notchFrequency;
+        if(dataListener != null){
+            dataListener.updateFilter(notchFrequency);
+        }
     }
 
     public void pause() {
@@ -243,6 +250,8 @@ public class EEGGraph extends FrameLayout {
         dataThread.start();
     }
 
+
+
     // --------------------------------------------------------------
     // Listeners
 
@@ -263,7 +272,7 @@ public class EEGGraph extends FrameLayout {
         DataListener() {
             if (appState.connectedMuse.isLowEnergy()) {
                 filterOn = true;
-                bandstopFilter = new Filter(256, "bandstop", 5, 55, 65);
+                bandstopFilter = new Filter(256, "bandstop", 5, notchFrequency - 5, notchFrequency + 5);
                 bandstopFiltState = new double[4][bandstopFilter.getNB()];
             }
             newData = new double[4];
@@ -302,6 +311,12 @@ public class EEGGraph extends FrameLayout {
         @Override
         public void receiveMuseArtifactPacket(final MuseArtifactPacket p, final Muse muse) {
             // Does nothing for now
+        }
+
+        public void updateFilter(int notchFrequency){
+            if(bandstopFilter != null){
+                bandstopFilter.updateFilter(notchFrequency - 5, notchFrequency + 5);
+            }
         }
     }
 

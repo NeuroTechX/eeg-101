@@ -18,6 +18,7 @@ import GraphView from "../interface/GraphView";
 function mapStateToProps(state) {
   return {
     connectionStatus: state.connectionStatus,
+    notchFrequency: state.notchFrequency
   };
 }
 
@@ -66,6 +67,7 @@ class SlideOne extends Component {
             this.setState({ slidePosition: e.nativeEvent.position })}
         >
           <GraphView
+            notchFrequency={this.props.notchFrequency}
             style={styles.graphView}
             isPlaying={this.state.isPlaying}
           />
