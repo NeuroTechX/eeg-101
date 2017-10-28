@@ -121,7 +121,7 @@ filtersDescription,"Filters remove frequencies that sit outside the spectrum of 
 ,,,,
 //slide-05.js,//slide-05.js,//slide-05.js,//slide-05.js,//slide-05.js
 epochingSlideTitle,EPOCHING,EXTRACTION D\'ÉPOQUES,DIVISIÓN EN ÉPOCAS,EINTEILUNG IN EPOCHEN
-chunkingSignal,Chunking the signal,Ségmenter le signal,Segmentando la señal,Einteilen des Signals in Epochen
+chunkingSignal,Chunking the signal,Segmenter le signal,Segmentando la señal,Einteilen des Signals in Epochen
 EEGDividedSegments,"Next, the EEG is divided into small segments or","Ensuite, l\'EEG est divisé en petits segments appelés",El siguiente paso es dividir la señal de EEG en segmentos cortos o,Anschließend erfolgt die Unterteilung des EEG in kleinere Segmente oder
 epochsLink,epochs,époques,épocas,epochen
 epochsTitle,Epochs,Époques,Épocas,Epochen
