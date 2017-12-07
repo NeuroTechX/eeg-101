@@ -17,7 +17,8 @@ function mapStateToProps(state) {
   return {
     connectionStatus: state.connectionStatus,
     dimensions: state.graphViewDimensions,
-    bciAction: state.bciAction
+    bciAction: state.bciAction,
+    notchFrequency: state.notchFrequency,
   };
 }
 
@@ -45,7 +46,7 @@ class BCITwo extends Component {
   }
 
   componentDidMount() {
-    Classifier.init();
+    Classifier.init(this.props.notchFrequency);
   }
 
   renderSwipeImage() {

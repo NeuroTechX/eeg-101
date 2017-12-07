@@ -55,6 +55,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     private PSDBuffer2D psdBuffer2D;
     private FFT fft;
     public BandPowerExtractor bandExtractor;
+    private int notchFrequency = 60;
 
     public NoiseDetector noiseDetector = new NoiseDetector(500, getReactApplicationContext());
     public GaussianNaiveBayesClassifier classifier = new GaussianNaiveBayesClassifier();
@@ -92,12 +93,14 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     // Bridged methods
 
     @ReactMethod
-    public void init() {
+    public void init(int notchFrequency) {
         if(appState.connectedMuse != null) {
             if (!appState.connectedMuse.isLowEnergy()) {
                 samplingRate = 220;
             }
         }
+        this.notchFrequency = notchFrequency;
+
         fft = new FFT(samplingRate, FFT_LENGTH, samplingRate);
         nbBins = fft.getFreqBins().length;
         bandExtractor = new BandPowerExtractor(fft.getFreqBins());
@@ -388,7 +391,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         ClassifierDataListener() {
             if (samplingRate == 256) {
                 filterOn = true;
-                bandstopFilter = new Filter(samplingRate, "bandstop", 5, 55, 65);
+                bandstopFilter = new Filter(samplingRate, "bandstop", 5, notchFrequency - 5, notchFrequency + 5);
                 bandstopFiltState = new double[4][bandstopFilter.getNB()];
             }
             newData = new double[4];

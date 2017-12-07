@@ -20,7 +20,8 @@ function mapStateToProps(state) {
   return {
     connectionStatus: state.connectionStatus,
     bciAction: state.bciAction,
-    dimensions: state.graphViewDimensions
+    dimensions: state.graphViewDimensions,
+    notchFrequency: state.notchFrequency
   };
 }
 
@@ -52,7 +53,7 @@ class BCITrain extends Component {
   }
 
   componentDidMount() {
-    Classifier.init();
+    Classifier.init(this.props.notchFrequency);
   }
 
   renderClass1() {

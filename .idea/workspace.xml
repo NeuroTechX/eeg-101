@@ -2,22 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fff88070-ce99-44ec-83b5-cccb52585535" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/localization/translation_text.csv" afterPath="$PROJECT_DIR$/localization/translation_text.csv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EEG101/android/.idea/misc.xml" afterPath="$PROJECT_DIR$/EEG101/android/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EEG101/src/components/BCIHistoryChart.js" afterPath="$PROJECT_DIR$/EEG101/src/components/BCIHistoryChart.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EEG101/src/components/ClassifierInfoDisplayer.js" afterPath="$PROJECT_DIR$/EEG101/src/components/ClassifierInfoDisplayer.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EEG101/src/components/MenuSection.js" afterPath="$PROJECT_DIR$/EEG101/src/components/MenuSection.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EEG101/src/components/SideMenu.js" afterPath="$PROJECT_DIR$/EEG101/src/components/SideMenu.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EEG101/src/i18n/locales/de.js" afterPath="$PROJECT_DIR$/EEG101/src/i18n/locales/de.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EEG101/src/i18n/locales/en.js" afterPath="$PROJECT_DIR$/EEG101/src/i18n/locales/en.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EEG101/src/i18n/locales/es.js" afterPath="$PROJECT_DIR$/EEG101/src/i18n/locales/es.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EEG101/src/i18n/locales/fr.js" afterPath="$PROJECT_DIR$/EEG101/src/i18n/locales/fr.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EEG101/src/scenes/slide-end.js" afterPath="$PROJECT_DIR$/EEG101/src/scenes/slide-end.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/localization/de.js" afterPath="$PROJECT_DIR$/localization/de.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/localization/en.js" afterPath="$PROJECT_DIR$/localization/en.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/localization/es.js" afterPath="$PROJECT_DIR$/localization/es.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/localization/fr.js" afterPath="$PROJECT_DIR$/localization/fr.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EEG101/android/.idea/modules.xml" afterPath="$PROJECT_DIR$/EEG101/android/.idea/modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EEG101/android/app/src/main/java/com/eeg_project/components/classifier/ClassifierModule.java" afterPath="$PROJECT_DIR$/EEG101/android/app/src/main/java/com/eeg_project/components/classifier/ClassifierModule.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EEG101/src/scenes/bci-02.js" afterPath="$PROJECT_DIR$/EEG101/src/scenes/bci-02.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/EEG101/src/scenes/bci-train.js" afterPath="$PROJECT_DIR$/EEG101/src/scenes/bci-train.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/localization/translation_text.csv" afterPath="$PROJECT_DIR$/localization/translation_text.csv" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -38,12 +28,30 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="PSDGraph.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="PSDGraph.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/EEG101/android/app/src/main/java/com/eeg_project/components/graphs/PSDGraph.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="221">
               <caret line="308" column="26" lean-forward="false" selection-start-line="308" selection-start-column="26" selection-end-line="308" selection-end-column="26" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#3810#3811#0" expanded="false" />
+                <element signature="e#3849#3850#0" expanded="false" />
+                <element signature="e#8569#8570#0" expanded="false" />
+                <element signature="e#8617#8618#0" expanded="false" />
+                <element signature="e#10793#10794#0" expanded="false" />
+                <element signature="e#10836#10837#0" expanded="false" />
+                <element signature="e#13145#13146#0" expanded="false" />
+                <element signature="e#13188#13189#0" expanded="false" />
+                <element signature="e#13515#13516#0" expanded="false" />
+                <element signature="e#13551#13552#0" expanded="false" />
+                <element signature="e#13598#13599#0" expanded="false" />
+                <element signature="e#13661#13662#0" expanded="false" />
+                <element signature="e#13720#13721#0" expanded="false" />
+                <element signature="e#13756#13757#0" expanded="false" />
+                <element signature="e#13815#13816#0" expanded="false" />
+                <element signature="e#13878#13879#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -53,7 +61,11 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="374">
               <caret line="34" column="57" lean-forward="false" selection-start-line="34" selection-start-column="57" selection-end-line="34" selection-end-column="57" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#755#756#0" expanded="false" />
+                <element signature="e#789#790#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -73,7 +85,11 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="476">
               <caret line="34" column="41" lean-forward="false" selection-start-line="34" selection-start-column="41" selection-end-line="34" selection-end-column="41" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#729#730#0" expanded="false" />
+                <element signature="e#768#769#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -82,8 +98,16 @@
         <entry file="file://$PROJECT_DIR$/EEG101/android/app/src/main/java/com/eeg_project/components/classifier/ClassifierModule.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1207">
-              <caret line="102" column="37" lean-forward="false" selection-start-line="102" selection-start-column="28" selection-end-line="102" selection-end-column="37" />
-              <folding />
+              <caret line="102" column="0" lean-forward="false" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#2651#2652#0" expanded="false" />
+                <element signature="e#2686#2687#0" expanded="false" />
+                <element signature="e#2878#2879#0" expanded="false" />
+                <element signature="e#2913#2914#0" expanded="false" />
+                <element signature="e#8602#8603#0" expanded="false" />
+                <element signature="e#8666#8667#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -93,16 +117,20 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="442">
               <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#2114#2115#0" expanded="false" />
+                <element signature="e#2144#2145#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="EEGGraph.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="EEGGraph.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/EEG101/android/app/src/main/java/com/eeg_project/components/graphs/EEGGraph.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1955">
-              <caret line="152" column="53" lean-forward="false" selection-start-line="152" selection-start-column="53" selection-end-line="152" selection-end-column="53" />
+            <state relative-caret-position="327">
+              <caret line="375" column="16" lean-forward="false" selection-start-line="375" selection-start-column="16" selection-end-line="375" selection-end-column="48" />
               <folding />
             </state>
           </provider>
@@ -113,7 +141,31 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="91" selection-end-column="1" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#1037#1038#0" expanded="false" />
+                <element signature="e#1071#1072#0" expanded="false" />
+                <element signature="e#1215#1216#0" expanded="false" />
+                <element signature="e#1243#1244#0" expanded="false" />
+                <element signature="e#1282#1283#0" expanded="false" />
+                <element signature="e#1337#1338#0" expanded="false" />
+                <element signature="e#1388#1389#0" expanded="false" />
+                <element signature="e#1416#1417#0" expanded="false" />
+                <element signature="e#1467#1468#0" expanded="false" />
+                <element signature="e#1506#1507#0" expanded="false" />
+                <element signature="e#1544#1545#0" expanded="false" />
+                <element signature="e#1576#1577#0" expanded="false" />
+                <element signature="e#1614#1615#0" expanded="false" />
+                <element signature="e#1660#1661#0" expanded="false" />
+                <element signature="e#1693#1694#0" expanded="false" />
+                <element signature="e#1728#1729#0" expanded="false" />
+                <element signature="e#1887#1888#0" expanded="false" />
+                <element signature="e#1916#1917#0" expanded="false" />
+                <element signature="e#2087#2088#0" expanded="false" />
+                <element signature="e#2125#2126#0" expanded="false" />
+                <element signature="e#2198#2199#0" expanded="false" />
+                <element signature="e#2238#2239#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -131,8 +183,8 @@
       <file leaf-file-name="sandbox.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/EEG101/src/scenes/sandbox.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1615">
-              <caret line="95" column="1" lean-forward="false" selection-start-line="95" selection-start-column="1" selection-end-line="95" selection-end-column="1" />
+            <state relative-caret-position="1632">
+              <caret line="96" column="1" lean-forward="false" selection-start-line="96" selection-start-column="1" selection-end-line="96" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -214,9 +266,10 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1598" />
-    <option name="width" value="1684" />
-    <option name="height" value="1052" />
+    <option name="x" value="-2" />
+    <option name="y" value="26" />
+    <option name="width" value="1924" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -280,9 +333,9 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="AndroidView" />
       <pane id="Scratches" />
       <pane id="Scope" />
-      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -377,7 +430,10 @@
       </Profilers>
       <option name="DEEP_LINK" value="" />
       <option name="ACTIVITY_CLASS" value="" />
-      <method />
+      <method>
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1510595583217" />
+      </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
       <module name="" />
@@ -422,7 +478,10 @@
       <Profilers>
         <option name="ADVANCED_PROFILING_ENABLED" value="false" />
       </Profilers>
-      <method />
+      <method>
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1510595583217" />
+      </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
@@ -550,7 +609,8 @@
     <option name="totallyTimeSpent" value="25974000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1598" y="0" width="1684" height="1052" extended-state="6" />
+    <frame x="-2" y="26" width="1924" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -559,10 +619,10 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3325967" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2761276" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28631705" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23802002" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -848,8 +908,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/EEG101/src/scenes/sandbox.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1615">
-          <caret line="95" column="1" lean-forward="false" selection-start-line="95" selection-start-column="1" selection-end-line="95" selection-end-column="1" />
+        <state relative-caret-position="1632">
+          <caret line="96" column="1" lean-forward="false" selection-start-line="96" selection-start-column="1" selection-end-line="96" selection-end-column="1" />
           <folding />
         </state>
       </provider>
@@ -866,7 +926,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="476">
           <caret line="34" column="41" lean-forward="false" selection-start-line="34" selection-start-column="41" selection-end-line="34" selection-end-column="41" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#729#730#0" expanded="false" />
+            <element signature="e#768#769#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -882,7 +946,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="442">
           <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#2114#2115#0" expanded="false" />
+            <element signature="e#2144#2145#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -890,31 +958,47 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="91" selection-end-column="1" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#1037#1038#0" expanded="false" />
+            <element signature="e#1071#1072#0" expanded="false" />
+            <element signature="e#1215#1216#0" expanded="false" />
+            <element signature="e#1243#1244#0" expanded="false" />
+            <element signature="e#1282#1283#0" expanded="false" />
+            <element signature="e#1337#1338#0" expanded="false" />
+            <element signature="e#1388#1389#0" expanded="false" />
+            <element signature="e#1416#1417#0" expanded="false" />
+            <element signature="e#1467#1468#0" expanded="false" />
+            <element signature="e#1506#1507#0" expanded="false" />
+            <element signature="e#1544#1545#0" expanded="false" />
+            <element signature="e#1576#1577#0" expanded="false" />
+            <element signature="e#1614#1615#0" expanded="false" />
+            <element signature="e#1660#1661#0" expanded="false" />
+            <element signature="e#1693#1694#0" expanded="false" />
+            <element signature="e#1728#1729#0" expanded="false" />
+            <element signature="e#1887#1888#0" expanded="false" />
+            <element signature="e#1916#1917#0" expanded="false" />
+            <element signature="e#2087#2088#0" expanded="false" />
+            <element signature="e#2125#2126#0" expanded="false" />
+            <element signature="e#2198#2199#0" expanded="false" />
+            <element signature="e#2238#2239#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/EEG101/android/app/src/main/java/com/eeg_project/components/classifier/ClassifierModule.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1207">
-          <caret line="102" column="37" lean-forward="false" selection-start-line="102" selection-start-column="28" selection-end-line="102" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/EEG101/android/app/src/main/java/com/eeg_project/components/graphs/EEGGraph.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1955">
-          <caret line="152" column="53" lean-forward="false" selection-start-line="152" selection-start-column="53" selection-end-line="152" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/EEG101/android/app/src/main/java/com/eeg_project/components/managers/EEGGraphManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="34" column="57" lean-forward="false" selection-start-line="34" selection-start-column="57" selection-end-line="34" selection-end-column="57" />
-          <folding />
+          <caret line="102" column="0" lean-forward="false" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#2651#2652#0" expanded="false" />
+            <element signature="e#2686#2687#0" expanded="false" />
+            <element signature="e#2878#2879#0" expanded="false" />
+            <element signature="e#2913#2914#0" expanded="false" />
+            <element signature="e#8602#8603#0" expanded="false" />
+            <element signature="e#8666#8667#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -922,6 +1006,44 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
           <caret line="308" column="26" lean-forward="false" selection-start-line="308" selection-start-column="26" selection-end-line="308" selection-end-column="26" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#3810#3811#0" expanded="false" />
+            <element signature="e#3849#3850#0" expanded="false" />
+            <element signature="e#8569#8570#0" expanded="false" />
+            <element signature="e#8617#8618#0" expanded="false" />
+            <element signature="e#10793#10794#0" expanded="false" />
+            <element signature="e#10836#10837#0" expanded="false" />
+            <element signature="e#13145#13146#0" expanded="false" />
+            <element signature="e#13188#13189#0" expanded="false" />
+            <element signature="e#13515#13516#0" expanded="false" />
+            <element signature="e#13551#13552#0" expanded="false" />
+            <element signature="e#13598#13599#0" expanded="false" />
+            <element signature="e#13661#13662#0" expanded="false" />
+            <element signature="e#13720#13721#0" expanded="false" />
+            <element signature="e#13756#13757#0" expanded="false" />
+            <element signature="e#13815#13816#0" expanded="false" />
+            <element signature="e#13878#13879#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/EEG101/android/app/src/main/java/com/eeg_project/components/managers/EEGGraphManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="34" column="57" lean-forward="false" selection-start-line="34" selection-start-column="57" selection-end-line="34" selection-end-column="57" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#755#756#0" expanded="false" />
+            <element signature="e#789#790#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/EEG101/android/app/src/main/java/com/eeg_project/components/graphs/EEGGraph.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="327">
+          <caret line="375" column="16" lean-forward="false" selection-start-line="375" selection-start-column="16" selection-end-line="375" selection-end-column="48" />
           <folding />
         </state>
       </provider>

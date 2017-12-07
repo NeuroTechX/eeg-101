@@ -1,4 +1,4 @@
-export default { 
+export default {
 
 	//global
 	nextLink:  ' NEXT ',
@@ -166,7 +166,7 @@ export default {
 	brainWavesLink:  'brain waves',
 	harnessingBrainWaves:  'Harnessing Brain Waves',
 	noticePowerChanges:  'Notice how the power in a given frequency band changes over time. It is possible to harness these changes to create a simple',
-	betaTitle:  'brain-computer interface',
+	betaTitle:  'Beta Waves',
 	deltaTitle:  'Delta δ (0-4 Hz)',
 	deltaDescription:  'Delta waves are the slowest (i.e. lowest frequency) brain waves. Delta waves dominate during deep sleep and tend to be high in amplitude because they represent the synchronized firing of large populations of neurons.',
 	thetaTitle:  'Theta θ (4-8 Hz)',

@@ -97,10 +97,11 @@ android {
         }
         signingConfigs {
             release {
-                storeFile file(EEG101_RELEASE_STORE_FILE)
-                storePassword EEG101_RELEASE_STORE_PASSWORD
-                keyAlias EEG101_RELEASE_KEY_ALIAS
-                keyPassword EEG101_RELEASE_KEY_PASSWORD
+                if (project.hasProperty('EEG101_RELEASE_STORE_FILE')) {
+                 storeFile file(EEG101_RELEASE_STORE_FILE)
+                  storePassword EEG101_RELEASE_STORE_PASSWORD
+                   keyAlias EEG101_RELEASE_KEY_ALIAS
+                    keyPassword EEG101_RELEASE_KEY_PASSWORD }
             }
         }
     }
