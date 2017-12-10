@@ -6,5 +6,5 @@
 .~lock.*
 
 # LibMuse
-./EEG101/android/app/libs/armeabi-v7a/libmuse_android.so
-./EEG101/android/app/libs/libmuse_android.jar
+EEG101/android/app/libs/armeabi-v7a/libmuse_android.so
+EEG101/android/app/libs/libmuse_android.jar
