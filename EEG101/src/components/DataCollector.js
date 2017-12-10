@@ -7,15 +7,11 @@ import React, { Component } from "react";
 import {
   Text,
   View,
-  TouchableOpacity,
   StyleSheet,
-  Image,
-  ActivityIndicator,
   Vibration
 } from "react-native";
 import Classifier from "../interface/Classifier.js";
 import Button from "../components/Button.js";
-import { MediaQueryStyleSheet } from "react-native-responsive";
 import I18n from "../i18n/i18n";
 import DataCollectionIndicator from "../components/DataCollectionIndicator.js";
 import * as colors from "../styles/colors";

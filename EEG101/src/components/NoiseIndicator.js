@@ -5,7 +5,7 @@ import React, { Component } from "react";
 import { View, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 
-export default class ElectrodeSelector extends Component {
+export default class NoiseIndicator extends Component {
   constructor(props) {
     super(props);
   }

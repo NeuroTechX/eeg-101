@@ -70,7 +70,6 @@ public class FilterGraphManager extends SimpleViewManager<FilterGraph> {
     // Bridge function for notch Prop. Calls setNotchFrequency in EEGGraph
     @ReactProp(name = "notchFrequency")
     public void setNotchFrequency(FilterGraph graph, @Nullable int notchFrequency) {
-        Log.w("MAnager", "received notch prop");
         graph.setNotchFrequency(notchFrequency);
     }
 

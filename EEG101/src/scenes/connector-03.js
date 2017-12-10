@@ -1,36 +1,78 @@
 import React, { Component } from "react";
-import { Text, View } from "react-native";
+import {
+  Text,
+  Image,
+  View,
+  NativeModules,
+  NativeEventEmitter
+} from "react-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
+import { isNil } from "lodash";
+import config from "../redux/config";
+import Classifier from "../interface/Classifier";
 import LinkButton from "../components/WhiteLinkButton";
+import NoiseIndicator from "../components/NoiseIndicator";
 import I18n from "../i18n/i18n";
 import * as colors from "../styles/colors";
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
   return {
-    connectionStatus: state.connectionStatus
+    connectionStatus: state.connectionStatus,
+    notchFrequency: state.notchFrequency
   };
 }
 
 class ConnectorThree extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      noise: ["0","1","2","3"]
+    };
+  }
+
+  componentDidMount() {
+    if (this.props.connectionStatus === config.connectionStatus.CONNECTED) {
+      Classifier.init(this.props.notchFrequency);
+      Classifier.startNoiseListener();
+      const noiseListener = new NativeEventEmitter(NativeModules.Classifier);
+      this.noiseSubscription = noiseListener.addListener("NOISE", message => {
+        this.setState({ noise: Object.keys(message) });
+        console.log(JSON.stringify(this.state.noise));
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    if (!isNil(this.noiseSubscription)) {
+      this.noiseSubscription.remove();
+      Classifier.stopNoiseListener();
+    }
+  }
+
+  renderNoiseIndicator() {
+    if (this.state.noise.length >= 1) {
+      return <NoiseIndicator noise={this.state.noise} height={80} width={80} />;
+    }
+    return (
+      <Image
+        source={require("../assets/ok.png")}
+        style={{ height: 60, width: 60 }}
+      />
+    );
   }
 
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.titleBox}>
-          <Text style={styles.title}>
-            {I18n.t("step3Title")}
-          </Text>
-          <Text style={styles.instructions}>
-            {I18n.t("museFitProperly")}
-          </Text>
-          <Text style={styles.body}>
-            {I18n.t("fitInstructions")}
-          </Text>
+          <Text style={styles.title}>{I18n.t("step3Title")}</Text>
+          <Text style={styles.instructions}>{I18n.t("museFitProperly")}</Text>
+          <Text style={styles.body}>{I18n.t("fitInstructions")}</Text>
+        </View>
+        <View style={styles.indicatorContainer}>
+          {this.renderNoiseIndicator()}
         </View>
 
         <View style={styles.buttonContainer}>
@@ -40,6 +82,7 @@ class ConnectorThree extends Component {
     );
   }
 }
+
 export default connect(mapStateToProps)(ConnectorThree);
 
 const styles = MediaQueryStyleSheet.create(
@@ -71,9 +114,16 @@ const styles = MediaQueryStyleSheet.create(
       backgroundColor: colors.skyBlue
     },
 
+    indicatorContainer: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center"
+    },
+
     buttonContainer: {
       flex: 1,
       margin: 40,
+      marginTop: 10,
       justifyContent: "center"
     },
 

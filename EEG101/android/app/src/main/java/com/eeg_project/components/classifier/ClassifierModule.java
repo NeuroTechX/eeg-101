@@ -30,8 +30,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 
 /**
- * Bridged native module for classifier.
- * Starts ClassifierDataListener to record data from Muse
+ * Bridged native module for interacting with the headband for the classifier (and noise detection)
+ *
  */
 
 public class ClassifierModule extends ReactContextBaseJavaModule implements BufferListener {
@@ -94,6 +94,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
 
     @ReactMethod
     public void init(int notchFrequency) {
+        Log.w("classifier", "init");
         if(appState.connectedMuse != null) {
             if (!appState.connectedMuse.isLowEnergy()) {
                 samplingRate = 220;
@@ -222,8 +223,24 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         fileWriter.addLineToFile("Variances, "+Arrays.deepToString(classifier.getVariances()));
         fileWriter.addLineToFile("Discriminative power, "+
                 Arrays.toString(classifier.computeFeatDiscrimPower()));
-        Log.w("GNB","Feature ranking, "+Arrays.toString(classifier.rankFeats()));
         fileWriter.writeFile("Classifier");
+    }
+
+    // Just starts the necessary listening and signal processing functions in order to send noise
+    // events back to React layer
+    @ReactMethod
+    public void startNoiseListener() {
+        // Sample noise twice a second
+        eegBuffer = new EpochBuffer(samplingRate, NUM_CHANNELS, samplingRate / 2);
+        eegBuffer.addListener(this);
+        appState.connectedMuse.registerDataListener(dataListener, MuseDataPacketType.EEG);
+        startThread();
+    }
+
+    @ReactMethod
+    public void stopNoiseListener() {
+        appState.connectedMuse.unregisterDataListener(dataListener, MuseDataPacketType.EEG);
+        stopThread();
     }
 
     // ------------------------------------------------------------------------------
@@ -406,7 +423,6 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
                 bandstopFiltState = bandstopFilter.transform(newData, bandstopFiltState);
                 newData = bandstopFilter.extractFilteredSamples(bandstopFiltState);
             }
-
             eegBuffer.update(newData);
         }
 

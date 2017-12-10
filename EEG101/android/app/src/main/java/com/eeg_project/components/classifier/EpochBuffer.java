@@ -6,7 +6,9 @@ import com.eeg_project.components.signal.CircularBuffer;
 
 import java.util.ArrayList;
 
-// A circular buffer that can register listeners to be sent epochs of data at a given interval
+/**
+ * A circular buffer that can register listeners to be sent epochs of data at a given interval
+ */
 
 public class EpochBuffer extends CircularBuffer {
 

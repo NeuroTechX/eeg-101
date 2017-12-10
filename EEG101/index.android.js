@@ -72,11 +72,6 @@ const mainViewStyle = { flex: 1 };
 
 class EEG101 extends Component {
   render() {
-    // Provider component wraps everything in Redux and gives access to the store
-    // RouterWithRedux manages allows store to be accessed
-    // Each Scene component of Router corresponds to a different scene of the tutorial.
-    // All scenes are wrapped in a root NavigationBar component that provides a custom navbar at the top of the screen
-    // previous slide info is currently harcoded in as the 'previous' prop
     return (
       <Provider store={store}>
         <NativeRouter>

@@ -6,12 +6,11 @@ import {
   NativeModules
 } from "react-native";
 import NoiseIndicator from "./NoiseIndicator.js";
-import Classifier from "../interface/Classifier.js";
 
 export default class DataCollectionIndicator extends Component {
   constructor(props) {
     super(props);
-
+    this.noiseSubscription = {};
     this.state = {
       noise: []
     };
@@ -29,7 +28,6 @@ export default class DataCollectionIndicator extends Component {
   }
 
   render() {
-    console.log(this.state.noise);
     if (this.state.noise.length >= 1) {
       return <NoiseIndicator noise={this.state.noise} width={40} height={40} />;
     } else {

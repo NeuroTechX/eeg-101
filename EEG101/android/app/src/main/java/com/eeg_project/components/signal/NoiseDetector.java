@@ -81,7 +81,6 @@ public class NoiseDetector {
 
         sendEvent("NOISE", noiseMap);
          noiseMap = Arguments.createMap();
-
         return decisions;
     }
 

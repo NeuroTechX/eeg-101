@@ -13,3 +13,6 @@ captures
 *.keystore
 */.build
 /*/externalNativeBuild
+# LibMuse
+libs/armeabi-v7a/libmuse_android.so
+libs/libmuse_android.jar
