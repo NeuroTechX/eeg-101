@@ -19,7 +19,7 @@ public class PlotUpdater implements Runnable {
             while (keepRunning) {
                 // 33ms sleep = 30 fps
                 Thread.sleep(33);
-                if(plot != null) {
+                if(plot != null && plot.get() != null) {
                     plot.get().redraw();
                 }
             }

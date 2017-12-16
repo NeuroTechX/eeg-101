@@ -2,7 +2,7 @@
 // An image of the EEG head diagram with current noisy channels indicated
 
 import React, { Component } from "react";
-import { View, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Image, ImageBackground } from "react-native";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 
 export default class NoiseIndicator extends Component {
@@ -27,7 +27,7 @@ export default class NoiseIndicator extends Component {
   render() {
     if (this.props.noise.length !== 0) {
       return (
-        <Image
+        <ImageBackground
           source={require("../assets/electrodediagram.png")}
           style={{height: this.props.height, width: this.props.width, alignSelf: 'center'}}
         >
@@ -39,7 +39,7 @@ export default class NoiseIndicator extends Component {
             {this.renderNoiseIcon("0")}
             {this.renderNoiseIcon("3")}
           </View>
-        </Image>
+        </ImageBackground>
       );
     } else return null;
   }

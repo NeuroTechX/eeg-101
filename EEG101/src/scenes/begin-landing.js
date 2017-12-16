@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, Image } from "react-native";
+import { Text, View, ImageBackground } from "react-native";
 import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import LinkButton from "../components/WhiteLinkButton";
@@ -31,7 +31,7 @@ class Landing extends Component {
 
   render() {
     return (
-      <Image
+      <ImageBackground
         source={require("../assets/clouds.png")}
         style={styles.container}
         resizeMode="stretch"
@@ -61,7 +61,7 @@ class Landing extends Component {
             {I18n.t("getStartedLink")}
           </LinkButton>
         </View>
-      </Image>
+      </ImageBackground>
     );
   }
 }

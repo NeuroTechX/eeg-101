@@ -4,11 +4,6 @@
 
 import React, { Component } from "react";
 import {
-  Text,
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
   UIManager,
   findNodeHandle
 } from "react-native";

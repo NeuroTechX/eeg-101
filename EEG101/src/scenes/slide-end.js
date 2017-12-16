@@ -4,6 +4,7 @@ import {
   View,
   ViewPagerAndroid,
   Image,
+  ImageBackground,
   Linking,
   TouchableOpacity
 } from "react-native";
@@ -26,7 +27,7 @@ class End extends Component {
 
   render() {
     return (
-      <Image
+      <ImageBackground
         source={require("../assets/clouds.png")}
         style={styles.container}
         resizeMode="stretch"
@@ -188,7 +189,7 @@ class End extends Component {
             </View>
           </View>
         </ViewPagerAndroid>
-      </Image>
+      </ImageBackground>
     );
   }
 }

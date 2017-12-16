@@ -70,7 +70,7 @@ class SlideThree extends Component {
             <Text style={styles.header}>
               {I18n.t("deviceHas4Electrodes")}
             </Text>
-            <View style={{ flexDirection: "row" }}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Text style={[styles.body, { flex: 0.5, marginRight: 10 }]}>
                 {I18n.t("touchTheHeadDiagram")}{' '}
                 <PopUpLink

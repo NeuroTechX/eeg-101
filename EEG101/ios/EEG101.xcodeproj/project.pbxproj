@@ -23,9 +23,9 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		F85A72EB43DB47A99FE96137 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 659CEC5C340B4A71B23F9D36 /* libRNSVG.a */; };
-		468A4A20EB594D3C89F44CC0 /* libLottieReactNative.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D15A4536F01421C8B79BDE6 /* libLottieReactNative.a */; };
 		D48418C949304240B74D6BAE /* libRNI18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 71381AC0F0E74E01A9091143 /* libRNI18n.a */; };
 		7F63070D042547E99EAB8F6A /* libRCTTorch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C484A44A36B4CDBA89E51FB /* libRCTTorch.a */; };
+		96D61CDFFAE845918A235046 /* libLottieReactNative.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52E257353FC846A1B71BF56C /* libLottieReactNative.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -132,12 +132,12 @@
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = ../node_modules/react-native/Libraries/Text/RCTText.xcodeproj; sourceTree = "<group>"; };
 		622A0974E4794F1DA01869D2 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; name = "RNSVG.xcodeproj"; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		659CEC5C340B4A71B23F9D36 /* libRNSVG.a */ = {isa = PBXFileReference; name = "libRNSVG.a"; path = "libRNSVG.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
-		F5A0157BF2F74E2795454219 /* LottieReactNative.xcodeproj */ = {isa = PBXFileReference; name = "LottieReactNative.xcodeproj"; path = "../node_modules/lottie-react-native/lib/ios/LottieReactNative.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		8D15A4536F01421C8B79BDE6 /* libLottieReactNative.a */ = {isa = PBXFileReference; name = "libLottieReactNative.a"; path = "libLottieReactNative.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		9E0F8D21F8A049A9ADC74E40 /* RNI18n.xcodeproj */ = {isa = PBXFileReference; name = "RNI18n.xcodeproj"; path = "../../../node_modules/react-native-i18n/ios/RNI18n.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		71381AC0F0E74E01A9091143 /* libRNI18n.a */ = {isa = PBXFileReference; name = "libRNI18n.a"; path = "libRNI18n.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		23FCEDE15DB74B0BA5582220 /* RCTTorch.xcodeproj */ = {isa = PBXFileReference; name = "RCTTorch.xcodeproj"; path = "../node_modules/react-native-torch/ios/RCTTorch.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		5C484A44A36B4CDBA89E51FB /* libRCTTorch.a */ = {isa = PBXFileReference; name = "libRCTTorch.a"; path = "libRCTTorch.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		2077695E31214A1EB9A4A16B /* LottieReactNative.xcodeproj */ = {isa = PBXFileReference; name = "LottieReactNative.xcodeproj"; path = "../node_modules/lottie-react-native/src/ios/LottieReactNative.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		52E257353FC846A1B71BF56C /* libLottieReactNative.a */ = {isa = PBXFileReference; name = "libLottieReactNative.a"; path = "libLottieReactNative.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,9 +164,9 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				F85A72EB43DB47A99FE96137 /* libRNSVG.a in Frameworks */,
-				468A4A20EB594D3C89F44CC0 /* libLottieReactNative.a in Frameworks */,
 				D48418C949304240B74D6BAE /* libRNI18n.a in Frameworks */,
 				7F63070D042547E99EAB8F6A /* libRCTTorch.a in Frameworks */,
+				96D61CDFFAE845918A235046 /* libLottieReactNative.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,9 +290,9 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				622A0974E4794F1DA01869D2 /* RNSVG.xcodeproj */,
-				F5A0157BF2F74E2795454219 /* LottieReactNative.xcodeproj */,
 				9E0F8D21F8A049A9ADC74E40 /* RNI18n.xcodeproj */,
 				23FCEDE15DB74B0BA5582220 /* RCTTorch.xcodeproj */,
+				2077695E31214A1EB9A4A16B /* LottieReactNative.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -608,9 +608,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};
 			name = Debug;
@@ -627,9 +624,6 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EEG101.app/EEG101";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};
@@ -649,6 +643,7 @@
 					"$(SRCROOT)/../node_modules/lottie-react-native/lib/ios/LottieReactNative",
 					"$(SRCROOT)\..\..\..\node_modules\react-native-i18n\ios",
 					"$(SRCROOT)/../node_modules/react-native-torch/ios",
+					"$(SRCROOT)/../node_modules/lottie-react-native/src/ios/LottieReactNative",
 				);
 				INFOPLIST_FILE = "EEG101/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -675,6 +670,7 @@
 					"$(SRCROOT)/../node_modules/lottie-react-native/lib/ios/LottieReactNative",
 					"$(SRCROOT)\..\..\..\node_modules\react-native-i18n\ios",
 					"$(SRCROOT)/../node_modules/react-native-torch/ios",
+					"$(SRCROOT)/../node_modules/lottie-react-native/src/ios/LottieReactNative",
 				);
 				INFOPLIST_FILE = "EEG101/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

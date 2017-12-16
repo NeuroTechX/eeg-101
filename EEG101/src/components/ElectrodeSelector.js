@@ -7,7 +7,7 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
-  Image,
+  ImageBackground,
 } from 'react-native';
 import { MediaQueryStyleSheet} from 'react-native-responsive';
 
@@ -43,8 +43,8 @@ export default class ElectrodeSelector extends Component {
 
 	render() {
 		return (
-			<Image source={this.state.image}
-			style={styles.container}>
+      <View style={styles.container}>
+			<ImageBackground source={this.state.image} style={styles.image}>
 				<View style={styles.horizontalContainer}>
 					<TouchableOpacity style={{flex:1}} onPress={() => {this.touch(2)}}/>
 					<TouchableOpacity style={{flex:1}} onPress={() => {this.touch(3)}}/>
@@ -53,7 +53,8 @@ export default class ElectrodeSelector extends Component {
 					<TouchableOpacity style={{flex:1}} onPress={() => {this.touch(1)}}/>
 					<TouchableOpacity style={{flex:1}} onPress={() => {this.touch(4)}}/>
 				</View>
-			</Image>
+			</ImageBackground>
+    </View>
 		);
 	}
 }
@@ -62,6 +63,12 @@ const styles = MediaQueryStyleSheet.create(
   // Base styles
   {
     container: {
+      flex: .5,
+      width: 100,
+      height: 100,
+      alignItems: 'center',
+    },
+    image: {
       height: 100,
       width: 100,
       alignItems: 'center',
