@@ -1,10 +1,15 @@
-# OSX
+
+# MacOS
 #
 .DS_Store
 
+
 # LibreOffice lock files
+#
 .~lock.*
 
-# LibMuse
-EEG101/android/app/libs/armeabi-v7a/libmuse_android.so
-EEG101/android/app/libs/libmuse_android.jar
+# Muse SDK
+#
+libmuse_android.so
+libmuse_android.jar
+*Muse.framework*

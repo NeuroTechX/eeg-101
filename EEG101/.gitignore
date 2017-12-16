@@ -1,4 +1,10 @@
+
+# NPM
+#
 node_modules/
 npm-debug.log
+
+
+# IntelliJ
+#
 .idea
-android/.idea
