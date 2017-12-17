@@ -141,6 +141,7 @@
 				F740EA0F1FE5DEC60043B68B /* Sources */,
 				F740EA101FE5DEC60043B68B /* Frameworks */,
 				F740EA111FE5DEC60043B68B /* Resources */,
+				F7506E891FE5EB7B00145D51 /* Bundle React Native code and images */,
 				91B6F5C00FC24C7742EF49EE /* [CP] Embed Pods Frameworks */,
 				CF7E5110EF77F1AA7FC51C31 /* [CP] Copy Pods Resources */,
 				F7506E861FE5EA3300145D51 /* Configure App Transport Security */,
@@ -356,6 +357,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "## Courtesy of http://sveinhal.github.io/2016/02/23/disable-ats-in-debug-builds/\n\nINFO_PLIST=\"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\nPLISTBUDDY=\"/usr/libexec/PlistBuddy\"\n\nif [ \"${CONFIGURATION}\" == \"Debug\" ]; then\n$PLISTBUDDY -c \"Add :NSAppTransportSecurity dict\" \"${INFO_PLIST}\" || true\n$PLISTBUDDY -c \"Add :NSAppTransportSecurity:NSAllowsArbitraryLoads bool true\" \"${INFO_PLIST}\" || true\n$PLISTBUDDY -c \"Set :NSAppTransportSecurity:NSAllowsArbitraryLoads true\" \"${INFO_PLIST}\"\nelse\n$PLISTBUDDY -c \"Delete :NSAppTransportSecurity:NSAllowsArbitraryLoads\" \"${INFO_PLIST}\" || true\nfi";
+		};
+		F7506E891FE5EB7B00145D51 /* Bundle React Native code and images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Bundle React Native code and images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
 /* End PBXShellScriptBuildPhase section */
 
