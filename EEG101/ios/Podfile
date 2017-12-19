@@ -9,6 +9,7 @@ target 'EEG101' do
     'Core',
     'CxxBridge',
     'DevSupport',
+    'RCTAnimation',
     'RCTImage',
     'RCTNetwork',
     'RCTText',
@@ -34,4 +35,5 @@ end
 
 post_install do |installer|
   system("sed -i '' 's#<fishhook/fishhook.h>#\"fishhook.h\"#g' ../node_modules/react-native/Libraries/WebSocket/RCTReconnectingWebSocket.m")
+  system("sed -i '' 's#<RCTAnimation/RCTValueAnimatedNode.h>#\"RCTValueAnimatedNode.h\"#g' ../node_modules/react-native/Libraries/NativeAnimation/RCTNativeAnimatedNodesManager.h")
 end
