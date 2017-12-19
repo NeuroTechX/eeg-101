@@ -13,6 +13,8 @@
 		F740EA211FE5DEC60043B68B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F740EA1F1FE5DEC60043B68B /* LaunchScreen.storyboard */; };
 		F740EA2C1FE5DEC60043B68B /* EEG101Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F740EA2B1FE5DEC60043B68B /* EEG101Tests.swift */; };
 		F74E8F3C1FE5E27700C8B7FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74E8F3A1FE5E27700C8B7FD /* AppDelegate.swift */; };
+		F7506E901FE5ECA800145D51 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F7506E8F1FE5ECA800145D51 /* libc++.tbd */; };
+		F7506E921FE5ED6A00145D51 /* Muse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7506E911FE5ED6A00145D51 /* Muse.framework */; };
 		F7AFAE211FE92E70008F3B8C /* RobotoCondensed-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7AFAE101FE92E6F008F3B8C /* RobotoCondensed-BoldItalic.ttf */; };
 		F7AFAE221FE92E70008F3B8C /* Roboto-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7AFAE111FE92E6F008F3B8C /* Roboto-MediumItalic.ttf */; };
 		F7AFAE231FE92E70008F3B8C /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7AFAE121FE92E70008F3B8C /* Roboto-Regular.ttf */; };
@@ -57,6 +59,9 @@
 		F740EA2B1FE5DEC60043B68B /* EEG101Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EEG101Tests.swift; sourceTree = "<group>"; };
 		F740EA2D1FE5DEC60043B68B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F74E8F3A1FE5E27700C8B7FD /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F7506E8F1FE5ECA800145D51 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		F7506E911FE5ED6A00145D51 /* Muse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Muse.framework; sourceTree = "<group>"; };
+		F7506E951FE5EE4F00145D51 /* EEG101-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EEG101-Bridging-Header.h"; sourceTree = "<group>"; };
 		F7AFAE101FE92E6F008F3B8C /* RobotoCondensed-BoldItalic.ttf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "RobotoCondensed-BoldItalic.ttf"; path = "../../android/app/src/main/assets/fonts/RobotoCondensed-BoldItalic.ttf"; sourceTree = "<group>"; };
 		F7AFAE111FE92E6F008F3B8C /* Roboto-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-MediumItalic.ttf"; path = "../../android/app/src/main/assets/fonts/Roboto-MediumItalic.ttf"; sourceTree = "<group>"; };
 		F7AFAE121FE92E70008F3B8C /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Regular.ttf"; path = "../../android/app/src/main/assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
@@ -81,6 +86,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7506E901FE5ECA800145D51 /* libc++.tbd in Frameworks */,
+				F7506E921FE5ED6A00145D51 /* Muse.framework in Frameworks */,
 				E66BDAE5C74F41A534E8F18B /* Pods_EEG101.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -110,10 +117,12 @@
 		D78FC4FE96E7C0345E84AB52 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F7506E8F1FE5ECA800145D51 /* libc++.tbd */,
+				F7506E911FE5ED6A00145D51 /* Muse.framework */,
 				316D79E79D5A4C32DCD6796D /* Pods_EEG101.framework */,
 				BE8BCA6DBBA7E83595334F9C /* Pods_EEG101Tests.framework */,
 			);
-			name = Frameworks;
+			path = Frameworks;
 			sourceTree = "<group>";
 		};
 		F740EA0A1FE5DEC60043B68B = {
@@ -160,6 +169,7 @@
 		F74E8F381FE5E11D00C8B7FD /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				F7506E951FE5EE4F00145D51 /* EEG101-Bridging-Header.h */,
 				F74E8F3A1FE5E27700C8B7FD /* AppDelegate.swift */,
 			);
 			path = Source;
@@ -531,6 +541,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -588,6 +599,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -628,6 +640,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.neurotechx.EEG101;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Source/EEG101-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -655,6 +668,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.neurotechx.EEG101;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Source/EEG101-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
