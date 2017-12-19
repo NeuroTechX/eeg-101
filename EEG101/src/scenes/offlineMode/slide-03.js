@@ -10,7 +10,7 @@ import PopUpLink from "../../components/PopUpLink";
 import ElectrodeSelector from "../../components/ElectrodeSelector";
 import I18n from "../../i18n/i18n";
 import * as colors from "../../styles/colors";
-import GraphView from "../../interface/GraphView";
+import GraphView from "../../native/GraphView";
 
 function mapStateToProps(state) {
   return {

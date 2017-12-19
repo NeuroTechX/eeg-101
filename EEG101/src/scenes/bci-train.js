@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import { setBCIAction } from "../redux/actions";
 import config from "../redux/config.js";
 import { MediaQueryStyleSheet } from "react-native-responsive";
-import Classifier from "../interface/Classifier.js";
+import Classifier from "../native/Classifier.js";
 import PopUp from "../components/PopUp";
 import DataCollectionIndicator from "../components/DataCollectionIndicator.js";
 import DecisionButton from "../components/DecisionButton.js";

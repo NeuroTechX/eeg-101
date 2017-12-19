@@ -13,7 +13,7 @@ import * as colors from "../styles/colors";
 import PlayPauseButton from "../components/PlayPauseButton.js";
 
 //Interfaces. For elements that bridge to native
-import GraphView from "../interface/GraphView";
+import GraphView from "../native/GraphView";
 
 function mapStateToProps(state) {
   return {

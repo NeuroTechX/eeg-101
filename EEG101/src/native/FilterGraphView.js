@@ -1,8 +1,8 @@
 // CircBufferGraphView.js
 // The interface layer between JS and Java. Most of the work is handled internally by react-native, so all that is necessary to here is to define the PropTypes that will be communicated from JS to the Java component
 
-import { PropTypes } from 'react';
-import { requireNativeComponent, View } from 'react-native';
+import PropTypes from 'prop-types';
+import { requireNativeComponent, ViewPropTypes } from 'react-native';
 
 const iface = {
   name: 'FilterGraphView',
@@ -12,7 +12,7 @@ const iface = {
         isRecording: PropTypes.bool,
         offlineData: PropTypes.string,
         notchFrequency: PropTypes.number,
-    ...View.propTypes // include the default view properties
+    ...ViewPropTypes // include the default view properties
   },
 };
 

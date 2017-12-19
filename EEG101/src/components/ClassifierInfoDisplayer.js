@@ -8,7 +8,7 @@ import {
   StyleSheet,
   ActivityIndicator
 } from "react-native";
-import Classifier from "../interface/Classifier.js";
+import Classifier from "../native/Classifier.js";
 import Button from "../components/Button.js";
 import PopUpLink from "./PopUpLink.js";
 import PopUp from "./PopUp.js";

@@ -1,8 +1,8 @@
 // PSDGraphView.js
 // In addition to importing the native PSDGraph, this component also draws axis and lines and labels with react-native-svg
 
-import { PropTypes } from "react";
-import { requireNativeComponent, View, StyleSheet, Text } from "react-native";
+
+import { View, StyleSheet, Text } from "react-native";
 import React, { Component } from "react";
 import Svg, { Line } from "react-native-svg";
 import * as colors from "../styles/colors";

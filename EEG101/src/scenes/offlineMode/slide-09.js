@@ -13,7 +13,7 @@ import I18n from "../../i18n/i18n";
 import * as colors from "../../styles/colors";
 
 //Interfaces. For elements that bridge to native
-import WaveGraphView from "../../interface/WaveGraphView";
+import WaveGraphView from "../../native/WaveGraphView";
 
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {

@@ -1,8 +1,7 @@
 // WaveGraphView.js
 // Same as PSDGraphView, but also draws colored bands representing different brain waves
 
-import { PropTypes } from 'react';
-import { requireNativeComponent, View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import React, { Component } from 'react';
 import Svg, { Rect, Line } from 'react-native-svg';
 import * as colors from "../styles/colors";

@@ -2,19 +2,18 @@
 // A component with a NavBar and redux-integrated navigation that can be a parent to most scenes in the app
 
 import React, { Component } from "react";
-import { Link } from "react-router-native";
-import { Image, Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import { Image, View, TouchableOpacity } from "react-native";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import { connect } from "react-redux";
 import { withRouter } from 'react-router';
-import config from "../redux/config";
 import { bindActionCreators } from "redux";
 import { setMenu } from "../redux/actions";
 import * as colors from "../styles/colors";
 
+// We don't actually use this prop, but it feels good to have, eh?
 function mapStateToProps(state) {
   return {
-
+    isMenuOpen: state.isMenuOpen,
   };
 }
 
