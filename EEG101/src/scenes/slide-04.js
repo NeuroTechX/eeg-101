@@ -7,8 +7,8 @@ import PopUpLink from "../components/PopUpLink";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 
 //Interfaces. For elements that bridge to native
-import GraphView from "../interface/GraphView";
-import FilterGraphView from "../interface/FilterGraphView";
+import GraphView from "../native/GraphView";
+import FilterGraphView from "../native/FilterGraphView";
 import config from "../redux/config";
 import I18n from "../i18n/i18n";
 import * as colors from "../styles/colors";

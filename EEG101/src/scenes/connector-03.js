@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import { isNil } from "lodash";
 import config from "../redux/config";
-import Classifier from "../interface/Classifier";
+import Classifier from "../native/Classifier";
 import LinkButton from "../components/WhiteLinkButton";
 import NoiseIndicator from "../components/NoiseIndicator";
 import I18n from "../i18n/i18n";

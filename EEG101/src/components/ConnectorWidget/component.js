@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import config from "../../redux/config";
-import Connector from "../../interface/Connector";
+import Connector from "../../native/Connector";
 import WhiteButton from "../WhiteButton";
 import Button from "../Button.js";
 import I18n from "../../i18n/i18n";

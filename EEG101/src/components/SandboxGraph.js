@@ -10,10 +10,10 @@ import {
 import config from "../redux/config";
 
 // Interfaces
-import GraphView from "../interface/GraphView";
-import FilterGraphView from "../interface/FilterGraphView";
-import PSDGraphView from "../interface/PSDGraphView";
-import WaveGraphView from "../interface/WaveGraphView";
+import GraphView from "../native/GraphView";
+import FilterGraphView from "../native/FilterGraphView";
+import PSDGraphView from "../native/PSDGraphView";
+import WaveGraphView from "../native/WaveGraphView";
 
 export default class SandboxGraph extends Component {
   constructor(props) {

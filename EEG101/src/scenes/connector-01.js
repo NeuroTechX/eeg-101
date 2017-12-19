@@ -8,7 +8,7 @@ import SandboxButton from "../components/SandboxButton";
 import I18n from "../i18n/i18n";
 import * as colors from "../styles/colors";
 import {
-  setOfflineMode
+  setOfflineMode,
 } from "../redux/actions";
 
 function mapStateToProps(state) {

@@ -5,7 +5,7 @@ import { MediaQueryStyleSheet } from "react-native-responsive";
 import config from "../redux/config";
 import { bindActionCreators } from "redux";
 import { setBCIAction } from "../redux/actions";
-import Classifier from "../interface/Classifier.js";
+import Classifier from "../native/Classifier.js";
 import I18n from "../i18n/i18n";
 import DataCollector from "../components/DataCollector.js";
 import ClassifierInfoDisplayer from "../components/ClassifierInfoDisplayer.js";

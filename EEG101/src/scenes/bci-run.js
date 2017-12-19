@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import config from "../redux/config";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import Torch from "react-native-torch";
-import Classifier from "../interface/Classifier.js";
+import Classifier from "../native/Classifier.js";
 import LinkButton from "../components/LinkButton";
 import PlayPauseButton from "../components/PlayPauseButton.js";
 import PopUp from "../components/PopUp";

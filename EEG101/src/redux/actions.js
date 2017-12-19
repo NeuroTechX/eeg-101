@@ -1,6 +1,6 @@
 // actions.js
 // Functions that interact with the Redux store.
-import Connector from "../interface/Connector";
+import Connector from "../native/Connector";
 import {
   SET_CONNECTION_STATUS,
   SET_GRAPHVIEW_DIMENSIONS,
