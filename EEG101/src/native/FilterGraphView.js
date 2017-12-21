@@ -16,5 +16,5 @@ const iface = {
   },
 };
 
-// requireNativeComponent takes 2 arguments: name of the Java view and and object that defines the interface. For now, this is an object ("iface") that specifies a name and propTypes. For more complex interactions between Java and JS, this would be replaced by a wrapped component. The component would be a class defined in this file.
+// requireNativeComponent takes 2 arguments: name of the Java view and and object that defines the interface. The interface defines a name for the object and declares the propTypes in order to check validity of the user's use of the native view.
 module.exports = requireNativeComponent('FILTER_GRAPH', iface);

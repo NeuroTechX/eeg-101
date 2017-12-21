@@ -62,11 +62,7 @@ const styles = MediaQueryStyleSheet.create(
       color: colors.white,
       fontSize: 18
     },
-
-    picker: {
-      color: colors.white,
-    },
-
+    
     padding: {
       paddingLeft: 16,
     },
