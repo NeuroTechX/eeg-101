@@ -184,6 +184,7 @@ export default {
 	thanksForCompleting:  'Danke für deinen Durchlauf von \n EEG 101',
 	hopeYouEnjoyed:  'Wir haben hart daran gearbeitet, eine einfache Einführung in die Neurowissenschaften, Signalverarbeitung und Gehirn-Computer-Interfaces bereitzustellen. Natürlich gibt es noch eine ganze Menge mehr zu lernen!',
 	furtherLearning:  'Weiterführende (englischsprachige) Materialien',
+	techysIntroduction:  'A Techy’s Introduction to Neuroscience',
 	bciResource:  'Eine geniale Liste an BCI-verwandten Ressourcen',
 	signalProcessingResource:  'Signals and Systems MIT Course',
 	machineLearningResource:  'Machine Learning is Fun!',
@@ -200,6 +201,8 @@ export default {
 	teamMemberSteve:  'Steve Harjula – Mediengestalter',
 	teamMemberMiles:  'Miles McCraw – Animationsdesigner',
 	restartButton:  'TUTORIAL NEU STARTEN',
+	sandboxButton:  'EEG SANDKASTEN',
+	bciButton:  'GEHIRN-COMPUTER-INTERFACE (BCI)',
 
 	//DeviceStatusWdiget
 	widgetConnected:  'Muse verbunden',
@@ -304,4 +307,7 @@ export default {
 	// config.js
 	configLight:  'das Licht',
 	configVibrate:  'vibration',
+
+	// LineNoisePicker.js
+	notchFrequency:  '',
 };

@@ -36,7 +36,7 @@ const styles = MediaQueryStyleSheet.create(
     // Base styles
     activeButton: {
       justifyContent: 'center',
-      backgroundColor: colors.faintBlue,
+      backgroundColor: colors.malibu,
       borderWidth: 2,
       borderColor: colors.black,
       elevation: 5,

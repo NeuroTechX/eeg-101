@@ -184,6 +184,7 @@ export default {
 	thanksForCompleting:  'Merci d\'avoir complété \n EEG 101',
 	hopeYouEnjoyed:  'Nous nous sommes efforcés d\'offrir une introduction simple aux neurosciences, au traitement de signaux et aux interfaces cerveau-ordinateur. Bien entendu, il y a beaucoup encore à apprendre!',
 	furtherLearning:  'Pour en apprendre plus (en anglais)',
+	techysIntroduction:  'A Techy’s Introduction to Neuroscience',
 	bciResource:  'Excellente liste de ressources sur les ICO',
 	signalProcessingResource:  'Cours du MIT sur les signaux et systèmes',
 	machineLearningResource:  'L\'apprentissage machine est amusant!',
@@ -200,6 +201,8 @@ export default {
 	teamMemberSteve:  'Steve Harjula – Design visuel',
 	teamMemberMiles:  'Miles McCraw – Animateur',
 	restartButton:  'RECOMMENCER LE TUTORIEL',
+	sandboxButton:  'BAC À SABLE',
+	bciButton:  'INTERFACE CERVEAU-ORDINATEUR',
 
 	//DeviceStatusWdiget
 	widgetConnected:  'Muse connecté',
@@ -304,4 +307,7 @@ export default {
 	// config.js
 	configLight:  'la lumière',
 	configVibrate:  'vibration',
+
+	// LineNoisePicker.js
+	notchFrequency:  '',
 };

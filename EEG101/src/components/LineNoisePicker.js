@@ -8,6 +8,8 @@ import { connect } from "react-redux";
 import { setNotchFrequency } from "../redux/actions";
 import { bindActionCreators } from "redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
+import I18n from "../i18n/i18n";
+
 import * as colors from "../styles/colors";
 
 function mapStateToProps(state) {
@@ -33,9 +35,9 @@ class LineNoisePicker extends Component {
   render() {
     return (
       <View>
-        <Text style={styles.title}>Notch Frequency</Text>
+        <Text style={styles.title}>{I18n.t('notchFrequency')}</Text>
         <View style={styles.padding}>
-        <Picker style={styles.picker}
+        <Picker itemStyle={styles.picker}
           selectedValue={this.props.notchFrequency}
           onValueChange={(itemValue) =>
             this.props.setNotchFrequency(itemValue)}
@@ -62,7 +64,7 @@ const styles = MediaQueryStyleSheet.create(
       color: colors.white,
       fontSize: 18
     },
-    
+
     padding: {
       paddingLeft: 16,
     },
@@ -71,6 +73,11 @@ const styles = MediaQueryStyleSheet.create(
       flex: 1,
       marginTop: 8,
       justifyContent: "flex-start"
+    },
+
+    picker: {
+      color: colors.white,
+      fontFamily: "Roboto",
     }
   },
   // Responsive styles

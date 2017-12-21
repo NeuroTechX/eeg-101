@@ -20,7 +20,7 @@ import * as colors from "../styles/colors";
 function mapStateToProps(state) {
   return {
     connectionStatus: state.connectionStatus,
-    notchFrequency: state.notchFrequency
+    notchFrequency: state.notchFrequency,
   };
 }
 
@@ -39,7 +39,9 @@ class ConnectorThree extends Component {
       const noiseListener = new NativeEventEmitter(NativeModules.Classifier);
       this.noiseSubscription = noiseListener.addListener("NOISE", message => {
         this.setState({ noise: Object.keys(message) });
-        console.log(JSON.stringify(this.state.noise));
+        if(Object.keys(message).length === 0) {
+          this.noiseSubscription.remove();
+        }
       });
     }
   }

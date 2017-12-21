@@ -53,7 +53,7 @@ class BCITwo extends Component {
     if (this.state.enableScroll === true) {
       return (
         <Image
-          source={require("../assets/swipeicon.png")}
+          source={require("../assets/swipeiconwhite.png")}
           resizeMode="contain"
           style={styles.swipeImage}
         />
@@ -218,23 +218,15 @@ export default connect(mapStateToProps, mapDispatchToProps)(BCITwo);
 const styles = MediaQueryStyleSheet.create(
   // Base styles
   {
-    currentTitle: {
-      marginLeft: 20,
-      marginTop: 10,
-      fontSize: 13,
-      fontFamily: "Roboto-Medium",
-      color: colors.black
-    },
-
     body: {
       fontFamily: "Roboto-Light",
       fontSize: 18,
-      color: colors.black,
+      color: colors.white,
       textAlign: "center"
     },
 
     container: {
-      backgroundColor: colors.white,
+      backgroundColor: colors.skyBlue,
       flex: 1,
       justifyContent: "space-around",
       alignItems: "stretch"
@@ -244,7 +236,7 @@ const styles = MediaQueryStyleSheet.create(
       textAlign: "center",
       margin: 15,
       lineHeight: 50,
-      color: colors.black,
+      color: colors.white,
       fontFamily: "Roboto-Black",
       fontSize: 48
     },
@@ -252,7 +244,7 @@ const styles = MediaQueryStyleSheet.create(
     subTitle: {
       fontSize: 16,
       fontFamily: "Roboto-Medium",
-      color: colors.black
+      color: colors.white
     },
 
     iconText: {
@@ -332,10 +324,6 @@ const styles = MediaQueryStyleSheet.create(
 
       header: {
         fontSize: 30
-      },
-
-      currentTitle: {
-        fontSize: 20
       },
 
       body: {

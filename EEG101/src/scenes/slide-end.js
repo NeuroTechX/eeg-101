@@ -25,6 +25,24 @@ class End extends Component {
     super(props);
   }
 
+  renderButtons() {
+    if (this.props.isOfflineMode) {
+      return (
+        <View style={styles.buttonBox}>
+          <LinkButton path={"/offline/slideOne"}>
+            {I18n.t("restartButton")}
+          </LinkButton>
+        </View>
+      );
+    }
+    return (
+      <View style={styles.buttonBox}>
+        <LinkButton path={"/sandbox"}>{I18n.t("sandboxButton")}</LinkButton>
+        <LinkButton path={"/bciTrain"}>{I18n.t("bciButton")}</LinkButton>
+      </View>
+    );
+  }
+
   render() {
     return (
       <ImageBackground
@@ -38,26 +56,27 @@ class End extends Component {
         >
           <View style={styles.page}>
             <View style={styles.titleBox}>
-              <Text style={styles.title}>
-                {I18n.t("thanksForCompleting")}
-              </Text>
-              <Text style={styles.body}>
-                {I18n.t("hopeYouEnjoyed")}
-              </Text>
+              <Text style={styles.title}>{I18n.t("thanksForCompleting")}</Text>
+              <Text style={styles.body}>{I18n.t("hopeYouEnjoyed")}</Text>
             </View>
 
             <View style={styles.listBox}>
-              <Text style={styles.header}>
-                {I18n.t("furtherLearning")}
-              </Text>
+              <Text style={styles.header}>{I18n.t("furtherLearning")}</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  Linking.openURL(
+                    "https://medium.com/neurotechx/a-techys-introduction-to-neuroscience-3f492df4d3bf"
+                  );
+                }}
+              >
+                <Text style={styles.link}>{I18n.t("techysIntroduction")}</Text>
+              </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
                   Linking.openURL("https://github.com/NeuroTechX/awesome-bci");
                 }}
               >
-                <Text style={styles.link}>
-                  {I18n.t("bciResource")}
-                </Text>
+                <Text style={styles.link}>{I18n.t("bciResource")}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
@@ -94,15 +113,12 @@ class End extends Component {
 
           <View style={styles.page}>
             <View style={styles.titleBox}>
-              <Text style={styles.header}>
-                {I18n.t("projectOpenSource")}
-              </Text>
-              <Text style={styles.body}>
-                {I18n.t("resultOfCollaboration")}
-              </Text>
+              <Text style={styles.header}>{I18n.t("projectOpenSource")}</Text>
+              <Text style={styles.body}>{I18n.t("resultOfCollaboration")}</Text>
               <View style={styles.textBox}>
-                <Text style={styles.body}>
-                  {I18n.t("interestedInApp")}
+                <Text style={styles.body}>{I18n.t("interestedInApp")}</Text>
+                <Text style={styles.body}>{'\n'}
+                  An iOS version is in the works! Follow our progress on GitHub
                 </Text>
               </View>
             </View>
@@ -165,9 +181,7 @@ class End extends Component {
 
           <View style={styles.page}>
             <View style={styles.listBox}>
-              <Text style={styles.header}>
-                {I18n.t("theTeam")}
-              </Text>
+              <Text style={styles.header}>{I18n.t("theTeam")}</Text>
               <Text style={styles.body}>Hubert Banville - Visionary</Text>
               <Text style={styles.body}>Dano Morrison - Developer</Text>
               <Text style={styles.body}>Geordan King - Producer</Text>
@@ -178,15 +192,7 @@ class End extends Component {
               <Text style={styles.body}>Miles McCraw - Animator</Text>
             </View>
 
-            <View style={styles.buttonBox}>
-              <LinkButton
-                path={
-                  this.props.isOfflineMode
-                    ? "/offline/slideOne"
-                    : "/connectorThree"
-                }
-              >{I18n.t("restartButton")}</LinkButton>
-            </View>
+            {this.renderButtons()}
           </View>
         </ViewPagerAndroid>
       </ImageBackground>

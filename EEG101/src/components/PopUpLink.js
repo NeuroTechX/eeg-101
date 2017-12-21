@@ -13,21 +13,38 @@ import * as colors from "../styles/colors";
 export default class PopUpLink extends Component{
 
   render() {
+    if(this.props.isWhite){
     return(
-      <Text style={{color: colors.skyBlue,
-        fontFamily: 'Roboto-Medium',
-        textDecorationLine: 'underline',}}
+      <Text style={styles.whiteLink}
        onPress={this.props.onPress}
        hitSlop={styles.hitSlop}>
         {this.props.children}
       </Text>
     );
   }
+  return(
+    <Text style={styles.link}
+     onPress={this.props.onPress}
+     hitSlop={styles.hitSlop}>
+      {this.props.children}
+    </Text>
+  );
+  }
 }
 
 const styles = MediaQueryStyleSheet.create(
   // Base styles
   {
+    link: {
+      color: colors.skyBlue,
+        fontFamily: 'Roboto-Medium',
+        textDecorationLine: 'underline',
+    },
+    whiteLink: {
+      color: colors.white,
+        fontFamily: 'Roboto-Medium',
+        textDecorationLine: 'underline',
+    },
     hitSlop: {
       top: 20, bottom: 20, left: 20, right: 20
     }
