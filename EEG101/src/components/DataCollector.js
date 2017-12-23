@@ -11,7 +11,7 @@ import {
   Vibration
 } from "react-native";
 import Classifier from "../native/Classifier.js";
-import Button from "../components/Button.js";
+import Button from "../components/WhiteButton.js";
 import I18n from "../i18n/i18n";
 import DataCollectionIndicator from "../components/DataCollectionIndicator.js";
 import * as colors from "../styles/colors";
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Roboto-Light",
     fontSize: 18,
-    color: colors.black,
+    color: colors.white,
     marginBottom: 30
   }
 });

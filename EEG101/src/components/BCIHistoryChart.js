@@ -51,8 +51,7 @@ export default class BCIHistoryChart extends Component {
                 stroke: "none"
               },
               tickLabels: {
-                fill: colors.white,
-                fontWeight: "light"
+                fill: colors.white
               }
             }}
           />

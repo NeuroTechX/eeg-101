@@ -61,7 +61,7 @@ export default {
 	dataShowing:  'data, showing the electrical activity of the brain',
 	noiseInSignal:  'Noise in the EEG signal',
 	differentTypes:  'The EEG is subject to many different types of',
-	blinksExample:  'Blinks, for example, produce large fluctuations in the signal due to ',
+	blinksExample:  'Blinks, for example, produce large fluctuations in the signal due to eyeball movement',
 	uninformativeRaw:  'For the most part, raw EEG data is pretty uninformative',
 	needsProcessing:  'With processing, EEG can give clues to overall brain activity, but it is not capable of',
 
@@ -80,7 +80,7 @@ export default {
 	sleepWakefulnessLink:  'sleep and wakefulness.',
 	neuralBasisEEGTitle:  'Neural basis of EEG.',
 	neuralBasisEEGDescription1:  'When synapses are activated on a neuron\'s dendrites, a small electric field (dipole) is created along the body of the neuron due to the difference in charge between those dendrites and the axon. This electric field only lasts for a few milliseconds.',
-	neuralBasisEEGDescription2:  'The electric fields produced by single neurons are vanishingly small. However, when large numbers of cortical neurons fire rhythmically, their activity can produce electric fields that are large enough to cross the surface of the skull. This process is influenced by many factors, including depth, orientation, and subtype of neurons, and is a topic of ongoing research.',
+	neuralBasisEEGDescription2:  'The electric fields produced by single neurons are vanishingly small. However, when large numbers of cortical neurons fire rhythmically, their activity can produce electric fields that are large enough to be detected outside of  the skull. This process is influenced by many factors, including depth, orientation, and subtype of neurons, and is a topic of ongoing research.',
 	brainStatesTitle:  'Brain states',
 	brainStatesDescription:  'During sleep our brains produce very different kinds of rhythmic electrical activity. When awake, brain rhythms tend to be rapidly-changing and irregular, while slowly-changing, organized rhythms become more dominant as we fall asleep and pass through the multiple sleep stages. \n Certain emotions and cognitive processes have also been linked with characteristic patterns of rhythmic activity that can be identified with EEG.',
 
@@ -103,7 +103,7 @@ export default {
 	electrodeNamingTitle:  'Electrode naming conventions',
 	electrodeNamingDescription:  'EEG electrodes are typically identified by a combination of a letter and a number. The letter indicates the part of the head where the electrode is located (F for frontal, C for central, etc.). The number indicates distance from the midline of the head with even numbers on the right hemisphere and odd numbers on the left.',
 	referencingTitle:  'Referencing',
-	referencingDescription:  'Each electrode\'s signal reflects the difference in electrical potential between that electrode and a seperate reference electrode. Thus, data gathered from EEG devices with different reference electrode placement can vary considerably. With Muse, the reference is located on the front of the forehead.',
+	referencingDescription:  'Each electrode\'s signal reflects the difference in electrical potential between that electrode and a separate reference electrode. Thus, data can vary considerably based on where reference electrodes are placed. With Muse, the reference is located on the front of the forehead.',
 
 	//slide-03.js offline
 	devicesHaveElectrodes:  'EEG devices have multiple electrodes',
@@ -174,7 +174,7 @@ export default {
 	alphaTitle:  'Alpha α (8-13 Hz)',
 	alphaDescription:  'Alpha waves can indicate the idling of a brain region. For example, they increase dramatically at when the eyes are closed. They are especially strong at the back of the head, where the vision centre of the brain is located.',
 	betaTitle:  'Beta β (13-30 Hz)',
-	betaDescription:  'Beta waves are prevalent when the brain is awake and active. They have been associated with alertness, concentration, and the active firing of neurons hard at work.',
+	betaDescription:  'Beta waves are prevalent when the brain is awake and active. They have been associated with alertness, concentration, and engagement. Someone absorbed in a conversation or thinking through a hard problem would display high beta activity.',
 	gammaTitle:  'Gamma γ (30-100 Hz)',
 	gammaDescription:  'Gamma waves are the fastest form of neural oscillation. They are difficult to detect and analyze with ordinary EEG but are a topic of much ongoing research. They have been tentatively associated with attention, working memory, and even consciousness.',
 	BCITitle:  'Brain-computer interfaces',
@@ -183,7 +183,8 @@ export default {
 	//slide-end.js
 	thanksForCompleting:  'Thanks for completing \n EEG 101',
 	hopeYouEnjoyed:  'We have tried hard to provide a simple introduction to neuroscience, signal processing, and brain-computer interfaces. Of course, there is a lot more to learn!',
-	furtherLearning:  'Resources for Further Learning',
+	furtherLearning:  'Further Reading',
+	techysIntroduction:  'A Techy’s Introduction to Neuroscience',
 	bciResource:  'Awesome List of BCI-related Resources',
 	signalProcessingResource:  'Signals and Systems MIT Course',
 	machineLearningResource:  'Machine Learning is Fun!',
@@ -200,6 +201,8 @@ export default {
 	teamMemberSteve:  'Steve Harjula - Visual Design',
 	teamMemberMiles:  'Miles McCraw - Animator',
 	restartButton:  'RESTART TUTORIAL',
+	sandboxButton:  'EEG SANDBOX',
+	bciButton:  'BRAIN-COMPUTER INTERFACE',
 
 	//DeviceStatusWdiget
 	widgetConnected:  'Muse connected',
@@ -304,4 +307,7 @@ export default {
 	// config.js
 	configLight:  'the light',
 	configVibrate:  'vibration',
+
+	// LineNoisePicker.js
+	notchFrequency:  'Notch Frequency',
 };

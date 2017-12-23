@@ -2,92 +2,92 @@
 // Dynamically-styled buttons for the SandBox Graph slide
 // Unfilled buttons when unselected, and filled with color when active
 
-import React, { Component } from 'react';
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
-import { MediaQueryStyleSheet } from 'react-native-responsive';
+import React, { Component } from "react";
+import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import { MediaQueryStyleSheet } from "react-native-responsive";
 import * as colors from "../styles/colors";
 
-export default class SandboxButton extends Component{
-  constructor(props){
+export default class SandboxButton extends Component {
+  constructor(props) {
     super(props);
-
   }
 
   render() {
-    const dynamicButtonStyle = (this.props.active) ? styles.activeButton: styles.inactiveButton;
-    const dynamicTextStyle = (this.props.active) ? styles.activeText: styles.inactiveText;
-    return(
-      <TouchableOpacity onPress={this.props.onPress} disabled={this.props.disabled}>
+    const dynamicButtonStyle = this.props.active
+      ? styles.activeButton
+      : styles.inactiveButton;
+    const dynamicTextStyle = this.props.active
+      ? styles.activeText
+      : styles.inactiveText;
+    return (
+      <TouchableOpacity
+        onPress={this.props.onPress}
+        disabled={this.props.disabled}
+      >
         <View style={dynamicButtonStyle}>
           <Text style={dynamicTextStyle}>{this.props.children}</Text>
         </View>
       </TouchableOpacity>
-    )
+    );
   }
-
-};
+}
 
 const styles = MediaQueryStyleSheet.create(
   {
     // Base styles
     activeButton: {
-      justifyContent: 'center',
+      justifyContent: "center",
       backgroundColor: colors.englishBlue,
       borderColor: colors.heather,
       borderRadius: 4,
       height: 30,
       margin: 5,
       padding: 5,
-      alignItems: 'center',
-      elevation: 3,
+      alignItems: "center",
+      elevation: 3
     },
 
     inactiveButton: {
-      justifyContent: 'center',
+      justifyContent: "center",
       backgroundColor: colors.white,
       borderColor: colors.heather,
       borderRadius: 4,
       height: 30,
       margin: 5,
       padding: 5,
-      alignItems: 'center',
-      elevation: 3,
+      alignItems: "center",
+      elevation: 3
     },
 
-    activeText:{
+    activeText: {
       color: colors.white,
-      fontFamily: 'Roboto-Regular',
+      fontFamily: "Roboto-Regular",
       fontSize: 15
     },
 
-    inactiveText:{
+    inactiveText: {
       color: colors.englishBlue,
-      fontFamily: 'Roboto-Regular',
+      fontFamily: "Roboto-Regular",
       fontSize: 15
-    },
-
+    }
   },
   // Responsive styles
   {
     "@media (min-device-height: 700)": {
       activeButton: {
-        height: 50,
+        height: 50
       },
       inactiveButton: {
-        height: 50,
+        height: 50
       },
 
-      activeText:{
+      activeText: {
         fontSize: 25
       },
 
-      inactiveText:{
+      inactiveText: {
         fontSize: 25
-      },
+      }
     }
-  });
+  }
+);

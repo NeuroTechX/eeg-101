@@ -57,7 +57,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     public BandPowerExtractor bandExtractor;
     private int notchFrequency = 60;
 
-    public NoiseDetector noiseDetector = new NoiseDetector(500, getReactApplicationContext());
+    public NoiseDetector noiseDetector = new NoiseDetector(1000, getReactApplicationContext());
     public GaussianNaiveBayesClassifier classifier = new GaussianNaiveBayesClassifier();
     public LinkedList<double[]> trainingData = new LinkedList<>();
     public LinkedList<Integer> labels = new LinkedList<>();

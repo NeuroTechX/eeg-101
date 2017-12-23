@@ -9,10 +9,10 @@ import {
   ActivityIndicator
 } from "react-native";
 import Classifier from "../native/Classifier.js";
-import Button from "../components/Button.js";
+import Button from "../components/WhiteButton.js";
 import PopUpLink from "./PopUpLink.js";
 import PopUp from "./PopUp.js";
-import LinkButton from "./LinkButton.js";
+import LinkButton from "./WhiteLinkButton.js";
 import I18n from "../i18n/i18n";
 import * as colors from "../styles/colors";
 
@@ -34,7 +34,7 @@ export default class ClassifierInfoDisplayer extends Component {
       return (
         <View style={styles.classifierContainer}>
           <Text style={styles.body}>{I18n.t('nextTrain')}{" "}
-            <PopUpLink onPress={() => this.setState({ popUp1Visible: true })}>
+            <PopUpLink isWhite={true} onPress={() => this.setState({ popUp1Visible: true })}>
               {I18n.t('classifierName')}
             </PopUpLink>{" "}{I18n.t('collectedData')}</Text>
           <Button
@@ -71,7 +71,7 @@ export default class ClassifierInfoDisplayer extends Component {
         <View style={styles.classifierContainer}>
           <View style={{ flex: 0.5 }}>
             <Text style={styles.body}>
-              <PopUpLink onPress={() => this.setState({ popUp2Visible: true })}>
+              <PopUpLink isWhite={true} onPress={() => this.setState({ popUp2Visible: true })}>
                 {I18n.t('classifierAccuracy')}
               </PopUpLink>{" "}
               <Text style={{ fontWeight: "bold" }}>{Math.round(this.state.score * 1000) / 1000}</Text>
@@ -114,6 +114,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Roboto-Light",
     fontSize: 18,
-    color: colors.black
+    color: colors.white
   }
 });

@@ -29,7 +29,7 @@ export default class DataCollectionIndicator extends Component {
 
   render() {
     if (this.state.noise.length >= 1) {
-      return <NoiseIndicator noise={this.state.noise} width={40} height={40} />;
+      return <NoiseIndicator noise={this.state.noise} width={50} height={50} />;
     } else {
       return <ActivityIndicator color={"#94DAFA"} size={"large"} />;
     }
