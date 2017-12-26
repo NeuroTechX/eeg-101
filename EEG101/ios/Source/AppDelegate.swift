@@ -20,4 +20,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        MuseConnectionManager.sharedInstance.reconnect()
+    }
+    
+    func applicationWillResignActive(_ application: UIApplication) {
+        MuseConnectionManager.sharedInstance.disconnect()
+    }
 }

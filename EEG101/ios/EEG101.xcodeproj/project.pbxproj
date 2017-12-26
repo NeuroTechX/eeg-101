@@ -9,8 +9,11 @@
 /* Begin PBXBuildFile section */
 		E66BDAE5C74F41A534E8F18B /* Pods_EEG101.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 316D79E79D5A4C32DCD6796D /* Pods_EEG101.framework */; };
 		F6AAA921329AC882111D4CB4 /* Pods_EEG101Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE8BCA6DBBA7E83595334F9C /* Pods_EEG101Tests.framework */; };
+		F7193FAE1FF041B100D08543 /* MuseConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7193FAD1FF041B100D08543 /* MuseConnectionManager.swift */; };
+		F7193FBE1FF2CB5F00D08543 /* MockMuse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7193FBD1FF2CB5F00D08543 /* MockMuse.swift */; };
 		F740EA1E1FE5DEC60043B68B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F740EA1D1FE5DEC60043B68B /* Assets.xcassets */; };
 		F740EA211FE5DEC60043B68B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F740EA1F1FE5DEC60043B68B /* LaunchScreen.storyboard */; };
+		F740EA2C1FE5DEC60043B68B /* MuseConnectionManagerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F740EA2B1FE5DEC60043B68B /* MuseConnectionManagerSpec.swift */; };
 		F74E8F3C1FE5E27700C8B7FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74E8F3A1FE5E27700C8B7FD /* AppDelegate.swift */; };
 		F7506E901FE5ECA800145D51 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F7506E8F1FE5ECA800145D51 /* libc++.tbd */; };
 		F7506E921FE5ED6A00145D51 /* Muse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7506E911FE5ED6A00145D51 /* Muse.framework */; };
@@ -50,11 +53,14 @@
 		316D79E79D5A4C32DCD6796D /* Pods_EEG101.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EEG101.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		659CEDA993192E974ECF0FCF /* Pods-EEG101Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EEG101Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EEG101Tests/Pods-EEG101Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		BE8BCA6DBBA7E83595334F9C /* Pods_EEG101Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EEG101Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F7193FAD1FF041B100D08543 /* MuseConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuseConnectionManager.swift; sourceTree = "<group>"; };
+		F7193FBD1FF2CB5F00D08543 /* MockMuse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMuse.swift; sourceTree = "<group>"; };
 		F740EA131FE5DEC60043B68B /* EEG101.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EEG101.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F740EA1D1FE5DEC60043B68B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F740EA201FE5DEC60043B68B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F740EA221FE5DEC60043B68B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F740EA271FE5DEC60043B68B /* EEG101Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EEG101Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F740EA2B1FE5DEC60043B68B /* MuseConnectionManagerSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuseConnectionManagerSpec.swift; sourceTree = "<group>"; };
 		F740EA2D1FE5DEC60043B68B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F74E8F3A1FE5E27700C8B7FD /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F7506E8F1FE5ECA800145D51 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
@@ -148,6 +154,8 @@
 			isa = PBXGroup;
 			children = (
 				F740EA2D1FE5DEC60043B68B /* Info.plist */,
+				F740EA2B1FE5DEC60043B68B /* MuseConnectionManagerSpec.swift */,
+				F7193FBD1FF2CB5F00D08543 /* MockMuse.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -166,8 +174,9 @@
 		F74E8F381FE5E11D00C8B7FD /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				F7506E951FE5EE4F00145D51 /* EEG101-Bridging-Header.h */,
 				F74E8F3A1FE5E27700C8B7FD /* AppDelegate.swift */,
+				F7506E951FE5EE4F00145D51 /* EEG101-Bridging-Header.h */,
+				F7193FAD1FF041B100D08543 /* MuseConnectionManager.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -477,6 +486,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7193FAE1FF041B100D08543 /* MuseConnectionManager.swift in Sources */,
 				F74E8F3C1FE5E27700C8B7FD /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -485,6 +495,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F740EA2C1FE5DEC60043B68B /* MuseConnectionManagerSpec.swift in Sources */,
+				F7193FBE1FF2CB5F00D08543 /* MockMuse.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
