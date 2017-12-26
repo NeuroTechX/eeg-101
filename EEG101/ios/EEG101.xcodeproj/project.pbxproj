@@ -11,7 +11,6 @@
 		F6AAA921329AC882111D4CB4 /* Pods_EEG101Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE8BCA6DBBA7E83595334F9C /* Pods_EEG101Tests.framework */; };
 		F740EA1E1FE5DEC60043B68B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F740EA1D1FE5DEC60043B68B /* Assets.xcassets */; };
 		F740EA211FE5DEC60043B68B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F740EA1F1FE5DEC60043B68B /* LaunchScreen.storyboard */; };
-		F740EA2C1FE5DEC60043B68B /* EEG101Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F740EA2B1FE5DEC60043B68B /* EEG101Tests.swift */; };
 		F74E8F3C1FE5E27700C8B7FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74E8F3A1FE5E27700C8B7FD /* AppDelegate.swift */; };
 		F7506E901FE5ECA800145D51 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F7506E8F1FE5ECA800145D51 /* libc++.tbd */; };
 		F7506E921FE5ED6A00145D51 /* Muse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7506E911FE5ED6A00145D51 /* Muse.framework */; };
@@ -56,7 +55,6 @@
 		F740EA201FE5DEC60043B68B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F740EA221FE5DEC60043B68B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F740EA271FE5DEC60043B68B /* EEG101Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EEG101Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		F740EA2B1FE5DEC60043B68B /* EEG101Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EEG101Tests.swift; sourceTree = "<group>"; };
 		F740EA2D1FE5DEC60043B68B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F74E8F3A1FE5E27700C8B7FD /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F7506E8F1FE5ECA800145D51 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
@@ -149,7 +147,6 @@
 		F740EA2A1FE5DEC60043B68B /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				F740EA2B1FE5DEC60043B68B /* EEG101Tests.swift */,
 				F740EA2D1FE5DEC60043B68B /* Info.plist */,
 			);
 			path = Tests;
@@ -431,9 +428,14 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-EEG101Tests/Pods-EEG101Tests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Nimble/Nimble.framework",
+				"${BUILT_PRODUCTS_DIR}/Quick/Quick.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Nimble.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Quick.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -483,7 +485,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F740EA2C1FE5DEC60043B68B /* EEG101Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -680,7 +681,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = EEG101Tests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.neurotechx.EEG101Tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -696,7 +697,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = EEG101Tests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.neurotechx.EEG101Tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";

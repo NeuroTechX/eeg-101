@@ -28,8 +28,9 @@ target 'EEG101' do
   target 'EEG101Tests' do
     inherit! :search_paths
     
-    # Pods for testing
-    
+    pod 'Quick'
+    pod 'Nimble'
+
   end
 end
 
