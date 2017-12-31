@@ -3,6 +3,20 @@
 
 class MockMuse: IXNMuse {
     
+    init(name: String = "") {
+        self.name = name
+    }
+    
+    var name: String
+    override func getName() -> String {
+        return name
+    }
+    
+    var _isLowEnergy = false
+    override func isLowEnergy() -> Bool {
+        return _isLowEnergy
+    }
+    
     private(set) var hasUnregisteredAllListeners = false
     override func unregisterAllListeners() {
         registeredConnectionListener = nil

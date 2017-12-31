@@ -19,8 +19,8 @@ class MuseConnectionManagerSpec: QuickSpec {
             
             beforeEach {
                 subject = MockMuse()
-                manager = MuseConnectionManager()
                 listener = MockConnectionListener()
+                manager = MuseConnectionManagerImpl()
                 
                 manager.connectTo(muse: subject, connectionListener: listener)
             }

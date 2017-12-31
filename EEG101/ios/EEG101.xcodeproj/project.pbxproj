@@ -16,12 +16,16 @@
 		F7193FBA1FF0680300D08543 /* NativeEventConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7193FB91FF0680300D08543 /* NativeEventConstants.swift */; };
 		F7193FBE1FF2CB5F00D08543 /* MockMuse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7193FBD1FF2CB5F00D08543 /* MockMuse.swift */; };
 		F7193FC01FF2D7D900D08543 /* EventEmitterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7193FBF1FF2D7D900D08543 /* EventEmitterSpec.swift */; };
+		F7193FC21FF2DD2000D08543 /* MuseConnectorModuleSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7193FC11FF2DD2000D08543 /* MuseConnectorModuleSpec.swift */; };
+		F7193FC41FF2E83800D08543 /* MockEventEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7193FC31FF2E83800D08543 /* MockEventEmitter.swift */; };
 		F740EA1E1FE5DEC60043B68B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F740EA1D1FE5DEC60043B68B /* Assets.xcassets */; };
 		F740EA211FE5DEC60043B68B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F740EA1F1FE5DEC60043B68B /* LaunchScreen.storyboard */; };
 		F740EA2C1FE5DEC60043B68B /* MuseConnectionManagerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F740EA2B1FE5DEC60043B68B /* MuseConnectionManagerSpec.swift */; };
 		F74E8F3C1FE5E27700C8B7FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74E8F3A1FE5E27700C8B7FD /* AppDelegate.swift */; };
 		F7506E901FE5ECA800145D51 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F7506E8F1FE5ECA800145D51 /* libc++.tbd */; };
 		F7506E921FE5ED6A00145D51 /* Muse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7506E911FE5ED6A00145D51 /* Muse.framework */; };
+		F77423AF1FEFF7B500CBED79 /* MuseConnectorModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77423AD1FEFF7B500CBED79 /* MuseConnectorModule.swift */; };
+		F77423B61FF009E600CBED79 /* Connector.m in Sources */ = {isa = PBXBuildFile; fileRef = F77423B41FF009E600CBED79 /* Connector.m */; };
 		F7AFAE211FE92E70008F3B8C /* RobotoCondensed-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7AFAE101FE92E6F008F3B8C /* RobotoCondensed-BoldItalic.ttf */; };
 		F7AFAE221FE92E70008F3B8C /* Roboto-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7AFAE111FE92E6F008F3B8C /* Roboto-MediumItalic.ttf */; };
 		F7AFAE231FE92E70008F3B8C /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7AFAE121FE92E70008F3B8C /* Roboto-Regular.ttf */; };
@@ -65,6 +69,8 @@
 		F7193FB91FF0680300D08543 /* NativeEventConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeEventConstants.swift; sourceTree = "<group>"; };
 		F7193FBD1FF2CB5F00D08543 /* MockMuse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMuse.swift; sourceTree = "<group>"; };
 		F7193FBF1FF2D7D900D08543 /* EventEmitterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEmitterSpec.swift; sourceTree = "<group>"; };
+		F7193FC11FF2DD2000D08543 /* MuseConnectorModuleSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuseConnectorModuleSpec.swift; sourceTree = "<group>"; };
+		F7193FC31FF2E83800D08543 /* MockEventEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEventEmitter.swift; sourceTree = "<group>"; };
 		F740EA131FE5DEC60043B68B /* EEG101.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EEG101.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F740EA1D1FE5DEC60043B68B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F740EA201FE5DEC60043B68B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -76,6 +82,8 @@
 		F7506E8F1FE5ECA800145D51 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		F7506E911FE5ED6A00145D51 /* Muse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Muse.framework; sourceTree = "<group>"; };
 		F7506E951FE5EE4F00145D51 /* EEG101-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EEG101-Bridging-Header.h"; sourceTree = "<group>"; };
+		F77423AD1FEFF7B500CBED79 /* MuseConnectorModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MuseConnectorModule.swift; sourceTree = "<group>"; };
+		F77423B41FF009E600CBED79 /* Connector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Connector.m; sourceTree = "<group>"; };
 		F7AFAE101FE92E6F008F3B8C /* RobotoCondensed-BoldItalic.ttf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "RobotoCondensed-BoldItalic.ttf"; path = "../../android/app/src/main/assets/fonts/RobotoCondensed-BoldItalic.ttf"; sourceTree = "<group>"; };
 		F7AFAE111FE92E6F008F3B8C /* Roboto-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-MediumItalic.ttf"; path = "../../android/app/src/main/assets/fonts/Roboto-MediumItalic.ttf"; sourceTree = "<group>"; };
 		F7AFAE121FE92E70008F3B8C /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Regular.ttf"; path = "../../android/app/src/main/assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
@@ -139,6 +147,15 @@
 			path = Frameworks;
 			sourceTree = "<group>";
 		};
+		F7193FAF1FF060D400D08543 /* Connector Module */ = {
+			isa = PBXGroup;
+			children = (
+				F77423AD1FEFF7B500CBED79 /* MuseConnectorModule.swift */,
+				F77423B41FF009E600CBED79 /* Connector.m */,
+			);
+			path = "Connector Module";
+			sourceTree = "<group>";
+		};
 		F7193FB81FF067B200D08543 /* Event Emitter */ = {
 			isa = PBXGroup;
 			children = (
@@ -175,9 +192,11 @@
 			isa = PBXGroup;
 			children = (
 				F740EA2D1FE5DEC60043B68B /* Info.plist */,
-				F740EA2B1FE5DEC60043B68B /* MuseConnectionManagerSpec.swift */,
-				F7193FBD1FF2CB5F00D08543 /* MockMuse.swift */,
 				F7193FBF1FF2D7D900D08543 /* EventEmitterSpec.swift */,
+				F7193FC31FF2E83800D08543 /* MockEventEmitter.swift */,
+				F7193FBD1FF2CB5F00D08543 /* MockMuse.swift */,
+				F740EA2B1FE5DEC60043B68B /* MuseConnectionManagerSpec.swift */,
+				F7193FC11FF2DD2000D08543 /* MuseConnectorModuleSpec.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -196,6 +215,7 @@
 		F74E8F381FE5E11D00C8B7FD /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				F7193FAF1FF060D400D08543 /* Connector Module */,
 				F7193FB81FF067B200D08543 /* Event Emitter */,
 				F74E8F3A1FE5E27700C8B7FD /* AppDelegate.swift */,
 				F7506E951FE5EE4F00145D51 /* EEG101-Bridging-Header.h */,
@@ -514,7 +534,9 @@
 				F7193FB31FF0656400D08543 /* EventEmitter.swift in Sources */,
 				F7193FAE1FF041B100D08543 /* MuseConnectionManager.swift in Sources */,
 				F74E8F3C1FE5E27700C8B7FD /* AppDelegate.swift in Sources */,
+				F77423AF1FEFF7B500CBED79 /* MuseConnectorModule.swift in Sources */,
 				F7193FB71FF0663C00D08543 /* ReactNativeEventEmitter.m in Sources */,
+				F77423B61FF009E600CBED79 /* Connector.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -523,7 +545,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F740EA2C1FE5DEC60043B68B /* MuseConnectionManagerSpec.swift in Sources */,
+				F7193FC41FF2E83800D08543 /* MockEventEmitter.swift in Sources */,
 				F7193FC01FF2D7D900D08543 /* EventEmitterSpec.swift in Sources */,
+				F7193FC21FF2DD2000D08543 /* MuseConnectorModuleSpec.swift in Sources */,
 				F7193FBE1FF2CB5F00D08543 /* MockMuse.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -599,7 +623,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -651,7 +675,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

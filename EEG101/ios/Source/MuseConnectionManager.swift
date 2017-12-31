@@ -1,10 +1,17 @@
 
-final class MuseConnectionManager {
+protocol MuseConnectionManager {
+    
+    func connectTo(muse: IXNMuse, connectionListener: IXNMuseConnectionListener)
+    func disconnect()
+    func reconnect()
+}
+
+final class MuseConnectionManagerImpl: MuseConnectionManager {
     
     private var connectedMuse: IXNMuse?
     private var connectionListener: IXNMuseConnectionListener?
     
-    static let sharedInstance = MuseConnectionManager()
+    static let sharedInstance = MuseConnectionManagerImpl()
     
     func connectTo(muse: IXNMuse, connectionListener: IXNMuseConnectionListener) {
         if let connectedMuse = connectedMuse {
