@@ -61,7 +61,7 @@ export default {
 	dataShowing:  'datos, mostrando la actividad eléctrica del cerebro',
 	noiseInSignal:  'Ruido en la señal EEG',
 	differentTypes:  'El EEG se ve afectado por',
-	blinksExample:  'Los parpadeos, por ejemplo, producen grandes fluctuaciones en la señal debido a la actividad muscular',
+	blinksExample:  'Los parpadeos, por ejemplo, producen grandes fluctuaciones en la señal debido a la movimiento ocular',
 	uninformativeRaw:  'Los datos crudos del EEG son bastante poco informativos',
 	needsProcessing:  'Con el procesamiento, el EEG puede dar pistas sobre la actividad cerebral general, pero no es capaz de',
 
@@ -80,7 +80,7 @@ export default {
 	sleepWakefulnessLink:  'si estás dormido o despierto.',
 	neuralBasisEEGTitle:  'Las bases neuronales del EEG.',
 	neuralBasisEEGDescription1:  'Cuando las sinapsis en las dendritas de una neurona se activan, un pequeño campo eléctrico (dipolo) se crea a lo largo del cuerpo de la neurona debido a la diferencia de carga eléctrica entre las dendritas y el axón. Este campo eléctrico dura un par de milisegundos.',
-	neuralBasisEEGDescription2:  'El campo eléctrico producido por una neurona es diminuto. No obstante, cuando muchas neuronas corticales disparan de manera rítmica, su actividad puede producir campos eléctricos que son lo suficientemente grandes para cruzar la superficie del cráneo. Este proceso depende de diferentes factores, incluyendo la profundidad, la orientación, el subtipo de neurona... y es un tema actual de investigación.',
+	neuralBasisEEGDescription2:  'El campo eléctrico producido por una neurona es diminuto. No obstante, cuando un gran número de neuronas corticales disparan rítmicamente, su actividad produce campos eléctricos que son lo suficientemente grandes para ser detectados al nivel del cuero cabelludo. Este proceso depende de diferentes factores, incluyendo la profundidad, la orientación, el subtipo de neurona... y es un tema actual de investigación.',
 	brainStatesTitle:  'Estados cerebrales',
 	brainStatesDescription:  'Mientras dormimos, nuestros cerebros producen un tipo particular de actividad eléctrica rítmica. Cuando estamos despiertos, los patrones rítmicos cerebrales tienden a ser dinámicos e irregulares, mientras que ritmos lentos y organizados se vuelven dominantes cuando nos vamos quedando dormidos y pasamos por las diferentes etapas del sueño. \n Ciertas emociones y procesos cognitivos también han sido asociados con patrones característicos de actividad rítmica cerebral que pueden ser registrados con el EEG.',
 
@@ -103,7 +103,7 @@ export default {
 	electrodeNamingTitle:  'Nomenclatura de los electrodos',
 	electrodeNamingDescription:  'Los electrodos típicamente se identifican con la combinación de una letra y un número. La letra indica en qué parte de la cabeza está ubicado el electrodo (F para frontal, C para central...). El número indica la distancia de la línea media de la cabeza utilizando números pares para el hemisferio derecho y números impares para el izquierdo.',
 	referencingTitle:  'Referencia',
-	referencingDescription:  'La señal de cada electrodo refleja la diferencia en potencial eléctrico entre ese electrodo y otro electrodo de referencia. Por lo tanto, los datos registrados con dispositivos EEG utilizando diferentes posiciones de electrodo de referencia pueden variar considerablemente. En el dispositivo Muse el electrodo de referencia se localiza en la frente.',
+	referencingDescription:  'La señal de cada electrodo refleja la diferencia en potencial eléctrico entre ese electrodo y otro electrodo de referencia. Por lo tanto, las señales pueden variar considerablemente basado en dónde se sitúan los electrodos de referencia  considerablemente. En el dispositivo Muse el electrodo de referencia se localiza en la frente.',
 
 	//slide-03.js offline
 	devicesHaveElectrodes:  'Los dispositivos EEG tienen múltiples electrodos',
@@ -174,7 +174,7 @@ export default {
 	alphaTitle:  'Alfa α (8-13 Hz)',
 	alphaDescription:  'Las ondas alfa pueden indicar la baja actividad de una región cerebral. Por ejemplo, pueden aumentar dramáticamente cuando los ojos están cerrados. Son especialmente fuertes en la parte de atrás de la cabeza, donde el centro de la visión del cerebro se localiza .',
 	betaTitle:  'Beta β (13-30 Hz)',
-	betaDescription:  'Las ondas beta prevalecen cuando el cerebro está despierto y activo. Han sido asociadas con estados de alerta, de concentración, y el disparo activo de neuronas que están trabajando arduamente.',
+	betaDescription:  'Las ondas beta prevalecen cuando el cerebro está despierto y activo. Han sido asociadas con estados de *alerta*, concentración y *atención*. Una persona *enfocada en una / atenta a* conversación o pensando en un problema difícil *presentaría* mayor actividad en la banda Beta alta.',
 	gammaTitle:  'Gamma γ (30-100 Hz)',
 	gammaDescription:  'Las ondas gamma son el tipo de oscilación neuronal más rápida. Son difíciles de detectar y analizar con EEG ordinario, pero son un tema actual de investigación. Han sido asociadas con procesos cognitivos superiores como la atención, la memoria de trabajo, e incluso la consciencia.',
 	BCITitle:  'Interfaz cerebro-computadora (BCI)',

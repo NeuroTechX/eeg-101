@@ -6,7 +6,8 @@ import {
   Text,
   View,
   TouchableOpacity,
-  DeviceEventEmitter,
+  NativeEventEmitter,
+  NativeModules,
   PermissionsAndroid,
   Modal,
   ScrollView,
@@ -43,18 +44,12 @@ class MusesPopUp extends Component {
         >
           <View style={styles.item}>
             <View style={styles.label}>
-              <Text style={styles.itemText}>
-                {index + 1}.
-              </Text>
+              <Text style={styles.itemText}>{index + 1}.</Text>
             </View>
             <View style={styles.value}>
-              <Text style={styles.itemText}>
-                {muse.name}
-              </Text>
+              <Text style={styles.itemText}>{muse.name}</Text>
             </View>
-            <Text style={styles.itemText}>
-              Model: {muse.model}
-            </Text>
+            <Text style={styles.itemText}>Model: {muse.model}</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -92,7 +87,8 @@ class MusesPopUp extends Component {
               <View style={{ flex: 1 }}>
                 <Button
                   onPress={() =>
-                    Connector.connectToMuseWithIndex(this.props.selectedMuse)}
+                    Connector.connectToMuseWithIndex(this.props.selectedMuse)
+                  }
                 >
                   {I18n.t("connectButton")}
                 </Button>
@@ -136,16 +132,16 @@ export default class ConnectorWidget extends Component {
     }
   }
 
-  // Calls getAndConnectoToDevice in native ConnectorModule after creating promise listeners
+  // Creates CONNECTION_CHANGED and MUSE_LIST_CHANGED event listeners
   startConnector() {
+    this.eventEmitter = new NativeEventEmitter(NativeModules.Connector);
     if (
       this.props.connectionStatus ===
         config.connectionStatus.NOT_YET_CONNECTED ||
       this.props.connectionStatus === config.connectionStatus.NO_MUSES
     ) {
       Connector.init();
-
-      DeviceEventEmitter.addListener("CONNECTION_CHANGED", params => {
+      this.eventEmitter.addListener("CONNECTION_CHANGED", params => {
         switch (params.connectionStatus) {
           case "CONNECTED":
             this.props.setConnectionStatus(config.connectionStatus.CONNECTED);
@@ -165,7 +161,7 @@ export default class ConnectorWidget extends Component {
       });
     }
 
-    DeviceEventEmitter.addListener("MUSE_LIST_CHANGED", params => {
+    this.eventEmitter.addListener("MUSE_LIST_CHANGED", params => {
       this.props.setAvailableMuses(params);
     });
   }
@@ -176,11 +172,12 @@ export default class ConnectorWidget extends Component {
   }
 
   componentWillUnmount() {
-    DeviceEventEmitter.removeListener("MUSE_LIST_CHANGED", params => {
+    this.eventEmitter.removeListener("MUSE_LIST_CHANGED", params => {
       this.props.setAvailableMuses(params);
     });
   }
 
+  // Might want to push some more of this logic into Redux actions
   getAndConnectToDevice() {
     this.props.setConnectionStatus(config.connectionStatus.SEARCHING);
     setTimeout(
