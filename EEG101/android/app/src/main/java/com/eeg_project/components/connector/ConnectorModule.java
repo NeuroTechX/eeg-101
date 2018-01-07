@@ -36,7 +36,6 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
     private int museIndex = 0;
     private List<Muse> availableMuses;
     private Muse muse;
-    private WritableMap bluetoothMap;
     private boolean isBluetoothEnabled;
     public MainApplication appState;
     public Handler connectHandler;
@@ -78,7 +77,7 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void init() {
-        if(checkBluetoothEnabled()) {
+        if (checkBluetoothEnabled()) {
             startMuseManager();
             startConnectorThread();
         }
@@ -86,7 +85,7 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void getMuses(Promise promise) {
-        if(checkBluetoothEnabled()) {
+        if (checkBluetoothEnabled()) {
             if (manager == null) {
                 startMuseManager();
                 startConnectorThread();
@@ -99,8 +98,7 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
             }
 
             promise.resolve(getWritableMuseList(availableMuses));
-        }
-        else {
+        } else {
             promise.reject("BLUETOOTH_DISABLED", "BLUETOOTH_DISABLED");
         }
 
@@ -194,7 +192,6 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
     }
 
 
-
     // ------------------------------------------------------------------------------
     // Runnables
 
@@ -239,8 +236,6 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
 
             // Only need to execute this code if in React Native app to send info about available Muses
             sendEvent(MUSE_LIST_CHANGED, getWritableMuseList(availableMuses));
-
-
         }
     }
 
@@ -278,7 +273,7 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
             if (current == ConnectionState.DISCONNECTED) {
                 museMap = Arguments.createMap();
                 museMap.putString("connectionStatus", "DISCONNECTED");
-                sendEvent( CONNECTION_CHANGED, museMap);
+                sendEvent(CONNECTION_CHANGED, museMap);
 
             }
             if (current == ConnectionState.CONNECTING) {
