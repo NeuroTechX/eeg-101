@@ -21,7 +21,7 @@ protocol MuseManager {
 
 extension IXNMuseManagerIos: MuseManager {}
 
-@objc(Connector)
+@objc(MuseConnectorModule)
 final class MuseConnectorModule: NSObject {
     
     private var bluetoothManager: BluetoothManager
@@ -53,15 +53,19 @@ final class MuseConnectorModule: NSObject {
     }
     
     @objc
+    func start() {
+        guard isBluetoothEnabled else { return }
+        refreshMuseList()
+    }
+    
+    @objc
     func getMuses(resolver resolve: RCTPromiseResolveBlock,
-                  rejecter reject: RCTPromiseRejectBlock)
-    {
+                  rejecter reject: RCTPromiseRejectBlock) {
+        
         guard isBluetoothEnabled else {
             reject("BLUETOOTH_DISABLED", "BLUETOOTH_DISABLED", nil)
             return
         }
-        
-        refreshMuseList()
         
         let availableMuses = getAvailableMuseParamList()
         if availableMuses.count > 0 {

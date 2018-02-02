@@ -11,9 +11,9 @@
 		F6AAA921329AC882111D4CB4 /* Pods_EEG101Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE8BCA6DBBA7E83595334F9C /* Pods_EEG101Tests.framework */; };
 		F7193FAE1FF041B100D08543 /* MuseConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7193FAD1FF041B100D08543 /* MuseConnectionManager.swift */; };
 		F7193FB31FF0656400D08543 /* EventEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7193FB21FF0656400D08543 /* EventEmitter.swift */; };
-		F7193FB51FF0662000D08543 /* ReactNativeEventEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7193FB41FF0662000D08543 /* ReactNativeEventEmitter.swift */; };
-		F7193FB71FF0663C00D08543 /* ReactNativeEventEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = F7193FB61FF0663C00D08543 /* ReactNativeEventEmitter.m */; };
-		F7193FBA1FF0680300D08543 /* NativeEventConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7193FB91FF0680300D08543 /* NativeEventConstants.swift */; };
+		F7193FB51FF0662000D08543 /* AppNativeEventEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7193FB41FF0662000D08543 /* AppNativeEventEmitter.swift */; };
+		F7193FB71FF0663C00D08543 /* AppNativeEventEmitterBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F7193FB61FF0663C00D08543 /* AppNativeEventEmitterBridge.m */; };
+		F7193FBA1FF0680300D08543 /* NativeEventNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7193FB91FF0680300D08543 /* NativeEventNames.swift */; };
 		F7193FBE1FF2CB5F00D08543 /* MockMuse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7193FBD1FF2CB5F00D08543 /* MockMuse.swift */; };
 		F7193FC01FF2D7D900D08543 /* EventEmitterSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7193FBF1FF2D7D900D08543 /* EventEmitterSpec.swift */; };
 		F7193FC21FF2DD2000D08543 /* MuseConnectorModuleSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7193FC11FF2DD2000D08543 /* MuseConnectorModuleSpec.swift */; };
@@ -25,7 +25,7 @@
 		F7506E901FE5ECA800145D51 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F7506E8F1FE5ECA800145D51 /* libc++.tbd */; };
 		F7506E921FE5ED6A00145D51 /* Muse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7506E911FE5ED6A00145D51 /* Muse.framework */; };
 		F77423AF1FEFF7B500CBED79 /* MuseConnectorModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77423AD1FEFF7B500CBED79 /* MuseConnectorModule.swift */; };
-		F77423B61FF009E600CBED79 /* Connector.m in Sources */ = {isa = PBXBuildFile; fileRef = F77423B41FF009E600CBED79 /* Connector.m */; };
+		F77423B61FF009E600CBED79 /* ConnectorBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F77423B41FF009E600CBED79 /* ConnectorBridge.m */; };
 		F7AFAE211FE92E70008F3B8C /* RobotoCondensed-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7AFAE101FE92E6F008F3B8C /* RobotoCondensed-BoldItalic.ttf */; };
 		F7AFAE221FE92E70008F3B8C /* Roboto-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7AFAE111FE92E6F008F3B8C /* Roboto-MediumItalic.ttf */; };
 		F7AFAE231FE92E70008F3B8C /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7AFAE121FE92E70008F3B8C /* Roboto-Regular.ttf */; };
@@ -64,9 +64,9 @@
 		BE8BCA6DBBA7E83595334F9C /* Pods_EEG101Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EEG101Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7193FAD1FF041B100D08543 /* MuseConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuseConnectionManager.swift; sourceTree = "<group>"; };
 		F7193FB21FF0656400D08543 /* EventEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEmitter.swift; sourceTree = "<group>"; };
-		F7193FB41FF0662000D08543 /* ReactNativeEventEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactNativeEventEmitter.swift; sourceTree = "<group>"; };
-		F7193FB61FF0663C00D08543 /* ReactNativeEventEmitter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReactNativeEventEmitter.m; sourceTree = "<group>"; };
-		F7193FB91FF0680300D08543 /* NativeEventConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeEventConstants.swift; sourceTree = "<group>"; };
+		F7193FB41FF0662000D08543 /* AppNativeEventEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNativeEventEmitter.swift; sourceTree = "<group>"; };
+		F7193FB61FF0663C00D08543 /* AppNativeEventEmitterBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppNativeEventEmitterBridge.m; sourceTree = "<group>"; };
+		F7193FB91FF0680300D08543 /* NativeEventNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeEventNames.swift; sourceTree = "<group>"; };
 		F7193FBD1FF2CB5F00D08543 /* MockMuse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMuse.swift; sourceTree = "<group>"; };
 		F7193FBF1FF2D7D900D08543 /* EventEmitterSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventEmitterSpec.swift; sourceTree = "<group>"; };
 		F7193FC11FF2DD2000D08543 /* MuseConnectorModuleSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MuseConnectorModuleSpec.swift; sourceTree = "<group>"; };
@@ -83,7 +83,7 @@
 		F7506E911FE5ED6A00145D51 /* Muse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Muse.framework; sourceTree = "<group>"; };
 		F7506E951FE5EE4F00145D51 /* EEG101-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "EEG101-Bridging-Header.h"; sourceTree = "<group>"; };
 		F77423AD1FEFF7B500CBED79 /* MuseConnectorModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MuseConnectorModule.swift; sourceTree = "<group>"; };
-		F77423B41FF009E600CBED79 /* Connector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Connector.m; sourceTree = "<group>"; };
+		F77423B41FF009E600CBED79 /* ConnectorBridge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectorBridge.m; sourceTree = "<group>"; };
 		F7AFAE101FE92E6F008F3B8C /* RobotoCondensed-BoldItalic.ttf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "RobotoCondensed-BoldItalic.ttf"; path = "../../android/app/src/main/assets/fonts/RobotoCondensed-BoldItalic.ttf"; sourceTree = "<group>"; };
 		F7AFAE111FE92E6F008F3B8C /* Roboto-MediumItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-MediumItalic.ttf"; path = "../../android/app/src/main/assets/fonts/Roboto-MediumItalic.ttf"; sourceTree = "<group>"; };
 		F7AFAE121FE92E70008F3B8C /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Regular.ttf"; path = "../../android/app/src/main/assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
@@ -151,7 +151,7 @@
 			isa = PBXGroup;
 			children = (
 				F77423AD1FEFF7B500CBED79 /* MuseConnectorModule.swift */,
-				F77423B41FF009E600CBED79 /* Connector.m */,
+				F77423B41FF009E600CBED79 /* ConnectorBridge.m */,
 			);
 			path = "Connector Module";
 			sourceTree = "<group>";
@@ -159,10 +159,10 @@
 		F7193FB81FF067B200D08543 /* Event Emitter */ = {
 			isa = PBXGroup;
 			children = (
-				F7193FB91FF0680300D08543 /* NativeEventConstants.swift */,
+				F7193FB61FF0663C00D08543 /* AppNativeEventEmitterBridge.m */,
+				F7193FB41FF0662000D08543 /* AppNativeEventEmitter.swift */,
 				F7193FB21FF0656400D08543 /* EventEmitter.swift */,
-				F7193FB41FF0662000D08543 /* ReactNativeEventEmitter.swift */,
-				F7193FB61FF0663C00D08543 /* ReactNativeEventEmitter.m */,
+				F7193FB91FF0680300D08543 /* NativeEventNames.swift */,
 			);
 			path = "Event Emitter";
 			sourceTree = "<group>";
@@ -529,14 +529,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F7193FBA1FF0680300D08543 /* NativeEventConstants.swift in Sources */,
-				F7193FB51FF0662000D08543 /* ReactNativeEventEmitter.swift in Sources */,
+				F7193FBA1FF0680300D08543 /* NativeEventNames.swift in Sources */,
+				F7193FB51FF0662000D08543 /* AppNativeEventEmitter.swift in Sources */,
 				F7193FB31FF0656400D08543 /* EventEmitter.swift in Sources */,
 				F7193FAE1FF041B100D08543 /* MuseConnectionManager.swift in Sources */,
 				F74E8F3C1FE5E27700C8B7FD /* AppDelegate.swift in Sources */,
 				F77423AF1FEFF7B500CBED79 /* MuseConnectorModule.swift in Sources */,
-				F7193FB71FF0663C00D08543 /* ReactNativeEventEmitter.m in Sources */,
-				F77423B61FF009E600CBED79 /* Connector.m in Sources */,
+				F7193FB71FF0663C00D08543 /* AppNativeEventEmitterBridge.m in Sources */,
+				F77423B61FF009E600CBED79 /* ConnectorBridge.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

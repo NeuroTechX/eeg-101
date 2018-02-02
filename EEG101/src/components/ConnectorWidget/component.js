@@ -12,7 +12,8 @@ import {
   Modal,
   ScrollView,
   ActivityIndicator,
-  Image
+  Image,
+  Platform
 } from "react-native";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import config from "../../redux/config";
@@ -116,8 +117,8 @@ export default class ConnectorWidget extends Component {
     };
   }
 
-  // Checks if user has enabled coarse location permission neceessary for BLE function
-  // If not, displays request popup, otherwise proceeds to startConnector()
+  // Android only - check if user has enabled coarse location permission neceessary
+  // for BLE function. If not, displays request popup, otherwise proceeds to startConnector()
   async requestLocationPermission() {
     try {
       const granted = await PermissionsAndroid.request(
@@ -134,13 +135,15 @@ export default class ConnectorWidget extends Component {
 
   // Creates CONNECTION_CHANGED and MUSE_LIST_CHANGED event listeners
   startConnector() {
-    this.eventEmitter = new NativeEventEmitter(NativeModules.Connector);
-    if (
-      this.props.connectionStatus ===
-        config.connectionStatus.NOT_YET_CONNECTED ||
-      this.props.connectionStatus === config.connectionStatus.NO_MUSES
-    ) {
-      Connector.init();
+    this.eventEmitter = new NativeEventEmitter(NativeModules.AppNativeEventEmitter);
+
+    this.eventEmitter.addListener("MUSE_LIST_CHANGED", params => {
+      this.props.setAvailableMuses(params);
+    });
+
+    if (this.props.connectionStatus === config.connectionStatus.NOT_YET_CONNECTED
+      || this.props.connectionStatus === config.connectionStatus.NO_MUSES) {
+
       this.eventEmitter.addListener("CONNECTION_CHANGED", params => {
         switch (params.connectionStatus) {
           case "CONNECTED":
@@ -159,16 +162,17 @@ export default class ConnectorWidget extends Component {
             break;
         }
       });
-    }
 
-    this.eventEmitter.addListener("MUSE_LIST_CHANGED", params => {
-      this.props.setAvailableMuses(params);
-    });
+      Connector.start();
+    }
   }
 
-  // request location permissions and call getAndConnectToDevice and register event listeners when component loads
   componentDidMount() {
-    this.requestLocationPermission().then(() => this.startConnector());
+    if (Platform.OS === 'android') {
+      this.requestLocationPermission().then(() => this.startConnector());
+    } else {
+      this.startConnector();
+    }
   }
 
   componentWillUnmount() {

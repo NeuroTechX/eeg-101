@@ -2,8 +2,8 @@
 
 import React
 
-@objc(ReactNativeEventEmitter)
-class ReactNativeEventEmitter: RCTEventEmitter {
+@objc(AppNativeEventEmitter)
+final class AppNativeEventEmitter: RCTEventEmitter {
     
     override init() {
         super.init()

@@ -8,11 +8,11 @@ final class EventEmitterImpl: EventEmitter {
     
     public static var sharedInstance = EventEmitterImpl()
     
-    private static var eventEmitter: ReactNativeEventEmitter!
+    private static var eventEmitter: AppNativeEventEmitter!
     
     private init() {}
     
-    func registerEventEmitter(eventEmitter: ReactNativeEventEmitter) {
+    func registerEventEmitter(eventEmitter: AppNativeEventEmitter) {
         EventEmitterImpl.eventEmitter = eventEmitter
     }
     
