@@ -43,6 +43,8 @@
 		F7AFAE2F1FE92E70008F3B8C /* RobotoCondensed-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7AFAE1E1FE92E70008F3B8C /* RobotoCondensed-Light.ttf */; };
 		F7AFAE301FE92E70008F3B8C /* Roboto-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7AFAE1F1FE92E70008F3B8C /* Roboto-LightItalic.ttf */; };
 		F7AFAE311FE92E70008F3B8C /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F7AFAE201FE92E70008F3B8C /* Roboto-Bold.ttf */; };
+		F7E649A42033E2C400579D41 /* EpochBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E649A32033E2C400579D41 /* EpochBuffer.swift */; };
+		F7E649A72033E65600579D41 /* CircularBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E649A62033E65600579D41 /* CircularBuffer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,6 +103,8 @@
 		F7AFAE1E1FE92E70008F3B8C /* RobotoCondensed-Light.ttf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "RobotoCondensed-Light.ttf"; path = "../../android/app/src/main/assets/fonts/RobotoCondensed-Light.ttf"; sourceTree = "<group>"; };
 		F7AFAE1F1FE92E70008F3B8C /* Roboto-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-LightItalic.ttf"; path = "../../android/app/src/main/assets/fonts/Roboto-LightItalic.ttf"; sourceTree = "<group>"; };
 		F7AFAE201FE92E70008F3B8C /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Bold.ttf"; path = "../../android/app/src/main/assets/fonts/Roboto-Bold.ttf"; sourceTree = "<group>"; };
+		F7E649A32033E2C400579D41 /* EpochBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpochBuffer.swift; sourceTree = "<group>"; };
+		F7E649A62033E65600579D41 /* CircularBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularBuffer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,13 +219,23 @@
 		F74E8F381FE5E11D00C8B7FD /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				F79C5F901FF97A8D00B3715E /* Classifier Module */,
 				F7193FAF1FF060D400D08543 /* Connector Module */,
 				F7193FB81FF067B200D08543 /* Event Emitter */,
+				F7E649A52033E64700579D41 /* Signal */,
 				F74E8F3A1FE5E27700C8B7FD /* AppDelegate.swift */,
 				F7506E951FE5EE4F00145D51 /* EEG101-Bridging-Header.h */,
 				F7193FAD1FF041B100D08543 /* MuseConnectionManager.swift */,
 			);
 			path = Source;
+			sourceTree = "<group>";
+		};
+		F79C5F901FF97A8D00B3715E /* Classifier Module */ = {
+			isa = PBXGroup;
+			children = (
+				F7E649A32033E2C400579D41 /* EpochBuffer.swift */,
+			);
+			path = "Classifier Module";
 			sourceTree = "<group>";
 		};
 		F7AFAE0F1FE92E4D008F3B8C /* Fonts */ = {
@@ -246,6 +260,14 @@
 				F7AFAE1A1FE92E70008F3B8C /* RobotoCondensed-Regular.ttf */,
 			);
 			name = Fonts;
+			sourceTree = "<group>";
+		};
+		F7E649A52033E64700579D41 /* Signal */ = {
+			isa = PBXGroup;
+			children = (
+				F7E649A62033E65600579D41 /* CircularBuffer.swift */,
+			);
+			path = Signal;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -533,9 +555,11 @@
 				F7193FB51FF0662000D08543 /* AppNativeEventEmitter.swift in Sources */,
 				F7193FB31FF0656400D08543 /* EventEmitter.swift in Sources */,
 				F7193FAE1FF041B100D08543 /* MuseConnectionManager.swift in Sources */,
+				F7E649A72033E65600579D41 /* CircularBuffer.swift in Sources */,
 				F74E8F3C1FE5E27700C8B7FD /* AppDelegate.swift in Sources */,
 				F77423AF1FEFF7B500CBED79 /* MuseConnectorModule.swift in Sources */,
 				F7193FB71FF0663C00D08543 /* AppNativeEventEmitterBridge.m in Sources */,
+				F7E649A42033E2C400579D41 /* EpochBuffer.swift in Sources */,
 				F77423B61FF009E600CBED79 /* ConnectorBridge.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
