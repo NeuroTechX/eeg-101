@@ -117,9 +117,9 @@ const styles = MediaQueryStyleSheet.create(
 
     offlineButtonContainer: {
       flex: 1,
-      marginLeft: 40,
-      marginRight: 40,
-      justifyContent: "center"
+      margin: 10,
+      justifyContent: "center",
+      alignSelf: 'center'
     },
 
     logo: {

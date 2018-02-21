@@ -55,11 +55,6 @@ const styles = MediaQueryStyleSheet.create(
       justifyContent: "flex-start"
     },
 
-    menuText: {
-      margin: 10,
-      fontSize: 20
-    },
-
     title: {
       paddingLeft: 16,
       fontFamily: "Roboto-Bold",
@@ -118,7 +113,27 @@ const styles = MediaQueryStyleSheet.create(
   },
   // Responsive styles
   {
-    "@media (min-device-height: 700)": {},
-    "@media (min-device-height: 1000)": {}
+    "@media (min-device-height: 700)": {  
+      title: {
+        fontSize: 25
+      },
+  
+      itemValue: {
+        fontSize: 20
+      },
+  
+      disabledItemValue: {
+        fontSize: 20
+      },
+
+  
+      itemLabel: {
+        fontSize: 20
+      },
+  
+      disabledItemLabel: {
+        fontSize: 20
+      }
+    },
   }
 );
