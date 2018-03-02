@@ -10,7 +10,9 @@ import {
   SET_MENU,
   SET_MUSE_INFO,
   SET_AVAILABLE_MUSES,
-  SET_NOTCH_FREQUENCY
+  SET_NOTCH_FREQUENCY,
+  SET_NOISE,
+  SET_CLASSIFIER_DATA
 } from "./actionTypes";
 
 const initialState = {
@@ -22,6 +24,8 @@ const initialState = {
   isMenuOpen: false,
   isOfflineMode: false,
   notchFrequency: 60,
+  noise: ["1", "2", "3", "4"],
+  classifierData: []
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -76,7 +80,17 @@ export default function reducer(state = initialState, action = {}) {
         notchFrequency: action.payload
       };
 
-    // ...other actions
+    case SET_NOISE:
+      return {
+        ...state,
+        noise: action.payload
+      };
+
+    case SET_CLASSIFIER_DATA:
+      return {
+        ...state,
+        classifierData: state.classifierData.concat(action.payload).slice(0, 30)
+      };
 
     default:
       return state;

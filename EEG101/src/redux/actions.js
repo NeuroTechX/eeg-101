@@ -9,7 +9,9 @@ import {
   SET_MENU,
   SET_MUSE_INFO,
   SET_AVAILABLE_MUSES,
-  SET_NOTCH_FREQUENCY
+  SET_NOTCH_FREQUENCY,
+  SET_NOISE,
+  UPDATE_CLASSIFIER_DATA
 } from "./actionTypes.js";
 import config from "./config";
 
@@ -40,7 +42,14 @@ export const setBCIAction = payload => ({ payload, type: SET_BCI_ACTION });
 
 export const setMenu = payload => ({ payload, type: SET_MENU });
 
-export const setNotchFrequency = payload => ({ payload, type: SET_NOTCH_FREQUENCY });
+export const setNotchFrequency = payload => ({
+  payload,
+  type: SET_NOTCH_FREQUENCY
+});
+
+export const setNoise = payload => ({ payload, type: SET_NOISE });
+
+export const updateClassifierData = payload => ({ payload, type: UPDATE_CLASSIFIER_DATA });
 
 export function getMuses() {
   return dispatch => {
@@ -54,7 +63,7 @@ export function getMuses() {
         } else {
           dispatch(setConnectionStatus(config.connectionStatus.NO_MUSES));
         }
-        return dispatch(setAvailableMuses(new Array()))
+        return dispatch(setAvailableMuses(new Array()));
       }
     );
   };

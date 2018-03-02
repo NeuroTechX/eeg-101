@@ -16,17 +16,6 @@ export default class DataCollectionIndicator extends Component {
     };
   }
 
-  componentDidMount() {
-    const noiseListener = new NativeEventEmitter(NativeModules.Classifier);
-    this.noiseSubscription = noiseListener.addListener("NOISE", message => {
-      this.setState({ noise: Object.keys(message) });
-    });
-  }
-
-  componentWillUnmount(){
-    this.noiseSubscription.remove();
-  }
-
   render() {
     if (this.state.noise.length >= 1) {
       return <NoiseIndicator noise={this.state.noise} width={50} height={50} />;

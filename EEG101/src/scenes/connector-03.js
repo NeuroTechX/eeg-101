@@ -19,43 +19,31 @@ import * as colors from "../styles/colors";
 // Sets isVisible prop by comparing state.scene.key (active scene) to the key of the wrapped scene
 function mapStateToProps(state) {
   return {
+    noise: state.noise,
     connectionStatus: state.connectionStatus,
-    notchFrequency: state.notchFrequency,
+    notchFrequency: state.notchFrequency
   };
 }
 
 class ConnectorThree extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      noise: ["0","1","2","3"]
-    };
   }
 
   componentDidMount() {
     if (this.props.connectionStatus === config.connectionStatus.CONNECTED) {
       Classifier.startClassifier(this.props.notchFrequency);
       Classifier.startNoiseListener();
-      const noiseListener = new NativeEventEmitter(NativeModules.Classifier);
-      this.noiseSubscription = noiseListener.addListener("NOISE", message => {
-        this.setState({ noise: Object.keys(message) });
-        if(Object.keys(message).length === 0) {
-          this.noiseSubscription.remove();
-        }
-      });
     }
   }
 
   componentWillUnmount() {
-    if (!isNil(this.noiseSubscription)) {
-      this.noiseSubscription.remove();
-      Classifier.stopNoiseListener();
-    }
+    Classifier.stopNoiseListener();
   }
 
   renderNoiseIndicator() {
-    if (this.state.noise.length >= 1) {
-      return <NoiseIndicator noise={this.state.noise} height={80} width={80} />;
+    if (this.props.noise.length >= 1) {
+      return <NoiseIndicator noise={this.props.noise} height={80} width={80} />;
     }
     return (
       <Image

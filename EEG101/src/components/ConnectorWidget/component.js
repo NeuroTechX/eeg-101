@@ -132,50 +132,12 @@ export default class ConnectorWidget extends Component {
     }
   }
 
-  // Creates CONNECTION_CHANGED and MUSE_LIST_CHANGED event listeners
-  startConnector() {
-    this.eventEmitter = new NativeEventEmitter(NativeModules.Connector);
-    if (
-      this.props.connectionStatus ===
-        config.connectionStatus.NOT_YET_CONNECTED ||
-      this.props.connectionStatus === config.connectionStatus.NO_MUSES
-    ) {
-      Connector.startConnector();
-      this.eventEmitter.addListener("CONNECTION_CHANGED", params => {
-        switch (params.connectionStatus) {
-          case "CONNECTED":
-            this.props.setConnectionStatus(config.connectionStatus.CONNECTED);
-            break;
-
-          case "CONNECTING":
-            this.props.setConnectionStatus(config.connectionStatus.CONNECTING);
-            break;
-
-          case "DISCONNECTED":
-          default:
-            this.props.setConnectionStatus(
-              config.connectionStatus.DISCONNECTED
-            );
-            break;
-        }
-      });
-    }
-
-    this.eventEmitter.addListener("MUSE_LIST_CHANGED", params => {
-      this.props.setAvailableMuses(params);
-    });
-  }
-
   // request location permissions and call getAndConnectToDevice and register event listeners when component loads
   componentDidMount() {
     this.requestLocationPermission().then(() => this.startConnector());
   }
 
-  componentWillUnmount() {
-    this.eventEmitter.removeListener("MUSE_LIST_CHANGED", params => {
-      this.props.setAvailableMuses(params);
-    });
-  }
+  componentWillUnmount() {}
 
   // Might want to push some more of this logic into Redux actions
   getAndConnectToDevice() {

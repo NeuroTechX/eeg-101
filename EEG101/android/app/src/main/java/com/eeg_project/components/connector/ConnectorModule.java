@@ -41,7 +41,6 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
     public Handler connectHandler;
     public HandlerThread connectThread;
 
-
     // ---------------------------------------------------------
     // Constructor
 
