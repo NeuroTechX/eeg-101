@@ -15,13 +15,16 @@ open class CircularBuffer {
         self.index = 0
         self.pts = 0
         self.buffer = [[Double]]()
+        self.buffer.reserveCapacity(bufferLength)
     }
     
     /// Updates the 2D buffer array with the 1D newData array at the current index.
     /// When index reaches the bufferLength it returns to 0.
     func update(with newData: [Double]) {
-        for i in 0..<nbCh {
-            buffer[index][i] = newData[i]
+        if buffer.count < index {
+            buffer.append(newData)
+        } else {
+            buffer[index] = newData
         }
         index = (index + 1) % bufferLength
         pts += 1
@@ -30,17 +33,10 @@ open class CircularBuffer {
     /// Extracts an array containing the last nbSamples from the buffer.
     /// If the loop that fills the extracted samples encounters the beginning of the buffer, it will begin to take samples from the end of the buffer
     func extract(sampleCount: Int) -> [[Double]] {
-        var extractedArray = [[Double]]()
-        
-        for i in 0..<sampleCount {
-            let extractIndex = (index - sampleCount + i) % bufferLength
-            for j in 0..<nbCh {
-                extractedArray[i][j] = buffer[extractIndex][j]
-            }
+        return (0..<sampleCount).map { i in
+            return buffer[(index - sampleCount + i) % bufferLength]
         }
-        return extractedArray
     }
-    
     
     /// Return an array containing the last `nbSamples` collected in
     /// the circular buffer.
@@ -51,14 +47,11 @@ open class CircularBuffer {
     /// through the returned array when computing FFT (the looping is
     /// instead done here.)
     func extractTransposed(sampleCount: Int) -> [[Double]] {
-        var extractedArray = [[Double]]()
-        for c in 0..<nbCh {
-            for i in 0..<sampleCount {
-                let extractIndex = (index - sampleCount + i) % bufferLength
-                extractedArray[c][i] = buffer[extractIndex][c]
+        return (0..<nbCh).map { c in
+            return (0..<sampleCount).map { i in
+                return buffer[(index - sampleCount + i) % bufferLength][c]
             }
         }
-        return extractedArray
     }
     
     /// Return an array containing the last `nbSamples` collected in
@@ -70,12 +63,10 @@ open class CircularBuffer {
     /// through the returned array when computing FFT (the looping is
     /// instead done here.)
     func extractSingleChannelTransposed(sampleCount: Int, channelofinterest: Int) -> [Double] {
-        var extractedArray = [Double]()
-        for i in 0..<sampleCount {
+        return (0..<sampleCount).map { i in
             let extractIndex = (index - sampleCount + i) % bufferLength
-            extractedArray[i] = buffer[extractIndex][channelofinterest]
+            return buffer[extractIndex][channelofinterest]
         }
-        return extractedArray
     }
     
     func resetPts() {
@@ -86,5 +77,6 @@ open class CircularBuffer {
         index = 0
         pts = 0
         buffer = [[Double]]()
+        buffer.reserveCapacity(bufferLength)
     }
 }
