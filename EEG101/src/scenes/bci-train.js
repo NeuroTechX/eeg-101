@@ -53,7 +53,7 @@ class BCITrain extends Component {
   }
 
   componentDidMount() {
-    Classifier.init(this.props.notchFrequency);
+    Classifier.startClassifier(this.props.notchFrequency);
   }
 
   renderClass1() {

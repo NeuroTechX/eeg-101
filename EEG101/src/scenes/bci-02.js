@@ -46,7 +46,7 @@ class BCITwo extends Component {
   }
 
   componentDidMount() {
-    Classifier.init(this.props.notchFrequency);
+    Classifier.startClassifier(this.props.notchFrequency);
   }
 
   renderSwipeImage() {

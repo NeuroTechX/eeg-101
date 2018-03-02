@@ -76,7 +76,7 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
     // Bridged methods (called from React Native)
 
     @ReactMethod
-    public void init() {
+    public void startConnector() {
         if (checkBluetoothEnabled()) {
             startMuseManager();
             startConnectorThread();

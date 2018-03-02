@@ -93,8 +93,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     // Bridged methods
 
     @ReactMethod
-    public void init(int notchFrequency) {
-        Log.w("classifier", "init");
+    public void startClassifier(int notchFrequency) {
         if(appState.connectedMuse != null) {
             if (!appState.connectedMuse.isLowEnergy()) {
                 samplingRate = 220;

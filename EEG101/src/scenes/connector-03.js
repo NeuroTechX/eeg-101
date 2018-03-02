@@ -34,7 +34,7 @@ class ConnectorThree extends Component {
 
   componentDidMount() {
     if (this.props.connectionStatus === config.connectionStatus.CONNECTED) {
-      Classifier.init(this.props.notchFrequency);
+      Classifier.startClassifier(this.props.notchFrequency);
       Classifier.startNoiseListener();
       const noiseListener = new NativeEventEmitter(NativeModules.Classifier);
       this.noiseSubscription = noiseListener.addListener("NOISE", message => {

@@ -140,7 +140,7 @@ export default class ConnectorWidget extends Component {
         config.connectionStatus.NOT_YET_CONNECTED ||
       this.props.connectionStatus === config.connectionStatus.NO_MUSES
     ) {
-      Connector.init();
+      Connector.startConnector();
       this.eventEmitter.addListener("CONNECTION_CHANGED", params => {
         switch (params.connectionStatus) {
           case "CONNECTED":
