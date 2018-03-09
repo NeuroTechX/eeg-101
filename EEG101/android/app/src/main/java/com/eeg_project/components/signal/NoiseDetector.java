@@ -1,20 +1,9 @@
 package com.eeg_project.components.signal;
 
-import android.app.Activity;
-import android.util.Log;
-
-import com.eeg_project.MainActivity;
+import com.eeg_project.MainApplication;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
-
-import org.apache.commons.lang3.ArrayUtils;
-
-import java.lang.reflect.Array;
-import java.nio.ByteBuffer;
-import java.util.Arrays; // For printing arrays when debugging
 
 import javax.annotation.Nullable;
 
@@ -29,20 +18,15 @@ public class NoiseDetector {
     private ReactApplicationContext reactContext;
     private WritableMap noiseMap = Arguments.createMap();
 
+    // grab reference to global singletons
+    MainApplication appState;
+
     // ------------------------------------------------------------------------
     // Constructor
 
     public NoiseDetector(double threshold, @Nullable ReactApplicationContext rctContext) {
         this.reactContext = rctContext;
         t = threshold;
-    }
-
-
-    // Called to emit events to event listeners in JS
-    private void sendEvent(String eventName, WritableMap noise) {
-        this.reactContext
-                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                .emit(eventName, noise);
     }
 
     // ------------------------------------------------------------------------
@@ -79,7 +63,7 @@ public class NoiseDetector {
             noiseMap.putBoolean(String.valueOf(i),true);
         }
 
-        sendEvent("NOISE", noiseMap);
+        appState.eventEmitter.sendEvent("NOISE", noiseMap);
          noiseMap = Arguments.createMap();
         return decisions;
     }

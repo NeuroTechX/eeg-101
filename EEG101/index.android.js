@@ -2,28 +2,17 @@ import React, { Component } from "react";
 import { View, AppRegistry, StatusBar } from "react-native";
 import {
   NativeRouter,
-  NativeModules,
   AndroidBackButton,
   Route,
-  Switch,
-  NativeEventEmitter,
-  Vibration
+  Switch
 } from "react-router-native";
+import { setMenu } from "./src/redux/actions";
 import { Provider, connect } from "react-redux";
 import { createStore, applyMiddleware, bindActionCreators } from "redux";
 import { withRouter } from "react-router";
-import {
-  setMenu,
-  setAvailableMuses,
-  getMuses,
-  setConnectedMuseInfo,
-  setConnectionStatus,
-  setOfflineMode,
-  updateClassifierData
-} from "./src/redux/actions";
 import Drawer from "react-native-drawer";
 import thunk from "redux-thunk";
-import Torch from "react-native-torch";
+import { initNativeEventListeners } from "./src/redux/actions";
 import NavBar from "./src/components/NavBar";
 import SideMenu from "./src/components/SideMenu";
 import * as colors from "./src/styles/colors.js";
@@ -59,8 +48,6 @@ import reducer from "./src/redux/reducer";
 
 function mapStateToProps(state) {
   return {
-    classifierData: state.classifierData,
-    bciAction: state.bciAction,
     open: state.isMenuOpen
   };
 }
@@ -68,10 +55,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      setAvailableMuses,
-      setConnectedMuseInfo,
-      setConnectionStatus,
-      updateClassifierData,
       onClose: () => setMenu(false)
     },
     dispatch
@@ -89,59 +72,6 @@ const store = createStore(reducer, applyMiddleware(thunk));
 const mainViewStyle = { flex: 1 };
 
 class EEG101 extends Component {
-  componentDidMount() {
-    const nativeEventEmitter = new NativeEventEmitter(
-      NativeModules.AppNativeEventEmitter
-    );
-
-    // Connection Status
-    nativeEventEmitter.addListener("CONNECTION_CHANGED", params => {
-      switch (params.connectionStatus) {
-        case "CONNECTED":
-          this.props.setConnectionStatus(config.connectionStatus.CONNECTED);
-          break;
-
-        case "CONNECTING":
-          this.props.setConnectionStatus(config.connectionStatus.CONNECTING);
-          break;
-
-        case "DISCONNECTED":
-        default:
-          this.props.setConnectionStatus(config.connectionStatus.DISCONNECTED);
-          break;
-      }
-    });
-
-    // Muse List
-    nativeEventEmitter.addListener("MUSE_LIST_CHANGED", params => {
-      this.props.setAvailableMuses(params);
-    });
-
-    // Noise
-    nativeEventEmitter.addListener("NOISE", message => {
-      this.props.setNoise(Object.keys(message));
-      // Cancel vibe and light?
-    });
-
-    // BCI Prediction
-    nativeEventEmitter.addListener("PREDICT_RESULT", message => {
-      if (message == 2) {
-        if (this.props.bciAction === "LIGHT") {
-          Torch.switchState(true);
-        } else if (this.props.bciAction === "VIBRATION") {
-          Vibration.vibrate([0, 1100], true);
-        }
-      } else {
-        if (this.props.bciAction === "LIGHT") {
-          Torch.switchState(false);
-        } else if (this.props.bciAction === "VIBRATION") {
-          Vibration.cancel();
-        }
-      }
-      this.props.updateClassifierData(message);
-      this.props.setNoise([]);
-    });
-  }
 
   render() {
     return (

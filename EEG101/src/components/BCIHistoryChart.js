@@ -3,11 +3,7 @@
 
 import React, { Component } from "react";
 import { View } from "react-native";
-import {
-  VictoryChart,
-  VictoryLine,
-  VictoryAxis,
-} from "victory-native";
+import { VictoryChart, VictoryLine, VictoryAxis } from "victory-native";
 import * as colors from "../styles/colors";
 
 export default class BCIHistoryChart extends Component {
@@ -16,6 +12,7 @@ export default class BCIHistoryChart extends Component {
   }
 
   render() {
+    console.log(this.props.data);
     return (
       <View
         style={{
@@ -29,7 +26,6 @@ export default class BCIHistoryChart extends Component {
           width={this.props.width}
           height={this.props.height}
           domainPadding={{ y: [50, 50] }}
-
           padding={{ bottom: 10, top: 10, left: 40, right: 0 }}
           style={{ labels: { fontSize: 10 } }}
         >
@@ -56,6 +52,7 @@ export default class BCIHistoryChart extends Component {
             }}
           />
           <VictoryLine
+          interpolation="basis"
             data={this.props.data}
             style={{ data: { stroke: colors.white } }}
           />

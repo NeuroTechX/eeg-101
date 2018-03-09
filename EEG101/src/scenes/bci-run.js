@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import {
   Text,
   View,
-  Vibration
+  Vibration,
+  ViewPagerAndroid
 } from "react-native";
 import { connect } from "react-redux";
 import config from "../redux/config";
@@ -27,7 +28,7 @@ function mapStateToProps(state) {
   };
 }
 
-class ClassifierRun extends Component {
+class BCIRun extends Component {
   constructor(props) {
     super(props);
 
@@ -99,6 +100,8 @@ class ClassifierRun extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(BCIRun);
 
 const styles = MediaQueryStyleSheet.create(
   // Base styles
@@ -190,4 +193,4 @@ const styles = MediaQueryStyleSheet.create(
     }
   }
 );
-export default connect(mapStateToProps)(ClassifierRun);
+

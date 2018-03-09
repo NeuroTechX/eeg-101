@@ -46,7 +46,10 @@ class BCITrain extends Component {
       isCollecting2: false,
       isFitting: false,
       score: "",
-      featurePower: ""
+      featurePower: "",
+      class1Samples: 0,
+      class2Samples: 0,
+      discrimPower: ""
     };
 
     Classifier.getNumSamples().then(promise => this.setState(promise));
@@ -61,9 +64,7 @@ class BCITrain extends Component {
       return (
         <View style={styles.dataClassContainer}>
           <View style={styles.cardTextContainer}>
-            <Text style={styles.classTitle}>
-              {I18n.t("trainOff")}
-            </Text>
+            <Text style={styles.classTitle}>{I18n.t("trainOff")}</Text>
             <Text style={styles.body}>
               {this.state.class1Samples} {I18n.t("trainSamples")}{" "}
             </Text>
@@ -81,9 +82,7 @@ class BCITrain extends Component {
       return (
         <View style={styles.dataClassContainer}>
           <View style={styles.cardTextContainer}>
-            <Text style={styles.classTitle}>
-              {I18n.t("trainOff")}
-            </Text>
+            <Text style={styles.classTitle}>{I18n.t("trainOff")}</Text>
             <Text style={styles.body}>
               {this.state.class1Samples} {I18n.t("trainSamples")}
             </Text>
@@ -110,9 +109,7 @@ class BCITrain extends Component {
       return (
         <View style={styles.dataClassContainer}>
           <View style={styles.cardTextContainer}>
-            <Text style={styles.classTitle}>
-              {I18n.t("trainOn")}
-            </Text>
+            <Text style={styles.classTitle}>{I18n.t("trainOn")}</Text>
             <Text style={styles.body}>
               {this.state.class2Samples} {I18n.t("trainSamples")}
             </Text>
@@ -130,9 +127,7 @@ class BCITrain extends Component {
       return (
         <View style={styles.dataClassContainer}>
           <View style={styles.cardTextContainer}>
-            <Text style={styles.classTitle}>
-              {I18n.t("trainOn")}
-            </Text>
+            <Text style={styles.classTitle}>{I18n.t("trainOn")}</Text>
             <Text style={styles.body}>
               {this.state.class2Samples} {I18n.t("trainSamples")}
             </Text>
@@ -161,11 +156,16 @@ class BCITrain extends Component {
           <Text style={styles.sectionTitle}>Classifier</Text>
           <SandboxButton
             onPress={() => {
-              this.setState({ isFitting: true });
-              Classifier.fitWithScore(6).then(promise => {
-                this.setState(promise);
-                this.setState({ isFitting: false });
-              });
+              if (
+                this.state.class1Samples > 3 &&
+                this.state.class2Samples > 3
+              ) {
+                this.setState({ isFitting: true });
+                Classifier.fitWithScore(6).then(promise => {
+                  this.setState(promise);
+                  this.setState({ isFitting: false });
+                });
+              }
             }}
             active={
               !this.state.class2Samples < 1 && !this.state.class1Samples < 1

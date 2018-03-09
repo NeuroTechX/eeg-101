@@ -2,6 +2,12 @@
 // Functions that interact with the Redux store.
 import Connector from "../native/Connector";
 import {
+  NativeModules,
+  NativeEventEmitter,
+  Vibration
+} from "react-native";
+import Torch from "react-native-torch";
+import {
   SET_CONNECTION_STATUS,
   SET_GRAPHVIEW_DIMENSIONS,
   SET_BCI_ACTION,
@@ -11,11 +17,14 @@ import {
   SET_AVAILABLE_MUSES,
   SET_NOTCH_FREQUENCY,
   SET_NOISE,
-  UPDATE_CLASSIFIER_DATA
+  UPDATE_CLASSIFIER_DATA,
+  SET_NATIVE_EMITTER,
 } from "./actionTypes.js";
 import config from "./config";
 
-// setConnectionStatus and setGraphViewDimensions pass a payload to the reducer. Both Fns have a type (defined in constants.js) that allows them to be handled properly
+// --------------------------------------------------------------------------
+// Action Creators
+
 export const setConnectionStatus = payload => ({
   payload,
   type: SET_CONNECTION_STATUS
@@ -49,7 +58,18 @@ export const setNotchFrequency = payload => ({
 
 export const setNoise = payload => ({ payload, type: SET_NOISE });
 
-export const updateClassifierData = payload => ({ payload, type: UPDATE_CLASSIFIER_DATA });
+export const updateClassifierData = payload => ({
+  payload,
+  type: UPDATE_CLASSIFIER_DATA
+});
+
+export const setNativeEventEmitter = payload => ({
+  payload,
+  type: SET_NATIVE_EMITTER
+});
+
+// -----------------------------------------------------------------------------
+// Actions
 
 export function getMuses() {
   return dispatch => {
@@ -66,5 +86,65 @@ export function getMuses() {
         return dispatch(setAvailableMuses(new Array()));
       }
     );
+  };
+}
+
+export function initNativeEventListeners() {
+  return (dispatch, getState) => {
+    const nativeEventEmitter = new NativeEventEmitter(NativeModules.AppNativeEventEmitter);
+
+    // Connection Status
+    nativeEventEmitter.addListener("CONNECTION_CHANGED", params => {
+      switch (params.connectionStatus) {
+        case "CONNECTED":
+          dispatch(setConnectionStatus(config.connectionStatus.CONNECTED));
+          break;
+
+        case "CONNECTING":
+          dispatch(setConnectionStatus(config.connectionStatus.CONNECTING));
+          break;
+
+        case "DISCONNECTED":
+        default:
+          dispatch(setConnectionStatus(config.connectionStatus.DISCONNECTED));
+          break;
+      }
+    });
+
+    // Muse List
+    nativeEventEmitter.addListener("MUSE_LIST_CHANGED", params => {
+      dispatch(setAvailableMuses(params));
+    });
+
+    // Noise
+    nativeEventEmitter.addListener("NOISE", message => {
+      dispatch(setNoise(Object.keys(message)));
+      if (getState().bciAction === "LIGHT") {
+        Torch.switchState(false);
+      } else if (getState().bciAction === "VIBRATION") {
+        Vibration.cancel();
+      }
+    });
+
+    // BCI Prediction
+    nativeEventEmitter.addListener("PREDICT_RESULT", message => {
+      if (message == 2) {
+        if (getState().bciAction === config.bciAction.LIGHT) {
+          Torch.switchState(true);
+        } else if (getState().bciAction === config.bciAction.VIBRATE) {
+          Vibration.vibrate([0, 1100], true);
+        }
+      } else {
+        if (getState().bciAction === config.bciAction.LIGHT) {
+          Torch.switchState(false);
+        } else if (getState().bciAction === config.bciAction.VIBRATE) {
+          Vibration.cancel();
+        }
+      }
+      dispatch(updateClassifierData(message));
+      dispatch(setNoise([]));
+    });
+
+    return dispatch(setNativeEventEmitter(nativeEventEmitter));
   };
 }

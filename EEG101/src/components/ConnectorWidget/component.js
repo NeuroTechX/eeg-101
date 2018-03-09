@@ -6,8 +6,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  NativeEventEmitter,
-  NativeModules,
   PermissionsAndroid,
   Modal,
   ScrollView,
@@ -116,8 +114,12 @@ export default class ConnectorWidget extends Component {
     };
   }
 
+  componentWillMount(){
+    Connector.startConnector();
+  }
+
   // Checks if user has enabled coarse location permission neceessary for BLE function
-  // If not, displays request popup, otherwise proceeds to startConnector()
+  // If not, displays request popup
   async requestLocationPermission() {
     try {
       const granted = await PermissionsAndroid.request(
@@ -132,9 +134,8 @@ export default class ConnectorWidget extends Component {
     }
   }
 
-  // request location permissions and call getAndConnectToDevice and register event listeners when component loads
   componentDidMount() {
-    this.requestLocationPermission().then(() => this.startConnector());
+    this.requestLocationPermission();
   }
 
   componentWillUnmount() {}
