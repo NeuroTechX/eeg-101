@@ -8,3 +8,14 @@ npm-debug.log
 # IntelliJ
 #
 .idea
+
+
+# Android Studio / IntelliJ
+#
+.idea
+android/.idea
+
+
+# Visual Studio Code
+#
+.vscode
