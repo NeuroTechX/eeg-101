@@ -203,6 +203,10 @@ teamMemberMiles,Miles McCraw - Animator,Miles McCraw – Animateur,Miles McCraw 
 restartButton,RESTART TUTORIAL,RECOMMENCER LE TUTORIEL,VOLVER A EMPEZAR TUTORIAL,TUTORIAL NEU STARTEN
 sandboxButton,EEG SANDBOX,BAC À SABLE,ZONA DE PRUEBAS DE EEG,EEG SANDKASTEN
 bciButton,BRAIN-COMPUTER INTERFACE,INTERFACE CERVEAU-ORDINATEUR,INTERFAZ CEREBRO-COMPUTADORA,GEHIRN-COMPUTER-INTERFACE (BCI)
+haveFeedback,Have Feedback?,Vous avez des commentaires ou des suggestions?,Have Feedback?,Have Feedback?
+suggestions,We would love to hear how you\'re using EEG 101 and what suggestions you might have for future versions of the app.,Nous apprécierions beaucoup savoir ce que vous pensez d\'EEG 101 et entendre vos suggestions pour le développement des prochaines versions de l\'application.,We would love to hear how you\'re using EEG 101 and what suggestions you might have for future versions of the app.,We would love to hear how you\'re using EEG 101 and what suggestions you might have for future versions of the app.
+bugs,"Also, if you found any bugs or mistakes, let us know and we\'ll do our best to fix them!","De plus, si vous rencontrez des bogues ou trouvez des erreurs, veuillez nous le faire savoir et nous ferons de notre mieux pour réparer le tout!","Also, if you found any bugs or mistakes, let us know and we\'ll do our best to fix them!","Also, if you found any bugs or mistakes, let us know and we\'ll do our best to fix them!"
+feedbackButton,LEAVE FEEDBACK,DONNER DU FEEDBACK,LEAVE FEEDBACK,LEAVE FEEDBACK
 ,,,,
 //DeviceStatusWdiget,//DeviceStatusWdiget,//DeviceStatusWdiget,//DeviceStatusWdiget,//DeviceStatusWidget
 widgetConnected,Muse connected,Muse connecté,Muse conectado,Muse verbunden

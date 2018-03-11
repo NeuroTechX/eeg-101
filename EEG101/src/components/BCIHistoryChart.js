@@ -12,7 +12,6 @@ export default class BCIHistoryChart extends Component {
   }
 
   render() {
-    console.log(this.props.data);
     return (
       <View
         style={{
@@ -52,7 +51,7 @@ export default class BCIHistoryChart extends Component {
             }}
           />
           <VictoryLine
-          interpolation="basis"
+            interpolation="basis"
             data={this.props.data}
             style={{ data: { stroke: colors.white } }}
           />

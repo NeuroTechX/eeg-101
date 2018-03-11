@@ -123,7 +123,6 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         // Create PSDBuffer to smooth over last 4 collected epochs
         psdBuffer2D = new PSDBuffer2D(4, NUM_CHANNELS, nbBins);
 
-        // Collect 4 epochs a second for collecting training data
         eegBuffer = new EpochBuffer(samplingRate, NUM_CHANNELS, samplingRate / EPOCHS_PER_SECOND);
         eegBuffer.addListener(this);
 

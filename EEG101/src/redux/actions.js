@@ -1,11 +1,8 @@
 // actions.js
 // Functions that interact with the Redux store.
 import Connector from "../native/Connector";
-import {
-  NativeModules,
-  NativeEventEmitter,
-  Vibration
-} from "react-native";
+import { NativeModules, NativeEventEmitter, Vibration } from "react-native";
+import { throttle } from "lodash";
 import Torch from "react-native-torch";
 import {
   SET_CONNECTION_STATUS,
@@ -18,7 +15,7 @@ import {
   SET_NOTCH_FREQUENCY,
   SET_NOISE,
   UPDATE_CLASSIFIER_DATA,
-  SET_NATIVE_EMITTER,
+  SET_NATIVE_EMITTER
 } from "./actionTypes.js";
 import config from "./config";
 
@@ -91,7 +88,9 @@ export function getMuses() {
 
 export function initNativeEventListeners() {
   return (dispatch, getState) => {
-    const nativeEventEmitter = new NativeEventEmitter(NativeModules.AppNativeEventEmitter);
+    const nativeEventEmitter = new NativeEventEmitter(
+      NativeModules.AppNativeEventEmitter
+    );
 
     // Connection Status
     nativeEventEmitter.addListener("CONNECTION_CHANGED", params => {
@@ -119,27 +118,15 @@ export function initNativeEventListeners() {
     // Noise
     nativeEventEmitter.addListener("NOISE", message => {
       dispatch(setNoise(Object.keys(message)));
-      if (getState().bciAction === "LIGHT") {
-        Torch.switchState(false);
-      } else if (getState().bciAction === "VIBRATION") {
-        Vibration.cancel();
-      }
+      actionOff(getState().bciAction);
     });
 
     // BCI Prediction
     nativeEventEmitter.addListener("PREDICT_RESULT", message => {
       if (message == 2) {
-        if (getState().bciAction === config.bciAction.LIGHT) {
-          Torch.switchState(true);
-        } else if (getState().bciAction === config.bciAction.VIBRATE) {
-          Vibration.vibrate([0, 1100], true);
-        }
+        actionOn(getState().bciAction);
       } else {
-        if (getState().bciAction === config.bciAction.LIGHT) {
-          Torch.switchState(false);
-        } else if (getState().bciAction === config.bciAction.VIBRATE) {
-          Vibration.cancel();
-        }
+        actionOff(getState().bciAction);
       }
       dispatch(updateClassifierData(message));
       dispatch(setNoise([]));
@@ -148,3 +135,33 @@ export function initNativeEventListeners() {
     return dispatch(setNativeEventEmitter(nativeEventEmitter));
   };
 }
+
+// -------------------------------------------------------------------------
+// Helper Methods
+
+const actionOn = throttle(bciAction => {
+  try {
+    if (bciAction === config.bciAction.LIGHT) {
+      console.log("torch on");
+      Torch.switchState(true);
+    } else if (bciAction === config.bciAction.VIBRATE) {
+      Vibration.vibrate([0, 1000], true);
+    }
+  } catch (e) {
+    console.log(e.message);
+  }
+}, 1000);
+
+const actionOff = throttle(bciAction => {
+  try {
+    if (bciAction === config.bciAction.LIGHT) {
+      console.log("torch off");
+
+      Torch.switchState(false);
+    } else if (bciAction === config.bciAction.VIBRATE) {
+      Vibration.cancel();
+    }
+  } catch (e) {
+    console.log(e.message);
+  }
+}, 500);

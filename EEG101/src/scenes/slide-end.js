@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import { connect } from "react-redux";
+import WhiteButton from "../components/WhiteButton";
 import LinkButton from "../components/WhiteLinkButton";
 import I18n from "../i18n/i18n";
 import * as colors from "../styles/colors";
@@ -117,9 +118,6 @@ class End extends Component {
               <Text style={styles.body}>{I18n.t("resultOfCollaboration")}</Text>
               <View style={styles.textBox}>
                 <Text style={styles.body}>{I18n.t("interestedInApp")}</Text>
-                <Text style={styles.body}>{'\n'}
-                  An iOS version is in the works! Follow our progress on GitHub
-                </Text>
               </View>
             </View>
 
@@ -180,10 +178,43 @@ class End extends Component {
           </View>
 
           <View style={styles.page}>
+            <View style={styles.titleBox}>
+              <Text style={styles.header}>{I18n.t("haveFeedback")}</Text>
+              <View style={styles.textBox}>
+                <Text style={styles.body}>
+                {I18n.t("suggestions")}
+                </Text>
+              </View>
+              <View style={styles.textBox}>
+                <Text style={styles.body}>
+                {I18n.t("bugs")}
+                </Text>
+              </View>
+            </View>
+            <View style={styles.feedbackBox}>
+              <WhiteButton
+                onPress={() =>
+                  Linking.openURL("https://goo.gl/forms/IokX3zq6Fqskuscv2")
+                }
+              >
+              {I18n.t("feedbackButton")}
+              </WhiteButton>
+            </View>
+            <View style={styles.marginContainer}>
+              <Image
+                source={require("../assets/swipeiconwhite.png")}
+                resizeMode="contain"
+                style={styles.swipeImage}
+              />
+            </View>
+          </View>
+
+          <View style={styles.page}>
             <View style={styles.listBox}>
               <Text style={styles.header}>{I18n.t("theTeam")}</Text>
               <Text style={styles.body}>Hubert Banville - Visionary</Text>
               <Text style={styles.body}>Dano Morrison - Developer</Text>
+              <Text style={styles.body}>Tom McNeely - Developer</Text>
               <Text style={styles.body}>Geordan King - Producer</Text>
               <Text style={styles.body}>Michael Vu - Author</Text>
               <Text style={styles.body}>Joanna Jang - Author</Text>
@@ -253,6 +284,14 @@ const styles = MediaQueryStyleSheet.create(
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "space-around"
+    },
+
+    feedbackBox: {
+      margin: 20,
+      marginTop: -20,
+      flex: 0.75,
+      alignItems: 'stretch',
+      alignSelf: 'stretch',
     },
 
     logo: {
