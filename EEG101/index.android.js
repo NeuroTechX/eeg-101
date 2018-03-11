@@ -6,12 +6,13 @@ import {
   Route,
   Switch
 } from "react-router-native";
+import { setMenu } from "./src/redux/actions";
 import { Provider, connect } from "react-redux";
 import { createStore, applyMiddleware, bindActionCreators } from "redux";
 import { withRouter } from "react-router";
-import { setMenu } from "./src/redux/actions";
 import Drawer from "react-native-drawer";
 import thunk from "redux-thunk";
+import { initNativeEventListeners } from "./src/redux/actions";
 import NavBar from "./src/components/NavBar";
 import SideMenu from "./src/components/SideMenu";
 import * as colors from "./src/styles/colors.js";
@@ -71,6 +72,7 @@ const store = createStore(reducer, applyMiddleware(thunk));
 const mainViewStyle = { flex: 1 };
 
 class EEG101 extends Component {
+
   render() {
     return (
       <Provider store={store}>

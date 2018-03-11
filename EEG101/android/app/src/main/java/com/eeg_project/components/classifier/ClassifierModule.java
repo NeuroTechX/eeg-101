@@ -62,7 +62,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
     public LinkedList<double[]> trainingData = new LinkedList<>();
     public LinkedList<Integer> labels = new LinkedList<>();
 
-    // grab reference to global Muse
+    // grab reference to global singletons
     MainApplication appState;
 
 
@@ -82,19 +82,12 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         return "Classifier";
     }
 
-    // Called to emit events to event listeners in JS
-    private void sendEvent(String eventName, int result) {
-        getReactApplicationContext()
-                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                .emit(eventName, result);
-    }
 
     // ---------------------------------------------------------
     // Bridged methods
 
     @ReactMethod
-    public void init(int notchFrequency) {
-        Log.w("classifier", "init");
+    public void startClassifier(int notchFrequency) {
         if(appState.connectedMuse != null) {
             if (!appState.connectedMuse.isLowEnergy()) {
                 samplingRate = 220;
@@ -130,7 +123,6 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
         // Create PSDBuffer to smooth over last 4 collected epochs
         psdBuffer2D = new PSDBuffer2D(4, NUM_CHANNELS, nbBins);
 
-        // Collect 4 epochs a second for collecting training data
         eegBuffer = new EpochBuffer(samplingRate, NUM_CHANNELS, samplingRate / EPOCHS_PER_SECOND);
         eegBuffer.addListener(this);
 
@@ -358,7 +350,7 @@ public class ClassifierModule extends ReactContextBaseJavaModule implements Buff
             else if(isPredicting){
                 getSmoothPSD(rawBuffer);
                 bandMeans = bandExtractor.extract1D(PSD);
-                sendEvent("PREDICT_RESULT", classifier.predict(bandMeans));
+                appState.eventEmitter.sendEvent("PREDICT_RESULT", classifier.predict(bandMeans));
             }
         }
 

@@ -1,7 +1,5 @@
 package com.eeg_project.components.signal;
 
-import android.util.Log;
-
 import org.jtransforms.fft.DoubleFFT_1D;
 import java.lang.Math; // For log10
 import java.util.Arrays; // For printing arrays when debugging

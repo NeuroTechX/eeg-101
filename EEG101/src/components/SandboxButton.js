@@ -3,7 +3,7 @@
 // Unfilled buttons when unselected, and filled with color when active
 
 import React, { Component } from "react";
-import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, View, TouchableOpacity } from "react-native";
 import { MediaQueryStyleSheet } from "react-native-responsive";
 import * as colors from "../styles/colors";
 
@@ -66,8 +66,8 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     inactiveText: {
-      color: colors.englishBlue,
-      fontFamily: "Roboto-Regular",
+      color: colors.skyBlue,
+      fontFamily: "Roboto",
       fontSize: 15
     }
   },
@@ -82,11 +82,11 @@ const styles = MediaQueryStyleSheet.create(
       },
 
       activeText: {
-        fontSize: 25
+        fontSize: 20
       },
 
       inactiveText: {
-        fontSize: 25
+        fontSize: 20
       }
     }
   }

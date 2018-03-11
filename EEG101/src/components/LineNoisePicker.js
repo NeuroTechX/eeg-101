@@ -37,7 +37,7 @@ class LineNoisePicker extends Component {
       <View>
         <Text style={styles.title}>{I18n.t('notchFrequency')}</Text>
         <View style={styles.padding}>
-        <Picker itemStyle={styles.picker}
+        <Picker style={styles.picker}
           selectedValue={this.props.notchFrequency}
           onValueChange={(itemValue) =>
             this.props.setNotchFrequency(itemValue)}
@@ -76,8 +76,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     picker: {
-      color: colors.white,
-      fontFamily: "Roboto",
+      color: colors.white
     }
   },
   // Responsive styles

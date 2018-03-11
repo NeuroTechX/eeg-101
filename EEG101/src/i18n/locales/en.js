@@ -40,10 +40,10 @@ export default {
 	eyeMovementCreates:  'Eye movements create',
 	noiseLink:  'noise',
 	inEEGSignal:  'in the EEG signal.',
-	tryThinkingAbout:  'Try thinking about a cat...',
+	tryThinkingAbout:  'What do electrodes measure?',
 	althoughEEG:  'Although EEG can measure overall brain activity, it\'s not capable of',
 	readingMindsLink:  'reading minds',
-	tryClosingEyes10:  'Now try closing your eyes for 10 seconds.',
+	tryClosingEyes10:  'EEG data needs processing to ',
 	mayNoticeSignalChange:  'You may notice a change in your signal due to an increase in',
 	alphaWavesLink:  'alpha waves.',
 	whatIsEEGTitle:  'What exactly is EEG?',
@@ -203,6 +203,10 @@ export default {
 	restartButton:  'RESTART TUTORIAL',
 	sandboxButton:  'EEG SANDBOX',
 	bciButton:  'BRAIN-COMPUTER INTERFACE',
+	haveFeedback:  'Have Feedback?',
+	suggestions:  'We would love to hear how you\'re using EEG 101 and what suggestions you might have for future versions of the app.',
+	bugs:  'Also, if you found any bugs or mistakes, let us know and we\'ll do our best to fix them!',
+	feedbackButton:  'LEAVE FEEDBACK',
 
 	//DeviceStatusWdiget
 	widgetConnected:  'Muse connected',

@@ -1,14 +1,13 @@
 package com.eeg_project;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.choosemuse.libmuse.Muse;
+import com.eeg_project.components.emitter.AppNativeEventEmitter;
 import com.facebook.react.ReactApplication;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.cubicphuse.RCTTorch.RCTTorchPackage;
-import com.airbnb.android.react.lottie.LottiePackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -17,13 +16,15 @@ import com.horcrux.svg.SvgPackage;
 
 import java.util.Arrays;
 import java.util.List;
-import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 
 
 public class MainApplication extends Application implements ReactApplication {
 
   // Global singleton Muse
   public static Muse connectedMuse;
+
+  // Global singleton event emitter
+  public static AppNativeEventEmitter eventEmitter;
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override

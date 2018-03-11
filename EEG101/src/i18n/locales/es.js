@@ -203,6 +203,10 @@ export default {
 	restartButton:  'VOLVER A EMPEZAR TUTORIAL',
 	sandboxButton:  'ZONA DE PRUEBAS DE EEG',
 	bciButton:  'INTERFAZ CEREBRO-COMPUTADORA',
+	haveFeedback:  'Have Feedback?',
+	suggestions:  'We would love to hear how you\'re using EEG 101 and what suggestions you might have for future versions of the app.',
+	bugs:  'Also, if you found any bugs or mistakes, let us know and we\'ll do our best to fix them!',
+	feedbackButton:  'LEAVE FEEDBACK',
 
 	//DeviceStatusWdiget
 	widgetConnected:  'Muse conectado',

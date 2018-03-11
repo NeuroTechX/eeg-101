@@ -203,6 +203,10 @@ export default {
 	restartButton:  'RECOMMENCER LE TUTORIEL',
 	sandboxButton:  'BAC À SABLE',
 	bciButton:  'INTERFACE CERVEAU-ORDINATEUR',
+	haveFeedback:  'Vous avez des commentaires ou des suggestions?',
+	suggestions:  'Nous apprécierions beaucoup savoir ce que vous pensez d\'EEG 101 et entendre vos suggestions pour le développement des prochaines versions de l\'application.',
+	bugs:  'De plus, si vous rencontrez des bogues ou trouvez des erreurs, veuillez nous le faire savoir et nous ferons de notre mieux pour réparer le tout!',
+	feedbackButton:  'DONNER DU FEEDBACK',
 
 	//DeviceStatusWdiget
 	widgetConnected:  'Muse connecté',

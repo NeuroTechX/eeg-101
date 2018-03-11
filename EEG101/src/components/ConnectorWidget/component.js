@@ -6,8 +6,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  NativeEventEmitter,
-  NativeModules,
   PermissionsAndroid,
   Modal,
   ScrollView,
@@ -117,68 +115,8 @@ export default class ConnectorWidget extends Component {
     };
   }
 
-  // Android only - check if user has enabled coarse location permission neceessary
-  // for BLE function. If not, displays request popup, otherwise proceeds to startConnector()
-  async requestLocationPermission() {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
-        {
-          title: I18n.t("needsPermission"),
-          message: I18n.t("requiresLocation")
-        }
-      );
-    } catch (err) {
-      console.warn(err);
-    }
-  }
-
-  // Creates CONNECTION_CHANGED and MUSE_LIST_CHANGED event listeners
-  startConnector() {
-    this.eventEmitter = new NativeEventEmitter(NativeModules.AppNativeEventEmitter);
-
-    this.eventEmitter.addListener("MUSE_LIST_CHANGED", params => {
-      this.props.setAvailableMuses(params);
-    });
-
-    if (this.props.connectionStatus === config.connectionStatus.NOT_YET_CONNECTED
-      || this.props.connectionStatus === config.connectionStatus.NO_MUSES) {
-
-      this.eventEmitter.addListener("CONNECTION_CHANGED", params => {
-        switch (params.connectionStatus) {
-          case "CONNECTED":
-            this.props.setConnectionStatus(config.connectionStatus.CONNECTED);
-            break;
-
-          case "CONNECTING":
-            this.props.setConnectionStatus(config.connectionStatus.CONNECTING);
-            break;
-
-          case "DISCONNECTED":
-          default:
-            this.props.setConnectionStatus(
-              config.connectionStatus.DISCONNECTED
-            );
-            break;
-        }
-      });
-
-      Connector.start();
-    }
-  }
-
-  componentDidMount() {
-    if (Platform.OS === 'android') {
-      this.requestLocationPermission().then(() => this.startConnector());
-    } else {
-      this.startConnector();
-    }
-  }
-
-  componentWillUnmount() {
-    this.eventEmitter.removeListener("MUSE_LIST_CHANGED", params => {
-      this.props.setAvailableMuses(params);
-    });
+  componentWillMount() {
+    Connector.startConnector();
   }
 
   // Might want to push some more of this logic into Redux actions

@@ -3,10 +3,8 @@
 // Based on react-native-side-menu
 
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  ScrollView
-} from "react-native";
+import { ScrollView } from "react-native";
+import { MediaQueryStyleSheet } from "react-native-responsive";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { setMenu } from "../redux/actions";
@@ -15,7 +13,7 @@ import config from "../redux/config.js";
 import DeviceStatusWidget from "./DeviceStatusWidget";
 import MenuSection from "./MenuSection.js";
 import I18n from "../i18n/i18n";
-import LineNoisePicker from "./LineNoisePicker"
+import LineNoisePicker from "./LineNoisePicker";
 import * as colors from "../styles/colors";
 
 function mapStateToProps(state) {
@@ -200,7 +198,7 @@ class SideMenu extends Component {
               }
             ]}
           />
-          <LineNoisePicker/>
+          <LineNoisePicker />
         </ScrollView>
       );
     } else
@@ -271,9 +269,11 @@ class SideMenu extends Component {
                 //icon: "face",
                 value: I18n.t("filteringValue"),
                 disabled:
-                  !this.props.isOfflineMode &&!this.props.isOfflineMode && this.props.connectionStatus !==
-              config.connectionStatus.CONNECTED,
-              active: this.props.name === "/offline/slideFour",
+                  !this.props.isOfflineMode &&
+                  !this.props.isOfflineMode &&
+                  this.props.connectionStatus !==
+                    config.connectionStatus.CONNECTED,
+                active: this.props.name === "/offline/slideFour",
                 onPress: () => this.navTo("/offline/slideFour")
               },
               {
@@ -366,9 +366,14 @@ export default withRouter(
   connect(mapStateToProps, mapDispatchToProps)(SideMenu)
 );
 
-const styles = StyleSheet.create({
-  menuContainer: {
-    flex: 1,
-    backgroundColor: colors.englishBlue,
+const styles = MediaQueryStyleSheet.create(
+  {
+    menuContainer: {
+      flex: 1,
+      backgroundColor: colors.englishBlue
+    }
+  },
+  {
+    "@media (min-device-height: 700)": {}
   }
-});
+);

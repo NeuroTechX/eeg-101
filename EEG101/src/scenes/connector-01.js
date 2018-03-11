@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View } from "react-native";
+import { Text, View, PermissionsAndroid } from "react-native";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
@@ -7,9 +7,7 @@ import LinkButton from "../components/WhiteLinkButton";
 import SandboxButton from "../components/SandboxButton";
 import I18n from "../i18n/i18n";
 import * as colors from "../styles/colors";
-import {
-  setOfflineMode,
-} from "../redux/actions";
+import { setOfflineMode, initNativeEventListeners } from "../redux/actions";
 
 function mapStateToProps(state) {
   return {
@@ -22,6 +20,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       setOfflineMode,
+      initNativeEventListeners
     },
     dispatch
   );
@@ -30,6 +29,27 @@ function mapDispatchToProps(dispatch) {
 class ConnectorOne extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    this.requestLocationPermission()
+    this.props.initNativeEventListeners();
+  }
+
+  // Checks if user has enabled coarse location permission neceessary for BLE function
+  // If not, displays request popup
+  async requestLocationPermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+        {
+          title: I18n.t("needsPermission"),
+          message: I18n.t("requiresLocation")
+        }
+      );
+    } catch (err) {
+      console.warn(err);
+    }
   }
 
   renderButton() {
@@ -41,9 +61,7 @@ class ConnectorOne extends Component {
       );
     } else
       return (
-        <LinkButton path="/ConnectorTwo">
-          {I18n.t("connector2Link")}
-        </LinkButton>
+        <LinkButton path="/ConnectorTwo">{I18n.t("connector2Link")}</LinkButton>
       );
   }
 
@@ -51,28 +69,23 @@ class ConnectorOne extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.titleBox}>
-          <Text style={styles.title}>
-            {I18n.t("step1Title")}
-          </Text>
+          <Text style={styles.title}>{I18n.t("step1Title")}</Text>
           <Text style={styles.instructions}>
             {I18n.t("musePowerOnWarning")}
           </Text>
-          <Text style={styles.body}>
-            {I18n.t("museFirstGenWarning")}
-          </Text>
+          <Text style={styles.body}>{I18n.t("museFirstGenWarning")}</Text>
         </View>
         <View style={styles.offlineButtonContainer}>
-        <SandboxButton
-          onPress={() =>
-            this.props.setOfflineMode(!this.props.isOfflineMode)}
-          active={this.props.isOfflineMode}
-        >
-          {this.props.isOfflineMode ? I18n.t("offlineModeDisable") : I18n.t("offlineModeEnable")}
-        </SandboxButton>
-      </View>
-        <View style={styles.buttonContainer}>
-          {this.renderButton()}
+          <SandboxButton
+            onPress={() => this.props.setOfflineMode(!this.props.isOfflineMode)}
+            active={this.props.isOfflineMode}
+          >
+            {this.props.isOfflineMode
+              ? I18n.t("offlineModeDisable")
+              : I18n.t("offlineModeEnable")}
+          </SandboxButton>
         </View>
+        <View style={styles.buttonContainer}>{this.renderButton()}</View>
       </View>
     );
   }
@@ -117,9 +130,9 @@ const styles = MediaQueryStyleSheet.create(
 
     offlineButtonContainer: {
       flex: 1,
-      marginLeft: 40,
-      marginRight: 40,
-      justifyContent: "center"
+      margin: 10,
+      justifyContent: "center",
+      alignSelf: "center"
     },
 
     logo: {

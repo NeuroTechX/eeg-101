@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.SystemClock;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -107,10 +108,11 @@ public class EEGFileWriter {
     }
 
     public void sendData(File dataCSV) {
+        FileProvider fileProvider = new FileProvider();
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.setType("application/csv");
-        sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(dataCSV));
+        sendIntent.putExtra(Intent.EXTRA_STREAM, fileProvider.getUriForFile(this.context, "com.eeg_project.fileprovider", dataCSV));
         context.startActivity(Intent.createChooser(sendIntent, "Export data to..."));
     }
 

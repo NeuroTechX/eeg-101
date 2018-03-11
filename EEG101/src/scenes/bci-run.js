@@ -2,10 +2,8 @@ import React, { Component } from "react";
 import {
   Text,
   View,
-  ViewPagerAndroid,
-  NativeEventEmitter,
-  NativeModules,
-  Vibration
+  Vibration,
+  ViewPagerAndroid
 } from "react-native";
 import { connect } from "react-redux";
 import config from "../redux/config";
@@ -24,87 +22,24 @@ function mapStateToProps(state) {
   return {
     connectionStatus: state.connectionStatus,
     dimensions: state.graphViewDimensions,
-    bciAction: state.bciAction
+    bciAction: state.bciAction,
+    noise: state.noise,
+    classifierData: state.classifierData
   };
 }
 
-class ClassifierRun extends Component {
+class BCIRun extends Component {
   constructor(props) {
     super(props);
 
     // Initialize States
     this.state = {
       popUp1Visible: false,
-      data: new Array(30).fill(1),
-      noise: [],
       isRunning: false
     };
   }
 
-  updateData(data, message) {
-    if (data.length >= 30) {
-      data.shift();
-    }
-    data.push(message);
-    return data;
-  }
-
-  componentDidMount() {
-    // Light action
-    if (this.props.bciAction === config.bciAction.LIGHT) {
-      const lightListener = new NativeEventEmitter(NativeModules.Classifier);
-      this.predictSubscription = lightListener.addListener(
-        "PREDICT_RESULT",
-        message => {
-          if (message == 2) {
-            Torch.switchState(true);
-          } else {
-            Torch.switchState(false);
-          }
-          this.setState({
-            data: this.updateData(this.state.data, message),
-            noise: []
-          });
-        }
-      );
-      this.noiseSubscription = lightListener.addListener("NOISE", message => {
-        this.setState({ noise: Object.keys(message) });
-        //Torch.switchState(false);
-      });
-    } else {
-      // Vibration action
-      const vibrationListener = new NativeEventEmitter(
-        NativeModules.Classifier
-      );
-      this.predictSubscription = vibrationListener.addListener(
-        "PREDICT_RESULT",
-        message => {
-          if (message == 2) {
-            Vibration.vibrate([0, 1100], true);
-          } else {
-            Vibration.cancel();
-          }
-          this.setState({
-            data: this.updateData(this.state.data, message),
-            noise: []
-          });
-        }
-      );
-      this.noiseSubscription = vibrationListener.addListener(
-        "NOISE",
-        message => {
-          this.setState({ noise: Object.keys(message) });
-          if (Object.keys(message).length >= 1) {
-            Vibration.cancel();
-          }
-        }
-      );
-    }
-  }
-
   componentWillUnmount() {
-    this.predictSubscription.remove();
-    this.noiseSubscription.remove();
     Classifier.stopCollecting();
     Torch.switchState(false);
     Vibration.cancel();
@@ -115,17 +50,15 @@ class ClassifierRun extends Component {
       <View style={styles.container}>
         <View style={styles.graphContainer}>
           <BCIHistoryChart
-            data={this.state.data}
+            data={this.props.classifierData}
             width={this.props.dimensions.width}
             height={this.props.dimensions.height}
           />
           <View style={styles.noiseView}>
-            <NoiseIndicator noise={this.state.noise} width={100} height={100} />
+            <NoiseIndicator noise={this.props.noise} width={100} height={100} />
           </View>
         </View>
-        <Text style={styles.currentTitle}>
-          {I18n.t("bciRunSlideTitle")}
-        </Text>
+        <Text style={styles.currentTitle}>{I18n.t("bciRunSlideTitle")}</Text>
         <ViewPagerAndroid style={styles.viewPager} initialPage={0}>
           <View style={styles.pageStyle}>
             <View style={styles.buttonView}>
@@ -144,18 +77,12 @@ class ClassifierRun extends Component {
                 size={80}
               />
             </View>
-            <View
-              style={styles.buttonContainer}
-            >
+            <View style={styles.buttonContainer}>
               <View style={styles.buttonFlex}>
-                <LinkButton path="/end">
-                  {I18n.t("endEeg101")}
-                </LinkButton>
+                <LinkButton path="/end">{I18n.t("endEeg101")}</LinkButton>
               </View>
               <View style={styles.buttonFlex}>
-                <LinkButton path="/bciTrain">
-                  {I18n.t("retrainBci")}
-                </LinkButton>
+                <LinkButton path="/bciTrain">{I18n.t("retrainBci")}</LinkButton>
               </View>
             </View>
           </View>
@@ -173,6 +100,8 @@ class ClassifierRun extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(BCIRun);
 
 const styles = MediaQueryStyleSheet.create(
   // Base styles
@@ -225,7 +154,7 @@ const styles = MediaQueryStyleSheet.create(
 
     buttonContainer: { flexDirection: "row", justifyContent: "space-around" },
 
-    buttonFlex: {flex: 1},
+    buttonFlex: { flex: 1 },
 
     viewPager: {
       flex: 4
@@ -264,4 +193,4 @@ const styles = MediaQueryStyleSheet.create(
     }
   }
 );
-export default connect(mapStateToProps)(ClassifierRun);
+
