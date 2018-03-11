@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View } from "react-native";
+import { Text, View, PermissionsAndroid } from "react-native";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { MediaQueryStyleSheet } from "react-native-responsive";
@@ -32,7 +32,24 @@ class ConnectorOne extends Component {
   }
 
   componentDidMount() {
+    this.requestLocationPermission()
     this.props.initNativeEventListeners();
+  }
+
+  // Checks if user has enabled coarse location permission neceessary for BLE function
+  // If not, displays request popup
+  async requestLocationPermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+        {
+          title: I18n.t("needsPermission"),
+          message: I18n.t("requiresLocation")
+        }
+      );
+    } catch (err) {
+      console.warn(err);
+    }
   }
 
   renderButton() {

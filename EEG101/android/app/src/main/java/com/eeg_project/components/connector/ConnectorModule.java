@@ -64,8 +64,8 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
         if (checkBluetoothEnabled()) {
             startMuseManager();
             startConnectorThread();
+            manager.startListening();
         }
-        manager.startListening();
     }
 
     @ReactMethod

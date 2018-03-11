@@ -118,28 +118,6 @@ export default class ConnectorWidget extends Component {
     Connector.startConnector();
   }
 
-  // Checks if user has enabled coarse location permission neceessary for BLE function
-  // If not, displays request popup
-  async requestLocationPermission() {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
-        {
-          title: I18n.t("needsPermission"),
-          message: I18n.t("requiresLocation")
-        }
-      );
-    } catch (err) {
-      console.warn(err);
-    }
-  }
-
-  componentDidMount() {
-    this.requestLocationPermission();
-  }
-
-  componentWillUnmount() {}
-
   // Might want to push some more of this logic into Redux actions
   getAndConnectToDevice() {
     this.props.setConnectionStatus(config.connectionStatus.SEARCHING);
