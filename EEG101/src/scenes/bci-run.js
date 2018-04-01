@@ -1,15 +1,10 @@
 import React, { Component } from "react";
-import {
-  Text,
-  View,
-  Vibration,
-  ViewPagerAndroid
-} from "react-native";
+import { Text, View, ViewPagerAndroid } from "react-native";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { startBCI, stopBCI } from "../redux//actions";
 import config from "../redux/config";
 import { MediaQueryStyleSheet } from "react-native-responsive";
-import Torch from "react-native-torch";
-import Classifier from "../native/Classifier.js";
 import LinkButton from "../components/LinkButton";
 import PlayPauseButton from "../components/PlayPauseButton.js";
 import PopUp from "../components/PopUp";
@@ -24,8 +19,19 @@ function mapStateToProps(state) {
     dimensions: state.graphViewDimensions,
     bciAction: state.bciAction,
     noise: state.noise,
-    classifierData: state.classifierData
+    classifierData: state.classifierData,
+    isBCIRunning: state.isBCIRunning
   };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      startBCI,
+      stopBCI
+    },
+    dispatch
+  );
 }
 
 class BCIRun extends Component {
@@ -34,15 +40,12 @@ class BCIRun extends Component {
 
     // Initialize States
     this.state = {
-      popUp1Visible: false,
-      isRunning: false
+      popUp1Visible: false
     };
   }
 
   componentWillUnmount() {
-    Classifier.stopCollecting();
-    Torch.switchState(false);
-    Vibration.cancel();
+    this.props.stopBCI();
   }
 
   render() {
@@ -64,14 +67,12 @@ class BCIRun extends Component {
             <View style={styles.buttonView}>
               <PlayPauseButton
                 onPress={() => {
-                  if (this.state.isRunning) {
-                    Classifier.stopCollecting();
+                  if (this.props.isBCIRunning) {
+                    this.props.stopBCI();
                   } else {
-                    Classifier.runClassification();
+                    this.props.startBCI();
                   }
                   this.setState({ isRunning: !this.state.isRunning });
-                  Torch.switchState(false);
-                  Vibration.cancel();
                 }}
                 isRunning={this.state.isRunning}
                 size={80}
@@ -101,7 +102,7 @@ class BCIRun extends Component {
   }
 }
 
-export default connect(mapStateToProps)(BCIRun);
+export default connect(mapStateToProps, mapDispatchToProps)(BCIRun);
 
 const styles = MediaQueryStyleSheet.create(
   // Base styles
@@ -193,4 +194,3 @@ const styles = MediaQueryStyleSheet.create(
     }
   }
 );
-

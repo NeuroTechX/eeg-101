@@ -21,7 +21,8 @@ function mapStateToProps(state) {
     connectionStatus: state.connectionStatus,
     bciAction: state.bciAction,
     dimensions: state.graphViewDimensions,
-    notchFrequency: state.notchFrequency
+    notchFrequency: state.notchFrequency,
+    noise: state.noise
   };
 }
 
@@ -69,7 +70,7 @@ class BCITrain extends Component {
               {this.state.class1Samples} {I18n.t("trainSamples")}{" "}
             </Text>
           </View>
-          <DataCollectionIndicator />
+          <DataCollectionIndicator noise={this.props.noise} />
           <SandboxButton
             onPress={() => Classifier.stopCollecting()}
             active={true}
@@ -114,7 +115,7 @@ class BCITrain extends Component {
               {this.state.class2Samples} {I18n.t("trainSamples")}
             </Text>
           </View>
-          <DataCollectionIndicator />
+          <DataCollectionIndicator noise={this.props.noise} />
           <SandboxButton
             onPress={() => Classifier.stopCollecting()}
             active={true}

@@ -1,8 +1,8 @@
 // actions.js
 // Functions that interact with the Redux store.
 import Connector from "../native/Connector";
+import Classifier from "../native/Classifier";
 import { NativeModules, NativeEventEmitter, Vibration } from "react-native";
-import { throttle } from "lodash";
 import Torch from "react-native-torch";
 import {
   SET_CONNECTION_STATUS,
@@ -15,7 +15,9 @@ import {
   SET_NOTCH_FREQUENCY,
   SET_NOISE,
   UPDATE_CLASSIFIER_DATA,
-  SET_NATIVE_EMITTER
+  SET_NATIVE_EMITTER,
+  START_BCI_RUNNING,
+  STOP_BCI_RUNNING
 } from "./actionTypes.js";
 import config from "./config";
 
@@ -64,6 +66,10 @@ export const setNativeEventEmitter = payload => ({
   payload,
   type: SET_NATIVE_EMITTER
 });
+
+export const startBCIRunning = () => ({ type: START_BCI_RUNNING });
+
+export const stopBCIRunning = () => ({ type: STOP_BCI_RUNNING });
 
 // -----------------------------------------------------------------------------
 // Actions
@@ -118,45 +124,63 @@ export function initNativeEventListeners() {
     // Noise
     nativeEventEmitter.addListener("NOISE", message => {
       dispatch(setNoise(Object.keys(message)));
-      actionOff(getState().bciAction);
+      if (getState().isBCIRunning && Object.keys(message).length > 0) {
+        actionOff(getState().bciAction);
+      }
     });
 
     // BCI Prediction
     nativeEventEmitter.addListener("PREDICT_RESULT", message => {
-      if (message == 2) {
-        actionOn(getState().bciAction);
-      } else {
-        actionOff(getState().bciAction);
+      if (getState().isBCIRunning) {
+        if (message == 2) {
+          actionOn(getState().bciAction);
+        } else {
+          actionOff(getState().bciAction);
+        }
+        dispatch(updateClassifierData(message));
+        dispatch(setNoise([]));
       }
-      dispatch(updateClassifierData(message));
-      dispatch(setNoise([]));
     });
 
     return dispatch(setNativeEventEmitter(nativeEventEmitter));
   };
 }
 
+export function startBCI() {
+  return dispatch => {
+    Classifier.runClassification();
+    dispatch(startBCIRunning());
+  };
+}
+
+export function stopBCI() {
+  return (dispatch, getState) => {
+    Classifier.stopCollecting();
+    dispatch(stopBCIRunning());
+    actionOff(getState().bciAction);
+  };
+}
+
 // -------------------------------------------------------------------------
 // Helper Methods
 
-const actionOn = throttle(bciAction => {
+const actionOn = bciAction => {
+  console.log("on");
   try {
     if (bciAction === config.bciAction.LIGHT) {
-      console.log("torch on");
       Torch.switchState(true);
     } else if (bciAction === config.bciAction.VIBRATE) {
-      Vibration.vibrate([0, 1000], true);
+      Vibration.vibrate(500);
     }
   } catch (e) {
     console.log(e.message);
   }
-}, 1000);
+};
 
-const actionOff = throttle(bciAction => {
+const actionOff = bciAction => {
+  console.log("off");
   try {
     if (bciAction === config.bciAction.LIGHT) {
-      console.log("torch off");
-
       Torch.switchState(false);
     } else if (bciAction === config.bciAction.VIBRATE) {
       Vibration.cancel();
@@ -164,4 +188,4 @@ const actionOff = throttle(bciAction => {
   } catch (e) {
     console.log(e.message);
   }
-}, 500);
+};
