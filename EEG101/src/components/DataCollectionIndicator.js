@@ -8,7 +8,6 @@ import NoiseIndicator from "./NoiseIndicator.js";
 export default class DataCollectionIndicator extends Component {
   constructor(props) {
     super(props);
-    this.noiseSubscription = {};
   }
 
   render() {

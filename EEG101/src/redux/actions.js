@@ -165,7 +165,6 @@ export function stopBCI() {
 // Helper Methods
 
 const actionOn = bciAction => {
-  console.log("on");
   try {
     if (bciAction === config.bciAction.LIGHT) {
       Torch.switchState(true);
@@ -178,7 +177,6 @@ const actionOn = bciAction => {
 };
 
 const actionOff = bciAction => {
-  console.log("off");
   try {
     if (bciAction === config.bciAction.LIGHT) {
       Torch.switchState(false);

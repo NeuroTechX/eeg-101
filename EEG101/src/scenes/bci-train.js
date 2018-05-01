@@ -58,6 +58,11 @@ class BCITrain extends Component {
 
   componentDidMount() {
     Classifier.startClassifier(this.props.notchFrequency);
+    Classifier.startNoiseListener();
+  }
+
+  componentWillUnmount() {
+    Classifier.stopNoiseListener();
   }
 
   renderClass1() {

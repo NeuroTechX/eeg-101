@@ -43,8 +43,8 @@ export default class DataCollector extends Component {
     setTimeout(() => Classifier.stopCollecting(), 20000);
   }
 
-  // class 1 == on
-  // class 2 == off
+  // class 1 == off
+  // class 2 == on
 
   render() {
     if (this.state.isCollecting) {
@@ -53,7 +53,8 @@ export default class DataCollector extends Component {
           <Text style={styles.body}>
             {I18n.t("collecting")}
           </Text>
-          <DataCollectionIndicator/>
+          <DataCollectionIndicator noise={this.props.noise}
+          />
         </View>
       );
     } else if (this.state.samples < 10 && this.state.hasCollected) {
@@ -76,36 +77,8 @@ export default class DataCollector extends Component {
         return (
           <View style={styles.dataClassContainer}>
             <Text style={styles.body}>
-              {I18n.t("letsTeach")} {this.props.bciAction}{" "}
-              {I18n.t("closeYourEyes")}
-            </Text>
-            <Button onPress={() => this.collectData()}>
-              {I18n.t("trainCollect")}
-            </Button>
-          </View>
-        );
-      } else if (this.state.samples >= 10) {
-        return (
-          <View style={styles.dataClassContainer}>
-            <Text style={styles.body}>
-              {I18n.t("youveCollected")}{" "}
-              <Text style={{ fontWeight: "bold" }}>
-                {this.state.samples}
-              </Text>{" "}
-              {I18n.t("totalCleanData")}
-            </Text>
-            <Button onPress={() => this.collectData()}>
-              {I18n.t("trainCollectMore")}
-            </Button>
-          </View>
-        );
-      }
-    } else if (this.props.class === 2) {
-      if (!this.state.hasCollected) {
-        return (
-          <View style={styles.dataClassContainer}>
-            <Text style={styles.body}>
-              {I18n.t("letsTeach2")} {this.props.bciAction} {I18n.t("eyesOpen")}
+              {I18n.t("letsTeach2")} {this.props.bciAction}{" "}
+              {I18n.t("eyesOpen")}
             </Text>
             <Button onPress={() => this.collectData()}>
               {I18n.t("trainCollect")}
@@ -121,6 +94,34 @@ export default class DataCollector extends Component {
                 {this.state.samples}
               </Text>{" "}
               {I18n.t("totalCleanData2")}
+            </Text>
+            <Button onPress={() => this.collectData()}>
+              {I18n.t("trainCollectMore")}
+            </Button>
+          </View>
+        );
+      }
+    } else if (this.props.class === 2) {
+      if (!this.state.hasCollected) {
+        return (
+          <View style={styles.dataClassContainer}>
+            <Text style={styles.body}>
+              {I18n.t("letsTeach")} {this.props.bciAction} {I18n.t("closeYourEyes")}
+            </Text>
+            <Button onPress={() => this.collectData()}>
+              {I18n.t("trainCollect")}
+            </Button>
+          </View>
+        );
+      } else if (this.state.samples >= 10) {
+        return (
+          <View style={styles.dataClassContainer}>
+            <Text style={styles.body}>
+              {I18n.t("youveCollected")}{" "}
+              <Text style={{ fontWeight: "bold" }}>
+                {this.state.samples}
+              </Text>{" "}
+              {I18n.t("totalCleanData")}
             </Text>
             <Button onPress={() => this.collectData()}>
               {I18n.t("trainCollectMore")}
