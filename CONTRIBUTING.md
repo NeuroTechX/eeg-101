@@ -18,7 +18,7 @@ If you're new to Git and want to learn how to fork this repo, make your own addi
 
 ### Community
 
-This project is maintained by the [NeuroTechX](www.neurotechx.com) community. Join our Slack to check out our #interactive-tutorial channel, where discussions about EEG101 take place.
+This project is maintained by the [NeuroTechX](http://www.neurotechx.com) community. Join our Slack to check out our #interactive-tutorial channel, where discussions about EEG101 take place.
 
 ## How can I contribute?
 
