@@ -19,6 +19,7 @@ function mapStateToProps(state) {
     dimensions: state.graphViewDimensions,
     bciAction: state.bciAction,
     notchFrequency: state.notchFrequency,
+    noise: state.noise
   };
 }
 
@@ -47,6 +48,11 @@ class BCITwo extends Component {
 
   componentDidMount() {
     Classifier.startClassifier(this.props.notchFrequency);
+    Classifier.startNoiseListener();
+  }
+
+  componentWillUnmount() {
+    Classifier.stopNoiseListener();
   }
 
   renderSwipeImage() {
@@ -84,18 +90,12 @@ class BCITwo extends Component {
         >
           <View style={styles.pageStyle}>
             <View style={styles.textWrapper}>
-              <Text style={styles.title}>
-                {I18n.t("step1Title")}
-              </Text>
-              <Text style={styles.subTitle}>
-                {I18n.t("chooseCommand")}
-              </Text>
+              <Text style={styles.title}>{I18n.t("step1Title")}</Text>
+              <Text style={styles.subTitle}>{I18n.t("chooseCommand")}</Text>
             </View>
             <View style={styles.contentContainer}>
               <View style={styles.textWrapper}>
-                <Text style={styles.body}>
-                  {I18n.t("bciCommands")}
-                </Text>
+                <Text style={styles.body}>{I18n.t("bciCommands")}</Text>
               </View>
               <View style={styles.decisionContainer}>
                 <DecisionButton
@@ -134,61 +134,45 @@ class BCITwo extends Component {
                 </DecisionButton>
               </View>
             </View>
-            <View style={styles.swipeView}>
-              {this.renderSwipeImage()}
-            </View>
+            <View style={styles.swipeView}>{this.renderSwipeImage()}</View>
           </View>
 
           <View style={styles.pageStyle}>
             <View style={styles.textWrapper}>
-              <Text style={styles.title}>
-                {I18n.t("step2Title")}
-              </Text>
-              <Text style={styles.subTitle}>
-                {I18n.t("offData")}
-              </Text>
+              <Text style={styles.title}>{I18n.t("step2Title")}</Text>
+              <Text style={styles.subTitle}>{I18n.t("offData")}</Text>
             </View>
             <View style={styles.contentContainer}>
               <DataCollector
                 bciAction={this.props.bciAction}
-                class={2}
-                onComplete={() => this.setState({ enableScroll: true })}
-              />
-            </View>
-            <View style={styles.swipeView}>
-              {this.renderSwipeImage()}
-            </View>
-          </View>
-
-          <View style={styles.pageStyle}>
-            <View style={styles.textWrapper}>
-              <Text style={styles.title}>
-                {I18n.t("step3Title")}
-              </Text>
-              <Text style={styles.subTitle}>
-                {I18n.t("onData")}
-              </Text>
-            </View>
-            <View style={styles.contentContainer}>
-              <DataCollector
-                bciAction={this.props.bciAction}
+                noise={this.props.noise}
                 class={1}
                 onComplete={() => this.setState({ enableScroll: true })}
               />
             </View>
-            <View style={styles.swipeView}>
-              {this.renderSwipeImage()}
-            </View>
+            <View style={styles.swipeView}>{this.renderSwipeImage()}</View>
           </View>
 
           <View style={styles.pageStyle}>
             <View style={styles.textWrapper}>
-              <Text style={styles.title}>
-                {I18n.t("step4Title")}
-              </Text>
-              <Text style={styles.subTitle}>
-                {I18n.t("trainClassifier")}
-              </Text>
+              <Text style={styles.title}>{I18n.t("step3Title")}</Text>
+              <Text style={styles.subTitle}>{I18n.t("onData")}</Text>
+            </View>
+            <View style={styles.contentContainer}>
+              <DataCollector
+                bciAction={this.props.bciAction}
+                noise={this.props.noise}
+                class={2}
+                onComplete={() => this.setState({ enableScroll: true })}
+              />
+            </View>
+            <View style={styles.swipeView}>{this.renderSwipeImage()}</View>
+          </View>
+
+          <View style={styles.pageStyle}>
+            <View style={styles.textWrapper}>
+              <Text style={styles.title}>{I18n.t("step4Title")}</Text>
+              <Text style={styles.subTitle}>{I18n.t("trainClassifier")}</Text>
             </View>
             <View style={styles.contentContainer}>
               <ClassifierInfoDisplayer
@@ -254,7 +238,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     decisionImage: {
-       height: 50
+      height: 50
     },
 
     swipeView: {

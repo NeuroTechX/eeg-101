@@ -89,8 +89,8 @@ android {
         applicationId "com.eeg_project"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 24
-        versionName "2.5"
+        versionCode 26
+        versionName "2.6"
         ndk {
             abiFilters "armeabi-v7a"
         }

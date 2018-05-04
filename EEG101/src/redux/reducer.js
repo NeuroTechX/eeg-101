@@ -13,7 +13,9 @@ import {
   SET_NOTCH_FREQUENCY,
   SET_NOISE,
   UPDATE_CLASSIFIER_DATA,
-  SET_NATIVE_EMITTER
+  SET_NATIVE_EMITTER,
+  START_BCI_RUNNING,
+  STOP_BCI_RUNNING
 } from "./actionTypes";
 
 const initialState = {
@@ -27,7 +29,8 @@ const initialState = {
   notchFrequency: 60,
   noise: ["1", "2", "3", "4"],
   classifierData: new Array(30).fill(1),
-  nativeEventEmitter: {}
+  nativeEventEmitter: {},
+  isBCIRunning: false
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -98,6 +101,18 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         nativeEventEmitter: action.payload
+      };
+
+    case START_BCI_RUNNING:
+      return {
+        ...state,
+        isBCIRunning: true
+      };
+
+    case STOP_BCI_RUNNING:
+      return {
+        ...state,
+        isBCIRunning: false
       };
 
     default:

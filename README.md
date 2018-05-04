@@ -21,7 +21,7 @@ Find [EEG 101](https://play.google.com/store/apps/details?id=com.eeg_project&hl=
 
 ## Video Walkthrough
 
-https://www.youtube.com/watch?v=GunGP1yrqM8&feature=youtu.be
+https://www.youtube.com/watch?v=fDQZ5zWVjY0&feature=youtu.be
 
 ## Lesson Content
 - Neurophysiology of EEG
