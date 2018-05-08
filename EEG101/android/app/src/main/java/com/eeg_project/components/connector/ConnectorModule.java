@@ -105,7 +105,7 @@ public class ConnectorModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void disconnectDevice() {
         if (appState.connectedMuse != null) {
-            appState.connectedMuse.disconnect(true);
+            appState.connectedMuse.disconnect();
             appState.connectedMuse.unregisterAllListeners();
         }
     }
