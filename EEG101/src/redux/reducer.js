@@ -15,7 +15,8 @@ import {
   UPDATE_CLASSIFIER_DATA,
   SET_NATIVE_EMITTER,
   START_BCI_RUNNING,
-  STOP_BCI_RUNNING
+  STOP_BCI_RUNNING,
+  SET_REFRESH
 } from "./actionTypes";
 
 const initialState = {
@@ -30,7 +31,8 @@ const initialState = {
   noise: ["1", "2", "3", "4"],
   classifierData: new Array(30).fill(1),
   nativeEventEmitter: {},
-  isBCIRunning: false
+  isBCIRunning: false,
+  refresh: false
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -113,6 +115,12 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         isBCIRunning: false
+      };
+
+    case SET_REFRESH:
+      return {
+        ...state,
+        refresh: action.payload
       };
 
     default:

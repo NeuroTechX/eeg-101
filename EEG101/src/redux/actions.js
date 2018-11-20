@@ -17,12 +17,18 @@ import {
   UPDATE_CLASSIFIER_DATA,
   SET_NATIVE_EMITTER,
   START_BCI_RUNNING,
-  STOP_BCI_RUNNING
+  STOP_BCI_RUNNING,
+  SET_REFRESH
 } from "./actionTypes.js";
 import config from "./config";
 
 // --------------------------------------------------------------------------
 // Action Creators
+
+export const setRefresh = payload => ({
+  payload,
+  type: SET_REFRESH
+});
 
 export const setConnectionStatus = payload => ({
   payload,
