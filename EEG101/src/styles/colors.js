@@ -16,4 +16,3 @@ export const modalTransparent = "rgba(12, 89, 128, 0.25)"
 export const black = '#484848'
 export const faintGrey = '#D3D3D3'
 export const heather = '#b6bfcb'
-export const red = '#ff0202'
