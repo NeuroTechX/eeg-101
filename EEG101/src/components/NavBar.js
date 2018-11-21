@@ -7,7 +7,7 @@ import { MediaQueryStyleSheet } from "react-native-responsive";
 import { connect } from "react-redux";
 import { withRouter } from 'react-router';
 import { bindActionCreators } from "redux";
-import { setMenu, setRefresh } from "../redux/actions";
+import { setMenu, setRefresh, setNoMore } from "../redux/actions";
 import * as colors from "../styles/colors";
 import Battery from "../native/Battery.js";
 import config from "../redux/config";
@@ -18,7 +18,8 @@ function mapStateToProps(state) {
   return {
 	connectionStatus: state.connectionStatus,
     isMenuOpen: state.isMenuOpen,
-    refresh: state.refresh
+    refresh: state.refresh,
+    noMore: state.noMore
   };
 }
 
@@ -28,7 +29,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       setMenu,
-	  setRefresh
+	  setRefresh,
+      setNoMore
     },
     dispatch
   );
@@ -37,6 +39,7 @@ function mapDispatchToProps(dispatch) {
 class NavBar extends Component {
   constructor(props) {
     super(props);
+    this.predictSubscription = {};
 	
     this.state = {
       batteryLevel: '',
@@ -44,25 +47,52 @@ class NavBar extends Component {
   }
   
   componentDidMount () {
-    TimerMixin.setInterval(
-      () => { this.props.setRefresh(!this.props.refresh); },
-      1000
-    );
+    TimerMixin.setInterval(() => { 
+	  this.props.setRefresh(!this.props.refresh); 
+	  this.startBatteryReading();
+      this.stopBatteryReading();
+	}, 1000);
+  }
+  
+   componentWillUnmount() {
+    this.props.setNoMore(this.props.noMore = false);
   }
 
-  setBattery = async () => {
-    try {
-      Battery.setBatteryListener();
-      const scoreListener = new NativeEventEmitter(
-        NativeModules.Battery
-      );
-      this.predictSubscription = scoreListener.addListener(
-        "BATTERY", battery => {
-          this.state.batteryLevel = battery;
-        }
-      );
-    } catch (b) {
-      console.log(b)
+  startBatteryReading() {
+    if (this.props.connectionStatus === config.connectionStatus.CONNECTED) {
+      if (this.props.noMore === false) {
+        Battery.startReading();
+        const batteryListener = new NativeEventEmitter(
+          NativeModules.Battery
+        );
+        this.predictSubscription = batteryListener.addListener(
+          "BATTERY", battery => {
+            this.state.batteryLevel = battery;
+          }
+        );
+        this.props.setNoMore(this.props.noMore = true);
+      } else {
+        return null;
+      }
+    } else {
+        return null;
+    }
+  }
+
+  stopBatteryReading() {
+    if (this.props.connectionStatus === config.connectionStatus.DISCONNECTED) {
+      if (this.props.noMore === true) {
+        Battery.stopReading();
+        const batteryListener = new NativeEventEmitter(
+          NativeModules.Battery
+        );
+        this.predictSubscription = batteryListener.removeListener();
+        this.props.setNoMore(this.props.noMore = false);
+      } else {
+        return null;
+      }
+    } else {
+        return null;
     }
   }
 
@@ -155,9 +185,6 @@ class NavBar extends Component {
   }
   
   render() {
-    if (this.props.connectionStatus === config.connectionStatus.CONNECTED) {
-      this.setBattery();
-    } 
     return (
       <View style={styles.navContainer}>
         <TouchableOpacity onPress={()=>this.props.setMenu(true)}>

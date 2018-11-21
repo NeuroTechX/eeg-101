@@ -20,7 +20,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
-//Created by Vasyl 19/11/2018
+//Created by Vasyl 21/11/2018
 
 public class BatteryModule extends ReactContextBaseJavaModule {
 
@@ -44,9 +44,14 @@ public class BatteryModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setBatteryListener() {
+    public void startReading() {
         batteryListener = new DataListener();
         appState.connectedMuse.registerDataListener(batteryListener, MuseDataPacketType.BATTERY);
+    }
+
+    @ReactMethod
+    public void stopReading() {
+        appState.connectedMuse.unregisterDataListener(batteryListener, MuseDataPacketType.BATTERY);
     }
 
     public class DataListener extends MuseDataListener {

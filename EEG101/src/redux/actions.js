@@ -18,12 +18,18 @@ import {
   SET_NATIVE_EMITTER,
   START_BCI_RUNNING,
   STOP_BCI_RUNNING,
-  SET_REFRESH
+  SET_REFRESH,
+  SET_NO_MORE
 } from "./actionTypes.js";
 import config from "./config";
 
 // --------------------------------------------------------------------------
 // Action Creators
+
+export const setNoMore = payload => ({
+  payload,
+  type: SET_NO_MORE
+});
 
 export const setRefresh = payload => ({
   payload,
