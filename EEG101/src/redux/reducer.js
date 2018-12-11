@@ -16,8 +16,7 @@ import {
   SET_NATIVE_EMITTER,
   START_BCI_RUNNING,
   STOP_BCI_RUNNING,
-  SET_REFRESH,
-  SET_NO_MORE
+  SET_BATTERY_VALUE
 } from "./actionTypes";
 
 const initialState = {
@@ -33,8 +32,7 @@ const initialState = {
   classifierData: new Array(30).fill(1),
   nativeEventEmitter: {},
   isBCIRunning: false,
-  refresh: false,
-  noMore: false
+  batteryValue: null
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -119,16 +117,10 @@ export default function reducer(state = initialState, action = {}) {
         isBCIRunning: false
       };
 
-    case SET_REFRESH:
+    case SET_BATTERY_VALUE:
       return {
         ...state,
-        refresh: action.payload
-      };
-	  
-    case SET_NO_MORE:
-      return {
-        ...state,
-        noMore: action.payload
+        batteryValue: action.payload
       };
 
     default:
