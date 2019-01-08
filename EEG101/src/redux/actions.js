@@ -17,9 +17,11 @@ import {
   UPDATE_CLASSIFIER_DATA,
   SET_NATIVE_EMITTER,
   START_BCI_RUNNING,
-  STOP_BCI_RUNNING
+  STOP_BCI_RUNNING,
+  SET_BATTERY_VALUE
 } from "./actionTypes.js";
 import config from "./config";
+import Battery from "../native/Battery.js";
 
 // --------------------------------------------------------------------------
 // Action Creators
@@ -71,6 +73,8 @@ export const startBCIRunning = () => ({ type: START_BCI_RUNNING });
 
 export const stopBCIRunning = () => ({ type: STOP_BCI_RUNNING });
 
+export const setBatteryValue = payload => ({ payload, type: SET_BATTERY_VALUE });
+
 // -----------------------------------------------------------------------------
 // Actions
 
@@ -98,11 +102,25 @@ export function initNativeEventListeners() {
       NativeModules.AppNativeEventEmitter
     );
 
+    const batteryListener = new NativeEventEmitter(
+      NativeModules.Battery
+    );
+
+    var subscription;
+    var listenerOn;
+
     // Connection Status
     nativeEventEmitter.addListener("CONNECTION_CHANGED", params => {
       switch (params.connectionStatus) {
         case "CONNECTED":
           dispatch(setConnectionStatus(config.connectionStatus.CONNECTED));
+          if (getState().batteryValue === null) {
+            Battery.startReading();
+            subscription = batteryListener.addListener("BATTERY", battery => {
+                dispatch(setBatteryValue(battery));
+            });
+            listenerOn = true;
+          }
           break;
 
         case "CONNECTING":
@@ -112,6 +130,12 @@ export function initNativeEventListeners() {
         case "DISCONNECTED":
         default:
           dispatch(setConnectionStatus(config.connectionStatus.DISCONNECTED));
+          if (listenerOn === true) {
+            subscription.remove();
+            dispatch(setBatteryValue(null));
+            listenerOn = false;
+            Battery.stopReading();   
+          }
           break;
       }
     });
