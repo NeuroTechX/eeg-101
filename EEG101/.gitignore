@@ -3,3 +3,5 @@ npm-debug.log
 .idea
 .vscode
 android/.idea
+
+.jsbundle
