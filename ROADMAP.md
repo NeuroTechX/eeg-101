@@ -4,11 +4,12 @@
 
 An interactive EEG tutorial app
 
-## Short term - what we're working on now
+### What I've Made
 
-- Localization
-- UI/UX Improvements
+- Update to React-Native 0.59.9
+- Update most of Nodes Modules
+- Update to Google SDK 28
 
-## Medium term
-- Event-related potentials
-- iOS Version
+## Issue
+- Error when searching Muse devices, propably due to the version of the Muse SDK.
+
