@@ -13,6 +13,3 @@ An interactive EEG tutorial app
 ## Issue
 - Error when searching Muse devices, propably due to the version of the Muse SDK.
 
-## Contributor
-Lhoste Rémi
-Intern at Faubert Lab
