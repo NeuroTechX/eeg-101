@@ -12,7 +12,7 @@
     "covgen": "3.1.0",
     "eslint-plugin-react-native": "3.7.0",
     "global": "4.4.0",
-    "lodash": "4.17.13",
+    "lodash": "4.17.19",
     "lottie": "^0.0.1",
     "lottie-react-native": "2.6.1",
     "react": "16.8.6",
